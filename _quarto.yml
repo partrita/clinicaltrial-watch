@@ -3,11 +3,15 @@ project:
   output-dir: docs
 
 website:
-  title: "website"
+  title: "Clinical Trial Watch (TIGIT)"
   navbar:
     left:
       - href: index.qmd
         text: Home
+      - href: full_data.qmd
+        text: Full Data
+      - href: history.qmd
+        text: History
       - about.qmd
 
 format:

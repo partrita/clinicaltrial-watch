@@ -1,7 +1,32 @@
 ---
-title: "website"
+title: "Clinical Trial Watch"
 ---
 
-This is a Quarto website.
+## Monitoring Status
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+This page monitors specific clinical trials and highlights any updates in their status or key fields.
+
+[Download Status Summary (CSV)](data/status_summary.csv)
+
+```{python}
+#| echo: false
+#| output: asis
+import json
+import os
+
+summary_path = "data/status_summary.json"
+if os.path.exists(summary_path):
+    with open(summary_path, "r") as f:
+        summary = json.load(f)
+    
+    print("| Trial ID | Sponsor | Update | Status | Conditions | Phases | Start | End | Enroll | Last Updated |")
+    print("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
+    for item in summary:
+        update_color = "🟢" if item.get('monitor_status') == "No Change" else "🔴"
+        print(f"| [{item['id']}](https://clinicaltrials.gov/study/{item['id']}) | {item.get('sponsor', 'N/A')} | {update_color} {item.get('monitor_status')} | {item.get('status', 'N/A')} | {item.get('conditions', 'N/A')} | {item.get('phases', 'N/A')} | {item.get('study_start', 'N/A')} | {item.get('study_end', 'N/A')} | {item.get('enrollment', 'N/A')} | {item.get('last_updated', 'N/A')} |")
+else:
+    print("No monitoring data available yet.")
+```
+
+
+[View Full Change History](history.qmd)
