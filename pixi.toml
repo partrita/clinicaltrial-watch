@@ -1,0 +1,11 @@
+[workspace]
+authors = ["fkt <deepthought@postech.ac.kr>"]
+channels = ["conda-forge"]
+name = "quarto-website-template"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+quarto = ">=1.8.27,<2"
