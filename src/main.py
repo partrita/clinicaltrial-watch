@@ -56,7 +56,25 @@ def update_history(trial_id, diff_text, history_dir="data/history"):
 def flatten_dict(d, parent_key='', sep='_'):
     items = []
     for k, v in d.items():
-        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        # Shorten prefixes for readability
+        clean_k = k
+        if parent_key == '':
+            if k == 'protocolSection': clean_k = 'Prot'
+            elif k == 'derivedSection': clean_k = 'Deriv'
+            elif k == 'annotationSection': clean_k = 'Annot'
+            elif k == 'resultsSection': clean_k = 'Res'
+        
+        # Specific sub-module shortening
+        if k.endswith('Module'): clean_k = k.replace('Module', '')
+        if k.endswith('Struct'): clean_k = k.replace('Struct', '')
+        
+        new_key = f"{parent_key}{sep}{clean_k}" if parent_key else clean_k
+        
+        # Final cleanup of common long prefixes
+        for prefix in ['Prot_', 'Deriv_', 'Annot_', 'Res_']:
+            if new_key.startswith(prefix):
+                new_key = new_key[len(prefix):]
+
         if isinstance(v, dict):
             items.extend(flatten_dict(v, new_key, sep=sep).items())
         elif isinstance(v, list):
