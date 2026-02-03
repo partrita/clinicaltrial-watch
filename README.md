@@ -4,10 +4,10 @@
 
 ## 주요 기능
 
-- 정기 크롤링**: ClinicalTrials.gov API v2를 사용하여 최신 임상 데이터를 가져옵니다.
-- 상태 변화 감지**: 이전 스냅샷과 비교하여 모집 현황(Recruitment Status), 단계(Phase), 예상 종료일(Primary Completion Date) 등의 주요 필드 변화를 추적합니다.
-- 자동 배포**: GitHub Actions를 통해 매일 정해진 시간에 작업을 수행하고, 변경 사항이 있을 경우 GitHub Pages에 업데이트된 리포트를 배포합니다.
-- 브라우징**: Quarto로 생성된 웹 페이지를 통해 현재 상태 summary와 전체 변경 이력을 확인할 수 있습니다.
+- 정기 크롤링: ClinicalTrials.gov API v2를 사용하여 최신 임상 데이터를 가져옵니다.
+- 상태 변화 감지: 이전 스냅샷과 비교하여 모집 현황(Recruitment Status), 단계(Phase), 예상 종료일(Primary Completion Date) 등의 주요 필드 변화를 추적합니다.
+- 자동 배포: GitHub Actions를 통해 매일 정해진 시간에 작업을 수행하고, 변경 사항이 있을 경우 GitHub Pages에 업데이트된 리포트를 배포합니다.
+- 브라우징: Quarto로 생성된 웹 페이지를 통해 현재 상태 summary와 전체 변경 이력을 확인할 수 있습니다.
 
 ## 프로젝트 구조
 
@@ -48,8 +48,8 @@ pixi run python src/update_trials_from_csv.py
 
 ## 기술 스택
 
-- Language**: Python 3.11+
-- Dependency Management**: Pixi
-- Libraries**: `requests`, `deepdiff`, `PyYAML`
-- Visualization**: Quarto, GitHub Pages
-- Automation**: GitHub Actions
+- Language: Python 3.11+
+- Dependency Management: Pixi
+- Libraries: `requests`, `deepdiff`, `PyYAML`
+- Visualization: Quarto, GitHub Pages
+- Automation: GitHub Actions
