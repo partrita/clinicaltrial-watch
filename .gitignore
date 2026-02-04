@@ -209,4 +209,4 @@ __marimo__/
 
 /.quarto/
 **/*.quarto_ipynb
-__freeze/
+_freeze/
