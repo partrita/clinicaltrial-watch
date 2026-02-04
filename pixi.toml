@@ -6,6 +6,8 @@ platforms = ["osx-arm64", "linux-64"]
 version = "0.1.0"
 
 [tasks]
+preview = "quarto preview"
+render = "quarto render"
 
 [dependencies]
 quarto = ">=1.8.27,<2"
