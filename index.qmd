@@ -1,5 +1,5 @@
 ---
-title: "Clinical Trial Watch"
+title: "Clinical Trial Watch(CCR8)"
 ---
 
 ## Monitoring Status
