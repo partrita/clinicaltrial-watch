@@ -1,6 +1,7 @@
 project:
   type: website
   output-dir: docs
+  execute-dir: project
 
 website:
   title: "Clinical Trial Watch"
@@ -8,10 +9,16 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - href: full_data.qmd
-        text: Full Data
-      - href: history.qmd
-        text: History
+      - text: Targets
+        menu:
+          - href: targets/ccr8.qmd
+            text: CCR8
+          - href: targets/tigit.qmd
+            text: TIGIT
+          - href: targets/ige.qmd
+            text: IgE
+          - href: targets/b7-h3.qmd
+            text: B7-H3
       - about.qmd
 
 format:
@@ -24,4 +31,3 @@ format:
 
 execute:
   freeze: auto
-

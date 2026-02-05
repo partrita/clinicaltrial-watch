@@ -40,10 +40,19 @@ quarto preview
 
 ### 모니터링 대상 일괄 추가 (CSV 활용)
 
-`data/ctg-studies.csv` 파일(NCT Number, Study Title 컬럼 포함)이 있는 경우, 다음 스크립트를 실행하여 `trials.yaml`을 한 번에 생성/업데이트할 수 있습니다.
+`NCT Number`, `Study Title` 컬럼이 포함된 CSV 파일을 사용하여 특정 타겟에 임상시험을 일괄 추가할 수 있습니다.
 
 ```bash
-pixi run python src/update_trials_from_csv.py
+# CCR8 타겟에 CSV 데이터 추가
+pixi run python src/update_trials_from_csv.py --target CCR8 --csv data/ctg-studies.csv
+
+# 새 타겟(TIGIT) 생성 및 추가
+pixi run python src/update_trials_from_csv.py --target TIGIT --csv data/ctg-studies_tigit.csv
+
+# 옵션
+#   --target, -t : 타겟 이름 (필수)
+#   --csv, -c    : CSV 파일 경로 (기본값: data/ctg-studies.csv)
+#   --replace    : 기존 trials 대체 (기본값: 추가)
 ```
 
 ## 기술 스택

@@ -4,13 +4,13 @@ title: "About"
 
 ## Project Overview
 
-**Clinical Trial Watch (TIGIT)** is an automated monitoring system designed to track changes in clinical trials related to TIGIT-targeted therapies. By leveraging the ClinicalTrials.gov API v2, this project provides researchers and clinicians with a clear, up-to-date view of the TIGIT landscape.
+**Clinical Trial Watch** is an automated monitoring system designed to track changes in clinical trials related to selected therapeutic targets (e.g., CCR8, TIGIT, IgE). By leveraging the ClinicalTrials.gov API v2, this project provides researchers and clinicians with a clear, up-to-date view of the competitive landscape.
 
 ## Key Features
 
-- **Automated Monitoring**: Daily updates on the status and key parameters of TIGIT-related clinical trials.
+- **Automated Monitoring**: Daily updates on the status and key parameters of clinical trials for multiple targets.
 - **Change Detection**: Intelligent diffing engine that highlights meaningful changes in recruitment status, phase, and completion dates.
-- **Data Insights**: Interactive visualizations to help understand clinical trial trends and distributions.
+- **Data Insights**: Interactive visualizations to help understand clinical trial trends and distributions for each target.
 - **Open Data**: All consolidated raw data is available for download as a CSV for deeper analysis.
 
 ## How it Works
