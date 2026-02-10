@@ -2,5 +2,9 @@
   {
     "timestamp": "2026-02-05 17:03:12",
     "event": "Initial data collection: 111 trials found."
+  },
+  {
+    "timestamp": "2026-02-10 07:04:06",
+    "event": "Changes detected in 9 trials: NCT07222735, NCT06646627, NCT06203210, NCT06242470, NCT07386002, NCT06362252, NCT06953089, NCT04514484, NCT04743661"
   }
 ]
