@@ -180,7 +180,7 @@ if os.path.exists(target_h_file):
     for record in reversed(history[-10:]):
         print(f"**Date:** {{record['timestamp']}}")
         print(f"\\n{{record['event']}}\\n")
-        print("---")
+        print("***")
 else:
     print(f"No target-level milestones recorded yet for {{target_name}}.")
 ```
@@ -219,7 +219,7 @@ for trial_id in target_trials:
             for record in reversed(real_changes[-5:]):
                 print(f"**Date:** {{record['timestamp']}}")
                 print(f"\\n{{record['diff']}}\\n")
-                print("---")
+                print("***")
 
 if not history_found:
     print(f"No specific trial changes (beyond initial collection) recorded yet for {{target_name}}.")

@@ -236,7 +236,7 @@ def process_trial(trial, target_name):
         report_item.update({
             "monitor_status": "Changed",
             "last_monitored_change": last_monitored,
-            "details": f"**[CHANGES FOUND]**\n{diff_text}\n\n---\n{detailed_desc}"
+            "details": f"**[CHANGES FOUND]**\n{diff_text}\n\n***\n{detailed_desc}"
         })
     else:
         history_file = f"data/history/{trial_id}_history.json"
@@ -291,6 +291,10 @@ def save_target_data(target_name, summary_report, all_raw_data):
     print(f"  Saved target data to {target_dir}/")
 
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+MAX_WORKERS = 10  # Reasonable number of concurrent requests to avoid getting blocked
+
 def main():
     config = load_config()
     targets = config.get('targets', [])
@@ -300,9 +304,9 @@ def main():
         return
     
     if not os.path.exists("data/snapshots"):
-        os.makedirs("data/snapshots")
+        os.makedirs("data/snapshots", exist_ok=True)
     
-    # Process each target
+    # Collect all trials for batch processing if needed, but here we process target by target
     target_summaries = []
     all_reports = []
     all_raw = []
@@ -319,16 +323,28 @@ def main():
         target_reports = []
         target_raw = []
         
-        for trial in trials:
-            current_trial_idx += 1
-            print(f"[{current_trial_idx}/{total_trials}]", end=" ")
-            report, raw = process_trial(trial, target_name)
-            if report:
-                target_reports.append(report)
-                all_reports.append(report)
-            if raw:
-                target_raw.append(raw)
-                all_raw.append(raw)
+        # Parallel processing of trials within each target
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            future_to_trial = {
+                executor.submit(process_trial, trial, target_name): trial 
+                for trial in trials
+            }
+            
+            for future in as_completed(future_to_trial):
+                current_trial_idx += 1
+                try:
+                    report, raw = future.result()
+                    if report:
+                        target_reports.append(report)
+                        all_reports.append(report)
+                    if raw:
+                        target_raw.append(raw)
+                        all_raw.append(raw)
+                    
+                    print(f"[{current_trial_idx}/{total_trials}] Processed {future_to_trial[future]['id']}")
+                except Exception as e:
+                    trial_id = future_to_trial[future]['id']
+                    print(f"[{current_trial_idx}/{total_trials}] Error processing {trial_id}: {e}")
         
         # Save target-specific data
         if target_reports:
