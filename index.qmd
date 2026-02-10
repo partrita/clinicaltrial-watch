@@ -1,12 +1,10 @@
 ---
-title: "Clinical Trial Watch(CCR8)"
+title: "Clinical Trial Watch"
 ---
 
-## Monitoring Status
+## Targets Overview
 
-This page monitors specific clinical trials and highlights any updates in their status or key fields.
-
-[Download Status Summary (CSV)](data/status_summary.csv)
+임상시험을 타겟별로 모니터링합니다.
 
 ```{python}
 #| echo: false
@@ -14,19 +12,33 @@ This page monitors specific clinical trials and highlights any updates in their 
 import json
 import os
 
-summary_path = "data/status_summary.json"
+summary_path = "data/targets_summary.json"
+
 if os.path.exists(summary_path):
     with open(summary_path, "r") as f:
-        summary = json.load(f)
+        targets = json.load(f)
     
-    print("| Trial ID | Sponsor | Update | Status | Conditions | Phases | Start | End | Enroll | Last Updated |")
-    print("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
-    for item in summary:
-        update_color = "🟢" if item.get('monitor_status') == "No Change" else "🔴"
-        print(f"| [{item['id']}](https://clinicaltrials.gov/study/{item['id']}) | {item.get('sponsor', 'N/A')} | {update_color} {item.get('monitor_status')} | {item.get('status', 'N/A')} | {item.get('conditions', 'N/A')} | {item.get('phases', 'N/A')} | {item.get('study_start', 'N/A')} | {item.get('study_end', 'N/A')} | {item.get('enrollment', 'N/A')} | {item.get('last_updated', 'N/A')} |")
+    print("| Target | Description | Trials | Changed |")
+    print("| --- | --- | --- | --- |")
+    for target in targets:
+        name = target['name']
+        link = f"targets/{name.lower()}.qmd"
+        changed_badge = f"🔴 {target['changed_count']}" if target['changed_count'] > 0 else "🟢 0"
+        print(f"| [{name}]({link}) | {target.get('description', '')} | {target['trial_count']} | {changed_badge} |")
 else:
-    print("No monitoring data available yet.")
+    print("No summary data available yet. Showing targets from configuration:")
+    print("")
+    print("| Target | Description |")
+    print("| --- | --- |")
+    
+    try:
+        import yaml
+        with open("trials.yaml", "r", encoding="utf-8") as f:
+            config = yaml.safe_load(f) or {}
+            for target in config.get('targets', []):
+                name = target['name']
+                desc = target.get('description', f"{name} 타겟 임상시험 모니터링")
+                print(f"| [{name}](targets/{name.lower()}.qmd) | {desc} |")
+    except Exception as e:
+        print(f"Error loading targets: {e}")
 ```
-
-
-[View Full Change History](history.qmd)

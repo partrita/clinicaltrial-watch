@@ -60,6 +60,7 @@ def format_diff(diff):
             lines.append(f"{label}: `{change['old']}` -> `{change['new']}`")
         return "\n".join(lines)
     
+    summary = []
     # Values changed
     if 'values_changed' in diff:
         for path, change in diff['values_changed'].items():

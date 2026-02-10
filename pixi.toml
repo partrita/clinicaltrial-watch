@@ -8,6 +8,7 @@ version = "0.1.0"
 [tasks]
 preview = "quarto preview"
 render = "quarto render"
+start = "python src/main.py"
 
 [dependencies]
 quarto = ">=1.8.27,<2"
