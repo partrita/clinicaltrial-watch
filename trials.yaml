@@ -2,13 +2,51 @@ targets:
 - name: CCR8
   description: CCR8 타겟 임상시험 모니터링
   trials:
+  - id: NCT04895709
+    name: BMS-986340 clinical
+  - id: NCT06479759
+    name: LM-108 clinical_1
+  - id: NCT05518045
+    name: LM-108 clinical_2
+  - id: NCT06873854
+    name: LM-108 clinical_3
+  - id: NCT06825494
+    name: LM-108 clinical_4
+  - id: NCT06821503
+    name: LM-108 clinical_5
+  - id: NCT05255484
+    name: LM-108 clinical_6
+  - id: NCT05199753
+    name: LM-108 clinical_7
+  - id: NCT05859464
+    name: ZL-1218 clinical_1
+  - id: NCT05005403
+    name: ABBV-514 clinical_1
+  - id: NCT05581004
+    name: RO7502175(RG6411) clinical_1
+  - id: NCT06131398
+    name: AMG-355(FPA157) clinical_1
+  - id: NCT05690581
+    name: ICP-B05(CM369) clinical_1
+  - id: NCT06304571
+    name: HC006 clinical_1
+  - id: NCT06963814
+    name: HC006 clinical_2
+  - id: NCT06819735
+    name: DT-7012 clinical_1
+  - id: NCT07213882
+    name: DT-7012 clinical_2
+  - id: NCT06911827
+    name: QLP2117 clinical_1
+  - id: NCT05830045
+    name: QLP2117 clinical_2
+  - id: NCT07011550
+    name: BMS-986340 clinical_1
   - id: NCT05101070
-    name: S-531011 as Monotherapy and in Combination With an Immune Checkpoint Inhibitor
-      in Advanced or Metastatic Solid Tumors
+    name: S-531011 as Monotherapy and in Combination With an Immune Checkpoint Inhibitor in Advanced or Metastatic Solid Tumors
   - id: NCT07362186
     name: LM-108 in Combination With Toripalimab Versus Paclitaxel Injection for the
-      Treatment of Subjects With CCR8-Positive Gastric and Gastroesophageal Junction
-      Adenocarcinoma
+      Treatment of Subjects With CCR8-Positive Gastric and Gastroesophageal Junction Adenocarcinoma
   - id: NCT06387628
     name: LM-108 in Combination With PD-1 Based Treatment for Patients With Recurrent
       or Metastatic Triple - Negative Breast Cancer
