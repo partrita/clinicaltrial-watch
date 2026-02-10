@@ -42,7 +42,7 @@ quarto preview
 
 `NCT Number`, `Study Title` 컬럼이 포함된 CSV 파일을 사용하여 특정 타겟에 임상시험을 일괄 추가할 수 있습니다.
 
-```bash
+```bashpixi run python src/update_trials_from_csv.py --target TIGIT --csv data/ctg-studies_tigit.csv
 # CCR8 타겟에 CSV 데이터 추가
 pixi run python src/update_trials_from_csv.py --target CCR8 --csv data/ctg-studies.csv
 
