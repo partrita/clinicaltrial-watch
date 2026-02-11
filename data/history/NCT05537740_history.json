@@ -2,5 +2,9 @@
   {
     "timestamp": "2026-02-05 15:10:19",
     "diff": "Initial data collection"
+  },
+  {
+    "timestamp": "2026-02-11 01:06:30",
+    "diff": "Field removed: `root['referencesModule']['seeAlsoLinks']`"
   }
 ]

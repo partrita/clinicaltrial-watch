@@ -6,5 +6,9 @@
   {
     "timestamp": "2026-02-10 07:04:01",
     "diff": "Field `identificationModule.briefTitle` changed from `A Phase II Study of Intracerebroventricular MT027 in Recurrent or Progressive Glioblastoma` to `Study of Intracerebroventricular MT027 in Recurrent or Progressive Glioblastoma`\nField `statusModule.lastUpdateSubmitDate` changed from `2026-01-27` to `2026-02-04`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2026-02-04` to `2026-02-06`"
+  },
+  {
+    "timestamp": "2026-02-11 01:36:34",
+    "diff": "Field `identificationModule.briefTitle` changed from `Study of Intracerebroventricular MT027 in Recurrent or Progressive Glioblastoma` to `The GLIOMAX Study: MT027 Allogeneic CAR-T for Recurrent Glioma`\nField `statusModule.lastUpdateSubmitDate` changed from `2026-02-04` to `2026-02-06`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2026-02-06` to `2026-02-10`\nNew field added: `root['identificationModule']['acronym']`"
   }
 ]
