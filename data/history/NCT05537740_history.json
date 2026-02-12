@@ -4,7 +4,11 @@
     "diff": "Initial data collection"
   },
   {
+<<<<<<< HEAD
     "timestamp": "2026-02-12 14:01:36",
+=======
+    "timestamp": "2026-02-11 01:06:30",
+>>>>>>> 9c89203a9f2cb1eaa3b6135c64a7b6df028ba260
     "diff": "Field removed: `root['referencesModule']['seeAlsoLinks']`"
   }
 ]
