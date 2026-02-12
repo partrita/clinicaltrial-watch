@@ -1,6 +1,8 @@
 ---
-title: "Targets Overview"
+title: "Clinical Trial Watch"
 ---
+
+## Targets Overview
 
 임상시험을 타겟별로 모니터링합니다.
 
@@ -16,7 +18,7 @@ if os.path.exists(summary_path):
     with open(summary_path, "r") as f:
         targets = json.load(f)
     
-    print("| Target | Description | Trials | Changed |")
+    print("| Target | Description | Trials | Changed(in a month) |")
     print("| --- | --- | --- | --- |")
     for target in targets:
         name = target['name']

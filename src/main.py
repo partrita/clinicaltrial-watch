@@ -7,7 +7,7 @@ Fetches trial data, compares with previous snapshots, and generates target-based
 import os
 import json
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
 from crawler import fetch_trial_data, save_snapshot
 from diff_engine import compare_snapshots, format_diff
 from generate_target_pages import main as generate_pages
@@ -40,7 +40,7 @@ def load_config(config_path="trials.yaml"):
                 
                 indent = len(line) - len(line.lstrip())
                 
-                if stripped.startswith("- name:") and indent == 2:
+                if stripped.startswith("- name:"):
                     if current_target:
                         targets.append(current_target)
                     current_target = {
@@ -54,7 +54,7 @@ def load_config(config_path="trials.yaml"):
                     if current_trial:
                         current_target['trials'].append(current_trial)
                     current_trial = {'id': stripped.split(":", 1)[1].strip().strip('"').strip("'")}
-                elif stripped.startswith("name:") and current_trial and indent >= 8:
+                elif stripped.startswith("name:") and current_trial:
                     current_trial['name'] = stripped.split(":", 1)[1].strip().strip('"').strip("'")
             
             if current_trial and current_target:
@@ -117,14 +117,14 @@ def update_target_history(target_name, current_reports, history_dir="data/histor
         with open(history_file, 'r', encoding='utf-8') as f:
             history = json.load(f)
     
-    # Check for changes
-    changed_trials = [r['id'] for r in current_reports if r['monitor_status'] == "Changed"]
+    # Check for changes today specifically for the daily log
+    changed_today = [r['id'] for r in current_reports if r.get('changed_today')]
     
     message = ""
     if not history:
         message = f"Initial data collection: {len(current_reports)} trials found."
-    elif changed_trials:
-        message = f"Changes detected in {len(changed_trials)} trials: {', '.join(changed_trials)}"
+    elif changed_today:
+        message = f"Changes detected in {len(changed_today)} trials: {', '.join(changed_today)}"
     
     if message:
         history.append({
@@ -234,9 +234,9 @@ def process_trial(trial, target_name):
         update_history(trial_id, diff_text)
         last_monitored = datetime.now().strftime("%Y-%m-%d")
         report_item.update({
-            "monitor_status": "Changed",
+            "changed_today": True,
             "last_monitored_change": last_monitored,
-            "details": f"**[CHANGES FOUND]**\n{diff_text}\n\n***\n{detailed_desc}"
+            "details": f"**[RECENT CHANGES FOUND]**\n{diff_text}\n\n***\n{detailed_desc}"
         })
     else:
         history_file = f"data/history/{trial_id}_history.json"
@@ -244,11 +244,33 @@ def process_trial(trial, target_name):
             print(f"  Initializing history for {trial_id}")
             update_history(trial_id, "Initial data collection")
             
-        if os.path.exists(history_file):
-            with open(history_file, 'r', encoding='utf-8') as f:
-                history = json.load(f)
-                if history:
-                    report_item["last_monitored_change"] = history[-1]['timestamp'].split(' ')[0]
+    # Check for any changes in the last 30 days to set monitor_status
+    history_file = f"data/history/{trial_id}_history.json"
+    if os.path.exists(history_file):
+        with open(history_file, 'r', encoding='utf-8') as f:
+            history = json.load(f)
+            if history:
+                # Update last_monitored_change from history
+                report_item["last_monitored_change"] = history[-1]['timestamp'].split(' ')[0]
+                
+                # Check 30 day window
+                # Check 30 day window
+                thirty_days_ago = datetime.now() - timedelta(days=30)
+                for record in reversed(history): # Search from newest
+                    if record['diff'] == "Initial data collection":
+                        continue
+                    try:
+                        ts = record['timestamp']
+                        if len(ts) > 10:
+                            record_date = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
+                        else:
+                            record_date = datetime.strptime(ts, "%Y-%m-%d")
+                            
+                        if record_date > thirty_days_ago:
+                            report_item["monitor_status"] = "Changed"
+                            break
+                    except Exception:
+                        continue
     
     save_snapshot(trial_id, new_data)
     return report_item, raw_data
@@ -355,14 +377,14 @@ def main():
         target_summaries.append({
             "name": target_name,
             "description": target.get('description', ''),
-            "trial_count": len(target_reports),
+            "trial_count": len(trials), # Use expected count from config
             "changed_count": sum(1 for r in target_reports if r['monitor_status'] == 'Changed')
         })
-    
-    # Save global target summary for index page
-    with open("data/targets_summary.json", 'w', encoding='utf-8') as f:
-        json.dump(target_summaries, f, indent=2, ensure_ascii=False)
-    
+        
+        # Save global target summary after each target for better visibility
+        with open("data/targets_summary.json", 'w', encoding='utf-8') as f:
+            json.dump(target_summaries, f, indent=2, ensure_ascii=False)
+            
     print(f"\n✓ Processed {len(targets)} targets, {len(all_reports)} total trials")
     
     # Automatically update target pages and _quarto.yml
