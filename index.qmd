@@ -15,8 +15,12 @@ import os
 summary_path = "data/targets_summary.json"
 
 if os.path.exists(summary_path):
-    with open(summary_path, "r") as f:
-        targets = json.load(f)
+    try:
+        with open(summary_path, "r") as f:
+            targets = json.load(f)
+    except Exception as e:
+        print(f"Error loading summary data: {e}")
+        targets = []
     
     print("| Target | Description | Trials | Changed(in a month) |")
     print("| --- | --- | --- | --- |")

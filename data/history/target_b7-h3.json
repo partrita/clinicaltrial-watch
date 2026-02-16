@@ -8,16 +8,7 @@
     "event": "Changes detected in 9 trials: NCT07222735, NCT06646627, NCT06203210, NCT06242470, NCT07386002, NCT06362252, NCT06953089, NCT04514484, NCT04743661"
   },
   {
-<<<<<<< HEAD
     "timestamp": "2026-02-12 14:14:38",
     "event": "Changes detected in 4 trials: NCT06892548, NCT06780137, NCT07386002, NCT04514484"
-=======
-    "timestamp": "2026-02-11 01:36:35",
-    "event": "Changes detected in 3 trials: NCT07386002, NCT06780137, NCT04514484"
-  },
-  {
-    "timestamp": "2026-02-12 01:29:17",
-    "event": "Changes detected in 2 trials: NCT06892548, NCT04514484"
->>>>>>> 9c89203a9f2cb1eaa3b6135c64a7b6df028ba260
   }
 ]

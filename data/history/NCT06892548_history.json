@@ -4,11 +4,7 @@
     "diff": "Initial data collection"
   },
   {
-<<<<<<< HEAD
     "timestamp": "2026-02-12 14:14:36",
-=======
-    "timestamp": "2026-02-12 01:29:16",
->>>>>>> 9c89203a9f2cb1eaa3b6135c64a7b6df028ba260
     "diff": "Field `statusModule.statusVerifiedDate` changed from `2026-01` to `2026-02`\nField `statusModule.lastUpdateSubmitDate` changed from `2026-01-19` to `2026-02-10`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2026-01-21` to `2026-02-11`\nField `contactsLocationsModule.locations.[26]zip` changed from `´710061` to `710061`\nNew field added: `root['contactsLocationsModule']['locations'][23]['state']`\nNew field added: `root['contactsLocationsModule']['locations'][25]['state']`\nNew field added: `root['contactsLocationsModule']['locations'][24]['state']`\nNew field added: `root['contactsLocationsModule']['locations'][26]['state']`"
   }
 ]
