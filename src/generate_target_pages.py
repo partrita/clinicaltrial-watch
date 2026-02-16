@@ -154,8 +154,7 @@ if os.path.exists(csv_path):
         fig4 = px.bar(sponsor_counts, x='Count', y='Sponsor', 
                      title='Top Lead Sponsors (by Number of Trials)', 
                      orientation='h', 
-                     color='Count',
-                     color_continuous_scale='Viridis',
+                     color='Sponsor',
                      template='plotly_white')
         fig4.update_layout(yaxis={{'categoryorder':'total ascending'}})
         fig4.show()
