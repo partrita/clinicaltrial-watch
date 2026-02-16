@@ -59,38 +59,6 @@ title: "{target_name}"
 {description}
 :::
 
-## Monitoring Status
-
-```{{python}}
-#| echo: false
-#| output: asis
-import json
-import os
-
-target_name = "{target_lower}"
-summary_path = f"data/targets/{{target_name}}/status_summary.json"
-
-if os.path.exists(summary_path):
-    try:
-        with open(summary_path, "r") as f:
-            summary = json.load(f)
-    except Exception as e:
-        print(f"Error loading data: {{e}}")
-        summary = []
-    
-    print("| Trial ID | Sponsor | Update | Status | Conditions | Phases | Start | End | Enroll | Last Updated |")
-    print("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
-    for item in summary:
-        update_color = "🟢" if item.get('monitor_status') == "No Change" else "🔴"
-        print(f"| [{{item['id']}}](https://clinicaltrials.gov/study/{{item['id']}}) | {{item.get('sponsor', 'N/A')}} | {{update_color}} {{item.get('monitor_status')}} | {{item.get('status', 'N/A')}} | {{item.get('conditions', 'N/A')}} | {{item.get('phases', 'N/A')}} | {{item.get('study_start', 'N/A')}} | {{item.get('study_end', 'N/A')}} | {{item.get('enrollment', 'N/A')}} | {{item.get('last_updated', 'N/A')}} |")
-else:
-    print(f"No monitoring data available yet for {{target_name}} at {{os.path.abspath(summary_path)}}. Run the data collection script first.")
-```
-
-[Download Status Summary (CSV)](../data/targets/{target_lower}/status_summary.csv)
-
----
-
 ## Visual Summary
 
 ::: {{.panel-tabset}}
@@ -162,8 +130,6 @@ if os.path.exists(csv_path):
 ```
 
 :::
-
-[Download Full Data (CSV)](../data/targets/{target_lower}/all_trials_raw.csv)
 
 ---
 
@@ -245,6 +211,41 @@ if not history_found:
 ```
 
 :::
+
+---
+
+<a href="../data/targets/{target_lower}/all_trials_raw.csv" class="btn btn-primary" role="button">📥 Download Full Data (CSV)</a>
+<a href="../data/targets/{target_lower}/status_summary.csv" class="btn btn-outline-secondary" role="button">📥 Download Status Summary (CSV)</a>
+
+---
+
+## Monitoring Status
+
+```{{python}}
+#| echo: false
+#| output: asis
+import json
+import os
+
+target_name = "{target_lower}"
+summary_path = f"data/targets/{{target_name}}/status_summary.json"
+
+if os.path.exists(summary_path):
+    try:
+        with open(summary_path, "r") as f:
+            summary = json.load(f)
+    except Exception as e:
+        print(f"Error loading data: {{e}}")
+        summary = []
+    
+    print("| Trial ID | Sponsor | Update | Status | Conditions | Phases | Start | End | Enroll | Last Updated |")
+    print("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
+    for item in summary:
+        update_color = "🟢" if item.get('monitor_status') == "No Change" else "🔴"
+        print(f"| [{{item['id']}}](https://clinicaltrials.gov/study/{{item['id']}}) | {{item.get('sponsor', 'N/A')}} | {{update_color}} {{item.get('monitor_status')}} | {{item.get('status', 'N/A')}} | {{item.get('conditions', 'N/A')}} | {{item.get('phases', 'N/A')}} | {{item.get('study_start', 'N/A')}} | {{item.get('study_end', 'N/A')}} | {{item.get('enrollment', 'N/A')}} | {{item.get('last_updated', 'N/A')}} |")
+else:
+    print(f"No monitoring data available yet for {{target_name}} at {{os.path.abspath(summary_path)}}. Run the data collection script first.")
+```
 '''
     
     with open(qmd_path, 'w', encoding='utf-8') as f:
