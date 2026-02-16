@@ -121,6 +121,7 @@ if os.path.exists(csv_path):
                      title='Study Status Distribution', 
                      color='Status',
                      template='plotly_white')
+        fig1.update_layout(showlegend=False)
         fig1.show()
 else:
     df = pd.DataFrame()
