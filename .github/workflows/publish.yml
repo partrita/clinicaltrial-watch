@@ -19,6 +19,9 @@ jobs:
         with:
           pixi-version: v0.46.0
 
+      - name: Run Monitoring Script
+        run: pixi run python src/main.py
+
       - name: Render with Pixi
         run: pixi run render
 
