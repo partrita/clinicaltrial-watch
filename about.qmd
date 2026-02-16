@@ -4,21 +4,21 @@ title: "About"
 
 ## Project Overview
 
-**Clinical Trial Watch** is an automated monitoring system designed to track changes in clinical trials related to selected therapeutic targets (e.g., CCR8, TIGIT, IgE). By leveraging the ClinicalTrials.gov API v2, this project provides researchers and clinicians with a clear, up-to-date view of the competitive landscape.
+Clinical Trial Watch is an automated monitoring system designed to track changes in clinical trials related to selected therapeutic targets (e.g., CCR8, TIGIT, IgE). By leveraging the ClinicalTrials.gov API v2, this project provides researchers and clinicians with a clear, up-to-date view of the competitive landscape.
 
 ## Key Features
 
-- **Automated Monitoring**: Daily updates on the status and key parameters of clinical trials for multiple targets.
-- **Change Detection**: Intelligent diffing engine that highlights meaningful changes in recruitment status, phase, and completion dates.
-- **Data Insights**: Interactive visualizations to help understand clinical trial trends and distributions for each target.
-- **Open Data**: All consolidated raw data is available for download as a CSV for deeper analysis.
+- Automated Monitoring: Daily updates on the status and key parameters of clinical trials for multiple targets.
+- Change Detection: Intelligent diffing engine that highlights meaningful changes in recruitment status, phase, and completion dates.
+- Data Insights: Interactive visualizations to help understand clinical trial trends and distributions for each target.
+- Open Data: All consolidated raw data is available for download as a CSV for deeper analysis.
 
 ## How it Works
 
-1. **Daily Watch**: A GitHub Actions workflow runs every 24 hours to fetch the latest data for all NCT IDs listed in `trials.yaml`.
-2. **Analysis**: The `src/main.py` script compares current data with previous snapshots to identify any changes.
-3. **Report Generation**: Updates are logged in the `history.qmd` page, and the dashboard is refreshed with the latest summary stats.
-4. **Publishing**: The updated Quarto website is automatically published to GitHub Pages.
+1. Daily Watch: A GitHub Actions workflow runs every 24 hours to fetch the latest data for all NCT IDs listed in `trials.yaml`.
+2. Analysis: The `src/main.py` script compares current data with previous snapshots to identify any changes.
+3. Report Generation: Updates are logged in the `history.qmd` page, and the dashboard is refreshed with the latest summary stats.
+4. Publishing: The updated Quarto website is automatically published to GitHub Pages.
 
 ## Data Source
 

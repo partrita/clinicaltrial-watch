@@ -156,7 +156,7 @@ if os.path.exists(csv_path):
                      orientation='h', 
                      color='Sponsor',
                      template='plotly_white')
-        fig4.update_layout(yaxis={{'categoryorder':'total ascending'}})
+        fig4.update_layout(yaxis={{'categoryorder':'total ascending'}}, showlegend=False)
         fig4.show()
 ```
 
