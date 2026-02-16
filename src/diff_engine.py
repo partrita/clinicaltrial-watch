@@ -16,8 +16,12 @@ def compare_snapshots(trial_id, new_data, snapshot_dir="data/snapshots"):
     if not os.path.exists(previous_path):
         return None  # No previous data to compare with
 
-    with open(previous_path, 'r', encoding='utf-8') as f:
-        old_data = json.load(f)
+    try:
+        with open(previous_path, 'r', encoding='utf-8') as f:
+            old_data = json.load(f)
+    except Exception as e:
+        print(f"  Warning: Failed to load previous snapshot for {trial_id}: {e}")
+        return None
 
     # Focus on protocolSection for substantive changes
     old_protocol = old_data.get('protocolSection', {})

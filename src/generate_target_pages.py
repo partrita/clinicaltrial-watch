@@ -71,8 +71,12 @@ target_name = "{target_lower}"
 summary_path = f"data/targets/{{target_name}}/status_summary.json"
 
 if os.path.exists(summary_path):
-    with open(summary_path, "r") as f:
-        summary = json.load(f)
+    try:
+        with open(summary_path, "r") as f:
+            summary = json.load(f)
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        summary = []
     
     print("| Trial ID | Sponsor | Update | Status | Conditions | Phases | Start | End | Enroll | Last Updated |")
     print("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
@@ -174,8 +178,12 @@ target_name = "{target_lower}"
 target_h_file = f"data/history/target_{{target_name}}.json"
 
 if os.path.exists(target_h_file):
-    with open(target_h_file, "r") as f:
-        history = json.load(f)
+    try:
+        with open(target_h_file, "r") as f:
+            history = json.load(f)
+    except Exception as e:
+        print(f"Error loading history: {e}")
+        history = []
     
     for record in reversed(history[-10:]):
         print(f"**Date:** {{record['timestamp']}}")
@@ -199,15 +207,21 @@ summary_path = f"data/targets/{{target_name}}/status_summary.json"
 # Get trial IDs for this target
 target_trials = []
 if os.path.exists(summary_path):
-    with open(summary_path, "r") as f:
-        target_trials = [item['id'] for item in json.load(f)]
+    try:
+        with open(summary_path, "r") as f:
+            target_trials = [item['id'] for item in json.load(f)]
+    except Exception:
+        target_trials = []
 
 history_found = False
 for trial_id in target_trials:
     h_file = f"data/history/{{trial_id}}_history.json"
     if os.path.exists(h_file):
-        with open(h_file, "r") as f:
-            history = json.load(f)
+        try:
+            with open(h_file, "r") as f:
+                history = json.load(f)
+        except Exception:
+            continue
         
         # Filter out "Initial data collection" to only show real changes
         real_changes = [r for r in history if r['diff'] != "Initial data collection"]
@@ -255,8 +269,12 @@ import os
 summary_path = "data/targets_summary.json"
 
 if os.path.exists(summary_path):
-    with open(summary_path, "r") as f:
-        targets = json.load(f)
+    try:
+        with open(summary_path, "r") as f:
+            targets = json.load(f)
+    except Exception as e:
+        print(f"Error loading summary: {e}")
+        targets = []
     
     print("| Target | Description | Trials | Changed |")
     print("| --- | --- | --- | --- |")

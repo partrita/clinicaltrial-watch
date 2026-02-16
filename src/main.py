@@ -82,6 +82,22 @@ def load_config(config_path="trials.yaml"):
     return data
 
 
+_SENTINEL = object()
+
+def safe_json_load(file_path, default=_SENTINEL):
+    """Safely load JSON from a file, returning default if error occurs."""
+    if default is _SENTINEL:
+        default = []
+    if not os.path.exists(file_path):
+        return default
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except (json.JSONDecodeError, Exception) as e:
+        print(f"  Warning: Failed to load {file_path}: {e}. Returning default.")
+        return default
+
+
 def update_history(trial_id, diff_text, history_dir="data/history"):
     """Save change history for a trial."""
     if not os.path.exists(history_dir):
@@ -90,10 +106,7 @@ def update_history(trial_id, diff_text, history_dir="data/history"):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     history_file = os.path.join(history_dir, f"{trial_id}_history.json")
     
-    history = []
-    if os.path.exists(history_file):
-        with open(history_file, 'r', encoding='utf-8') as f:
-            history = json.load(f)
+    history = safe_json_load(history_file, default=[])
     
     history.append({
         "timestamp": timestamp,
@@ -112,10 +125,7 @@ def update_target_history(target_name, current_reports, history_dir="data/histor
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     history_file = os.path.join(history_dir, f"target_{target_name.lower()}.json")
     
-    history = []
-    if os.path.exists(history_file):
-        with open(history_file, 'r', encoding='utf-8') as f:
-            history = json.load(f)
+    history = safe_json_load(history_file, default=[])
     
     # Check for changes today specifically for the daily log
     changed_today = [r['id'] for r in current_reports if r.get('changed_today')]
@@ -177,10 +187,8 @@ def process_trial(trial, target_name):
     new_data = fetch_trial_data(trial_id)
     if not new_data:
         local_path = f"data/snapshots/{trial_id}_latest.json"
-        if os.path.exists(local_path):
-            with open(local_path, 'r', encoding='utf-8') as f:
-                new_data = json.load(f)
-        else:
+        new_data = safe_json_load(local_path, default=None)
+        if not new_data:
             print(f"  Skipping {trial_id} - no data available.")
             return None, None
     
@@ -246,31 +254,28 @@ def process_trial(trial, target_name):
             
     # Check for any changes in the last 30 days to set monitor_status
     history_file = f"data/history/{trial_id}_history.json"
-    if os.path.exists(history_file):
-        with open(history_file, 'r', encoding='utf-8') as f:
-            history = json.load(f)
-            if history:
-                # Update last_monitored_change from history
-                report_item["last_monitored_change"] = history[-1]['timestamp'].split(' ')[0]
+    history = safe_json_load(history_file, default=[])
+    if history:
+        # Update last_monitored_change from history
+        report_item["last_monitored_change"] = history[-1]['timestamp'].split(' ')[0]
                 
-                # Check 30 day window
-                # Check 30 day window
-                thirty_days_ago = datetime.now() - timedelta(days=30)
-                for record in reversed(history): # Search from newest
-                    if record['diff'] == "Initial data collection":
-                        continue
-                    try:
-                        ts = record['timestamp']
-                        if len(ts) > 10:
-                            record_date = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
-                        else:
-                            record_date = datetime.strptime(ts, "%Y-%m-%d")
-                            
-                        if record_date > thirty_days_ago:
-                            report_item["monitor_status"] = "Changed"
-                            break
-                    except Exception:
-                        continue
+        # Check 30 day window
+        thirty_days_ago = datetime.now() - timedelta(days=30)
+        for record in reversed(history): # Search from newest
+            if record['diff'] == "Initial data collection":
+                continue
+            try:
+                ts = record['timestamp']
+                if len(ts) > 10:
+                    record_date = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
+                else:
+                    record_date = datetime.strptime(ts, "%Y-%m-%d")
+                    
+                if record_date > thirty_days_ago:
+                    report_item["monitor_status"] = "Changed"
+                    break
+            except Exception:
+                continue
     
     save_snapshot(trial_id, new_data)
     return report_item, raw_data
@@ -370,8 +375,11 @@ def main():
         
         # Save target-specific data
         if target_reports:
-            save_target_data(target_name, target_reports, target_raw)
-            update_target_history(target_name, target_reports)
+            try:
+                save_target_data(target_name, target_reports, target_raw)
+                update_target_history(target_name, target_reports)
+            except Exception as e:
+                print(f"  Error saving data for target {target_name}: {e}")
         
         # Collect target summary
         target_summaries.append({
