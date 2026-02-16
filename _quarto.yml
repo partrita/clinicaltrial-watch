@@ -24,7 +24,7 @@ website:
 format:
   html:
     theme:
-      - flatly
+      - cosmo
       - brand
     css: styles.css
     toc: true

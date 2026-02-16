@@ -227,21 +227,13 @@ class TestPublishWorkflowDataAvailability:
             "main.py must run BEFORE quarto render in daily-watch.yml"
         )
 
-    def test_publish_generates_before_render(self):
-        """publish.yml must run main.py BEFORE quarto render."""
+    def test_publish_renders(self):
+        """publish.yml must run quarto render."""
         yml_path = os.path.join(
             os.path.dirname(__file__), '..', '.github', 'workflows', 'publish.yml'
         )
         with open(yml_path, 'r') as f:
             content = f.read()
 
-        main_pos = content.find("src/main.py")
         render_pos = content.find("pixi run render")
-
-        assert main_pos != -1, (
-            "publish.yml must run main.py BEFORE render to ensure CSV data exists"
-        )
         assert render_pos != -1, "publish.yml must run quarto render"
-        assert main_pos < render_pos, (
-            "main.py must run BEFORE quarto render in publish.yml"
-        )

@@ -318,11 +318,17 @@ def save_target_data(target_name, summary_report, all_raw_data):
     print(f"  Saved target data to {target_dir}/")
 
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
+from crawler import reset_session
 
 MAX_WORKERS = 10  # Reasonable number of concurrent requests to avoid getting blocked
+PER_TRIAL_TIMEOUT = 30  # Seconds per trial before skipping
+TARGET_TIMEOUT = 120  # 2 minutes max per target
 
 def main():
+    # Reset HTTP session to ensure fresh timeout settings
+    reset_session()
+    
     config = load_config()
     targets = config.get('targets', [])
     
@@ -351,16 +357,17 @@ def main():
         target_raw = []
         
         # Parallel processing of trials within each target
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            future_to_trial = {
-                executor.submit(process_trial, trial, target_name): trial 
-                for trial in trials
-            }
-            
-            for future in as_completed(future_to_trial):
+        executor = ThreadPoolExecutor(max_workers=MAX_WORKERS)
+        future_to_trial = {
+            executor.submit(process_trial, trial, target_name): trial 
+            for trial in trials
+        }
+        
+        try:
+            for future in as_completed(future_to_trial, timeout=TARGET_TIMEOUT):
                 current_trial_idx += 1
                 try:
-                    report, raw = future.result()
+                    report, raw = future.result(timeout=PER_TRIAL_TIMEOUT)
                     if report:
                         target_reports.append(report)
                         all_reports.append(report)
@@ -369,9 +376,18 @@ def main():
                         all_raw.append(raw)
                     
                     print(f"[{current_trial_idx}/{total_trials}] Processed {future_to_trial[future]['id']}")
+                except TimeoutError:
+                    trial_id = future_to_trial[future]['id']
+                    print(f"[{current_trial_idx}/{total_trials}] Timeout processing {trial_id}, skipping")
                 except Exception as e:
                     trial_id = future_to_trial[future]['id']
                     print(f"[{current_trial_idx}/{total_trials}] Error processing {trial_id}: {e}")
+        except TimeoutError:
+            skipped = sum(1 for f in future_to_trial if not f.done())
+            print(f"  ⚠ Target {target_name} timed out after {TARGET_TIMEOUT}s, skipped {skipped} remaining trials")
+        finally:
+            # Don't wait for remaining threads — move on immediately
+            executor.shutdown(wait=False, cancel_futures=True)
         
         # Save target-specific data
         if target_reports:
@@ -402,3 +418,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # Force exit to kill any lingering background threads from timed-out targets
+    os._exit(0)

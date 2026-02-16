@@ -75,7 +75,7 @@ if os.path.exists(summary_path):
         with open(summary_path, "r") as f:
             summary = json.load(f)
     except Exception as e:
-        print(f"Error loading data: {e}")
+        print(f"Error loading data: {{e}}")
         summary = []
     
     print("| Trial ID | Sponsor | Update | Status | Conditions | Phases | Start | End | Enroll | Last Updated |")
@@ -187,7 +187,7 @@ if os.path.exists(target_h_file):
         with open(target_h_file, "r") as f:
             history = json.load(f)
     except Exception as e:
-        print(f"Error loading history: {e}")
+        print(f"Error loading history: {{e}}")
         history = []
     
     for record in reversed(history[-10:]):
@@ -278,7 +278,7 @@ if os.path.exists(summary_path):
         with open(summary_path, "r") as f:
             targets = json.load(f)
     except Exception as e:
-        print(f"Error loading summary: {e}")
+        print(f"Error loading summary: {{e}}")
         targets = []
     
     print("| Target | Description | Trials | Changed |")

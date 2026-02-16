@@ -2,5 +2,9 @@
   {
     "timestamp": "2026-02-05 15:10:41",
     "diff": "Initial data collection"
+  },
+  {
+    "timestamp": "2026-02-16 21:08:10",
+    "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-11` to `2026-02`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-12-02` to `2026-02-11`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-12-08` to `2026-02-13`\nField `contactsLocationsModule.locations.[0]status` changed from `RECRUITING` to `COMPLETED`\nField `contactsLocationsModule.locations.[1]status` changed from `RECRUITING` to `COMPLETED`\nField `contactsLocationsModule.locations.[18]status` changed from `WITHDRAWN` to `NOT_YET_RECRUITING`\nField `contactsLocationsModule.locations.[18]city` changed from `South Brisbane` to `Taichung`\nField `contactsLocationsModule.locations.[18]zip` changed from `4101` to `40705`\nField `contactsLocationsModule.locations.[18]country` changed from `Australia` to `Taiwan`\nField `contactsLocationsModule.locations.[18]geoPoint.lat` changed from `-27.48034` to `24.1469`\nField `contactsLocationsModule.locations.[18]geoPoint.lon` changed from `153.02049` to `120.6839`"
   }
 ]

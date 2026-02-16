@@ -19,10 +19,10 @@ if os.path.exists(summary_path):
         with open(summary_path, "r") as f:
             targets = json.load(f)
     except Exception as e:
-        print(f"Error loading summary data: {e}")
+        print(f"Error loading summary: {e}")
         targets = []
     
-    print("| Target | Description | Trials | Changed(in a month) |")
+    print("| Target | Description | Trials | Changed |")
     print("| --- | --- | --- | --- |")
     for target in targets:
         name = target['name']
