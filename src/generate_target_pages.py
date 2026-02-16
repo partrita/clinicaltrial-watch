@@ -108,7 +108,11 @@ target_name = "{target_lower}"
 csv_path = f"data/targets/{{target_name}}/all_trials_raw.csv"
 
 if os.path.exists(csv_path):
-    df = pd.read_csv(csv_path)
+    try:
+        df = pd.read_csv(csv_path, on_bad_lines='skip')
+    except Exception as e:
+        print(f"Error reading CSV: {{e}}")
+        df = pd.DataFrame()
     
     if 'status_overallStatus' in df.columns:
         status_counts = df['status_overallStatus'].value_counts().reset_index()
@@ -119,6 +123,7 @@ if os.path.exists(csv_path):
                      template='plotly_white')
         fig1.show()
 else:
+    df = pd.DataFrame()
     print("No data available yet.")
 ```
 
