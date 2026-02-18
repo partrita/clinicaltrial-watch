@@ -2,5 +2,9 @@
   {
     "timestamp": "2026-02-12 14:01:36",
     "diff": "Initial data collection"
+  },
+  {
+    "timestamp": "2026-02-18 01:00:46",
+    "diff": "Field `statusModule.statusVerifiedDate` changed from `2026-01` to `2026-02`\nField `statusModule.lastUpdateSubmitDate` changed from `2026-01-16` to `2026-02-16`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2026-01-20` to `2026-02-17`\nField `contactsLocationsModule.locations.[22]city` changed from `N. Efkapria-Pavlos Melas` to `Pavlos Melas`\nField `contactsLocationsModule.locations.[30]facility` changed from `ICO l?Hospitalet ? Hospital Duran i Reynals` to `ICO Hospitalet- Hospital Duran i Reynals`"
   }
 ]
