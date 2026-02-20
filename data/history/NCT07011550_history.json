@@ -2,5 +2,9 @@
   {
     "timestamp": "2026-02-12 14:01:36",
     "diff": "Initial data collection"
+  },
+  {
+    "timestamp": "2026-02-20 00:56:09",
+    "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-08` to `2026-02`\nField `statusModule.overallStatus` changed from `RECRUITING` to `SUSPENDED`\nField `statusModule.startDateStruct.date` changed from `2025-11-30` to `2025-08-15`\nField `statusModule.startDateStruct.type` changed from `ESTIMATED` to `ACTUAL`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-08-20` to `2026-02-17`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-08-27` to `2026-02-19`\nField `designModule.enrollmentInfo.count` changed from `40` to `7`\nField `designModule.enrollmentInfo.type` changed from `ESTIMATED` to `ACTUAL`\nNew field added: `root['statusModule']['whyStopped']`\nField removed: `root['contactsLocationsModule']['centralContacts']`\nField removed: `root['contactsLocationsModule']['locations'][0]['status']`\nField removed: `root['contactsLocationsModule']['locations'][0]['contacts']`"
   }
 ]
