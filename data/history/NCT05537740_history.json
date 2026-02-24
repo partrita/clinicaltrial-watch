@@ -6,5 +6,9 @@
   {
     "timestamp": "2026-02-12 14:01:36",
     "diff": "Field removed: `root['referencesModule']['seeAlsoLinks']`"
+  },
+  {
+    "timestamp": "2026-02-24 00:57:04",
+    "diff": "Field `statusModule.statusVerifiedDate` changed from `2026-01` to `2026-02`\nField `statusModule.lastUpdateSubmitDate` changed from `2026-01-21` to `2026-02-20`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2026-01-22` to `2026-02-23`\nField `contactsLocationsModule.locations.[20]facility` changed from `Clinica Universidad De Navarra | Oncologia Medica` to `Clinica Universidad de Navarra | Pamplona | Oncologia`\nField `contactsLocationsModule.locations.[22]facility` changed from `Clinica Universidad De Navarra | Oncologia Medica` to `Clinica Universidad de Navarra | Madrid | Oncologia`"
   }
 ]
