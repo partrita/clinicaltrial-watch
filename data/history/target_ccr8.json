@@ -30,5 +30,9 @@
   {
     "timestamp": "2026-02-25 01:02:23",
     "event": "Changes detected in 1 trials: NCT07011550"
+  },
+  {
+    "timestamp": "2026-02-26 00:55:49",
+    "event": "Changes detected in 2 trials: NCT04895709, NCT06911827"
   }
 ]

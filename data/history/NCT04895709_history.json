@@ -2,5 +2,9 @@
   {
     "timestamp": "2026-02-12 14:01:35",
     "diff": "Initial data collection"
+  },
+  {
+    "timestamp": "2026-02-26 00:55:48",
+    "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-12` to `2026-02`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-12-16` to `2026-02-23`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-12-17` to `2026-02-25`\nField `contactsLocationsModule.centralContacts.[0]name` changed from `BMS Study Connect Contact Center www.BMSStudyConnect.com` to `BMS Clinical Trials Contact Center www.BMSClinicalTrials.com`\nField `contactsLocationsModule.locations.[3]status` changed from `COMPLETED` to `ACTIVE_NOT_RECRUITING`\nField `contactsLocationsModule.locations.[7]status` changed from `COMPLETED` to `ACTIVE_NOT_RECRUITING`\nNew field added: `root['ipdSharingStatementModule']`"
   }
 ]
