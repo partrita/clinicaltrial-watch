@@ -2,28 +2,30 @@
 title: "About"
 ---
 
-## Project Overview
+## 프로젝트 개요
 
-Clinical Trial Watch is an automated monitoring system designed to track changes in clinical trials related to selected therapeutic targets (e.g., CCR8, TIGIT, IgE). By leveraging the ClinicalTrials.gov API v2, this project provides researchers and clinicians with a clear, up-to-date view of the competitive landscape.
+Clinicaltrials.gov Watcher는 선택된 치료 타겟(예: CCR8, TIGIT, B7-H3)과 관련된 임상시험의 변동 사항을 추적하도록 설계된 자동 모니터링 시스템입니다. ClinicalTrials.gov API v2를 활용하여, 이 프로젝트는 연구자와 임상의에게 경쟁 환경에 대한 명확하고 최신의 뷰를 제공합니다.
 
-## Key Features
+## 주요 기능
 
-- Automated Monitoring: Daily updates on the status and key parameters of clinical trials for multiple targets.
-- Change Detection: Intelligent diffing engine that highlights meaningful changes in recruitment status, phase, and completion dates.
-- Data Insights: Interactive visualizations to help understand clinical trial trends and distributions for each target.
-- Open Data: All consolidated raw data is available for download as a CSV for deeper analysis.
+- 자동 탐색 (Auto-Discovery): 정의된 타겟과 일치하는 새로운 임상시험을 자동으로 검색하고 등록합니다.
+- 자동 모니터링 (Automated Monitoring): 여러 타겟에 대한 임상시험의 상태 및 주요 매개변수에 대한 일 단위 업데이트를 제공합니다.
+- 변경 감지 (Change Detection): 모집 현황, 단계, 예상 종료일 등의 의미 있는 변화를 강조하는 지능형 비교(diffing) 엔진을 포함합니다.
+- 데이터 인사이트 (Data Insights): 각 타겟에 대한 임상시험 동향과 분포를 이해하는 데 도움이 되는 대화형 시각화 자료를 제공합니다.
+- 오픈 데이터 (Open Data): 심층 분석을 위해 통합된 모든 원시 데이터를 CSV 형식으로 다운로드할 수 있습니다.
 
-## How it Works
+## 동작 방식
 
-1. Daily Watch: A GitHub Actions workflow runs every 24 hours to fetch the latest data for all NCT IDs listed in `trials.yaml`.
-2. Analysis: The `src/main.py` script compares current data with previous snapshots to identify any changes.
-3. Report Generation: Updates are logged in the `history.qmd` page, and the dashboard is refreshed with the latest summary stats.
-4. Publishing: The updated Quarto website is automatically published to GitHub Pages.
+1. 자동 탐색 (Auto-Discovery): 각 타겟과 관련된 새로운 임상에 대해 ClinicalTrials.gov API를 질의하고 `trials.yaml`을 자동으로 업데이트합니다.
+2. 일일 감시 (Daily Watch): GitHub Actions 워크플로우가 24시간마다 실행되어 `trials.yaml`에 나열된 모든 NCT ID에 대한 최신 데이터를 가져옵니다.
+3. 분석 (Analysis): `src/main.py` 스크립트가 현재 데이터와 이전 스냅샷을 비교하여 변경 사항을 식별합니다.
+4. 리포트 생성 (Report Generation): 업데이트 내역이 타겟별 페이지에 기록되며, 최신 통계로 요약 정보가 갱신됩니다.
+5. 배포 (Publishing): 업데이트된 Quarto 웹사이트가 GitHub Pages에 자동으로 배포됩니다.
 
-## Data Source
+## 데이터 출처
 
-All data is sourced from [ClinicalTrials.gov](https://clinicaltrials.gov/) via their official API. 
+모든 데이터는 공식 API를 통해 [ClinicalTrials.gov](https://clinicaltrials.gov/)에서 수집됩니다.
 
 ---
 
-*This project is built using Python, Quarto, and GitHub Actions.*
+*이 프로젝트는 Python, Quarto 및 GitHub Actions를 사용하였습니다.*

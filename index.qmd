@@ -1,8 +1,7 @@
 ---
-title: "Clinical Trial Watch"
+title: "Targets Overview"
 ---
 
-## Targets Overview
 
 임상시험을 타겟별로 모니터링합니다.
 
