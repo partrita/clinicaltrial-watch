@@ -4,7 +4,7 @@ project:
   execute-dir: project
 
 website:
-  title: "Clinicaltrials.gov Watcher"
+  title: "Clinical Trial Watch"
   navbar:
     left:
       - href: index.qmd
@@ -15,6 +15,8 @@ website:
             text: CCR8
           - href: targets/tigit.qmd
             text: TIGIT
+          - href: targets/ige.qmd
+            text: IgE
           - href: targets/b7-h3.qmd
             text: B7-H3
       - about.qmd
@@ -22,7 +24,7 @@ website:
 format:
   html:
     theme:
-      - flatly
+      - cosmo
       - brand
     css: styles.css
     toc: true

@@ -7,10 +7,10 @@ Uses mocking to avoid real network calls while testing the full processing pipel
 import json
 import os
 import sys
-import pytest
-from unittest.mock import patch
+from typing import Any
+from unittest.mock import patch, MagicMock
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from main import process_trial
 
@@ -18,36 +18,22 @@ from main import process_trial
 # Sample trial data mimicking real ClinicalTrials.gov API response
 SAMPLE_TRIAL_DATA = {
     "protocolSection": {
-        "identificationModule": {
-            "nctId": "NCT00000001",
-            "briefTitle": "Test Trial"
-        },
+        "identificationModule": {"nctId": "NCT00000001", "briefTitle": "Test Trial"},
         "statusModule": {
             "overallStatus": "RECRUITING",
             "startDateStruct": {"date": "2025-01-01"},
             "completionDateStruct": {"date": "2026-12-31"},
             "lastUpdatePostDateStruct": {"date": "2026-02-01"},
-            "lastUpdateSubmitDate": "2026-01-28"
+            "lastUpdateSubmitDate": "2026-01-28",
         },
-        "sponsorCollaboratorsModule": {
-            "leadSponsor": {"name": "Test University"}
-        },
-        "designModule": {
-            "enrollmentInfo": {"count": 100},
-            "phases": ["PHASE2"]
-        },
-        "conditionsModule": {
-            "conditions": ["Cancer", "Melanoma"]
-        },
+        "sponsorCollaboratorsModule": {"leadSponsor": {"name": "Test University"}},
+        "designModule": {"enrollmentInfo": {"count": 100}, "phases": ["PHASE2"]},
+        "conditionsModule": {"conditions": ["Cancer", "Melanoma"]},
         "descriptionModule": {
             "briefSummary": "A test trial for testing.",
-            "detailedDescription": "Detailed description of the test trial."
+            "detailedDescription": "Detailed description of the test trial.",
         },
-        "outcomesModule": {
-            "primaryOutcomes": [
-                {"measure": "Overall Survival"}
-            ]
-        }
+        "outcomesModule": {"primaryOutcomes": [{"measure": "Overall Survival"}]},
     }
 }
 
@@ -55,10 +41,17 @@ SAMPLE_TRIAL_DATA = {
 class TestProcessTrial:
     """Integration tests for process_trial."""
 
-    @patch('main.fetch_trial_data')
-    @patch('main.save_snapshot')
-    @patch('main.compare_snapshots', return_value=None)
-    def test_successful_processing(self, mock_compare, mock_save, mock_fetch, tmp_path, monkeypatch):
+    @patch("main.fetch_trial_data")
+    @patch("main.save_snapshot")
+    @patch("main.compare_snapshots", return_value=None)
+    def test_successful_processing(
+        self,
+        mock_compare: MagicMock,
+        mock_save: MagicMock,
+        mock_fetch: MagicMock,
+        tmp_path: Any,
+        monkeypatch: Any,
+    ) -> None:
         """Should process a trial and return a valid report."""
         monkeypatch.chdir(tmp_path)
         mock_fetch.return_value = SAMPLE_TRIAL_DATA
@@ -77,8 +70,10 @@ class TestProcessTrial:
         assert report["primary_outcome"] == "Overall Survival"
         assert report["monitor_status"] == "No Change"
 
-    @patch('main.fetch_trial_data')
-    def test_no_data_available(self, mock_fetch, tmp_path, monkeypatch):
+    @patch("main.fetch_trial_data")
+    def test_no_data_available(
+        self, mock_fetch: MagicMock, tmp_path: Any, monkeypatch: Any
+    ) -> None:
         """When API returns None and no local snapshot, should return None, None."""
         monkeypatch.chdir(tmp_path)
         mock_fetch.return_value = None
@@ -89,10 +84,17 @@ class TestProcessTrial:
         assert report is None
         assert raw is None
 
-    @patch('main.fetch_trial_data')
-    @patch('main.save_snapshot')
-    @patch('main.compare_snapshots', return_value=None)
-    def test_fallback_to_local_snapshot(self, mock_compare, mock_save, mock_fetch, tmp_path, monkeypatch):
+    @patch("main.fetch_trial_data")
+    @patch("main.save_snapshot")
+    @patch("main.compare_snapshots", return_value=None)
+    def test_fallback_to_local_snapshot(
+        self,
+        mock_compare: MagicMock,
+        mock_save: MagicMock,
+        mock_fetch: MagicMock,
+        tmp_path: Any,
+        monkeypatch: Any,
+    ) -> None:
         """When API fails, should fall back to local snapshot."""
         monkeypatch.chdir(tmp_path)
         mock_fetch.return_value = None
@@ -109,10 +111,17 @@ class TestProcessTrial:
         assert report is not None
         assert report["sponsor"] == "Test University"
 
-    @patch('main.fetch_trial_data')
-    @patch('main.save_snapshot')
-    @patch('main.compare_snapshots', return_value=None)
-    def test_corrupted_local_snapshot(self, mock_compare, mock_save, mock_fetch, tmp_path, monkeypatch):
+    @patch("main.fetch_trial_data")
+    @patch("main.save_snapshot")
+    @patch("main.compare_snapshots", return_value=None)
+    def test_corrupted_local_snapshot(
+        self,
+        mock_compare: MagicMock,
+        mock_save: MagicMock,
+        mock_fetch: MagicMock,
+        tmp_path: Any,
+        monkeypatch: Any,
+    ) -> None:
         """Corrupted local snapshot should not crash, should return None."""
         monkeypatch.chdir(tmp_path)
         mock_fetch.return_value = None
@@ -129,10 +138,17 @@ class TestProcessTrial:
         assert report is None
         assert raw is None
 
-    @patch('main.fetch_trial_data')
-    @patch('main.save_snapshot')
-    @patch('main.compare_snapshots')
-    def test_with_changes_detected(self, mock_compare, mock_save, mock_fetch, tmp_path, monkeypatch):
+    @patch("main.fetch_trial_data")
+    @patch("main.save_snapshot")
+    @patch("main.compare_snapshots")
+    def test_with_changes_detected(
+        self,
+        mock_compare: MagicMock,
+        mock_save: MagicMock,
+        mock_fetch: MagicMock,
+        tmp_path: Any,
+        monkeypatch: Any,
+    ) -> None:
         """When changes are detected, report should reflect that."""
         monkeypatch.chdir(tmp_path)
         mock_fetch.return_value = SAMPLE_TRIAL_DATA
@@ -146,6 +162,7 @@ class TestProcessTrial:
 
         # Need to handle the case where diff_engine doesn't have deepdiff
         import diff_engine
+
         original = diff_engine.HAS_DEEPDIFF
         diff_engine.HAS_DEEPDIFF = False
         try:
@@ -157,19 +174,22 @@ class TestProcessTrial:
         assert report.get("changed_today") is True
         assert "RECENT CHANGES FOUND" in report["details"]
 
-    @patch('main.fetch_trial_data')
-    @patch('main.save_snapshot')
-    @patch('main.compare_snapshots', return_value=None)
-    def test_missing_optional_fields(self, mock_compare, mock_save, mock_fetch, tmp_path, monkeypatch):
+    @patch("main.fetch_trial_data")
+    @patch("main.save_snapshot")
+    @patch("main.compare_snapshots", return_value=None)
+    def test_missing_optional_fields(
+        self,
+        mock_compare: MagicMock,
+        mock_save: MagicMock,
+        mock_fetch: MagicMock,
+        tmp_path: Any,
+        monkeypatch: Any,
+    ) -> None:
         """Trial data with missing optional fields should not crash."""
         monkeypatch.chdir(tmp_path)
         # Minimal data - missing many optional fields
         minimal_data = {
-            "protocolSection": {
-                "statusModule": {
-                    "overallStatus": "UNKNOWN"
-                }
-            }
+            "protocolSection": {"statusModule": {"overallStatus": "UNKNOWN"}}
         }
         mock_fetch.return_value = minimal_data
 

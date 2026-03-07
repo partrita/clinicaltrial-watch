@@ -1,7 +1,8 @@
 ---
-title: "Targets Overview"
+title: "Clinical Trial Watch"
 ---
 
+## Targets Overview
 
 임상시험을 타겟별로 모니터링합니다.
 
@@ -10,6 +11,7 @@ title: "Targets Overview"
 #| output: asis
 import json
 import os
+from utils import sanitize_id
 
 summary_path = "data/targets_summary.json"
 

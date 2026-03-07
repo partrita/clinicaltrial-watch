@@ -8,23 +8,26 @@ import os
 import json
 import csv
 from datetime import datetime, timedelta
-from crawler import fetch_trial_data, save_snapshot
+from typing import Any, Dict, List, Optional, Tuple
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
+from crawler import fetch_trial_data, save_snapshot, reset_session
 from utils import sanitize_id
 from diff_engine import compare_snapshots, format_diff
 from generate_target_pages import main as generate_pages
 
 try:
     import yaml
+
     HAS_YAML = True
 except ImportError:
     HAS_YAML = False
 
 
-def load_config(config_path="trials.yaml"):
+def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     """Load trials configuration from YAML file."""
     data = {}
     if HAS_YAML:
-        with open(config_path, 'r', encoding='utf-8') as f:
+        with open(config_path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f) or {}
     else:
         # Fallback manual parser for targets structure
@@ -32,143 +35,158 @@ def load_config(config_path="trials.yaml"):
         targets = []
         current_target = None
         current_trial = {}
-        
-        with open(config_path, 'r', encoding='utf-8') as f:
+
+        with open(config_path, "r", encoding="utf-8") as f:
             for line in f:
                 stripped = line.strip()
-                if not stripped or stripped.startswith('#'):
+                if not stripped or stripped.startswith("#"):
                     continue
-                
-                indent = len(line) - len(line.lstrip())
-                
+
                 if stripped.startswith("- name:"):
                     if current_target:
                         targets.append(current_target)
                     current_target = {
-                        'name': stripped.split(":", 1)[1].strip().strip('"').strip("'"),
-                        'description': '',
-                        'trials': []
+                        "name": stripped.split(":", 1)[1].strip().strip('"').strip("'"),
+                        "description": "",
+                        "trials": [],
                     }
                 elif stripped.startswith("description:") and current_target:
-                    current_target['description'] = stripped.split(":", 1)[1].strip().strip('"').strip("'")
+                    current_target["description"] = (
+                        stripped.split(":", 1)[1].strip().strip('"').strip("'")
+                    )
                 elif stripped.startswith("- id:") and current_target:
                     if current_trial:
-                        current_target['trials'].append(current_trial)
-                    current_trial = {'id': stripped.split(":", 1)[1].strip().strip('"').strip("'")}
+                        current_target["trials"].append(current_trial)
+                    current_trial = {
+                        "id": stripped.split(":", 1)[1].strip().strip('"').strip("'")
+                    }
                 elif stripped.startswith("name:") and current_trial:
-                    current_trial['name'] = stripped.split(":", 1)[1].strip().strip('"').strip("'")
-            
+                    current_trial["name"] = (
+                        stripped.split(":", 1)[1].strip().strip('"').strip("'")
+                    )
+
             if current_trial and current_target:
-                current_target['trials'].append(current_trial)
+                current_target["trials"].append(current_trial)
             if current_target:
                 targets.append(current_target)
-        
-        data = {'targets': targets}
+
+        data = {"targets": targets}
 
     # Handle legacy format (flat trials list)
-    if 'trials' in data and 'targets' not in data:
+    if "trials" in data and "targets" not in data:
         print("Converting legacy format to target-based structure...")
         data = {
-            'targets': [{
-                'name': 'Default',
-                'description': 'Migrated from legacy format',
-                'trials': data['trials']
-            }]
+            "targets": [
+                {
+                    "name": "Default",
+                    "description": "Migrated from legacy format",
+                    "trials": data["trials"],
+                }
+            ]
         }
-    
+
     # Handle old 'topics' naming
-    if 'topics' in data and 'targets' not in data:
-        data['targets'] = data.pop('topics')
-    
+    if "topics" in data and "targets" not in data:
+        data["targets"] = data.pop("topics")
+
     return data
 
 
 _SENTINEL = object()
 
-def safe_json_load(file_path, default=_SENTINEL):
+
+def safe_json_load(file_path: str, default: Any = _SENTINEL) -> Any:
     """Safely load JSON from a file, returning default if error occurs."""
     if default is _SENTINEL:
         default = []
     if not os.path.exists(file_path):
         return default
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             return json.load(f)
     except (json.JSONDecodeError, Exception) as e:
         print(f"  Warning: Failed to load {file_path}: {e}. Returning default.")
         return default
 
 
-def update_history(trial_id, diff_text, history_dir="data/history"):
+def update_history(
+    trial_id: str, diff_text: str, history_dir: str = "data/history"
+) -> None:
     """Save change history for a trial."""
     if not os.path.exists(history_dir):
         os.makedirs(history_dir)
-    
+
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     safe_trial_id = sanitize_id(trial_id)
     history_file = os.path.join(history_dir, f"{safe_trial_id}_history.json")
-    
+
     history = safe_json_load(history_file, default=[])
-    
-    history.append({
-        "timestamp": timestamp,
-        "diff": diff_text
-    })
-    
-    with open(history_file, 'w', encoding='utf-8') as f:
+
+    history.append({"timestamp": timestamp, "diff": diff_text})
+
+    with open(history_file, "w", encoding="utf-8") as f:
         json.dump(history, f, indent=2, ensure_ascii=False)
 
 
-def update_target_history(target_name, current_reports, history_dir="data/history"):
+def update_target_history(
+    target_name: str,
+    current_reports: List[Dict[str, Any]],
+    history_dir: str = "data/history",
+) -> None:
     """Save change history for a target."""
     if not os.path.exists(history_dir):
         os.makedirs(history_dir)
-    
+
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     safe_target_name = sanitize_id(target_name)
     history_file = os.path.join(history_dir, f"target_{safe_target_name.lower()}.json")
-    
+
     history = safe_json_load(history_file, default=[])
-    
+
     # Check for changes today specifically for the daily log
-    changed_today = [r['id'] for r in current_reports if r.get('changed_today')]
-    
+    changed_today = [r["id"] for r in current_reports if r.get("changed_today")]
+
     message = ""
     if not history:
         message = f"Initial data collection: {len(current_reports)} trials found."
     elif changed_today:
         message = f"Changes detected in {len(changed_today)} trials: {', '.join(changed_today)}"
-    
+
     if message:
-        history.append({
-            "timestamp": timestamp,
-            "event": message
-        })
-        
-        with open(history_file, 'w', encoding='utf-8') as f:
+        history.append({"timestamp": timestamp, "event": message})
+
+        with open(history_file, "w", encoding="utf-8") as f:
             json.dump(history, f, indent=2, ensure_ascii=False)
         print(f"  Updated target history for {target_name}")
 
 
-def flatten_dict(d, parent_key='', sep='_'):
+def flatten_dict(
+    d: Dict[str, Any], parent_key: str = "", sep: str = "_"
+) -> Dict[str, Any]:
     """Flatten nested dictionary for CSV export."""
     items = []
     for k, v in d.items():
         clean_k = k
-        if parent_key == '':
-            if k == 'protocolSection': clean_k = 'Prot'
-            elif k == 'derivedSection': clean_k = 'Deriv'
-            elif k == 'annotationSection': clean_k = 'Annot'
-            elif k == 'resultsSection': clean_k = 'Res'
-        
-        if k.endswith('Module'): clean_k = k.replace('Module', '')
-        if k.endswith('Struct'): clean_k = k.replace('Struct', '')
-        
+        if parent_key == "":
+            if k == "protocolSection":
+                clean_k = "Prot"
+            elif k == "derivedSection":
+                clean_k = "Deriv"
+            elif k == "annotationSection":
+                clean_k = "Annot"
+            elif k == "resultsSection":
+                clean_k = "Res"
+
+        if k.endswith("Module"):
+            clean_k = k.replace("Module", "")
+        if k.endswith("Struct"):
+            clean_k = k.replace("Struct", "")
+
         new_key = f"{parent_key}{sep}{clean_k}" if parent_key else clean_k
-        
-        for prefix in ['Prot_', 'Deriv_', 'Annot_', 'Res_']:
+
+        for prefix in ["Prot_", "Deriv_", "Annot_", "Res_"]:
             if new_key.startswith(prefix):
-                new_key = new_key[len(prefix):]
+                new_key = new_key[len(prefix) :]
 
         if isinstance(v, dict):
             items.extend(flatten_dict(v, new_key, sep=sep).items())
@@ -182,11 +200,13 @@ def flatten_dict(d, parent_key='', sep='_'):
     return dict(items)
 
 
-def process_trial(trial, target_name):
+def process_trial(
+    trial: Dict[str, Any], target_name: str
+) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
     """Process a single trial and return report data."""
-    trial_id = trial['id']
+    trial_id = trial["id"]
     print(f"Processing {trial_id}...")
-    
+
     new_data = fetch_trial_data(trial_id)
     if not new_data:
         safe_trial_id = sanitize_id(trial_id)
@@ -195,36 +215,45 @@ def process_trial(trial, target_name):
         if not new_data:
             print(f"  Skipping {trial_id} - no data available.")
             return None, None
-    
+
     raw_data = flatten_dict(new_data)
-    raw_data['_target'] = target_name
-    
-    protocol = new_data.get('protocolSection', {})
-    status_mod = protocol.get('statusModule', {})
-    
-    sponsor = protocol.get('sponsorCollaboratorsModule', {}).get('leadSponsor', {}).get('name', 'N/A')
-    last_update = status_mod.get('lastUpdatePostDateStruct', {}).get('date', 'N/A')
-    start_date = status_mod.get('startDateStruct', {}).get('date', 'N/A')
-    end_date = status_mod.get('completionDateStruct', {}).get('date', 'N/A')
-    enrollment = protocol.get('designModule', {}).get('enrollmentInfo', {}).get('count', 'N/A')
-    
-    primary_outcomes = protocol.get('outcomesModule', {}).get('primaryOutcomes', [])
-    primary_outcome = primary_outcomes[0].get('measure', 'N/A') if primary_outcomes else 'N/A'
-    
-    study_status = status_mod.get('overallStatus', 'N/A')
-    last_submit_date = status_mod.get('lastUpdateSubmitDate', 'N/A')
-    conditions_list = protocol.get('conditionsModule', {}).get('conditions', [])
+    raw_data["_target"] = target_name
+
+    protocol = new_data.get("protocolSection", {})
+    status_mod = protocol.get("statusModule", {})
+
+    sponsor = (
+        protocol.get("sponsorCollaboratorsModule", {})
+        .get("leadSponsor", {})
+        .get("name", "N/A")
+    )
+    start_date = status_mod.get("startDateStruct", {}).get("date", "N/A")
+    end_date = status_mod.get("completionDateStruct", {}).get("date", "N/A")
+    enrollment = (
+        protocol.get("designModule", {}).get("enrollmentInfo", {}).get("count", "N/A")
+    )
+
+    primary_outcomes = protocol.get("outcomesModule", {}).get("primaryOutcomes", [])
+    primary_outcome = (
+        primary_outcomes[0].get("measure", "N/A") if primary_outcomes else "N/A"
+    )
+
+    study_status = status_mod.get("overallStatus", "N/A")
+    last_submit_date = status_mod.get("lastUpdateSubmitDate", "N/A")
+    conditions_list = protocol.get("conditionsModule", {}).get("conditions", [])
     conditions = ", ".join(conditions_list) if conditions_list else "N/A"
-    phases_list = protocol.get('designModule', {}).get('phases', [])
+    phases_list = protocol.get("designModule", {}).get("phases", [])
     phases = ", ".join(phases_list) if phases_list else "N/A"
-    detailed_desc = protocol.get('descriptionModule', {}).get('detailedDescription', 
-                    protocol.get('descriptionModule', {}).get('briefSummary', 'N/A'))
+    detailed_desc = protocol.get("descriptionModule", {}).get(
+        "detailedDescription",
+        protocol.get("descriptionModule", {}).get("briefSummary", "N/A"),
+    )
 
     diff = compare_snapshots(trial_id, new_data)
-    
+
     report_item = {
         "id": trial_id,
-        "name": trial['name'],
+        "name": trial["name"],
         "target": target_name,
         "sponsor": sponsor,
         "status": study_status,
@@ -237,7 +266,7 @@ def process_trial(trial, target_name):
         "primary_outcome": primary_outcome,
         "monitor_status": "No Change",
         "last_monitored_change": "No changes yet",
-        "details": detailed_desc
+        "details": detailed_desc,
     }
 
     if diff:
@@ -245,130 +274,139 @@ def process_trial(trial, target_name):
         print(f"  Changes found for {trial_id}")
         update_history(trial_id, diff_text)
         last_monitored = datetime.now().strftime("%Y-%m-%d")
-        report_item.update({
-            "changed_today": True,
-            "last_monitored_change": last_monitored,
-            "details": f"**[RECENT CHANGES FOUND]**\n{diff_text}\n\n***\n{detailed_desc}"
-        })
+        report_item.update(
+            {
+                "changed_today": True,
+                "last_monitored_change": last_monitored,
+                "details": f"**[RECENT CHANGES FOUND]**\n{diff_text}\n\n***\n{detailed_desc}",
+            }
+        )
     else:
         safe_trial_id = sanitize_id(trial_id)
         history_file = f"data/history/{safe_trial_id}_history.json"
         if not os.path.exists(history_file):
             print(f"  Initializing history for {trial_id}")
             update_history(trial_id, "Initial data collection")
-            
+
     # Check for any changes in the last 30 days to set monitor_status
     safe_trial_id = sanitize_id(trial_id)
     history_file = f"data/history/{safe_trial_id}_history.json"
     history = safe_json_load(history_file, default=[])
     if history:
         # Update last_monitored_change from history
-        report_item["last_monitored_change"] = history[-1]['timestamp'].split(' ')[0]
-                
+        report_item["last_monitored_change"] = history[-1]["timestamp"].split(" ")[0]
+
         # Check 30 day window
         thirty_days_ago = datetime.now() - timedelta(days=30)
-        for record in reversed(history): # Search from newest
-            if record['diff'] == "Initial data collection":
+        for record in reversed(history):  # Search from newest
+            if record["diff"] == "Initial data collection":
                 continue
             try:
-                ts = record['timestamp']
+                ts = record["timestamp"]
                 if len(ts) > 10:
                     record_date = datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
                 else:
                     record_date = datetime.strptime(ts, "%Y-%m-%d")
-                    
+
                 if record_date > thirty_days_ago:
                     report_item["monitor_status"] = "Changed"
                     break
             except Exception:
                 continue
-    
+
     save_snapshot(trial_id, new_data)
     return report_item, raw_data
 
-def save_target_data(target_name, summary_report, all_raw_data):
+
+def save_target_data(
+    target_name: str,
+    summary_report: List[Dict[str, Any]],
+    all_raw_data: List[Dict[str, Any]],
+) -> None:
     """Save data for a specific target."""
     safe_target_name = sanitize_id(target_name)
     target_dir = f"data/targets/{safe_target_name.lower()}"
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
-    
+
     # Save JSON summary
-    with open(f"{target_dir}/status_summary.json", 'w', encoding='utf-8') as f:
+    with open(f"{target_dir}/status_summary.json", "w", encoding="utf-8") as f:
         json.dump(summary_report, f, indent=2, ensure_ascii=False)
-    
+
     # Save CSV summary
     if summary_report:
         keys = set()
         for item in summary_report:
             keys.update(item.keys())
         headers = sorted(list(keys))
-        
-        with open(f"{target_dir}/status_summary.csv", 'w', encoding='utf-8-sig', newline='') as f:
+
+        with open(
+            f"{target_dir}/status_summary.csv", "w", encoding="utf-8-sig", newline=""
+        ) as f:
             dict_writer = csv.DictWriter(f, fieldnames=headers)
             dict_writer.writeheader()
             dict_writer.writerows(summary_report)
-    
+
     # Save raw data CSV
     if all_raw_data:
         all_keys = set()
         for row in all_raw_data:
             all_keys.update(row.keys())
-        
+
         headers = sorted(list(all_keys))
-        with open(f"{target_dir}/all_trials_raw.csv", 'w', newline='', encoding='utf-8-sig') as f:
+        with open(
+            f"{target_dir}/all_trials_raw.csv", "w", newline="", encoding="utf-8-sig"
+        ) as f:
             writer = csv.DictWriter(f, fieldnames=headers)
             writer.writeheader()
             writer.writerows(all_raw_data)
-    
+
     print(f"  Saved target data to {target_dir}/")
 
-
-from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
-from crawler import reset_session
 
 MAX_WORKERS = 10  # Reasonable number of concurrent requests to avoid getting blocked
 PER_TRIAL_TIMEOUT = 30  # Seconds per trial before skipping
 TARGET_TIMEOUT = 120  # 2 minutes max per target
 
-def main():
+
+def main() -> None:
     # Reset HTTP session to ensure fresh timeout settings
     reset_session()
-    
+
     config = load_config()
-    targets = config.get('targets', [])
-    
+    targets = config.get("targets", [])
+
     if not targets:
         print("No targets found in trials.yaml")
         return
-    
+
     if not os.path.exists("data/snapshots"):
         os.makedirs("data/snapshots", exist_ok=True)
-    
+
     # Collect all trials for batch processing if needed, but here we process target by target
     target_summaries = []
     all_reports = []
     all_raw = []
-    
-    total_trials = sum(len(target.get('trials', [])) for target in targets)
+
+    total_trials = sum(len(target.get("trials", [])) for target in targets)
     current_trial_idx = 0
-    
+
     for target in targets:
-        target_name = target['name']
-        trials = target.get('trials', [])
-        
+        target_name = target["name"]
+        trials = target.get("trials", [])
+
         print(f"\nProcessing target: {target_name} ({len(trials)} trials)")
-        
+
         target_reports = []
         target_raw = []
-        
+
         # Parallel processing of trials within each target
         executor = ThreadPoolExecutor(max_workers=MAX_WORKERS)
         future_to_trial = {
-            executor.submit(process_trial, trial, target_name): trial 
+            executor.submit(process_trial, trial, target_name): trial
             for trial in trials
         }
-        
+
         try:
             for future in as_completed(future_to_trial, timeout=TARGET_TIMEOUT):
                 current_trial_idx += 1
@@ -380,21 +418,29 @@ def main():
                     if raw:
                         target_raw.append(raw)
                         all_raw.append(raw)
-                    
-                    print(f"[{current_trial_idx}/{total_trials}] Processed {future_to_trial[future]['id']}")
+
+                    print(
+                        f"[{current_trial_idx}/{total_trials}] Processed {future_to_trial[future]['id']}"
+                    )
                 except TimeoutError:
-                    trial_id = future_to_trial[future]['id']
-                    print(f"[{current_trial_idx}/{total_trials}] Timeout processing {trial_id}, skipping")
+                    trial_id = future_to_trial[future]["id"]
+                    print(
+                        f"[{current_trial_idx}/{total_trials}] Timeout processing {trial_id}, skipping"
+                    )
                 except Exception as e:
-                    trial_id = future_to_trial[future]['id']
-                    print(f"[{current_trial_idx}/{total_trials}] Error processing {trial_id}: {e}")
+                    trial_id = future_to_trial[future]["id"]
+                    print(
+                        f"[{current_trial_idx}/{total_trials}] Error processing {trial_id}: {e}"
+                    )
         except TimeoutError:
             skipped = sum(1 for f in future_to_trial if not f.done())
-            print(f"  ⚠ Target {target_name} timed out after {TARGET_TIMEOUT}s, skipped {skipped} remaining trials")
+            print(
+                f"  ⚠ Target {target_name} timed out after {TARGET_TIMEOUT}s, skipped {skipped} remaining trials"
+            )
         finally:
             # Don't wait for remaining threads — move on immediately
             executor.shutdown(wait=False, cancel_futures=True)
-        
+
         # Save target-specific data
         if target_reports:
             try:
@@ -402,21 +448,25 @@ def main():
                 update_target_history(target_name, target_reports)
             except Exception as e:
                 print(f"  Error saving data for target {target_name}: {e}")
-        
+
         # Collect target summary
-        target_summaries.append({
-            "name": target_name,
-            "description": target.get('description', ''),
-            "trial_count": len(trials), # Use expected count from config
-            "changed_count": sum(1 for r in target_reports if r['monitor_status'] == 'Changed')
-        })
-        
+        target_summaries.append(
+            {
+                "name": target_name,
+                "description": target.get("description", ""),
+                "trial_count": len(trials),  # Use expected count from config
+                "changed_count": sum(
+                    1 for r in target_reports if r["monitor_status"] == "Changed"
+                ),
+            }
+        )
+
         # Save global target summary after each target for better visibility
-        with open("data/targets_summary.json", 'w', encoding='utf-8') as f:
+        with open("data/targets_summary.json", "w", encoding="utf-8") as f:
             json.dump(target_summaries, f, indent=2, ensure_ascii=False)
-            
+
     print(f"\n✓ Processed {len(targets)} targets, {len(all_reports)} total trials")
-    
+
     # Automatically update target pages and _quarto.yml
     print("\nUpdating website pages...")
     generate_pages()
