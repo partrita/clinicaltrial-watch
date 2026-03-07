@@ -6,6 +6,7 @@ Usage: python generate_target_pages.py
 """
 
 import os
+from utils import sanitize_id
 
 try:
     import yaml
@@ -48,7 +49,8 @@ def generate_target_qmd(target_name, description, output_dir="targets"):
     """Generate a QMD file for a target."""
     os.makedirs(output_dir, exist_ok=True)
     
-    target_lower = target_name.lower()
+    safe_target_name = sanitize_id(target_name)
+    target_lower = safe_target_name.lower()
     qmd_path = os.path.join(output_dir, f"{target_lower}.qmd")
     
     content = f'''---
@@ -71,6 +73,7 @@ title: "{target_name}"
 import pandas as pd
 import plotly.express as px
 import os
+from utils import sanitize_id
 
 target_name = "{target_lower}"
 csv_path = f"data/targets/{{target_name}}/all_trials_raw.csv"
@@ -144,6 +147,7 @@ if os.path.exists(csv_path):
 #| output: asis
 import json
 import os
+from utils import sanitize_id
 
 target_name = "{target_lower}"
 target_h_file = f"data/history/target_{{target_name}}.json"
@@ -171,6 +175,7 @@ else:
 #| output: asis
 import json
 import os
+from utils import sanitize_id
 
 target_name = "{target_lower}"
 summary_path = f"data/targets/{{target_name}}/status_summary.json"
@@ -226,6 +231,7 @@ if not history_found:
 #| output: asis
 import json
 import os
+from utils import sanitize_id
 
 target_name = "{target_lower}"
 summary_path = f"data/targets/{{target_name}}/status_summary.json"
@@ -271,6 +277,7 @@ title: "Clinical Trial Watch"
 #| output: asis
 import json
 import os
+from utils import sanitize_id
 
 summary_path = "data/targets_summary.json"
 
@@ -320,7 +327,8 @@ def update_quarto_yml(targets, quarto_path="_quarto.yml"):
     menu_items = []
     for target in targets:
         target_name = target['name']
-        target_lower = target_name.lower()
+        safe_target_name = sanitize_id(target_name)
+        target_lower = safe_target_name.lower()
         menu_items.append(f"          - href: targets/{target_lower}.qmd\n            text: {target_name}")
     
     menu_str = "\n".join(menu_items)
