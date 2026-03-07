@@ -9,6 +9,7 @@ import json
 import csv
 from datetime import datetime, timedelta
 from crawler import fetch_trial_data, save_snapshot
+from utils import sanitize_id
 from diff_engine import compare_snapshots, format_diff
 from generate_target_pages import main as generate_pages
 
@@ -104,7 +105,8 @@ def update_history(trial_id, diff_text, history_dir="data/history"):
         os.makedirs(history_dir)
     
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    history_file = os.path.join(history_dir, f"{trial_id}_history.json")
+    safe_trial_id = sanitize_id(trial_id)
+    history_file = os.path.join(history_dir, f"{safe_trial_id}_history.json")
     
     history = safe_json_load(history_file, default=[])
     
@@ -123,7 +125,8 @@ def update_target_history(target_name, current_reports, history_dir="data/histor
         os.makedirs(history_dir)
     
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    history_file = os.path.join(history_dir, f"target_{target_name.lower()}.json")
+    safe_target_name = sanitize_id(target_name)
+    history_file = os.path.join(history_dir, f"target_{safe_target_name.lower()}.json")
     
     history = safe_json_load(history_file, default=[])
     
@@ -186,7 +189,8 @@ def process_trial(trial, target_name):
     
     new_data = fetch_trial_data(trial_id)
     if not new_data:
-        local_path = f"data/snapshots/{trial_id}_latest.json"
+        safe_trial_id = sanitize_id(trial_id)
+        local_path = f"data/snapshots/{safe_trial_id}_latest.json"
         new_data = safe_json_load(local_path, default=None)
         if not new_data:
             print(f"  Skipping {trial_id} - no data available.")
@@ -247,13 +251,15 @@ def process_trial(trial, target_name):
             "details": f"**[RECENT CHANGES FOUND]**\n{diff_text}\n\n***\n{detailed_desc}"
         })
     else:
-        history_file = f"data/history/{trial_id}_history.json"
+        safe_trial_id = sanitize_id(trial_id)
+        history_file = f"data/history/{safe_trial_id}_history.json"
         if not os.path.exists(history_file):
             print(f"  Initializing history for {trial_id}")
             update_history(trial_id, "Initial data collection")
             
     # Check for any changes in the last 30 days to set monitor_status
-    history_file = f"data/history/{trial_id}_history.json"
+    safe_trial_id = sanitize_id(trial_id)
+    history_file = f"data/history/{safe_trial_id}_history.json"
     history = safe_json_load(history_file, default=[])
     if history:
         # Update last_monitored_change from history
@@ -280,10 +286,10 @@ def process_trial(trial, target_name):
     save_snapshot(trial_id, new_data)
     return report_item, raw_data
 
-
 def save_target_data(target_name, summary_report, all_raw_data):
     """Save data for a specific target."""
-    target_dir = f"data/targets/{target_name.lower()}"
+    safe_target_name = sanitize_id(target_name)
+    target_dir = f"data/targets/{safe_target_name.lower()}"
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
     

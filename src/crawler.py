@@ -2,6 +2,7 @@ import json
 import os
 import time
 import random
+from src.utils import sanitize_id
 
 try:
     import requests
@@ -50,7 +51,9 @@ def fetch_trial_data(trial_id):
     Fetches clinical trial data from ClinicalTrials.gov API v2.
     Uses connection pooling and retries for speed and reliability.
     """
-    url = f"https://clinicaltrials.gov/api/v2/studies/{trial_id}"
+    # Sanitize trial_id to prevent injection and traversal
+    safe_trial_id = sanitize_id(trial_id)
+    url = f"https://clinicaltrials.gov/api/v2/studies/{safe_trial_id}"
     
     if HAS_REQUESTS:
         session = get_session()
@@ -63,13 +66,13 @@ def fetch_trial_data(trial_id):
             if response.status_code == 200:
                 return response.json()
             elif response.status_code == 404:
-                print(f"Trial {trial_id} not found (404).")
+                print(f"Trial {safe_trial_id} not found (404).")
                 return None
             else:
-                print(f"Error fetching data for {trial_id}: {response.status_code}")
+                print(f"Error fetching data for {safe_trial_id}: {response.status_code}")
                 return None
         except Exception as e:
-            print(f"Exception fetching data for {trial_id}: {e}")
+            print(f"Exception fetching data for {safe_trial_id}: {e}")
             # Reset session on connection errors to avoid stuck connections
             reset_session()
             return None
@@ -82,10 +85,10 @@ def fetch_trial_data(trial_id):
                 if response.status == 200:
                     return json.loads(response.read().decode('utf-8'))
                 else:
-                    print(f"Error fetching data for {trial_id} (urllib): {response.status}")
+                    print(f"Error fetching data for {safe_trial_id} (urllib): {response.status}")
                     return None
         except Exception as e:
-            print(f"Exception fetching data for {trial_id} (urllib): {e}")
+            print(f"Exception fetching data for {safe_trial_id} (urllib): {e}")
             return None
 
 def save_snapshot(trial_id, data, snapshot_dir="data/snapshots"):
@@ -95,7 +98,9 @@ def save_snapshot(trial_id, data, snapshot_dir="data/snapshots"):
     if not os.path.exists(snapshot_dir):
         os.makedirs(snapshot_dir, exist_ok=True)
     
-    filepath = os.path.join(snapshot_dir, f"{trial_id}_latest.json")
+    # Sanitize trial_id to prevent path traversal
+    safe_trial_id = sanitize_id(trial_id)
+    filepath = os.path.join(snapshot_dir, f"{safe_trial_id}_latest.json")
     
     with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
