@@ -28,8 +28,9 @@ jobs:
         run: |
           pixi run test
 
-      - name: Run Monitoring Script
+      - Run Monitoring Script
         run: |
+          pixi run python src/auto_discover_trials.py
           pixi run python src/main.py
 
       - name: Commit and Push changes
