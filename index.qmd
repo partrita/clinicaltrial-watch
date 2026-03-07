@@ -11,7 +11,6 @@ title: "Clinical Trial Watch"
 #| output: asis
 import json
 import os
-from utils import sanitize_id
 
 summary_path = "data/targets_summary.json"
 
