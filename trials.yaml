@@ -3,45 +3,65 @@ targets:
   description: CCR8 타겟 임상시험 모니터링
   trials:
   - id: NCT04895709
-    name: BMS-986340 clinical
+    name: A Study of BMS-986340 as Monotherapy and in Combination With Nivolumab or
+      Docetaxel in Participants With Advanced Solid Tumors
   - id: NCT06479759
-    name: LM-108 clinical_1
+    name: LM-108 Antibody Combination With Sintilimab for Locally Advanced or Metastatic
+      Non-Small Cell Lung Cancer
   - id: NCT05518045
-    name: LM-108 clinical_2
+    name: A Study of LM-108 as Monotherapy or in Combination With Antitumor Therapies
+      in Subjects With Advanced Solid Tumors
   - id: NCT06873854
-    name: LM-108 clinical_3
+    name: A Study of LM-108 in Combination With Toripalimab in Subjects With Advanced
+      Solid Tumours
   - id: NCT06825494
-    name: LM-108 clinical_4
+    name: Clinical Studies for the Treatment of Advanced Solid Tumors
   - id: NCT06821503
-    name: LM-108 clinical_5
+    name: 'Clinical Study Evaluating the Safety, Tolerability, and Preliminary Efficacy
+      of LM-108 ± Penpulimab+Chemotherapy in Advanced Solid Tumors - Cohort C'
   - id: NCT05255484
-    name: LM-108 clinical_6
+    name: Study of LM-108 as a Single Agent or in Combination With Pembrolizumab in
+      Subjects With Advanced Solid Tumours
   - id: NCT05199753
-    name: LM-108 clinical_7
+    name: Study of LM-108 as a Single Agent or in Combination With Anti-PD-1 Antibody
+      in Subjects With Advanced Solid Tumours
   - id: NCT05859464
-    name: ZL-1218 clinical_1
+    name: A Phase 1 Study of ZL-1218 in Subjects With Advanced Solid Tumors
   - id: NCT05005403
-    name: ABBV-514 clinical_1
+    name: Study to Assess Adverse Events and Pharmacokinetics in Adult Participants
+      With Non-Small Cell Lung Cancer (NSCLC), Head and Neck Squamous Cell Carcinoma
+      (HNSCC) and Other Solid Tumors, Receiving Intravenous (IV) Infusion of Azirkitug
+      (ABBV-514) Alone or in Combination With Budigalimab or Bevacizumab
   - id: NCT05581004
-    name: RO7502175(RG6411) clinical_1
+    name: A Study to Evaluate the Safety, Pharmacokinetics, and Activity of RO7502175
+      as a Single Agent and in Combination With Checkpoint Inhibitor in Participants
+      With Locally Advanced or Metastatic Solid Tumors
   - id: NCT06131398
-    name: AMG-355(FPA157) clinical_1
+    name: A Study of AMG 355 Alone and in Combination With Pembrolizumab in Participants
+      With Advanced Solid Tumors
   - id: NCT05690581
-    name: ICP-B05(CM369) clinical_1
+    name: Safety, Tolerability, Pharmacokinetic Characteristics, and Efficacy of CM369
+      in Advanced Solid Tumors & Hematologic Malignancies
   - id: NCT06304571
-    name: HC006 clinical_1
+    name: A Study of HC006 in Subjects With Advanced Solid Tumors
   - id: NCT06963814
-    name: HC006 clinical_2
+    name: Study of HC006 in Combination With a PD-1 Inhibitor in Patients With Advanced
+      Solid Tumors
   - id: NCT06819735
-    name: DT-7012 clinical_1
+    name: Study of DT-7012 as a Single Agent and in Combination With an Immune Checkpoint
+      Inhibitor in Participants With Advanced Solid Tumors
   - id: NCT07213882
-    name: DT-7012 clinical_2
+    name: A Phase 1, Multicenter, Open-label, Prospective, First-in-human Dose-escalation
+      Clinical Trial of Domain Therapeutics' Anti-CCR8 Monoclonal Antibody (DT-7012)
+      in Patients With Relapsed or Refractory Cutaneous T-cell Lymphomas (CTCL)
   - id: NCT06911827
-    name: QLP2117 clinical_1
+    name: A Study of QLP2117 in Combination With QL2107 in Advanced Solid Tumor Patients
   - id: NCT05830045
-    name: QLP2117 clinical_2
+    name: A Phase I Study of QLP2117 in Subjects With Advanced Solid Tumors
   - id: NCT07011550
-    name: BMS-986340 clinical_1
+    name: Phase 2, Single-arm Trial of BMS-986340 in Association With Nivolumab, Trifluridine/Tipiracil
+      and Bevacizumab for Patients Refractory to Standard of Care Treatment and With
+      Microsatellite-stable Colorectal Cancer
   - id: NCT05101070
     name: S-531011 as Monotherapy and in Combination With an Immune Checkpoint Inhibitor in Advanced or Metastatic Solid Tumors
   - id: NCT07362186
