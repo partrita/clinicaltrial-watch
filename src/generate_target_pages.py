@@ -69,7 +69,7 @@ def generate_target_qmd(
 import pandas as pd
 import plotly.express as px
 import os
-from utils import sanitize_id
+from src.utils import sanitize_id
 
 target_name = "'''
         + target_lower
@@ -145,7 +145,7 @@ if os.path.exists(csv_path):
 #| output: asis
 import json
 import os
-from utils import sanitize_id
+from src.utils import sanitize_id
 
 target_name = "'''
         + target_lower
@@ -175,7 +175,7 @@ else:
 #| output: asis
 import json
 import os
-from utils import sanitize_id
+from src.utils import sanitize_id
 
 target_name = "'''
         + target_lower
@@ -241,7 +241,7 @@ if not history_found:
 #| output: asis
 import json
 import os
-from utils import sanitize_id
+from src.utils import sanitize_id
 
 target_name = "'''
         + target_lower
@@ -304,7 +304,7 @@ title: "Clinical Trial Watch"
 #| output: asis
 import json
 import os
-from utils import sanitize_id
+from src.utils import sanitize_id
 
 summary_path = "data/targets_summary.json"
 

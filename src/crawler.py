@@ -3,7 +3,7 @@ import os
 import time
 import random
 from typing import Any, Dict, Optional
-from src.utils import sanitize_id
+from utils import sanitize_id
 
 try:
     import requests
