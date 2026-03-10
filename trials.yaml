@@ -492,16 +492,7 @@ targets:
     name: A Clinical Proof-of-principle Trial in Adult Subjects With Newly Diagnosed
       Type 1 Diabetes Mellitus Investigating the Effect of NNC0114-0006 and Liraglutide
       on Preservation of Beta-cell Function
-- name: IgE
-  description: 그냥 테스트용
-  trials:
-  - id: NCT02546921
-    name: Phase I Study of MOv18 IgE
-  - id: NCT03019237
-    name: Effect of Intranasal Anti-IgE Antibodies on IgE Production
-  - id: NCT06547840
-    name: A Study of MOv18 IgE in Folate Receptor Alpha-expressing Platinum Resistant
-      Ovarian Cancer
+
 - name: B7-H3
   description: B7-H3 타겟 임상시험 모니터링
   trials:

@@ -2,6 +2,11 @@
 
 이 프로젝트는 ClinicalTrials.gov API를 사용하여 특정 치료 타겟에 대한 임상시험의 변동 사항을 정기적으로 모니터링하고, 그 결과를 Quarto 기반의 웹사이트로 배포하는 자동화 시스템입니다.
 
+## 할일
+
+- [ ] snapshot을 json에서 duckdb로 전환하기
+- [ ] 단순 키워드 검색 뿐만 아니라
+
 ## 주요 기능
 
 - **자동 탐색 (Auto-Discovery)**: `trials.yaml`에 정의된 타겟을 바탕으로 ClinicalTrials.gov API를 검색하여 새로운 임상시험을 자동으로 추가합니다.

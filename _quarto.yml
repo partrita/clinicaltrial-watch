@@ -15,8 +15,6 @@ website:
             text: CCR8
           - href: targets/tigit.qmd
             text: TIGIT
-          - href: targets/ige.qmd
-            text: IgE
           - href: targets/b7-h3.qmd
             text: B7-H3
       - about.qmd
