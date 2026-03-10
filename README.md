@@ -5,7 +5,8 @@
 ## 할일
 
 - [ ] snapshot을 json에서 duckdb로 전환하기
-- [ ] 단순 키워드 검색 뿐만 아니라
+- [ ] 단순 키워드 검색 뿐만 아니라 fuzzy search를 능적용해서 NCT code 찾기
+- [ ] 잘못들어간 NCT code를 제거하는 관리 기능
 
 ## 주요 기능
 
