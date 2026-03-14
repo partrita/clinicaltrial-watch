@@ -1,6 +1,6 @@
 targets:
-- name: CCR8
-  description: CCR8 타겟 임상시험 모니터링
+- description: CCR8 타겟 임상시험 모니터링
+  name: CCR8
   trials:
   - id: NCT04895709
     name: A Study of BMS-986340 as Monotherapy and in Combination With Nivolumab or
@@ -17,8 +17,8 @@ targets:
   - id: NCT06825494
     name: Clinical Studies for the Treatment of Advanced Solid Tumors
   - id: NCT06821503
-    name: 'Clinical Study Evaluating the Safety, Tolerability, and Preliminary Efficacy
-      of LM-108 ± Penpulimab+Chemotherapy in Advanced Solid Tumors - Cohort C'
+    name: Clinical Study Evaluating the Safety, Tolerability, and Preliminary Efficacy
+      of LM-108 ± Penpulimab+Chemotherapy in Advanced Solid Tumors - Cohort C
   - id: NCT05255484
     name: Study of LM-108 as a Single Agent or in Combination With Pembrolizumab in
       Subjects With Advanced Solid Tumours
@@ -63,10 +63,12 @@ targets:
       and Bevacizumab for Patients Refractory to Standard of Care Treatment and With
       Microsatellite-stable Colorectal Cancer
   - id: NCT05101070
-    name: S-531011 as Monotherapy and in Combination With an Immune Checkpoint Inhibitor in Advanced or Metastatic Solid Tumors
+    name: S-531011 as Monotherapy and in Combination With an Immune Checkpoint Inhibitor
+      in Advanced or Metastatic Solid Tumors
   - id: NCT07362186
     name: LM-108 in Combination With Toripalimab Versus Paclitaxel Injection for the
-      Treatment of Subjects With CCR8-Positive Gastric and Gastroesophageal Junction Adenocarcinoma
+      Treatment of Subjects With CCR8-Positive Gastric and Gastroesophageal Junction
+      Adenocarcinoma
   - id: NCT06387628
     name: LM-108 in Combination With PD-1 Based Treatment for Patients With Recurrent
       or Metastatic Triple - Negative Breast Cancer
@@ -99,8 +101,8 @@ targets:
   - id: NCT07226856
     name: BMS-986340 in Combination With Nivolumab, Gemcitabine and Nab-paclitaxel
       for the Treatment of Metastatic and Recurrent Pancreatic Adenocarcinoma
-- name: TIGIT
-  description: TIGIT 타겟 임상시험 모니터링
+- description: TIGIT 타겟 임상시험 모니터링
+  name: TIGIT
   trials:
   - id: NCT04818619
     name: TIGIT in Patients With Chronic Myeloid Leukemia
@@ -492,9 +494,8 @@ targets:
     name: A Clinical Proof-of-principle Trial in Adult Subjects With Newly Diagnosed
       Type 1 Diabetes Mellitus Investigating the Effect of NNC0114-0006 and Liraglutide
       on Preservation of Beta-cell Function
-
-- name: B7-H3
-  description: B7-H3 타겟 임상시험 모니터링
+- description: B7-H3 타겟 임상시험 모니터링
+  name: B7-H3
   trials:
   - id: NCT07358260
     name: B7-H3.CD28Z.CART in Solid Tumors

@@ -134,7 +134,7 @@ def main() -> int:
         new_trials = extract_trials(api_studies)
         print(f"Found {len(new_trials)} studies related to '{target_name}' via API.")
 
-        # Determine existing trials for this target to count exactly how many are new
+        # Determine existing trials and excluded trials
         existing_target = next(
             (t for t in targets if t["name"].lower() == target_name.lower()), None
         )
@@ -143,6 +143,18 @@ def main() -> int:
             if existing_target
             else set()
         )
+
+        # Load excluded trials for logging/filtering
+        excluded_ids = set()
+        exclusion_yaml = "excluded_trials.yaml"
+        if os.path.exists(exclusion_yaml):
+            try:
+                import yaml
+                with open(exclusion_yaml, "r", encoding="utf-8") as f:
+                    ex_data = yaml.safe_load(f) or {}
+                    excluded_ids = set(ex_data.get("excluded_ids", []))
+            except Exception:
+                pass
 
         # Perform the update
         data = update_target(data, target_name, new_trials, target.get("description"))

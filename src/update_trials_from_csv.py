@@ -117,9 +117,24 @@ def update_target(
     # Get existing trial IDs
     existing_ids = {trial["id"] for trial in target.get("trials", [])}
 
+    # Load excluded trials
+    excluded_ids = set()
+    exclusion_yaml = "excluded_trials.yaml"
+    if os.path.exists(exclusion_yaml):
+        try:
+            with open(exclusion_yaml, "r", encoding="utf-8") as f:
+                ex_data = yaml.safe_load(f) or {}
+                excluded_ids = set(ex_data.get("excluded_ids", []))
+        except Exception as e:
+            print(f"Warning: Could not load exclusion list: {e}")
+
     # Add new trials
     added = 0
     for trial in new_trials:
+        if trial["id"] in excluded_ids:
+            # print(f"  Skipping excluded trial {trial['id']}")
+            continue
+
         if trial["id"] not in existing_ids:
             target["trials"].append(trial)
             existing_ids.add(trial["id"])
