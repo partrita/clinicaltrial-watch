@@ -1,5 +1,7 @@
 # Clinical Trial Watch
 
+![](./screenshot.png)
+
 이 프로젝트는 ClinicalTrials.gov API를 사용하여 특정 치료 타겟에 대한 임상시험의 변동 사항을 정기적으로 모니터링하고, 그 결과를 Quarto 기반의 웹사이트로 배포하는 자동화 시스템입니다.
 
 ## 할일
