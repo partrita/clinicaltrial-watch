@@ -32,6 +32,10 @@ def compare_snapshots(
     old_protocol = old_data.get("protocolSection", {})
     new_protocol = new_data.get("protocolSection", {})
 
+    # Fast-path: Check for equality before expensive DeepDiff
+    if old_protocol == new_protocol:
+        return None
+
     if HAS_DEEPDIFF:
         diff = DeepDiff(old_protocol, new_protocol, ignore_order=True)
         return diff
