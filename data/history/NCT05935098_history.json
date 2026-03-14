@@ -2,5 +2,9 @@
   {
     "timestamp": "2026-02-05 15:10:20",
     "diff": "Initial data collection"
+  },
+  {
+    "timestamp": "2026-03-14 02:07:20",
+    "diff": "Field `identificationModule.organization.fullName` changed from `BeiGene` to `BeOne Medicines`\nField `statusModule.statusVerifiedDate` changed from `2025-06` to `2026-03`\nField `statusModule.overallStatus` changed from `ACTIVE_NOT_RECRUITING` to `TERMINATED`\nField `statusModule.primaryCompletionDateStruct.date` changed from `2027-03-31` to `2026-01-27`\nField `statusModule.primaryCompletionDateStruct.type` changed from `ESTIMATED` to `ACTUAL`\nField `statusModule.completionDateStruct.date` changed from `2027-03-31` to `2026-01-27`\nField `statusModule.completionDateStruct.type` changed from `ESTIMATED` to `ACTUAL`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-06-23` to `2026-03-11`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-06-25` to `2026-03-13`\nField `designModule.enrollmentInfo.count` changed from `263` to `99`\nField `designModule.enrollmentInfo.type` changed from `ESTIMATED` to `ACTUAL`\nNew field added: `root['statusModule']['whyStopped']`"
   }
 ]
