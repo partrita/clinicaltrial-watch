@@ -1,7 +1,9 @@
 import re
 import html
+from functools import lru_cache
 
 
+@lru_cache(maxsize=1024)
 def sanitize_id(identifier: str) -> str:
     """
     Sanitize an identifier (trial ID or target name) to prevent

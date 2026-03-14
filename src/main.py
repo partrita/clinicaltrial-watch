@@ -161,43 +161,49 @@ def update_target_history(
 
 
 def flatten_dict(
-    d: Dict[str, Any], parent_key: str = "", sep: str = "_"
+    d: Dict[str, Any], parent_key: str = "", sep: str = "_", result: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
-    """Flatten nested dictionary for CSV export."""
-    items = []
+    """
+    Flatten nested dictionary for CSV export.
+    Optimized to reduce intermediate dictionary creation while maintaining original behavior.
+    """
+    if result is None:
+        result = {}
+
+    is_top_level = not parent_key
+
     for k, v in d.items():
         clean_k = k
-        if parent_key == "":
-            if k == "protocolSection":
-                clean_k = "Prot"
-            elif k == "derivedSection":
-                clean_k = "Deriv"
-            elif k == "annotationSection":
-                clean_k = "Annot"
-            elif k == "resultsSection":
-                clean_k = "Res"
+        if is_top_level:
+            if k == "protocolSection": clean_k = "Prot"
+            elif k == "derivedSection": clean_k = "Deriv"
+            elif k == "annotationSection": clean_k = "Annot"
+            elif k == "resultsSection": clean_k = "Res"
 
-        if k.endswith("Module"):
-            clean_k = k.replace("Module", "")
-        if k.endswith("Struct"):
-            clean_k = k.replace("Struct", "")
+        if clean_k.endswith("Module"):
+            clean_k = clean_k[:-6]
+        elif clean_k.endswith("Struct"):
+            clean_k = clean_k[:-6]
 
         new_key = f"{parent_key}{sep}{clean_k}" if parent_key else clean_k
 
-        for prefix in ["Prot_", "Deriv_", "Annot_", "Res_"]:
+        # Restore aggressive prefix stripping
+        for prefix in ("Prot_", "Deriv_", "Annot_", "Res_"):
             if new_key.startswith(prefix):
                 new_key = new_key[len(prefix) :]
 
         if isinstance(v, dict):
-            items.extend(flatten_dict(v, new_key, sep=sep).items())
+            flatten_dict(v, new_key, sep, result)
         elif isinstance(v, list):
+            # Restore original behavior: all([]) returns True, so empty list becomes ""
             if all(isinstance(i, (str, int, float, bool)) for i in v):
-                items.append((new_key, ", ".join(map(str, v))))
+                result[new_key] = ", ".join(map(str, v))
             else:
-                items.append((new_key, json.dumps(v, ensure_ascii=False)))
+                result[new_key] = json.dumps(v, ensure_ascii=False)
         else:
-            items.append((new_key, v))
-    return dict(items)
+            result[new_key] = v
+
+    return result
 
 
 def process_trial(
