@@ -69,7 +69,7 @@ def generate_target_qmd(
 import pandas as pd
 import plotly.express as px
 import os
-from src.utils import sanitize_id
+from src.utils import sanitize_id, get_status_badge, get_update_badge, escape_html
 
 target_name = "'''
         + target_lower
@@ -260,26 +260,21 @@ if os.path.exists(summary_path):
     print("| Trial ID | Sponsor | Update | Status | Conditions | Phases | Start | End | Enroll | Last Updated |")
     print("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
     for item in summary:
-        update_color = "🟢" if item.get('monitor_status') == "No Change" else "🔴"
-        status = item.get('status', 'N/A')
-        status_map = {
-            'RECRUITING': 'success',
-            'ACTIVE_NOT_RECRUITING': 'info',
-            'COMPLETED': 'secondary',
-            'NOT_YET_RECRUITING': 'warning',
-            'SUSPENDED': 'danger',
-            'TERMINATED': 'danger',
-            'WITHDRAWN': 'danger'
-        }
-        badge_class = status_map.get(status, 'light text-dark')
-        status_badge = f'<span class="badge bg-{badge_class}">{status}</span>'
+        update_badge = get_update_badge(item.get('monitor_status', 'No Change'))
+        status_badge = get_status_badge(item.get('status', 'N/A'))
+
         sponsor = item.get('sponsor', 'N/A')
         if len(sponsor) > 30:
             sponsor = sponsor[:30] + "..."
+        safe_sponsor = escape_html(sponsor)
+
         conditions = item.get('conditions', 'N/A')
         if len(conditions) > 30:
             conditions = conditions[:30] + "..."
-        print(f"| [{item['id']}](https://clinicaltrials.gov/study/{item['id']}) | {sponsor} | {update_color} {item.get('monitor_status')} | {status_badge} | {conditions} | {item.get('phases', 'N/A')} | {item.get('study_start', 'N/A')} | {item.get('study_end', 'N/A')} | {item.get('enrollment', 'N/A')} | {item.get('last_updated', 'N/A')} |")
+        safe_conditions = escape_html(conditions)
+
+        trial_id = item['id']
+        print(f"| [{trial_id}](https://clinicaltrials.gov/study/{trial_id}) | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {escape_html(item.get('enrollment', 'N/A'))} | {escape_html(item.get('last_updated', 'N/A'))} |")
     print('</div>')
 else:
     print(f"No monitoring data available yet for {target_name} at {os.path.abspath(summary_path)}. Run the data collection script first.")
@@ -310,7 +305,7 @@ title: "Clinical Trial Watch"
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id
+from src.utils import sanitize_id, get_changed_count_badge
 
 summary_path = "data/targets_summary.json"
 
@@ -327,7 +322,7 @@ if os.path.exists(summary_path):
     for target in targets:
         name = target['name']
         link = f"targets/{name.lower()}.qmd"
-        changed_badge = f"🔴 {target['changed_count']}" if target['changed_count'] > 0 else "🟢 0"
+        changed_badge = get_changed_count_badge(target['changed_count'])
         print(f"| [{name}]({link}) | {target.get('description', '')} | {target['trial_count']} | {changed_badge} |")
 else:
     print("No summary data available yet. Showing targets from configuration:")
@@ -377,6 +372,8 @@ def update_quarto_yml(
 
 website:
   title: "Clinical Trial Watch"
+  link-external-icon: true
+  link-external-newwindow: true
   navbar:
     left:
       - href: index.qmd
