@@ -18,8 +18,14 @@ def sanitize_id(identifier: str) -> str:
 
 
 def escape_html(text: str) -> str:
-    """Escape HTML special characters in a string."""
-    return html.escape(str(text))
+    """
+    Escape HTML special characters in a string.
+    Also explicitly escapes the pipe character '|' to prevent breaking Markdown tables.
+    """
+    if text is None:
+        return ""
+    escaped = html.escape(str(text))
+    return escaped.replace("|", "&#124;")
 
 
 def get_status_badge(status: str) -> str:

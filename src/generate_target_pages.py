@@ -145,7 +145,7 @@ if os.path.exists(csv_path):
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id
+from src.utils import sanitize_id, escape_html
 
 target_name = "'''
         + target_lower
@@ -161,8 +161,8 @@ if os.path.exists(target_h_file):
         history = []
     
     for record in reversed(history[-10:]):
-        print(f"**Date:** {record['timestamp']}")
-        print(f"\n{record['event']}\n")
+        print(f"**Date:** {escape_html(record['timestamp'])}")
+        print(f"\n{escape_html(record['event'])}\n")
         print("***")
 else:
     print(f"No target-level milestones recorded yet for {target_name}.")
@@ -175,7 +175,7 @@ else:
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id
+from src.utils import sanitize_id, escape_html
 
 target_name = "'''
         + target_lower
@@ -209,11 +209,11 @@ for trial_id in target_trials:
                 history_found = True
             print(f"#### {trial_id}")
             for record in reversed(real_changes[-5:]):
-                print(f"**{record['timestamp']}**")
+                print(f"**{escape_html(record['timestamp'])}**")
                 for line in record['diff'].splitlines():
                     line = line.strip()
                     if line:
-                        print(f"- {line}")
+                        print(f"- {escape_html(line)}")
                 print("")
                 print("***")
 
