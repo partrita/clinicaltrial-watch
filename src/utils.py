@@ -31,30 +31,43 @@ def escape_html(text: str) -> str:
 
 
 def get_status_badge(status: str) -> str:
-    """Return a Bootstrap badge for a trial status."""
-    status_map = {
-        "RECRUITING": "success",
-        "ACTIVE_NOT_RECRUITING": "info",
-        "COMPLETED": "secondary",
-        "NOT_YET_RECRUITING": "warning",
-        "SUSPENDED": "danger",
-        "TERMINATED": "danger",
-        "WITHDRAWN": "danger",
+    """Return a Bootstrap badge for a trial status with emoji and ARIA label."""
+    # Maps raw status to (display_label, emoji, bootstrap_class)
+    status_configs = {
+        "RECRUITING": ("Recruiting", "🟢", "success"),
+        "ACTIVE_NOT_RECRUITING": ("Active (Not Recruiting)", "🔵", "info"),
+        "COMPLETED": ("Completed", "⚪", "secondary"),
+        "NOT_YET_RECRUITING": ("Not Yet Recruiting", "🟡", "warning"),
+        "SUSPENDED": ("Suspended", "🟠", "danger"),
+        "TERMINATED": ("Terminated", "🔴", "danger"),
+        "WITHDRAWN": ("Withdrawn", "🔴", "danger"),
     }
-    badge_class = status_map.get(status, "light text-dark")
+
+    label, emoji, bg_class = status_configs.get(
+        status, (status.replace("_", " ").title(), "⚪", "light text-dark")
+    )
+
+    safe_label = escape_html(label)
     safe_status = escape_html(status)
-    return f'<span class="badge bg-{badge_class}">{safe_status}</span>'
+    display_text = f"{emoji} {safe_label}" if emoji else safe_label
+
+    return (
+        f'<span class="badge bg-{bg_class}" '
+        f'title="Original status: {safe_status}" '
+        f'aria-label="Status: {safe_label}">{display_text}</span>'
+    )
 
 
 def get_update_badge(monitor_status: str) -> str:
-    """Return a badge/emoji for monitoring status with ARIA label."""
+    """Return a badge/emoji for monitoring status with ARIA label and title."""
+    safe_status = escape_html(monitor_status)
     if monitor_status == "Changed":
-        return f'<span aria-label="Changes detected">🔴 {escape_html(monitor_status)}</span>'
-    return f'<span aria-label="No recent changes">🟢 {escape_html(monitor_status)}</span>'
+        return f'<span aria-label="Changes detected" title="Changes detected since last crawl">🔴 {safe_status}</span>'
+    return f'<span aria-label="No recent changes" title="No changes detected since last crawl">🟢 {safe_status}</span>'
 
 
 def get_changed_count_badge(count: int) -> str:
-    """Return a badge for changed trial count."""
+    """Return a badge for changed trial count with title."""
     if count > 0:
-        return f'<span aria-label="{count} trials changed">🔴 {count}</span>'
-    return '<span aria-label="No trials changed">🟢 0</span>'
+        return f'<span aria-label="{count} trials changed" title="{count} trials have updates">🔴 {count}</span>'
+    return '<span aria-label="No trials changed" title="No trials have updates">🟢 0</span>'
