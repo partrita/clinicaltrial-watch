@@ -25,3 +25,28 @@ def test_escape_html_pipe():
 
 def test_escape_html_none():
     assert escape_html(None) == ""
+
+def test_generation_escaping():
+    """Verify that target metadata is escaped during site generation."""
+    from src.generate_target_pages import generate_target_qmd, update_quarto_yml
+    import os
+
+    name, desc = "Target | Pipe", "Desc <script>"
+    # Test QMD generation
+    qmd = generate_target_qmd(name, desc, output_dir="tests/tmp_targets")
+    with open(qmd, "r") as f:
+        content = f.read()
+    assert 'title: "Target &#124; Pipe"' in content
+    assert "Desc &lt;script&gt;" in content
+
+    # Test YAML generation
+    yml = "tests/tmp_quarto.yml"
+    update_quarto_yml([{"name": name}], yml)
+    with open(yml, "r") as f:
+        content = f.read()
+    assert "text: Target &#124; Pipe" in content
+
+    # Cleanup
+    os.remove(qmd)
+    os.remove(yml)
+    os.rmdir("tests/tmp_targets")
