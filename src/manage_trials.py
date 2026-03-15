@@ -7,8 +7,7 @@ Allows removing NCT codes from tracking and cleaning up associated data.
 import argparse
 import os
 import json
-import shutil
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 from utils import sanitize_id
 from generate_target_pages import main as generate_pages
 
