@@ -40,7 +40,10 @@ def get_session() -> Optional[Any]:
             backoff_factor=0.5,
             status_forcelist=[429, 500, 502, 503, 504],
         )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
+        # Increase pool size to match MAX_WORKERS in main.py for better concurrency
+        adapter = HTTPAdapter(
+            max_retries=retry_strategy, pool_connections=20, pool_maxsize=20
+        )
         _session.mount("https://", adapter)
         _session.mount("http://", adapter)
 
