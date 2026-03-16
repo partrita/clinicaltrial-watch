@@ -11,7 +11,7 @@ title: "Clinical Trial Watch"
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, get_changed_count_badge
+from src.utils import sanitize_id, get_changed_count_badge, escape_html
 
 summary_path = "data/targets_summary.json"
 
@@ -27,9 +27,10 @@ if os.path.exists(summary_path):
     print("| --- | --- | --- | --- |")
     for target in targets:
         name = target['name']
+        desc = target.get('description', '')
         link = f"targets/{name.lower()}.qmd"
         changed_badge = get_changed_count_badge(target['changed_count'])
-        print(f"| [{name}]({link}) | {target.get('description', '')} | {target['trial_count']} | {changed_badge} |")
+        print(f"| [{escape_html(name)}]({link}) | {escape_html(desc)} | {target['trial_count']} | {changed_badge} |")
 else:
     print("No summary data available yet. Showing targets from configuration:")
     print("")
@@ -43,7 +44,7 @@ else:
             for target in config.get('targets', []):
                 name = target['name']
                 desc = target.get('description', f"{name} 타겟 임상시험 모니터링")
-                print(f"| [{name}](targets/{name.lower()}.qmd) | {desc} |")
+                print(f"| [{escape_html(name)}](targets/{name.lower()}.qmd) | {escape_html(desc)} |")
     except Exception as e:
         print(f"Error loading targets: {e}")
 ```
