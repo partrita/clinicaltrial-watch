@@ -1,7 +1,10 @@
 import os
 import yaml
 from typing import Any, Dict, List
-from utils import sanitize_id
+try:
+    from utils import sanitize_id, escape_html
+except ImportError:
+    from src.utils import sanitize_id, escape_html
 
 
 def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
@@ -53,7 +56,9 @@ def generate_target_qmd(
     qmd_path = os.path.join(output_dir, f"{target_lower}.qmd")
 
     # Using a literal string for most of the content to avoid f-string brace hell
-    header = f'---\ntitle: "{target_name}"\n---\n\n::: {{.callout-note}}\n{description}\n:::\n'
+    safe_name = escape_html(target_name)
+    safe_description = escape_html(description)
+    header = f'---\ntitle: "{safe_name}"\n---\n\n::: {{.callout-note}}\n{safe_description}\n:::\n'
 
     body = (
         r'''
@@ -241,7 +246,7 @@ if not history_found:
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id
+from src.utils import sanitize_id, get_update_badge, get_status_badge, escape_html
 
 target_name = "'''
         + target_lower
@@ -305,7 +310,7 @@ title: "Clinical Trial Watch"
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, get_changed_count_badge
+from src.utils import sanitize_id, get_changed_count_badge, escape_html
 
 summary_path = "data/targets_summary.json"
 
@@ -321,9 +326,10 @@ if os.path.exists(summary_path):
     print("| --- | --- | --- | --- |")
     for target in targets:
         name = target['name']
+        desc = target.get('description', '')
         link = f"targets/{name.lower()}.qmd"
         changed_badge = get_changed_count_badge(target['changed_count'])
-        print(f"| [{name}]({link}) | {target.get('description', '')} | {target['trial_count']} | {changed_badge} |")
+        print(f"| [{escape_html(name)}]({link}) | {escape_html(desc)} | {target['trial_count']} | {changed_badge} |")
 else:
     print("No summary data available yet. Showing targets from configuration:")
     print("")
@@ -337,7 +343,7 @@ else:
             for target in config.get('targets', []):
                 name = target['name']
                 desc = target.get('description', f"{name} 타겟 임상시험 모니터링")
-                print(f"| [{name}](targets/{name.lower()}.qmd) | {desc} |")
+                print(f"| [{escape_html(name)}](targets/{name.lower()}.qmd) | {escape_html(desc)} |")
     except Exception as e:
         print(f"Error loading targets: {e}")
 ```
@@ -359,8 +365,9 @@ def update_quarto_yml(
         target_name = target["name"]
         safe_target_name = sanitize_id(target_name)
         target_lower = safe_target_name.lower()
+        safe_name = escape_html(target_name)
         menu_items.append(
-            f"          - href: targets/{target_lower}.qmd\n            text: {target_name}"
+            f"          - href: targets/{target_lower}.qmd\n            text: {safe_name}"
         )
 
     menu_str = "\n".join(menu_items)
