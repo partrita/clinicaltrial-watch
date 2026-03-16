@@ -168,8 +168,8 @@ if not history_found:
 
 ---
 
-<a href="../data/targets/ccr8/all_trials_raw.csv" class="btn btn-primary" role="button">📥 Download Full Data (CSV)</a>
-<a href="../data/targets/ccr8/status_summary.csv" class="btn btn-outline-secondary" role="button">📥 Download Status Summary (CSV)</a>
+<a href="../data/targets/ccr8/all_trials_raw.csv" class="btn btn-primary" role="button" aria-label="Download full trial data in CSV format">📥 Download Full Data (CSV)</a>
+<a href="../data/targets/ccr8/status_summary.csv" class="btn btn-outline-secondary" role="button" aria-label="Download status summary in CSV format">📥 Download Status Summary (CSV)</a>
 
 ---
 
@@ -201,17 +201,26 @@ if os.path.exists(summary_path):
         status_badge = get_status_badge(item.get('status', 'N/A'))
 
         sponsor = item.get('sponsor', 'N/A')
+        full_sponsor_escaped = escape_html(sponsor)
         if len(sponsor) > 30:
-            sponsor = sponsor[:30] + "..."
-        safe_sponsor = escape_html(sponsor)
+            display_sponsor = escape_html(sponsor[:30] + "...")
+            safe_sponsor = f'<span title="{full_sponsor_escaped}">{display_sponsor}</span>'
+        else:
+            safe_sponsor = full_sponsor_escaped
 
         conditions = item.get('conditions', 'N/A')
+        full_conditions_escaped = escape_html(conditions)
         if len(conditions) > 30:
-            conditions = conditions[:30] + "..."
-        safe_conditions = escape_html(conditions)
+            display_conditions = escape_html(conditions[:30] + "...")
+            safe_conditions = f'<span title="{full_conditions_escaped}">{display_conditions}</span>'
+        else:
+            safe_conditions = full_conditions_escaped
 
         trial_id = item['id']
-        print(f"| [{trial_id}](https://clinicaltrials.gov/study/{trial_id}) | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {escape_html(item.get('enrollment', 'N/A'))} | {escape_html(item.get('last_updated', 'N/A'))} |")
+        # NCT Link with aria-label for accessibility
+        nct_link = f'[{trial_id}](https://clinicaltrials.gov/study/{trial_id}){{aria-label="View trial {trial_id} on ClinicalTrials.gov"}}'
+
+        print(f"| {nct_link} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {escape_html(item.get('enrollment', 'N/A'))} | {escape_html(item.get('last_updated', 'N/A'))} |")
     print('</div>')
 else:
     print(f"No monitoring data available yet for {target_name} at {os.path.abspath(summary_path)}. Run the data collection script first.")

@@ -1,1 +1,12 @@
 /* css styles */
+
+/* 🎨 Palette: Tooltip styling for truncated text */
+span[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+/* 🎨 Palette: Table row hover for better scannability */
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
