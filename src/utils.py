@@ -22,12 +22,18 @@ def sanitize_id(identifier: str) -> str:
 def escape_html(text: str) -> str:
     """
     Escape HTML special characters in a string.
-    Also explicitly escapes the pipe character '|' to prevent breaking Markdown tables.
+    Also explicitly escapes characters that can break Markdown formatting:
+    - Pipe character '|' (breaks tables)
+    - Square brackets '[' and ']' (breaks links)
     """
     if text is None:
         return ""
     escaped = html.escape(str(text))
-    return escaped.replace("|", "&#124;")
+    return (
+        escaped.replace("|", "&#124;")
+        .replace("[", "&#91;")
+        .replace("]", "&#93;")
+    )
 
 
 def get_status_badge(status: str) -> str:

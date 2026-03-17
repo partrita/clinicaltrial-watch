@@ -19,9 +19,11 @@ def test_escape_html_basic():
     assert escape_html("<script>alert('xss')</script>") == "&lt;script&gt;alert(&#x27;xss&#x27;)&lt;/script&gt;"
     assert escape_html('Hello "World" & others') == "Hello &quot;World&quot; &amp; others"
 
-def test_escape_html_pipe():
+def test_escape_html_markdown_chars():
     # Pipe character should be escaped to prevent Markdown table injection
     assert escape_html("Data | with | pipes") == "Data &#124; with &#124; pipes"
+    # Square brackets should be escaped to prevent Markdown link injection
+    assert escape_html("Title [link]") == "Title &#91;link&#93;"
 
 def test_escape_html_none():
     assert escape_html(None) == ""
