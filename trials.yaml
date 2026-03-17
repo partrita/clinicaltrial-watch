@@ -101,6 +101,11 @@ targets:
   - id: NCT07226856
     name: BMS-986340 in Combination With Nivolumab, Gemcitabine and Nab-paclitaxel
       for the Treatment of Metastatic and Recurrent Pancreatic Adenocarcinoma
+  - id: NCT04810572
+    name: Nutraceutical Composition Containing Natural Products Derivatives on the
+      Modulation of the Endocrine Neuroimmune Axis
+  - id: NCT02836067
+    name: Impact of Smoking and Its Cessation on Systemic and Airway Immune Activation
 - description: TIGIT 타겟 임상시험 모니터링
   name: TIGIT
   trials:
@@ -799,3 +804,23 @@ targets:
   - id: NCT03014804
     name: Autologous Dendritic Cells Pulsed With Tumor Lysate Antigen Vaccine and
       Nivolumab in Treating Patients With Recurrent Glioblastoma
+  - id: NCT07428993
+    name: Evaluating Efficacy of B7-H3-CAR T Cells Administered at the End of Upfront
+      Map Chemotherapy in Patients With Newly Diagnosed High-Risk Osteosarcoma
+  - id: NCT07423117
+    name: A Study of ITC-6146RO in Patients With Advanced or Metastatic Cancer Who
+      Have Failed Standard Therapy
+  - id: NCT07415863
+    name: Phase 1/II Clinical Study of SYS6043 in the Treatment of Advanced/Metastatic
+      Solid Tumors
+  - id: NCT07462923
+    name: HS-20093 in Patients With Advanced Gastric and Gastroesophageal Junction
+      Adenocarcinoma
+  - id: NCT07408063
+    name: A Comprehensive Multiomic Biomarker Evaluation Across Two Single-arm Cohorts
+      to Elucidate Mechanisms of Response and Resistance in Recurrent/Metastatic (R/M)
+      Head and Neck Squamous Cell Carcinoma (HNSCC)
+  - id: NCT07390539
+    name: B7-H3.CD28Z.CART in CNS Neoplasms
+  - id: NCT07424547
+    name: Phase I Study of SYS6043 in Patients With Advanced/Metastatic Solid Tumors

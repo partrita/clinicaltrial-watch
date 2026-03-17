@@ -4,6 +4,7 @@ Auto-discover new clinical trials from ClinicalTrials.gov based on targets in tr
 Queries the API for each target and appends new trials to trials.yaml.
 """
 
+import os
 import time
 import random
 from typing import Any, Dict, List, Optional
