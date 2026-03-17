@@ -1,1 +1,16 @@
 /* css styles */
+
+.truncated-text {
+    text-decoration: underline dotted;
+    cursor: help;
+}
+
+/* Improve table scannability */
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Ensure badges have enough spacing */
+.badge {
+    margin-right: 2px;
+}

@@ -1,4 +1,4 @@
-from src.utils import get_status_badge, get_update_badge, get_changed_count_badge
+from src.utils import get_status_badge, get_update_badge, get_changed_count_badge, format_truncated_with_tooltip, escape_html
 
 def test_get_status_badge_enhanced():
     # Verify enhanced behavior
@@ -16,9 +16,9 @@ def test_get_status_badge_unknown():
     assert '⚪ Unknown State' in badge
 
 def test_get_update_badge():
-    badge = get_update_badge("Changed")
+    badge = get_update_badge("Changed", "2024-03-20")
     assert 'aria-label="Changes detected"' in badge
-    assert 'title="Changes detected since last crawl"' in badge
+    assert 'title="Changes detected since last crawl. Last change: 2024-03-20"' in badge
     assert '🔴 Changed' in badge
 
     badge = get_update_badge("No Change")
@@ -36,3 +36,18 @@ def test_get_changed_count_badge():
     assert 'aria-label="No trials changed"' in badge
     assert 'title="No trials have updates"' in badge
     assert '🟢 0' in badge
+
+def test_format_truncated_with_tooltip():
+    # Test no truncation
+    assert format_truncated_with_tooltip("Short text", 20) == "Short text"
+
+    # Test truncation
+    long_text = "This is a very long sponsor name that should be truncated"
+    badge = format_truncated_with_tooltip(long_text, 10)
+    assert 'class="truncated-text"' in badge
+    assert f'title="{escape_html(long_text)}"' in badge
+    assert "This is a ..." in badge
+
+    # Test empty/None
+    assert format_truncated_with_tooltip("") == ""
+    assert format_truncated_with_tooltip(None) == ""

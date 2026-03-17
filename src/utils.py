@@ -58,12 +58,32 @@ def get_status_badge(status: str) -> str:
     )
 
 
-def get_update_badge(monitor_status: str) -> str:
+def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
     """Return a badge/emoji for monitoring status with ARIA label and title."""
     safe_status = escape_html(monitor_status)
+    title_extra = f". Last change: {escape_html(last_change_date)}" if last_change_date else ""
     if monitor_status == "Changed":
-        return f'<span aria-label="Changes detected" title="Changes detected since last crawl">🔴 {safe_status}</span>'
-    return f'<span aria-label="No recent changes" title="No changes detected since last crawl">🟢 {safe_status}</span>'
+        return f'<span aria-label="Changes detected" title="Changes detected since last crawl{title_extra}">🔴 {safe_status}</span>'
+    return f'<span aria-label="No recent changes" title="No changes detected since last crawl{title_extra}">🟢 {safe_status}</span>'
+
+
+def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
+    """
+    Truncate text and provide a tooltip with the full text.
+    Uses 'truncated-text' class for styling and 'title' for accessibility.
+    """
+    if not text:
+        return ""
+
+    if len(text) <= max_length:
+        return escape_html(text)
+
+    truncated = text[:max_length] + "..."
+    safe_full = escape_html(text)
+    # Truncate BEFORE escaping to avoid breaking entities
+    safe_truncated = escape_html(truncated)
+
+    return f'<span class="truncated-text" title="{safe_full}">{safe_truncated}</span>'
 
 
 def get_changed_count_badge(count: int) -> str:
