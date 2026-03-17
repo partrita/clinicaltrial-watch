@@ -160,43 +160,57 @@ def update_target_history(
         print(f"  Updated target history for {target_name}")
 
 
+# Pre-defined mappings for efficient dictionary flattening
+TOP_LEVEL_SECTION_MAP = {
+    "protocolSection": "Prot",
+    "derivedSection": "Deriv",
+    "annotationSection": "Annot",
+    "resultsSection": "Res",
+}
+FLATTEN_STRIP_PREFIXES = ("Prot", "Deriv", "Annot", "Res")
+
+
 def flatten_dict(
     d: Dict[str, Any], parent_key: str = "", sep: str = "_", result: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     """
     Flatten nested dictionary for CSV export.
-    Optimized to reduce intermediate dictionary creation while maintaining original behavior.
+    Optimized to reduce intermediate dictionary creation and redundant string operations.
     """
     if result is None:
         result = {}
 
-    is_top_level = not parent_key
-
     for k, v in d.items():
-        clean_k = k
-        if is_top_level:
-            if k == "protocolSection": clean_k = "Prot"
-            elif k == "derivedSection": clean_k = "Deriv"
-            elif k == "annotationSection": clean_k = "Annot"
-            elif k == "resultsSection": clean_k = "Res"
+        if not parent_key:
+            # Handle top-level keys: map section names and strip suffixes
+            clean_k = TOP_LEVEL_SECTION_MAP.get(k, k)
+            if clean_k.endswith(("Module", "Struct")):
+                clean_k = clean_k[:-6]
+            new_key = clean_k
 
-        if clean_k.endswith("Module"):
-            clean_k = clean_k[:-6]
-        elif clean_k.endswith("Struct"):
-            clean_k = clean_k[:-6]
+            # Ensure consistent stripping even if top-level key matches prefix (for backward compatibility)
+            for prefix in ("Prot_", "Deriv_", "Annot_", "Res_"):
+                if new_key.startswith(prefix):
+                    new_key = new_key[len(prefix) :]
+        else:
+            # Handle nested keys: strip suffixes and prepend parent key
+            clean_k = k
+            if clean_k.endswith(("Module", "Struct")):
+                clean_k = clean_k[:-6]
 
-        new_key = f"{parent_key}{sep}{clean_k}" if parent_key else clean_k
-
-        # Restore aggressive prefix stripping
-        for prefix in ("Prot_", "Deriv_", "Annot_", "Res_"):
-            if new_key.startswith(prefix):
-                new_key = new_key[len(prefix) :]
+            # If parent is a major section abbreviation, don't prepend it (keep keys compact)
+            if parent_key in FLATTEN_STRIP_PREFIXES:
+                new_key = clean_k
+            else:
+                new_key = f"{parent_key}{sep}{clean_k}"
 
         if isinstance(v, dict):
             flatten_dict(v, new_key, sep, result)
         elif isinstance(v, list):
-            # Restore original behavior: all([]) returns True, so empty list becomes ""
-            if all(isinstance(i, (str, int, float, bool)) for i in v):
+            # Handle list values: join simple types, JSON dump others
+            if not v:
+                result[new_key] = ""
+            elif all(isinstance(i, (str, int, float, bool)) for i in v):
                 result[new_key] = ", ".join(map(str, v))
             else:
                 result[new_key] = json.dumps(v, ensure_ascii=False)
