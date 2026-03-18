@@ -2,5 +2,9 @@
   {
     "timestamp": "2026-02-05 17:03:03",
     "diff": "Initial data collection"
+  },
+  {
+    "timestamp": "2026-03-18 02:34:12",
+    "diff": "Field `sponsorCollaboratorsModule.collaborators.[0]name` changed from `The Affiliated Cancer Hospital of Zhengzhou University & Henan Cancer Hospital` to `Zhengzhou University`\nField `sponsorCollaboratorsModule.collaborators.[0]class` changed from `UNKNOWN` to `OTHER`\nField `contactsLocationsModule.overallOfficials.[0]affiliation` changed from `The Affiliated Cancer Hospital of Zhengzhou University & Henan Cancer Hospital` to `Zhengzhou University`"
   }
 ]
