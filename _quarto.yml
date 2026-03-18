@@ -5,6 +5,8 @@ project:
 
 website:
   title: "Clinical Trial Watch"
+  link-external-icon: true
+  link-external-newwindow: true
   navbar:
     left:
       - href: index.qmd
@@ -26,8 +28,6 @@ format:
       - brand
     css: styles.css
     toc: true
-    link-external-icon: true
-    link-external-newwindow: true
 
 execute:
   freeze: auto
