@@ -13,7 +13,7 @@
       "officialTitle": "A Phase I/II Open-label Dose Escalation and Expansion Study to Evaluate the Safety, Pharmacokinetics, Pharmacodynamics, and Efficacy of AZD6750, a CD8 Guided IL-2 Agent Alone and in Combination With Other Anti-cancer Agents in Participants With Select Advanced or Metastatic Solid Tumors"
     },
     "statusModule": {
-      "statusVerifiedDate": "2026-02",
+      "statusVerifiedDate": "2026-03",
       "overallStatus": "RECRUITING",
       "expandedAccessInfo": {
         "hasExpandedAccess": false
@@ -36,9 +36,9 @@
         "date": "2025-08-11",
         "type": "ACTUAL"
       },
-      "lastUpdateSubmitDate": "2026-02-04",
+      "lastUpdateSubmitDate": "2026-03-16",
       "lastUpdatePostDateStruct": {
-        "date": "2026-02-05",
+        "date": "2026-03-17",
         "type": "ACTUAL"
       }
     },
@@ -240,7 +240,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Pittsburgh",
           "state": "Pennsylvania",
           "zip": "15232",
@@ -276,7 +276,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Fairfax",
           "state": "Virginia",
           "zip": "22031",
@@ -318,6 +318,28 @@
             "lat": 35.86224,
             "lon": 139.97732
           }
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Seoul",
+          "zip": "03080",
+          "country": "South Korea",
+          "geoPoint": {
+            "lat": 37.566,
+            "lon": 126.9784
+          }
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Seoul",
+          "zip": "06351",
+          "country": "South Korea",
+          "geoPoint": {
+            "lat": 37.566,
+            "lon": 126.9784
+          }
         }
       ]
     },
@@ -335,7 +357,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-13"
+      "versionHolder": "2026-03-17"
     },
     "conditionBrowseModule": {
       "meshes": [

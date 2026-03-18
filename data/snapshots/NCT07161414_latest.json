@@ -21,7 +21,7 @@
       "acronym": "ARTEMIDE-subQ"
     },
     "statusModule": {
-      "statusVerifiedDate": "2026-02",
+      "statusVerifiedDate": "2026-03",
       "overallStatus": "RECRUITING",
       "expandedAccessInfo": {
         "hasExpandedAccess": false
@@ -44,9 +44,9 @@
         "date": "2025-09-08",
         "type": "ACTUAL"
       },
-      "lastUpdateSubmitDate": "2026-02-20",
+      "lastUpdateSubmitDate": "2026-03-16",
       "lastUpdatePostDateStruct": {
-        "date": "2026-02-23",
+        "date": "2026-03-17",
         "type": "ACTUAL"
       }
     },
@@ -307,7 +307,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Barcelona",
           "zip": "08036",
           "country": "Spain",
@@ -318,7 +318,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Madrid",
           "zip": "28027",
           "country": "Spain",
@@ -329,7 +329,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Madrid",
           "zip": "28040",
           "country": "Spain",
@@ -372,7 +372,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-13"
+      "versionHolder": "2026-03-17"
     },
     "conditionBrowseModule": {
       "meshes": [

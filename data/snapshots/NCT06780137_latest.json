@@ -53,9 +53,9 @@
         "date": "2025-01-17",
         "type": "ACTUAL"
       },
-      "lastUpdateSubmitDate": "2026-03-04",
+      "lastUpdateSubmitDate": "2026-03-12",
       "lastUpdatePostDateStruct": {
-        "date": "2026-03-06",
+        "date": "2026-03-16",
         "type": "ACTUAL"
       }
     },
@@ -541,7 +541,7 @@
             {
               "name": "Study Coordinator",
               "role": "CONTACT",
-              "phone": "720-848-0300"
+              "phone": "303-724-6268"
             }
           ],
           "geoPoint": {
@@ -742,7 +742,7 @@
         {
           "facility": "Princess Alexandra Hospital ( Site 5300)",
           "status": "RECRUITING",
-          "city": "Wooloongabba",
+          "city": "Brisbane",
           "state": "Queensland",
           "zip": "4102",
           "country": "Australia",
@@ -752,7 +752,11 @@
               "role": "CONTACT",
               "phone": "+61731766577"
             }
-          ]
+          ],
+          "geoPoint": {
+            "lat": -27.46794,
+            "lon": 153.02809
+          }
         },
         {
           "facility": "FALP ( Site 2100)",
@@ -1313,6 +1317,43 @@
             "lat": 39.91987,
             "lon": 32.85427
           }
+        },
+        {
+          "facility": "National Institute for Health Research UCLH Clinical Research Facility ( Site 3902)",
+          "status": "RECRUITING",
+          "city": "London",
+          "state": "London, City of",
+          "zip": "W1T 7HA",
+          "country": "United Kingdom",
+          "contacts": [
+            {
+              "name": "Study Coordinator",
+              "role": "CONTACT",
+              "phone": "+442034472930"
+            }
+          ],
+          "geoPoint": {
+            "lat": 51.50853,
+            "lon": -0.12574
+          }
+        },
+        {
+          "facility": "The Clatterbridge Cancer Centre ( Site 3903)",
+          "status": "RECRUITING",
+          "city": "Liverpool",
+          "zip": "L7 8YA",
+          "country": "United Kingdom",
+          "contacts": [
+            {
+              "name": "Study Coordinator",
+              "role": "CONTACT",
+              "phone": "00441515565000"
+            }
+          ],
+          "geoPoint": {
+            "lat": 53.41058,
+            "lon": -2.97794
+          }
         }
       ]
     },
@@ -1336,7 +1377,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-09"
+      "versionHolder": "2026-03-17"
     },
     "conditionBrowseModule": {
       "meshes": [

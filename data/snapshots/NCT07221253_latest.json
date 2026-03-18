@@ -14,7 +14,7 @@
       "acronym": "AB02"
     },
     "statusModule": {
-      "statusVerifiedDate": "2026-02",
+      "statusVerifiedDate": "2026-03",
       "overallStatus": "RECRUITING",
       "expandedAccessInfo": {
         "hasExpandedAccess": false
@@ -37,9 +37,9 @@
         "date": "2025-10-27",
         "type": "ACTUAL"
       },
-      "lastUpdateSubmitDate": "2026-02-09",
+      "lastUpdateSubmitDate": "2026-03-16",
       "lastUpdatePostDateStruct": {
-        "date": "2026-02-10",
+        "date": "2026-03-17",
         "type": "ACTUAL"
       }
     },
@@ -301,7 +301,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Duarte",
           "state": "California",
           "zip": "91010",
@@ -433,7 +433,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Marietta",
           "state": "Georgia",
           "zip": "30060",
@@ -541,7 +541,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Santa Fe",
           "state": "New Mexico",
           "zip": "87505",
@@ -649,7 +649,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Sioux Falls",
           "state": "South Dakota",
           "zip": "57105",
@@ -668,6 +668,17 @@
           "geoPoint": {
             "lat": -33.87939,
             "lon": 151.21925
+          }
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Gosford",
+          "zip": "2250",
+          "country": "Australia",
+          "geoPoint": {
+            "lat": -33.4244,
+            "lon": 151.34399
           }
         },
         {
@@ -760,7 +771,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Porto Alegre",
           "zip": "91350-200",
           "country": "Brazil",
@@ -793,7 +804,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Vitória",
           "zip": "29043-272",
           "country": "Brazil",
@@ -852,7 +863,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Toronto",
           "state": "Ontario",
           "zip": "M4N 3M5",
@@ -864,7 +875,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Toronto",
           "state": "Ontario",
           "zip": "M5G 2M9",
@@ -933,7 +944,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Changde",
           "zip": "415000",
           "country": "China",
@@ -977,7 +988,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Fuzhou",
           "zip": "350005",
           "country": "China",
@@ -1010,7 +1021,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Hefei",
           "zip": "230001",
           "country": "China",
@@ -1034,7 +1045,7 @@
           "facility": "Research Site",
           "status": "NOT_YET_RECRUITING",
           "city": "Luoyang",
-          "zip": "471003",
+          "zip": "471023",
           "country": "China",
           "geoPoint": {
             "lat": 34.67345,
@@ -1384,12 +1395,34 @@
         {
           "facility": "Research Site",
           "status": "NOT_YET_RECRUITING",
+          "city": "Kolkata",
+          "zip": "700063",
+          "country": "India",
+          "geoPoint": {
+            "lat": 22.56263,
+            "lon": 88.36304
+          }
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
           "city": "Mumbai",
           "zip": "400012",
           "country": "India",
           "geoPoint": {
             "lat": 19.07283,
             "lon": 72.88261
+          }
+        },
+        {
+          "facility": "Research Site",
+          "status": "NOT_YET_RECRUITING",
+          "city": "Nashik",
+          "zip": "422002",
+          "country": "India",
+          "geoPoint": {
+            "lat": 19.99727,
+            "lon": 73.79096
           }
         },
         {
@@ -1489,7 +1522,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Kōtoku",
           "zip": "135-8550",
           "country": "Japan",
@@ -1500,7 +1533,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Matsuyama",
           "zip": "790-0024",
           "country": "Japan",
@@ -1544,21 +1577,21 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Suita-shi",
           "zip": "565-0871",
           "country": "Japan"
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Takatsuki-shi",
           "zip": "569-8686",
           "country": "Japan"
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Ube",
           "zip": "755-8505",
           "country": "Japan",
@@ -1569,7 +1602,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Yokohama",
           "zip": "241-8515",
           "country": "Japan",
@@ -1679,7 +1712,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Busan",
           "zip": "48108",
           "country": "South Korea",
@@ -1712,7 +1745,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Seongnam-si",
           "zip": "13620",
           "country": "South Korea",
@@ -1844,7 +1877,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Kaohsiung City",
           "zip": "833",
           "country": "Taiwan",
@@ -1877,7 +1910,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Tainan",
           "zip": "704",
           "country": "Taiwan",
@@ -1954,7 +1987,7 @@
         },
         {
           "facility": "Research Site",
-          "status": "NOT_YET_RECRUITING",
+          "status": "RECRUITING",
           "city": "Khon Kaen",
           "zip": "40002",
           "country": "Thailand",
@@ -2114,7 +2147,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-13"
+      "versionHolder": "2026-03-17"
     },
     "conditionBrowseModule": {
       "meshes": [

@@ -6,5 +6,9 @@
   {
     "timestamp": "2026-02-19 01:00:02",
     "diff": "Minor formatting updates."
+  },
+  {
+    "timestamp": "2026-03-18 02:24:04",
+    "diff": "Field `referencesModule.references.[0]citation` changed from `Dummer R, Guo J, Luke JJ, Carlino MS, Schadendorf D, Khattak MA, Hauschild A, Ascierto PA, Chen Y, Shin SJ, Rutkowski P, Luo Z, Chen J, Rivalland G, Coetzee C, Ribas A, Mujika K, Markel G, Villarroel RU, Dizdar O, Caglevic C, Grebennik D, Donovan K, Krepler C, Long GV. Vibostolimab coformulated with pembrolizumab versus pembrolizumab alone as adjuvant therapy for high-risk stage IIB-IV melanoma (KEYVIBE-010): a randomised, double-blind, phase 3 study. Lancet Oncol. 2026 Feb 13:S1470-2045(25)00709-0. doi: 10.1016/S1470-2045(25)00709-0. Online ahead of print.` to `Dummer R, Guo J, Luke JJ, Carlino MS, Schadendorf D, Khattak MA, Hauschild A, Ascierto PA, Chen Y, Shin SJ, Rutkowski P, Luo Z, Chen J, Rivalland G, Coetzee C, Ribas A, Mujika K, Markel G, Villarroel RU, Dizdar O, Caglevic C, Grebennik D, Donovan K, Krepler C, Long GV. Vibostolimab coformulated with pembrolizumab versus pembrolizumab alone as adjuvant therapy for high-risk stage IIB-IV melanoma (KEYVIBE-010): a randomised, double-blind, phase 3 study. Lancet Oncol. 2026 Mar;27(3):327-339. doi: 10.1016/S1470-2045(25)00709-0. Epub 2026 Feb 13.`"
   }
 ]

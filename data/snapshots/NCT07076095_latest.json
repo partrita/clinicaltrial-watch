@@ -52,8 +52,8 @@
       },
       "collaborators": [
         {
-          "name": "The Affiliated Cancer Hospital of Zhengzhou University & Henan Cancer Hospital",
-          "class": "UNKNOWN"
+          "name": "Zhengzhou University",
+          "class": "OTHER"
         }
       ]
     },
@@ -270,7 +270,7 @@
       "overallOfficials": [
         {
           "name": "ming qi wang",
-          "affiliation": "The Affiliated Cancer Hospital of Zhengzhou University & Henan Cancer Hospital",
+          "affiliation": "Zhengzhou University",
           "role": "PRINCIPAL_INVESTIGATOR"
         }
       ]
@@ -278,7 +278,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-09"
+      "versionHolder": "2026-03-17"
     },
     "conditionBrowseModule": {
       "meshes": [
