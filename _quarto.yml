@@ -5,6 +5,8 @@ project:
 
 website:
   title: "Clinical Trial Watch"
+  link-external-icon: true
+  link-external-newwindow: true
   navbar:
     left:
       - href: index.qmd
@@ -12,11 +14,11 @@ website:
       - text: Targets
         menu:
           - href: targets/ccr8.qmd
-            text: CCR8
+            text: "CCR8"
           - href: targets/tigit.qmd
-            text: TIGIT
+            text: "TIGIT"
           - href: targets/b7-h3.qmd
-            text: B7-H3
+            text: "B7-H3"
       - about.qmd
 
 format:
@@ -26,8 +28,6 @@ format:
       - brand
     css: styles.css
     toc: true
-    link-external-icon: true
-    link-external-newwindow: true
 
 execute:
   freeze: auto

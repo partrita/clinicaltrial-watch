@@ -150,7 +150,7 @@ for trial_id in target_trials:
         if real_changes:
             if not history_found:
                 history_found = True
-            print(f"#### {trial_id}")
+            print(f"#### {escape_html(trial_id)}")
             for record in reversed(real_changes[-5:]):
                 print(f"**{escape_html(record['timestamp'])}**")
                 for line in record['diff'].splitlines():
@@ -204,7 +204,9 @@ if os.path.exists(summary_path):
         safe_conditions = format_truncated_with_tooltip(item.get('conditions', 'N/A'), 30)
 
         trial_id = item['id']
-        print(f"| [{trial_id}](https://clinicaltrials.gov/study/{trial_id}){{aria-label='View trial {trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {escape_html(item.get('enrollment', 'N/A'))} | {escape_html(item.get('last_updated', 'N/A'))} |")
+        safe_trial_id = escape_html(trial_id)
+        url_trial_id = sanitize_id(trial_id)
+        print(f"| [{safe_trial_id}](https://clinicaltrials.gov/study/{url_trial_id}){{aria-label='View trial {safe_trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {escape_html(item.get('enrollment', 'N/A'))} | {escape_html(item.get('last_updated', 'N/A'))} |")
     print('</div>')
 else:
     print(f"No monitoring data available yet for {target_name} at {os.path.abspath(summary_path)}. Run the data collection script first.")

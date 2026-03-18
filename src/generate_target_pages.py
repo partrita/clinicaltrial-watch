@@ -212,7 +212,7 @@ for trial_id in target_trials:
         if real_changes:
             if not history_found:
                 history_found = True
-            print(f"#### {trial_id}")
+            print(f"#### {escape_html(trial_id)}")
             for record in reversed(real_changes[-5:]):
                 print(f"**{escape_html(record['timestamp'])}**")
                 for line in record['diff'].splitlines():
@@ -276,7 +276,9 @@ if os.path.exists(summary_path):
         safe_conditions = format_truncated_with_tooltip(item.get('conditions', 'N/A'), 30)
 
         trial_id = item['id']
-        print(f"| [{trial_id}](https://clinicaltrials.gov/study/{trial_id}){{aria-label='View trial {trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {escape_html(item.get('enrollment', 'N/A'))} | {escape_html(item.get('last_updated', 'N/A'))} |")
+        safe_trial_id = escape_html(trial_id)
+        url_trial_id = sanitize_id(trial_id)
+        print(f"| [{safe_trial_id}](https://clinicaltrials.gov/study/{url_trial_id}){{aria-label='View trial {safe_trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {escape_html(item.get('enrollment', 'N/A'))} | {escape_html(item.get('last_updated', 'N/A'))} |")
     print('</div>')
 else:
     print(f"No monitoring data available yet for {target_name} at {os.path.abspath(summary_path)}. Run the data collection script first.")
@@ -324,7 +326,7 @@ if os.path.exists(summary_path):
     for target in targets:
         name = target['name']
         desc = target.get('description', '')
-        link = f"targets/{name.lower()}.qmd"
+        link = f"targets/{sanitize_id(name).lower()}.qmd"
         changed_badge = get_changed_count_badge(target['changed_count'])
         print(f"| [{escape_html(name)}]({link}) | {escape_html(desc)} | {target['trial_count']} | {changed_badge} |")
 else:
@@ -340,7 +342,8 @@ else:
             for target in config.get('targets', []):
                 name = target['name']
                 desc = target.get('description', f"{name} 타겟 임상시험 모니터링")
-                print(f"| [{escape_html(name)}](targets/{name.lower()}.qmd) | {escape_html(desc)} |")
+                link = f"targets/{sanitize_id(name).lower()}.qmd"
+                print(f"| [{escape_html(name)}]({link}) | {escape_html(desc)} |")
     except Exception as e:
         print(f"Error loading targets: {e}")
 ```
@@ -364,7 +367,7 @@ def update_quarto_yml(
         target_lower = safe_target_name.lower()
         safe_name = escape_html(target_name)
         menu_items.append(
-            f"          - href: targets/{target_lower}.qmd\n            text: {safe_name}"
+            f'          - href: targets/{target_lower}.qmd\n            text: "{safe_name}"'
         )
 
     menu_str = "\n".join(menu_items)
