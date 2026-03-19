@@ -26,7 +26,7 @@
       "acronym": "aCCeleR8-001"
     },
     "statusModule": {
-      "statusVerifiedDate": "2025-04",
+      "statusVerifiedDate": "2026-03",
       "overallStatus": "RECRUITING",
       "expandedAccessInfo": {
         "hasExpandedAccess": false
@@ -36,11 +36,11 @@
         "type": "ACTUAL"
       },
       "primaryCompletionDateStruct": {
-        "date": "2027-04-16",
+        "date": "2028-05-31",
         "type": "ESTIMATED"
       },
       "completionDateStruct": {
-        "date": "2027-04-16",
+        "date": "2028-05-31",
         "type": "ESTIMATED"
       },
       "studyFirstSubmitDate": "2021-10-14",
@@ -49,9 +49,9 @@
         "date": "2021-11-01",
         "type": "ACTUAL"
       },
-      "lastUpdateSubmitDate": "2025-05-22",
+      "lastUpdateSubmitDate": "2026-03-16",
       "lastUpdatePostDateStruct": {
-        "date": "2025-05-28",
+        "date": "2026-03-18",
         "type": "ACTUAL"
       }
     },
@@ -76,7 +76,7 @@
       "isFdaRegulatedDevice": false
     },
     "descriptionModule": {
-      "briefSummary": "The primary objective of Part A is to evaluate the safety and tolerability of S-531011 and to determine the maximum tolerated dose (MTD) and/or recommended Phase 2 dose (RP2D) of S-531011.\n\nThe primary objective of Parts B and C is to evaluate the antitumor activity of S-531011 at the RP2D."
+      "briefSummary": "The primary objective of Part A is to evaluate the safety and tolerability of S-531011 and to determine the maximum tolerated dose (MTD) and/or recommended Phase 2 dose (RP2D) of S-531011 with or without pembrolizumab.\n\nThe primary objective of Parts B and C is to evaluate the antitumor activity of S-531011 at the RP2D with or without pembrolizumab.\n\nThe primary objective of Parts D and E is to evaluate the antitumor activity of S-531011 at the RP2D in combination with bevacizumab with our without pembrolizumab."
     },
     "conditionsModule": {
       "conditions": [
@@ -101,7 +101,7 @@
         }
       },
       "enrollmentInfo": {
-        "count": 274,
+        "count": 282,
         "type": "ESTIMATED"
       }
     },
@@ -140,6 +140,25 @@
             "Drug: S-531011",
             "Drug: Pembrolizumab"
           ]
+        },
+        {
+          "label": "Part D: S-531011 + Bevacizumab",
+          "type": "EXPERIMENTAL",
+          "description": "Participants will receive S-531011 at the RP2D in combination with bevacizumab or bevacizumab biosimilar by intravenous infusion for up to approximately 24 months.",
+          "interventionNames": [
+            "Drug: S-531011",
+            "Drug: Bevacizumab"
+          ]
+        },
+        {
+          "label": "Part E: S-531011 + Bevacizumab + Pembrolizumab",
+          "type": "EXPERIMENTAL",
+          "description": "Participants will receive S-531011 at the RP2D in combination with bevacizumab or bevacizumab biosimilar and pembrolizumab by intravenous infusion for up to approximately 24 months.",
+          "interventionNames": [
+            "Drug: S-531011",
+            "Drug: Pembrolizumab",
+            "Drug: Bevacizumab"
+          ]
         }
       ],
       "interventions": [
@@ -151,7 +170,9 @@
             "Part A-1: S-531011 Monotherapy",
             "Part A-2: S-531011 + Pembrolizumab",
             "Part B: S-531011 Monotherapy",
-            "Part C: S-531011 + Pembrolizumab"
+            "Part C: S-531011 + Pembrolizumab",
+            "Part D: S-531011 + Bevacizumab",
+            "Part E: S-531011 + Bevacizumab + Pembrolizumab"
           ]
         },
         {
@@ -160,10 +181,23 @@
           "description": "Administered by intravenous infusion",
           "armGroupLabels": [
             "Part A-2: S-531011 + Pembrolizumab",
-            "Part C: S-531011 + Pembrolizumab"
+            "Part C: S-531011 + Pembrolizumab",
+            "Part E: S-531011 + Bevacizumab + Pembrolizumab"
           ],
           "otherNames": [
             "KEYTRUDA"
+          ]
+        },
+        {
+          "type": "DRUG",
+          "name": "Bevacizumab",
+          "description": "Administered by intravenous infusion",
+          "armGroupLabels": [
+            "Part D: S-531011 + Bevacizumab",
+            "Part E: S-531011 + Bevacizumab + Pembrolizumab"
+          ],
+          "otherNames": [
+            "Avastin"
           ]
         }
       ]
@@ -175,34 +209,34 @@
           "timeFrame": "Approximately 12 months (Part A-1); Approximately 24 months (Part A-2)"
         },
         {
-          "measure": "Parts B and C: Objective Response Rate",
-          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part B]; Approximately 24 months [Part C])"
+          "measure": "Parts B, C, D, E: Objective Response Rate",
+          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part B]; Approximately 24 months [Parts C, D, E])"
         },
         {
-          "measure": "Parts B and C: Duration of Response",
-          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part B]; Approximately 24 months [Part C])"
+          "measure": "Parts B, C, D, E: Duration of Response",
+          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part B]; Approximately 24 months [Parts C, D, E])"
         },
         {
-          "measure": "Parts B and C: Disease Control Rate",
-          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part B]; Approximately 24 months [Part C])"
+          "measure": "Parts B, C, D, E: Disease Control Rate",
+          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part B]; Approximately 24 months [Parts C, D, E])"
         },
         {
-          "measure": "Parts B and C: Time to Response",
-          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part B]; Approximately 24 months [Part C])"
+          "measure": "Parts B, C, D, E: Time to Response",
+          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part B]; Approximately 24 months [Parts C, D, E])"
         },
         {
-          "measure": "Parts B and C: Progression-free Survival",
-          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part B]; Approximately 24 months [Part C])"
+          "measure": "Parts B, C, D, E: Progression-free Survival",
+          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part B]; Approximately 24 months [Parts C, D, E])"
         },
         {
-          "measure": "Parts B and C: Overall Survival",
-          "timeFrame": "From first dose to death, or up to a maximum of 18 months after last dose in the last participant"
+          "measure": "Parts B, C, D, E: Overall Survival",
+          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part B]; Approximately 24 months [Parts C, D, E])"
         }
       ],
       "secondaryOutcomes": [
         {
           "measure": "Part A: Objective Response Rate",
-          "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part A-1]; Approximately 24 months [Part A-2])"
+          "timeFrame": "Every 6 weeks for the ﬁrst 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part A-1]; Approximately 24 months [Part A-2])"
         },
         {
           "measure": "Part A: Duration of Response",
@@ -221,8 +255,8 @@
           "timeFrame": "Every 6 weeks for the first 24 weeks and every 9 weeks thereafter, until disease progression (Approximately 12 months [Part A-1]; Approximately 24 months [Part A-2])"
         },
         {
-          "measure": "Serum concentrations of S-531011",
-          "timeFrame": "Part A: Cycle 1, Days 8 and 15 (4 hours post infusion); Cycles 2-9, Day 1 (pre- and end-of-infusion); Safety Follow-up Visit. Parts B and C: Day 1 of Cycles 1-9 (pre- and end-of-infusion); Safety Follow-up Visit. (each cycle is 21 days)"
+          "measure": "All Parts: Serum concentrations of S-531011",
+          "timeFrame": "Part A: Cycle 1, Days 8 and 15 (4 hours post infusion); Cycles 2-9, Day 1 (pre- and end-of-infusion); Safety Follow-up Visit. Parts B, C, D, E: Day 1 of Cycles 1-9 (pre- and end-of-infusion); Safety Follow-up Visit. (each cycle is 21 days)"
         },
         {
           "measure": "Part A: Maximum Serum Concentration (Cmax) of S-531011",
@@ -265,17 +299,22 @@
           "timeFrame": "Day 1 of Cycles 1 to 9 (each cycle is 21 days)"
         },
         {
+          "measure": "All Parts: Anti-S-531011 Antibody (ADA) Titer Level",
+          "description": "Neutralization assays will be performed only for the samples that are confirmed to have ADA.",
+          "timeFrame": "Day 1 of Cycles 1 to 9 (each cycle is 21 days)"
+        },
+        {
           "measure": "All Parts: Changes in serum tumor markers from pretreatment to on-treatment",
           "timeFrame": "Baseline and Day 1 of each treatment cycle (each cycle is 21 days)"
         },
         {
-          "measure": "Part B and C: Number of Participants with Treatment-emergent Adverse Events (TEAEs)",
-          "timeFrame": "Approximately 12 months (Part B); Approximately 24 months (Part C)"
+          "measure": "Parts B, C, D, E: Number of Participants with Treatment-emergent Adverse Events (TEAEs)",
+          "timeFrame": "Approximately 12 months (Part B); Approximately 24 months (Parts C, D, E)"
         }
       ]
     },
     "eligibilityModule": {
-      "eligibilityCriteria": "Key Inclusion Criteria:\n\n1. Male or female participant must be at least 18 years of age inclusive (or complies with country-specific regulatory requirements), at the time of signing the informed consent.\n2. Participants with histologically or cytologically confirmed advanced (locoregionally recurrent, not amenable to curative therapy) or metastatic solid tumors who have no standard therapies with a proven clinical benefit, or who are intolerant to or unwilling to receive these therapies for any reasons.\n3. Measurable disease by Response Evaluation Criteria in Solid Tumors version 1.1.\n4. (Part A only) Participants should have 1 of the following tumor types: malignant melanoma, head and neck squamous cell carcinoma, renal cell carcinoma, urothelial carcinoma, non-small cell lung cancer, or triple-negative breast cancer, esophageal cancer (esophageal squamous cell carcinoma and adenocarcinoma), or gastric cancer (gastric and gastroesophageal junction adenocarcinoma). Participants with colorectal cancer (CRC), pancreatic cancer, cervical cancer, epithelial ovarian cancer, and other types of solid tumors may also be enrolled upon discussion with and approval by the sponsor. For the backfill cohorts only, specific tumor types may be selected.\n5. (Part B CRC cohorts only) Participants must have histologically or cytologically confirmed adenocarcinoma of the colon or rectum, who had disease progression on or after receiving all of the following standard of care systemic therapies for advanced or metastatic disease or who were intolerant to: fluoropyrimidine, oxaliplatin, and irinotecan; anti-epidermal growth factor receptor (EGFR) therapy if rat sarcoma virus (RAS) (Kirsten RAS/neuroblastoma RAS \\[KRAS/NRAS\\]) wild-type; V-raf murine sarcoma viral oncogene homolog B (BRAF) inhibitor if BRAF V600E mutation. In addition, participants who received up to 2 additional lines of therapy for advanced or metastatic disease of the following therapies are also eligible: trifluridine/tipiracil, regorafenib, fruquintinib, other drugs approved in the country, or investigational drugs.\n6. (Part C CRC cohorts only) Participants must have histologically or cytologically confirmed adenocarcinoma of the colon or rectum, who had disease progression on or after receiving all of the following standard of care systemic therapies for advanced or metastatic disease or who were intolerant to: fluoropyrimidine, oxaliplatin, and irinotecan; anti-EGFR therapy if RAS (KRAS/NRAS) wild-type; BRAF inhibitor if BRAF V600E mutation. In addition, participants who received up to 2 additional lines of therapy for advanced or metastatic disease of the following therapies are also eligible: trifluridine/tipiracil, regorafenib, fruquintinib, other drugs approved in the country, or investigational drugs.\n7. Participants should be willing and able to provide permission to access archival formalin-fixed paraffin-embedded tumor tissues (as block or unstained slides) for this study.\n8. Participants should be willing and able to provide both pre-treatment and on-treatment paired tumor biopsy samples.\n9. (At selected sites only) Participants should be willing and able to provide both pre-treatment and on-treatment paired tumor biopsy samples. Fresh tissue samples are required as these will be used for the proof of mechanism (flow cytometry) analysis.\n10. Eastern Cooperative Oncology Group Performance Status of 0 or 1.\n11. An estimated life expectancy of at least 12 weeks.\n12. Adequate hematologic and organ function as confirmed by laboratory values.\n13. QT interval corrected with the Fridericia formula ≤ 480 milliseconds in 12-lead electrocardiogram at Screening.\n\nKey Exclusion Criteria:\n\n1. Presence or history of autoimmune diseases or immune-mediated diseases that require chronic use of systemic corticosteroids (\\> 10 milligrams of prednisone equivalent per day), immunosuppressive agents, or disease-modifying agents.\n2. Presence or history of interstitial lung disease and (non-infectious) pneumonitis that required corticosteroids.\n3. Active clinically significant bacterial, viral or fungal infection, or any major episode of infection requiring hospitalization or treatment with parenteral anti-infectives within 4 weeks before the first dose of study intervention.\n4. Uncontrolled or clinically significant cardiovascular disease defined as New York Heart Association classification III or IV.\n5. A positive test for hepatitis B surface antigen and/or hepatitis C virus (HCV) antibody (participants with positive HCV antibody are eligible if a confirmatory HCV RNA test is undetectable).\n6. A positive serological test for human immunodeficiency virus infection.\n7. Known history of any other relevant congenital or acquired immunodeficiency.\n8. Known history of an allogeneic tissue and/or solid organ transplant.\n9. Known history of severe allergy, hypersensitivity, anaphylaxis, or any serious adverse reaction to any component of study intervention or formulation components and/or any other monoclonal antibodies.\n10. Women who are pregnant or breastfeeding (or have discontinued breastfeeding) or trying to become pregnant.\n11. Clinical evidence of uncontrolled brain metastasis.\n12. Clinically uncontrollable symptomatic pleural effusion and/or ascites. (Participants who do not require fluid drainage or have no significant increase of fluid for 28 days may be eligible with approval by the sponsor.)\n13. Known additional malignancy that is progressing or has required active treatment within the past 3 years.\n14. (Part B and C CRC cohorts only): Colorectal cancer with mismatch repair deficient/microsatellite instability-high status.\n15. (Parts A-2 and C only): Has received prior therapy with an anti-programmed death 1, anti-programmed death ligand 1, or anti-programmed death ligand 2 agent or with an agent directed to another stimulatory or co-inhibitory T-cell receptor (for example, cytotoxic T-lymphocyte-associated protein 4, OX-40, CD137), and was discontinued from that treatment due to ≥ Grade 3 immune-related adverse event.\n16. Prior treatment with systemic anticancer drugs (including any investigational medicinal products) within 28 days or 5 half-lives (whichever is shorter) before the first dose of study intervention.\n17. Prior major surgery within 28 days before the first dose of study intervention.\n18. Prior extended field radiotherapy within 28 days before the first dose of study intervention (within 14 days for limited field radiation for palliation) or history of radiation pneumonitis.\n19. Participants who have not recovered from any previous treatment toxicities to ≤ Grade 1 or baseline (except alopecia and peripheral neuropathy) before the first dose of study intervention.\n20. Prior treatment with anti-CCR8 antibody for any indication.\n21. Receipt of hematopoietic growth factors (for example, granulocyte-colony stimulating factor or erythropoietin) within 14 days before the first dose of study intervention or blood transfusions within 14 days before the first dose of study intervention.\n22. Receipt of a live, attenuated vaccine within 30 days before the first dose of study intervention.\n\nNote: Additional inclusion/exclusion criteria may apply, per protocol.",
+      "eligibilityCriteria": "Eligibility Criteria: Key Inclusion Criteria:\n\n1. Participants with histologically or cytologically conﬁrmed advanced (locoregionally recurrent, not amenable to curative therapy) or metastatic solid tumors who have no standard therapies with a proven clinical beneﬁt, or who are intolerant to or unwilling to receive these therapies for any reasons.\n2. Measurable disease by Response Evaluation Criteria in Solid Tumors version 1.1.\n3. (Part A only) Participants should have 1 of the following tumor types: malignant melanoma, head and neck squamous cell carcinoma, renal cell carcinoma, urothelial carcinoma, non-small cell lung cancer, or triple-negative breast cancer, esophageal cancer (esophageal squamous cell carcinoma and adenocarcinoma), or gastric cancer (gastric and gastroesophageal junction adenocarcinoma). Participants with colorectal cancer (CRC), pancreatic cancer, cervical cancer, epithelial ovarian cancer, and other types of solid tumors may also be enrolled upon discussion with and approval by the sponsor. For the backﬁll cohorts only, speciﬁc tumor types may be selected.\n4. (Part B CRC cohorts only) Participants must have histologically or cytologically conﬁrmed metastatic adenocarcinoma of the colon or rectum, who had disease progression on or after receiving all of the following standard of care systemic therapies for advanced or metastatic disease or who were intolerant to: ﬂuoropyrimidine, oxaliplatin, and irinotecan; anti-epidermal growth factor receptor (EGFR) therapy if rat sarcoma virus (RAS) (Kirsten RAS/neuroblastoma RAS \\[KRAS/NRAS\\]) wild-type and medically appropriate ; V-raf murine sarcoma viral oncogene homolog B (BRAF) inhibitor if BRAF V600E mutation. In addition, participants who received up to 2 additional lines of therapy for advanced or metastatic disease of the following therapies are also eligible: triﬂuridine/tipiracil, regorafenib, fruquintinib, other drugs approved in the country, or investigational drugs.\n5. (Part C CRC cohorts only) Participants must have histologically or cytologically conﬁrmed metastatic adenocarcinoma of the colon or rectum, who had disease progression on or after receiving all of the following standard of care systemic therapies for advanced or metastatic disease or who were intolerant to: ﬂuoropyrimidine, oxaliplatin, and irinotecan; anti-EGFR therapy if RAS (KRAS/NRAS) wild-type and medically appropriate ; BRAF inhibitor if BRAF V600E mutation. In addition, participants who received up to 2 additional lines of therapy for advanced or metastatic disease of the following therapies are also eligible: triﬂuridine/tipiracil, regorafenib, fruquintinib, other drugs approved in the country, or investigational drugs.\n6. (Parts D and E) Participants must have histologically or cytologically conﬁrmed metastatic adenocarcinoma of the colon or rectum, who had disease progression on or after receiving all of the following standard of care systemic therapies for advanced or metastatic disease or who were intolerant to: fluoropyrimidine, oxaliplatin, and irinotecan; anti-EGFR therapy if RAS (KRAS/NRAS) wild-type and medically appropriate; BRAF inhibitor if BRAF-V600E mutation.. In addition, participants who received up to 2 additional lines of therapy for advanced or metastatic disease of the following therapies are also eligible: triﬂuridine/tipiracil, regorafenib, fruquintinib, other drugs approved in the country, or investigational drugs.\n7. Participants should be willing and able to provide permission to access archival formalin-ﬁxed paraffin-embedded tumor tissues (as block or unstained slides) for this study.\n8. Participants should be willing and able to provide both pre-treatment and on-treatment paired tumor biopsy samples.\n9. (Part A and B/CRC Cohorts only; At selected sites only) Participants should be willing and able to provide both pre-treatment and on-treatment paired tumor biopsy samples. Fresh tissue samples are required as these will be used for the proof of mechanism (ﬂow cytometry) analysis.\n10. Eastern Cooperative Oncology Group Performance Status of 0 or 1.\n11. An estimated life expectancy of at least 12 weeks.\n12. Adequate hematologic and organ function as conﬁrmed by laboratory values.\n13. QT interval corrected with the Fridericia formula ≤ 480 milliseconds in 12- lead electrocardiogram at Screening.\n\nKey Exclusion Criteria:\n\n1. Presence or history of autoimmune diseases or immune-mediated diseases that require chronic use of systemic corticosteroids (\\> 10 milligrams of prednisone equivalent per day), immunosuppressive agents, or disease-modifying agents.\n2. Presence or history of interstitial lung disease and (non-infectious) pneumonitis that required corticosteroids.\n3. Active clinically signiﬁcant bacterial, viral or fungal infection, or any major episode of infection requiring hospitalization or treatment with parenteral anti-infectives within 4 weeks before the ﬁrst dose of study intervention.\n4. Uncontrolled or clinically signiﬁcant cardiovascular disease deﬁned as New York Heart Association classiﬁcation III or IV.\n5. A positive test for hepatitis B surface antigen and/or hepatitis C virus (HCV) antibody (participants with positive HCV antibody are eligible if a conﬁrmatory HCV RNA test is undetectable).\n6. A positive serological test for human immunodeﬁciency virus infection.\n7. Known history of any other relevant congenital or acquired immunodeﬁciency.\n8. Known history of an allogeneic tissue and/or solid organ transplant.\n9. Known history of severe allergy, hypersensitivity, anaphylaxis, or any serious adverse reaction to any component of study intervention or formulation components and/or any other monoclonal antibodies.\n10. Women who are pregnant or breastfeeding (or have discontinued breastfeeding) or trying to become pregnant.\n11. (Parts D and E only) Serious non-healing wound, non-healing ulcer, or non healing bone fracture.\n12. (Parts D and E only) Presence or history of severe arterial thromboembolic events (for example, cerebral infarction, transient ischemic attacks, myocardial infarction, and angina) within 6 months prior to the ﬁrst dose of study intervention, and/or ≥ Grade 3 venous thromboembolic events (for example, deep vein thrombosis) within 3 months prior to the ﬁrst dose of study intervention. Participants who receive a full-dose therapeutic anticoagulation should be excluded.\n13. (Parts D and E only) Known coagulopathy that increases risk of bleeding, bleeding diatheses, or any other hemorrhage/bleeding event of ≥ Grade 3 within 4 weeks prior to the ﬁrst dose of study intervention.\n14. (Parts D and E only) Presence or history of any life-threatening vascular endothelial growth factor (VEGF)-related adverse event (AE).\n15. (Parts D and E only) Proteinuria ≥ 2+ by urine dipstick test within 4 weeks prior to the ﬁrst dose of study intervention.\n16. Clinical evidence of uncontrolled brain metastasis.\n17. Clinically uncontrollable symptomatic pleural effusion and/or ascites. (Participants who do not require ﬂuid drainage or have no signiﬁcant increase of ﬂuid for 28 days may be eligible with approval by the sponsor.)\n18. Known additional malignancy that is progressing or has required active treatment within the past 3 years.\n19. (Part B, C, D and E CRC cohorts only): Colorectal cancer with mismatch repair deﬁcient/microsatellite instability-high status.\n20. (Parts A-2, C and E only): Has received prior therapy with an anti-programmed death 1, anti-programmed death ligand 1, or anti-programmed death ligand 2 agent or with an agent directed to another stimulatory or co-inhibitory T-cell receptor (for example, cytotoxic T-lymphocyte-associated protein 4, OX-40, CD137), and was discontinued from that treatment due to ≥ Grade 3 immune-related adverse event.\n21. Prior treatment with systemic anticancer drugs (including any investigational medicinal products) within 28 days or 5 half-lives (whichever is shorter) before the ﬁrst dose of study intervention.\n22. Prior major surgery within 28 days before the ﬁrst dose of study intervention.\n23. Prior extended ﬁeld radiotherapy within 28 days before the ﬁrst dose of study intervention (within 14 days for limited ﬁeld radiation for palliation) or history of radiation pneumonitis.\n24. Participants who have not recovered from any previous treatment toxicities to ≤ Grade 1 or baseline (except alopecia and peripheral neuropathy) before the ﬁrst dose of study intervention.\n25. Prior treatment with anti-CCR8 antibody for any indication.\n26. Receipt of hematopoietic growth factors (for example, granulocyte-colony stimulating factor or erythropoietin) within 14 days before the ﬁrst dose of study intervention or blood transfusions within 14 days before the ﬁrst dose of study intervention.\n27. (Parts D and E only) Presence or history of allergic reactions or hypersensitivity to bevacizumab or any of its excipients.\n28. (Parts D and E only) Presence or history of hypersensitivity to Chinese Hamster Ovary cell products or other recombinant human or humanized antibodies.\n29. Receipt of a live, attenuated vaccine within 30 days before the ﬁrst dose of study intervention.\n\nNote: Additional protocol deﬁned Inclusion/Exclusion criteria may apply.",
       "healthyVolunteers": false,
       "sex": "ALL",
       "minimumAge": "18 Years",
@@ -303,7 +342,7 @@
       "locations": [
         {
           "facility": "Angeles Clinic and Research Center",
-          "status": "RECRUITING",
+          "status": "ACTIVE_NOT_RECRUITING",
           "city": "Los Angeles",
           "state": "California",
           "zip": "90025",
@@ -327,7 +366,7 @@
         },
         {
           "facility": "Henry Ford Health Center",
-          "status": "RECRUITING",
+          "status": "ACTIVE_NOT_RECRUITING",
           "city": "Detroit",
           "state": "Michigan",
           "zip": "48202",
@@ -398,13 +437,59 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-17"
+      "versionHolder": "2026-03-18"
     },
     "interventionBrowseModule": {
       "meshes": [
         {
           "id": "C582435",
           "term": "pembrolizumab"
+        },
+        {
+          "id": "D000068258",
+          "term": "Bevacizumab"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D061067",
+          "term": "Antibodies, Monoclonal, Humanized"
+        },
+        {
+          "id": "D000911",
+          "term": "Antibodies, Monoclonal"
+        },
+        {
+          "id": "D000906",
+          "term": "Antibodies"
+        },
+        {
+          "id": "D007136",
+          "term": "Immunoglobulins"
+        },
+        {
+          "id": "D007162",
+          "term": "Immunoproteins"
+        },
+        {
+          "id": "D001798",
+          "term": "Blood Proteins"
+        },
+        {
+          "id": "D011506",
+          "term": "Proteins"
+        },
+        {
+          "id": "D000602",
+          "term": "Amino Acids, Peptides, and Proteins"
+        },
+        {
+          "id": "D012712",
+          "term": "Serum Globulins"
+        },
+        {
+          "id": "D005916",
+          "term": "Globulins"
         }
       ]
     }

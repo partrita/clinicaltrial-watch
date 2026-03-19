@@ -7,6 +7,10 @@
       },
       "secondaryIdInfos": [
         {
+          "id": "2024-510977-27-00",
+          "type": "CTIS"
+        },
+        {
           "id": "2022-002840-29",
           "type": "EUDRACT_NUMBER"
         }
@@ -19,7 +23,7 @@
       "officialTitle": "An Open-Label, Multi-Drug, Multi-Centre, Phase II Study to Evaluate the Efficacy, Safety, Tolerability, Pharmacokinetics, and Immunogenicity of Novel Combinations in Participants With Locally Advanced Unresectable or Metastatic Gastric or Gastroesophageal Junction Adenocarcinoma"
     },
     "statusModule": {
-      "statusVerifiedDate": "2025-11",
+      "statusVerifiedDate": "2026-03",
       "overallStatus": "RECRUITING",
       "expandedAccessInfo": {
         "hasExpandedAccess": false
@@ -29,11 +33,11 @@
         "type": "ACTUAL"
       },
       "primaryCompletionDateStruct": {
-        "date": "2026-07-03",
+        "date": "2027-11-30",
         "type": "ESTIMATED"
       },
       "completionDateStruct": {
-        "date": "2027-09-28",
+        "date": "2029-05-31",
         "type": "ESTIMATED"
       },
       "studyFirstSubmitDate": "2022-12-07",
@@ -42,9 +46,9 @@
         "date": "2023-01-27",
         "type": "ACTUAL"
       },
-      "lastUpdateSubmitDate": "2025-11-14",
+      "lastUpdateSubmitDate": "2026-03-16",
       "lastUpdatePostDateStruct": {
-        "date": "2025-11-17",
+        "date": "2026-03-18",
         "type": "ACTUAL"
       }
     },
@@ -64,7 +68,7 @@
     },
     "descriptionModule": {
       "briefSummary": "This is a Phase II, open-label, multi-drug, multi-centre study designed to assess the efficacy, safety, tolerability, pharmacokinetics, and immunogenicity of novel combination therapies in participants with locally advanced unresectable or metastatic gastric or GEJ adenocarcinoma.",
-      "detailedDescription": "Approximately 240 participants will be assigned across 6 substudies, with approximately 40 evaluable participants of the confirmed recommend dose by SRC for study intervention in each corresponding substudy."
+      "detailedDescription": "Approximately 360 participants will be assigned across 4 substudies, with approximately 60 evaluable participants of the conﬁrmed recommend dose by SRC for study intervention in each corresponding substudy/cohort."
     },
     "conditionsModule": {
       "conditions": [
@@ -92,7 +96,7 @@
         }
       },
       "enrollmentInfo": {
-        "count": 240,
+        "count": 163,
         "type": "ESTIMATED"
       }
     },
@@ -130,9 +134,9 @@
           ]
         },
         {
-          "label": "Substudy 4",
+          "label": "Substudy 4, Cohort 4a1",
           "type": "EXPERIMENTAL",
-          "description": "AZD0901 plus rilvegostomig and 5-fluorouracil or capecitabine",
+          "description": "Sonesitatug vedotin (AZD0901) plus rilvegostomig and 5-fluorouracil or capecitabine",
           "interventionNames": [
             "Drug: Rilvegostomig",
             "Drug: AZD0901",
@@ -141,23 +145,21 @@
           ]
         },
         {
-          "label": "Substudy 5",
+          "label": "Substudy 4, Cohort 4a2",
           "type": "EXPERIMENTAL",
-          "description": "AZD7789 plus XELOX (oxaliplatin and capecitabine) or FOLFOX (oxaliplatin and 5-FU/CF)",
+          "description": "Sonesitatug vedotin (AZD0901) plus rilvegostomig and 5-fluorouracil",
           "interventionNames": [
-            "Drug: FOLFOX",
-            "Drug: XELOX",
-            "Drug: AZD7789"
+            "Drug: Rilvegostomig",
+            "Drug: AZD0901",
+            "Drug: 5-Fluorouracil"
           ]
         },
         {
-          "label": "Substudy 6",
+          "label": "Substudy 4, Cohort 4b",
           "type": "EXPERIMENTAL",
-          "description": "AZD0901 plus AZD7789 and 5-fluorouracil or capecitabine",
+          "description": "Sonesitatug vedotin (AZD0901) plus capecitabine",
           "interventionNames": [
-            "Drug: AZD7789",
             "Drug: AZD0901",
-            "Drug: 5-Fluorouracil",
             "Drug: Capecitabine"
           ]
         }
@@ -169,7 +171,8 @@
           "description": "an anti PD-1 and anti-TIGIT bispecific antibody; IV infusion",
           "armGroupLabels": [
             "Substudy 2",
-            "Substudy 4"
+            "Substudy 4, Cohort 4a1",
+            "Substudy 4, Cohort 4a2"
           ]
         },
         {
@@ -184,30 +187,19 @@
         {
           "type": "DRUG",
           "name": "FOLFOX",
-          "description": "5-fluorouracil 400 mg/m\\^2 IV, oxaliplatin 85 mg/m\\^2, leucovorin 400 mg/m\\^2 (or levoleucovorin 200 mg/m\\^2 when locally preferred and available), day 1, 5-fluorouracil 1200 mg/m\\^2 IV 24 h day 1-2",
+          "description": "5-fluorouracil oxaliplatin, leucovorin (levoleucovorin when locally preferred and available)",
           "armGroupLabels": [
             "Substudy 1",
-            "Substudy 2",
-            "Substudy 5"
+            "Substudy 2"
           ]
         },
         {
           "type": "DRUG",
           "name": "XELOX",
-          "description": "capecitabine 1000 mg/m\\^2 BID, days 1 to 14, oxaliplatin 130 mg/m\\^2, day 1",
+          "description": "capecitabine and oxaliplatin",
           "armGroupLabels": [
             "Substudy 1",
-            "Substudy 2",
-            "Substudy 5"
-          ]
-        },
-        {
-          "type": "DRUG",
-          "name": "AZD7789",
-          "description": "an anti PD 1 and anti TIM 3 bispecific antibody; IV infusion",
-          "armGroupLabels": [
-            "Substudy 5",
-            "Substudy 6"
+            "Substudy 2"
           ]
         },
         {
@@ -216,28 +208,29 @@
           "description": "an anti Claudin18.2 ADC; IV infusion",
           "armGroupLabels": [
             "Substudy 3",
-            "Substudy 4",
-            "Substudy 6"
+            "Substudy 4, Cohort 4a1",
+            "Substudy 4, Cohort 4a2",
+            "Substudy 4, Cohort 4b"
           ]
         },
         {
           "type": "DRUG",
           "name": "5-Fluorouracil",
-          "description": "5-FU, IV infusion, Q3W",
+          "description": "5-FU, IV infusion",
           "armGroupLabels": [
             "Substudy 3",
-            "Substudy 4",
-            "Substudy 6"
+            "Substudy 4, Cohort 4a1",
+            "Substudy 4, Cohort 4a2"
           ]
         },
         {
           "type": "DRUG",
           "name": "Capecitabine",
-          "description": "Oral take, Q3W",
+          "description": "Oral take",
           "armGroupLabels": [
             "Substudy 3",
-            "Substudy 4",
-            "Substudy 6"
+            "Substudy 4, Cohort 4a1",
+            "Substudy 4, Cohort 4b"
           ]
         }
       ]
@@ -279,7 +272,7 @@
       ]
     },
     "eligibilityModule": {
-      "eligibilityCriteria": "Inclusion Criteria:\n\n* 18 years or older at the time of signing the ICF.\n* Body weight \\> 35 kg.\n* Previously untreated for unresectable or metastatic gastric or gastroesophageal junction adenocarcinoma.\n* Has measurable target disease assessed by the Investigator based on RECIST 1.1.\n* ECOG PS zero or one.\n* Life expectancy of at least 12 weeks.\n* Adequate organ and bone marrow function.\n* Has central lab confirmed Claudin18.2 status at screening from archival tumour collected within past 24 months or from a fresh biopsy when Substudy 3, Substudy 4 or Substudy 6 is open for recruitment.\n\nExclusion Criteria:\n\n* Participants with HER2-positive (3+ by IHC, or 2+ by IHC and positive by in situhybridisation) or indeterminate gastric or GEJ carcinoma.\n* Untreated or progressive CNS metastatic disease, any leptomeningeal disease, or cord compression.\n* Participants with ascites which cannot be controlled with appropriate interventions.\n* Active infectious diseases, including tuberculosis, HIV infection, or hepatitis A/B/C.\n* Uncontrolled intercurrent illness.\n* Active or prior documented autoimmune or inflammatory disorders requiring systemic treatment with steroids or other immunosuppressive treatment.\n* History of another primary malignancy.\n* Previous treatment with an immune-oncology agent.\n* Previous treatment with any modalities of Claudin18.2 target therapy or MMAE exposure (when Substudy 3, Substudy 4, or Substudy 6 is open for recruitment).",
+      "eligibilityCriteria": "Inclusion Criteria:\n\n* 18 years or older at the time of signing the ICF.\n* Body weight \\> 35 kg.\n* Previously untreated for unresectable or metastatic gastric or gastroesophageal junction adenocarcinoma.\n* Has measurable target disease assessed by the Investigator based on RECIST 1.1.\n* ECOG PS zero or one.\n* Life expectancy of at least 12 weeks.\n* Adequate organ and bone marrow function.\n* Has central lab conﬁrmed Claudin18.2 status at screening from archival tumour collected within past 24 months or from a fresh biopsy when Substudy 3, Substudy 4 i s open for recruitment.\n\nExclusion Criteria:\n\n* Participants with HER2-positive (3+ by IHC, or 2+ by IHC and positive by in situhybridisation) or indeterminate gastric or GEJ carcinoma.\n* Untreated or progressive CNS metastatic disease, any leptomeningeal disease, or cord compression.\n* Participants with ascites which cannot be controlled with appropriate interventions.\n* Active infectious diseases, including tuberculosis, HIV infection, or hepatitis B/C.\n* Uncontrolled intercurrent illness.\n* Active or prior documented autoimmune or inflammatory disorders requiring systemic treatment with steroids or other immunosuppressive treatment.\n* History of another primary malignancy.\n* Previous treatment with an immune-oncology agent.\n* Previous treatment with any modalities of Claudin18.2 target therapy or MMAE exposure (when Substudy 3, Substudy 4 is open for recruitment).",
       "healthyVolunteers": false,
       "sex": "ALL",
       "minimumAge": "18 Years",
@@ -801,7 +794,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-17"
+      "versionHolder": "2026-03-18"
     },
     "conditionBrowseModule": {
       "meshes": [
