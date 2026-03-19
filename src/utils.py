@@ -91,3 +91,43 @@ def get_changed_count_badge(count: int) -> str:
     if count > 0:
         return f'<span aria-label="{count} trials changed" title="{count} trials have updates">🔴 {count}</span>'
     return '<span aria-label="No trials changed" title="No trials have updates">🟢 0</span>'
+
+
+def format_diff_line(line: str) -> str:
+    """
+    Format a diff line with color-coded additions/removals.
+    Example: "Field `x` changed from `old` to `new`"
+    """
+    if not line:
+        return ""
+
+    # Escape HTML first
+    safe_line = escape_html(line)
+
+    # Highlight "from `value`" in red and "to `value`" in green
+    # Pattern: changed from `(.*?)` to `(.*?)`
+    pattern = r"(changed from `)(.*?)` (to `)(.*?)`"
+
+    def replace_match(m):
+        return (
+            f"{m.group(1)}<span class='text-danger'>{m.group(2)}</span>` "
+            f"{m.group(3)}<span class='text-success'>{m.group(4)}</span>`"
+        )
+
+    formatted = re.sub(pattern, replace_match, safe_line)
+
+    # Also handle "New field added: `(.*?)`"
+    formatted = re.sub(
+        r"(New field added: `)(.*?)`",
+        r"\1<span class='text-success'>\2</span>`",
+        formatted,
+    )
+
+    # And "Field removed: `(.*?)`"
+    formatted = re.sub(
+        r"(Field removed: `)(.*?)`",
+        r"\1<span class='text-danger'>\2</span>`",
+        formatted,
+    )
+
+    return formatted
