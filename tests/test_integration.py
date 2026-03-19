@@ -57,7 +57,7 @@ class TestProcessTrial:
         mock_fetch.return_value = SAMPLE_TRIAL_DATA
 
         trial = {"id": "NCT00000001", "name": "Test Trial"}
-        report, raw = process_trial(trial, "TestTarget")
+        report, raw = process_trial(trial, "TestTarget", thirty_days_ago_str="2025-01-01")
 
         assert report is not None
         assert raw is not None
@@ -79,7 +79,7 @@ class TestProcessTrial:
         mock_fetch.return_value = None
 
         trial = {"id": "NCT_MISSING", "name": "Missing Trial"}
-        report, raw = process_trial(trial, "TestTarget")
+        report, raw = process_trial(trial, "TestTarget", thirty_days_ago_str="2025-01-01")
 
         assert report is None
         assert raw is None
@@ -106,7 +106,7 @@ class TestProcessTrial:
         snapshot_file.write_text(json.dumps(SAMPLE_TRIAL_DATA), encoding="utf-8")
 
         trial = {"id": "NCT_LOCAL", "name": "Local Trial"}
-        report, raw = process_trial(trial, "TestTarget")
+        report, raw = process_trial(trial, "TestTarget", thirty_days_ago_str="2025-01-01")
 
         assert report is not None
         assert report["sponsor"] == "Test University"
@@ -133,7 +133,7 @@ class TestProcessTrial:
         snapshot_file.write_text("CORRUPTED {{{", encoding="utf-8")
 
         trial = {"id": "NCT_BADLOCAL", "name": "Corrupted Local"}
-        report, raw = process_trial(trial, "TestTarget")
+        report, raw = process_trial(trial, "TestTarget", thirty_days_ago_str="2025-01-01")
 
         assert report is None
         assert raw is None
@@ -166,7 +166,7 @@ class TestProcessTrial:
         original = diff_engine.HAS_DEEPDIFF
         diff_engine.HAS_DEEPDIFF = False
         try:
-            report, raw = process_trial(trial, "TestTarget")
+            report, raw = process_trial(trial, "TestTarget", thirty_days_ago_str="2025-01-01")
         finally:
             diff_engine.HAS_DEEPDIFF = original
 
@@ -194,7 +194,7 @@ class TestProcessTrial:
         mock_fetch.return_value = minimal_data
 
         trial = {"id": "NCT_MINIMAL", "name": "Minimal Trial"}
-        report, raw = process_trial(trial, "TestTarget")
+        report, raw = process_trial(trial, "TestTarget", thirty_days_ago_str="2025-01-01")
 
         assert report is not None
         assert report["status"] == "UNKNOWN"
