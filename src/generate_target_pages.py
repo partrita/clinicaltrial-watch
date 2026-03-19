@@ -276,7 +276,9 @@ if os.path.exists(summary_path):
         safe_conditions = format_truncated_with_tooltip(item.get('conditions', 'N/A'), 30)
 
         trial_id = item['id']
-        print(f"| [{trial_id}](https://clinicaltrials.gov/study/{trial_id}){{aria-label='View trial {trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {escape_html(item.get('enrollment', 'N/A'))} | {escape_html(item.get('last_updated', 'N/A'))} |")
+        safe_trial_id = sanitize_id(trial_id)
+        escaped_trial_id = escape_html(trial_id)
+        print(f"| [{escaped_trial_id}](https://clinicaltrials.gov/study/{safe_trial_id}){{aria-label='View trial {escaped_trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {escape_html(item.get('enrollment', 'N/A'))} | {escape_html(item.get('last_updated', 'N/A'))} |")
     print('</div>')
 else:
     print(f"No monitoring data available yet for {target_name} at {os.path.abspath(summary_path)}. Run the data collection script first.")
@@ -324,7 +326,7 @@ if os.path.exists(summary_path):
     for target in targets:
         name = target['name']
         desc = target.get('description', '')
-        link = f"targets/{name.lower()}.qmd"
+        link = f"targets/{sanitize_id(name).lower()}.qmd"
         changed_badge = get_changed_count_badge(target['changed_count'])
         print(f"| [{escape_html(name)}]({link}) | {escape_html(desc)} | {target['trial_count']} | {changed_badge} |")
 else:
@@ -340,7 +342,7 @@ else:
             for target in config.get('targets', []):
                 name = target['name']
                 desc = target.get('description', f"{name} 타겟 임상시험 모니터링")
-                print(f"| [{escape_html(name)}](targets/{name.lower()}.qmd) | {escape_html(desc)} |")
+                print(f"| [{escape_html(name)}](targets/{sanitize_id(name).lower()}.qmd) | {escape_html(desc)} |")
     except Exception as e:
         print(f"Error loading targets: {e}")
 ```
