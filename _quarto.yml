@@ -1,3 +1,4 @@
+# Quarto project configuration
 project:
   type: website
   output-dir: docs
