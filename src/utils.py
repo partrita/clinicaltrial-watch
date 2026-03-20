@@ -107,3 +107,31 @@ def format_enrollment(value: Any) -> str:
         return f"{num_val:,}"
     except (ValueError, TypeError):
         return "N/A"
+
+
+def format_diff_line(line: str) -> str:
+    """
+    Format a diff line with color-coded changes.
+    Highlights 'changed from `old` to `new`' with Bootstrap classes.
+    """
+    if not line:
+        return ""
+
+    safe_line = escape_html(line)
+
+    # Regex to find: changed from `old` to `new`
+    # We use non-greedy matching for the backticked values
+    pattern = r"(changed from )(`.*?`)( to )(`.*?`)"
+
+    def replace_match(match):
+        prefix = match.group(1)
+        old_val = match.group(2)
+        connector = match.group(3)
+        new_val = match.group(4)
+
+        return (
+            f"{prefix}<span class='text-danger fw-bold'>{old_val}</span>"
+            f"{connector}<span class='text-success fw-bold'>{new_val}</span>"
+        )
+
+    return re.sub(pattern, replace_match, safe_line)
