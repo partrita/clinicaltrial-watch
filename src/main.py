@@ -92,6 +92,80 @@ def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     return data
 
 
+def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Check for duplicate trial IDs within and across targets.
+    Merges trial configurations for the same ID within a target.
+    """
+    targets = config.get("targets", [])
+    if not targets:
+        return config
+
+    total_duplicates = 0
+    seen_globally = {}  # trial_id -> target_name
+
+    for target in targets:
+        target_name = target.get("name", "Unknown")
+        trials = target.get("trials", [])
+        if not trials:
+            continue
+
+        unique_target_trials = []
+        seen_in_target = {}  # trial_id -> index in unique_target_trials
+
+        for trial in trials:
+            trial_id = trial.get("id")
+            if not trial_id:
+                continue
+
+            if trial_id in seen_in_target:
+                idx = seen_in_target[trial_id]
+                existing_trial = unique_target_trials[idx]
+                # Merge logic: favor non-empty names or longer names
+                if not existing_trial.get("name") and trial.get("name"):
+                    existing_trial["name"] = trial["name"]
+                elif (
+                    existing_trial.get("name")
+                    and trial.get("name")
+                    and len(trial["name"]) > len(existing_trial["name"])
+                ):
+                    existing_trial["name"] = trial["name"]
+                total_duplicates += 1
+                print(f"  Note: Duplicate trial {trial_id} merged within target {target_name}")
+            else:
+                seen_in_target[trial_id] = len(unique_target_trials)
+                unique_target_trials.append(trial)
+
+                if trial_id in seen_globally:
+                    print(
+                        f"  Note: Trial {trial_id} appears in multiple targets: {seen_globally[trial_id]} and {target_name}"
+                    )
+                else:
+                    seen_globally[trial_id] = target_name
+
+        target["trials"] = unique_target_trials
+
+    if total_duplicates > 0:
+        print(f"\n✓ Integrity check: Merged {total_duplicates} duplicate trial entries.")
+        save_config(config)
+
+    return config
+
+
+def save_config(config: Dict[str, Any], config_path: str = "trials.yaml") -> None:
+    """Save cleaned trials configuration back to YAML file."""
+    if not HAS_YAML:
+        print("Warning: Cannot save cleaned config because 'yaml' module is missing.")
+        return
+
+    try:
+        with open(config_path, "w", encoding="utf-8") as f:
+            yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
+        print(f"  ✓ Cleaned configuration saved to {config_path}")
+    except Exception as e:
+        print(f"  Warning: Failed to save cleaned config: {e}")
+
+
 _SENTINEL = object()
 
 
@@ -395,6 +469,7 @@ def main() -> None:
     reset_session()
 
     config = load_config()
+    config = deduplicate_config(config)
     targets = config.get("targets", [])
 
     if not targets:

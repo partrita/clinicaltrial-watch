@@ -72,10 +72,6 @@ targets:
   - id: NCT06387628
     name: LM-108 in Combination With PD-1 Based Treatment for Patients With Recurrent
       or Metastatic Triple - Negative Breast Cancer
-  - id: NCT07213882
-    name: A Phase 1, Multicenter, Open-label, Prospective, First-in-human Dose-escalation
-      Clinical Trial of Domain Therapeutics' Anti-CCR8 Monoclonal Antibody (DT-7012)
-      in Patients With Relapsed or Refractory Cutaneous T-cell Lymphomas (CTCL)
   - id: NCT05537740
     name: A First-in-human Study to Learn How Safe the Study Drug BAY3375968, an Anti-CCR8
       Antibody, is, When Given Alone or in Combination With Pembrolizumab, How it

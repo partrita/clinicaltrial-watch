@@ -377,8 +377,6 @@ def update_quarto_yml(
 
 website:
   title: "Clinical Trial Watch"
-  link-external-icon: true
-  link-external-newwindow: true
   navbar:
     left:
       - href: index.qmd
@@ -390,6 +388,8 @@ website:
 
 format:
   html:
+    link-external-icon: true
+    link-external-newwindow: true
     theme:
       - cosmo
       - brand
