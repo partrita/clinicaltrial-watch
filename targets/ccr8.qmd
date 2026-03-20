@@ -106,9 +106,12 @@ if os.path.exists(target_h_file):
         history = []
     
     for record in reversed(history[-10:]):
-        print(f"**Date:** {escape_html(record['timestamp'])}")
-        print(f"\n{escape_html(record['event'])}\n")
-        print("***")
+        print(f'<div class="card mb-3 shadow-sm">')
+        print(f'  <div class="card-header bg-light"><strong>Date:</strong> {escape_html(record["timestamp"])}</div>')
+        print(f'  <div class="card-body">')
+        print(f'    <p class="card-text">{escape_html(record["event"])}</p>')
+        print(f'  </div>')
+        print(f'</div>')
 else:
     print(f"No target-level milestones recorded yet for {target_name}.")
 ```
@@ -120,7 +123,7 @@ else:
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, escape_html
+from src.utils import sanitize_id, escape_html, format_diff_line
 
 target_name = "ccr8"
 summary_path = f"data/targets/{target_name}/status_summary.json"
@@ -152,13 +155,21 @@ for trial_id in target_trials:
                 history_found = True
             print(f"#### {trial_id}")
             for record in reversed(real_changes[-5:]):
-                print(f"**{escape_html(record['timestamp'])}**")
+                print(f'<div class="card mb-3 shadow-sm">')
+                print(f'  <div class="card-header d-flex justify-content-between align-items-center">')
+                print(f'    <span><strong>{escape_html(record["timestamp"])}</strong></span>')
+                print(f'    <span class="badge bg-primary rounded-pill">Trial Update</span>')
+                print(f'  </div>')
+                print(f'  <div class="card-body">')
+                print(f'    <ul class="list-group list-group-flush">')
                 for line in record['diff'].splitlines():
                     line = line.strip()
                     if line:
-                        print(f"- {escape_html(line)}")
-                print("")
-                print("***")
+                        formatted_line = format_diff_line(line)
+                        print(f'      <li class="list-group-item">{formatted_line}</li>')
+                print(f'    </ul>')
+                print(f'  </div>')
+                print(f'</div>')
 
 if not history_found:
     print(f"No specific trial changes (beyond initial collection) recorded yet for {target_name}.")
