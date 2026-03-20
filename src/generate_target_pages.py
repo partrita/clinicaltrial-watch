@@ -51,9 +51,8 @@ def generate_target_qmd(
     """Generate a QMD file for a target."""
     os.makedirs(output_dir, exist_ok=True)
 
-    safe_target_name = sanitize_id(target_name)
-    target_lower = safe_target_name.lower()
-    qmd_path = os.path.join(output_dir, f"{target_lower}.qmd")
+    target_id = sanitize_id(target_name).lower()
+    qmd_path = os.path.join(output_dir, f"{target_id}.qmd")
 
     # Using a literal string for most of the content to avoid f-string brace hell
     safe_name = escape_html(target_name)
@@ -76,10 +75,10 @@ import plotly.express as px
 import os
 from src.utils import sanitize_id, get_status_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment
 
-target_name = "'''
-        + target_lower
+target_id = "'''
+        + target_id
         + r'''"
-csv_path = f"data/targets/{target_name}/all_trials_raw.csv"
+csv_path = f"data/targets/{target_id}/all_trials_raw.csv"
 
 if os.path.exists(csv_path):
     try:
@@ -152,10 +151,10 @@ import json
 import os
 from src.utils import sanitize_id, escape_html
 
-target_name = "'''
-        + target_lower
+target_id = "'''
+        + target_id
         + r'''"
-target_h_file = f"data/history/target_{target_name}.json"
+target_h_file = f"data/history/target_{target_id}.json"
 
 if os.path.exists(target_h_file):
     try:
@@ -170,7 +169,7 @@ if os.path.exists(target_h_file):
         print(f"\n{escape_html(record['event'])}\n")
         print("***")
 else:
-    print(f"No target-level milestones recorded yet for {target_name}.")
+    print(f"No target-level milestones recorded yet for {target_id}.")
 ```
 
 ### Trial Changes
@@ -182,10 +181,10 @@ import json
 import os
 from src.utils import sanitize_id, escape_html
 
-target_name = "'''
-        + target_lower
+target_id = "'''
+        + target_id
         + r""""
-summary_path = f"data/targets/{target_name}/status_summary.json"
+summary_path = f"data/targets/{target_id}/status_summary.json"
 
 # Get trial IDs for this target
 target_trials = []
@@ -212,7 +211,7 @@ for trial_id in target_trials:
         if real_changes:
             if not history_found:
                 history_found = True
-            print(f"#### {trial_id}")
+            print(f"#### {escape_html(trial_id)}")
             for record in reversed(real_changes[-5:]):
                 print(f"**{escape_html(record['timestamp'])}**")
                 for line in record['diff'].splitlines():
@@ -223,7 +222,7 @@ for trial_id in target_trials:
                 print("***")
 
 if not history_found:
-    print(f"No specific trial changes (beyond initial collection) recorded yet for {target_name}.")
+    print(f"No specific trial changes (beyond initial collection) recorded yet for {target_id}.")
 ```
 
 :::
@@ -231,12 +230,12 @@ if not history_found:
 ---
 
 <a href="../data/targets/"""
-        + target_lower
+        + target_id
         + r'''/all_trials_raw.csv" class="btn btn-primary" role="button" aria-label="Download all raw trial data for '''
         + safe_name
         + r''' in CSV format">📥 Download Full Data (CSV)</a>
 <a href="../data/targets/'''
-        + target_lower
+        + target_id
         + r'''/status_summary.csv" class="btn btn-outline-secondary" role="button" aria-label="Download status summary for '''
         + safe_name
         + r''' in CSV format">📥 Download Status Summary (CSV)</a>
@@ -252,10 +251,10 @@ import json
 import os
 from src.utils import sanitize_id, get_status_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment
 
-target_name = "'''
-        + target_lower
+target_id = "'''
+        + target_id
         + r""""
-summary_path = f"data/targets/{target_name}/status_summary.json"
+summary_path = f"data/targets/{target_id}/status_summary.json"
 
 if os.path.exists(summary_path):
     try:
@@ -276,11 +275,13 @@ if os.path.exists(summary_path):
         safe_conditions = format_truncated_with_tooltip(item.get('conditions', 'N/A'), 30)
 
         trial_id = item['id']
+        safe_trial_id = sanitize_id(trial_id)
+        escaped_trial_id = escape_html(trial_id)
         safe_enrollment = format_enrollment(item.get('enrollment', 'N/A'))
-        print(f"| [{trial_id}](https://clinicaltrials.gov/study/{trial_id}){{aria-label='View trial {trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {safe_enrollment} | {escape_html(item.get('last_updated', 'N/A'))} |")
+        print(f"| [{escaped_trial_id}](https://clinicaltrials.gov/study/{safe_trial_id}){{aria-label='View trial {escaped_trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {safe_enrollment} | {escape_html(item.get('last_updated', 'N/A'))} |")
     print('</div>')
 else:
-    print(f"No monitoring data available yet for {target_name} at {os.path.abspath(summary_path)}. Run the data collection script first.")
+    print(f"No monitoring data available yet for {target_id} at {os.path.abspath(summary_path)}. Run the data collection script first.")
 ```
 """
     )
@@ -325,7 +326,8 @@ if os.path.exists(summary_path):
     for target in targets:
         name = target['name']
         desc = target.get('description', '')
-        link = f"targets/{name.lower()}.qmd"
+        target_id = sanitize_id(name).lower()
+        link = f"targets/{target_id}.qmd"
         changed_badge = get_changed_count_badge(target['changed_count'])
         print(f"| [{escape_html(name)}]({link}) | {escape_html(desc)} | {target['trial_count']} | {changed_badge} |")
 else:
@@ -341,7 +343,8 @@ else:
             for target in config.get('targets', []):
                 name = target['name']
                 desc = target.get('description', f"{name} 타겟 임상시험 모니터링")
-                print(f"| [{escape_html(name)}](targets/{name.lower()}.qmd) | {escape_html(desc)} |")
+                target_id = sanitize_id(name).lower()
+                print(f"| [{escape_html(name)}](targets/{target_id}.qmd) | {escape_html(desc)} |")
     except Exception as e:
         print(f"Error loading targets: {e}")
 ```
@@ -361,11 +364,10 @@ def update_quarto_yml(
     menu_items = []
     for target in targets:
         target_name = target["name"]
-        safe_target_name = sanitize_id(target_name)
-        target_lower = safe_target_name.lower()
+        target_id = sanitize_id(target_name).lower()
         safe_name = escape_html(target_name)
         menu_items.append(
-            f"          - href: targets/{target_lower}.qmd\n            text: {safe_name}"
+            f"          - href: targets/{target_id}.qmd\n            text: \"{safe_name}\""
         )
 
     menu_str = "\n".join(menu_items)

@@ -20,8 +20,8 @@ import plotly.express as px
 import os
 from src.utils import sanitize_id, get_status_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment
 
-target_name = "ccr8"
-csv_path = f"data/targets/{target_name}/all_trials_raw.csv"
+target_id = "ccr8"
+csv_path = f"data/targets/{target_id}/all_trials_raw.csv"
 
 if os.path.exists(csv_path):
     try:
@@ -94,8 +94,8 @@ import json
 import os
 from src.utils import sanitize_id, escape_html
 
-target_name = "ccr8"
-target_h_file = f"data/history/target_{target_name}.json"
+target_id = "ccr8"
+target_h_file = f"data/history/target_{target_id}.json"
 
 if os.path.exists(target_h_file):
     try:
@@ -110,7 +110,7 @@ if os.path.exists(target_h_file):
         print(f"\n{escape_html(record['event'])}\n")
         print("***")
 else:
-    print(f"No target-level milestones recorded yet for {target_name}.")
+    print(f"No target-level milestones recorded yet for {target_id}.")
 ```
 
 ### Trial Changes
@@ -122,8 +122,8 @@ import json
 import os
 from src.utils import sanitize_id, escape_html
 
-target_name = "ccr8"
-summary_path = f"data/targets/{target_name}/status_summary.json"
+target_id = "ccr8"
+summary_path = f"data/targets/{target_id}/status_summary.json"
 
 # Get trial IDs for this target
 target_trials = []
@@ -150,7 +150,7 @@ for trial_id in target_trials:
         if real_changes:
             if not history_found:
                 history_found = True
-            print(f"#### {trial_id}")
+            print(f"#### {escape_html(trial_id)}")
             for record in reversed(real_changes[-5:]):
                 print(f"**{escape_html(record['timestamp'])}**")
                 for line in record['diff'].splitlines():
@@ -161,7 +161,7 @@ for trial_id in target_trials:
                 print("***")
 
 if not history_found:
-    print(f"No specific trial changes (beyond initial collection) recorded yet for {target_name}.")
+    print(f"No specific trial changes (beyond initial collection) recorded yet for {target_id}.")
 ```
 
 :::
@@ -182,8 +182,8 @@ import json
 import os
 from src.utils import sanitize_id, get_status_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment
 
-target_name = "ccr8"
-summary_path = f"data/targets/{target_name}/status_summary.json"
+target_id = "ccr8"
+summary_path = f"data/targets/{target_id}/status_summary.json"
 
 if os.path.exists(summary_path):
     try:
@@ -204,9 +204,11 @@ if os.path.exists(summary_path):
         safe_conditions = format_truncated_with_tooltip(item.get('conditions', 'N/A'), 30)
 
         trial_id = item['id']
+        safe_trial_id = sanitize_id(trial_id)
+        escaped_trial_id = escape_html(trial_id)
         safe_enrollment = format_enrollment(item.get('enrollment', 'N/A'))
-        print(f"| [{trial_id}](https://clinicaltrials.gov/study/{trial_id}){{aria-label='View trial {trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {safe_enrollment} | {escape_html(item.get('last_updated', 'N/A'))} |")
+        print(f"| [{escaped_trial_id}](https://clinicaltrials.gov/study/{safe_trial_id}){{aria-label='View trial {escaped_trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {safe_enrollment} | {escape_html(item.get('last_updated', 'N/A'))} |")
     print('</div>')
 else:
-    print(f"No monitoring data available yet for {target_name} at {os.path.abspath(summary_path)}. Run the data collection script first.")
+    print(f"No monitoring data available yet for {target_id} at {os.path.abspath(summary_path)}. Run the data collection script first.")
 ```
