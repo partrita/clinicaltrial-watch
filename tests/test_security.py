@@ -44,7 +44,7 @@ def test_generation_escaping():
     update_quarto_yml([{"name": name}], yml)
     with open(yml, "r") as f:
         content = f.read()
-    assert "text: Target &#124; Pipe" in content
+    assert 'text: "Target &#124; Pipe"' in content
 
     # Cleanup
     os.remove(qmd)
