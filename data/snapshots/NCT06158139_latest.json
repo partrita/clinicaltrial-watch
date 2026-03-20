@@ -13,7 +13,7 @@
       "officialTitle": "A Phase I Study of Autologous CAR-T Cells Targeting the B7-H3 Antigen and Containing the Inducible Caspase 9 Safety Switch in Subjects With Refractory Pancreatic Ductal Adenocarcinoma (PDAC)"
     },
     "statusModule": {
-      "statusVerifiedDate": "2025-03",
+      "statusVerifiedDate": "2026-03",
       "overallStatus": "RECRUITING",
       "expandedAccessInfo": {
         "hasExpandedAccess": false
@@ -23,11 +23,11 @@
         "type": "ACTUAL"
       },
       "primaryCompletionDateStruct": {
-        "date": "2026-06",
+        "date": "2028-04",
         "type": "ESTIMATED"
       },
       "completionDateStruct": {
-        "date": "2028-06",
+        "date": "2030-04",
         "type": "ESTIMATED"
       },
       "studyFirstSubmitDate": "2023-11-27",
@@ -36,9 +36,9 @@
         "date": "2023-12-06",
         "type": "ACTUAL"
       },
-      "lastUpdateSubmitDate": "2025-03-14",
+      "lastUpdateSubmitDate": "2026-03-16",
       "lastUpdatePostDateStruct": {
-        "date": "2025-03-18",
+        "date": "2026-03-19",
         "type": "ACTUAL"
       }
     },
@@ -252,7 +252,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-18"
+      "versionHolder": "2026-03-19"
     },
     "conditionBrowseModule": {
       "meshes": [
