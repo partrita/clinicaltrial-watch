@@ -391,23 +391,6 @@
     "details": "To evaluate the efficacy and safety of LM108 plus toripalimab plusnab-paclitaxel or eribulin as first-line or post-line treatment in patients with metastatic triple-negative breast cancer."
   },
   {
-    "id": "NCT07213882",
-    "name": "A Phase 1, Multicenter, Open-label, Prospective, First-in-human Dose-escalation Clinical Trial of Domain Therapeutics' Anti-CCR8 Monoclonal Antibody (DT-7012) in Patients With Relapsed or Refractory Cutaneous T-cell Lymphomas (CTCL)",
-    "target": "CCR8",
-    "sponsor": "Assistance Publique - Hôpitaux de Paris",
-    "status": "NOT_YET_RECRUITING",
-    "conditions": "Cutaneous T Cell Lymphoma (CTCL), Mycosis Fungoides, Sezary Syndrome",
-    "phases": "EARLY_PHASE1",
-    "last_updated": "2025-10-02",
-    "study_start": "2026-01-01",
-    "study_end": "2028-08-01",
-    "enrollment": 30,
-    "primary_outcome": "Dose limiting toxicity (DLT) defined by any treatment-emergent adverse event (TEAE) not attributable to the disease or disease-related processes",
-    "monitor_status": "No Change",
-    "last_monitored_change": "2026-02-05",
-    "details": "Cutaneous T-cell lymphomas (CTCL) are a heterogeneous group of lymphomas characterized by a primary involvement of the skin. Among them, mycosis fungoides (MF) and Sézary syndrome (SS) are the most common subtypes. SS is defined as erythroderma (erythema of the entire skin surface), and circulating tumor blood cells. The circulating tumor T cells express CD4 and may lose expression of CD7 and CD26, while exhibiting in most cases aberrant expression of CD158k (KIR3DL2), which is a surface marker of Sézary cells. CCR8 is a surface marker of tumor-infiltrating regulatory T cells. It has recently be observed that CCR8 was expressed by tumor cells in CTCL and other peripheral T-cell lymphomas. CCR8 is expressed by skin resident-memory T cells which are believed to be the tumor cell-of-origin in mycosis fungoides. Domain Therapeutics (DT) showed the in vitro efficacy of their proprietary anti-CCR8 mAb DT7012 in the depletion of CTCL cells. Therapeutic depletion of CCR8-expressing cells by DT-7012 could eliminate tumor cells and activate the anti-tumor immunity in CTCL. We hypothesize that treatment with DT-7012 is effective in the treatment of relapsed or refractory (R/R) CTCL as advanced MF and SS."
-  },
-  {
     "id": "NCT05537740",
     "name": "A First-in-human Study to Learn How Safe the Study Drug BAY3375968, an Anti-CCR8 Antibody, is, When Given Alone or in Combination With Pembrolizumab, How it Affects the Body, How it Moves Into, Through, and Out of the Body, and to Find the Best Dose in Participants With Advanced Solid Tumors",
     "target": "CCR8",
@@ -473,8 +456,7 @@
     "primary_outcome": "[Arms 1a, 1b, and 2] Rate of Dose Limiting Toxicity (DLT)",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-20",
-    "details": "**[RECENT CHANGES FOUND]**\nField `statusModule.statusVerifiedDate` changed from `2025-07` to `2026-03`\nField `statusModule.primaryCompletionDateStruct.date` changed from `2026-02` to `2026-09-30`\nField `statusModule.completionDateStruct.date` changed from `2026-02` to `2027-01-01`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-07-30` to `2026-03-17`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-08-01` to `2026-03-19`\n\n***\nThis is a Phase 1, open-label, first-in-human, dose-escalation and expansion study of CHS-114, a monoclonal antibody that targets CCR8, as a monotherapy in participants with advanced solid tumors, that will be conducted in 3 parts:\n\n* Arm 1a: CHS-114 monotherapy dose-escalation portion of the study will enroll approximately 25 participants with advanced solid tumors.\n* Arm 1b: CHS-114 monotherapy expansion cohort(s) will evaluate the safety, efficacy, tolerability, pharmacokinetics, and pharmacodynamics of CHS-114 in indication specific cohort(s). Up to approximately 10 participants will be enrolled.\n* Arm 2: CHS-114 + toripalimab combination dose-escalation portion of the study will evaluate the safety, efficacy, tolerability, pharmacokinetics, and pharmacodynamics of CHS-114 in combination with toripalimab in indication specific cohort(s). Up to approximately 6-12 participants will be enrolled.\n* Arm 3: CHS-114 + toripalimab combination dose-expansion portion of the study will evaluate the safety, efficacy, tolerability, pharmacokinetics, and pharmacodynamics of CHS-114 in combination with toripalimab in indication specific cohort(s). Up to approximately 40 participants will be randomized to two dosing arms.",
-    "changed_today": true
+    "details": "This is a Phase 1, open-label, first-in-human, dose-escalation and expansion study of CHS-114, a monoclonal antibody that targets CCR8, as a monotherapy in participants with advanced solid tumors, that will be conducted in 3 parts:\n\n* Arm 1a: CHS-114 monotherapy dose-escalation portion of the study will enroll approximately 25 participants with advanced solid tumors.\n* Arm 1b: CHS-114 monotherapy expansion cohort(s) will evaluate the safety, efficacy, tolerability, pharmacokinetics, and pharmacodynamics of CHS-114 in indication specific cohort(s). Up to approximately 10 participants will be enrolled.\n* Arm 2: CHS-114 + toripalimab combination dose-escalation portion of the study will evaluate the safety, efficacy, tolerability, pharmacokinetics, and pharmacodynamics of CHS-114 in combination with toripalimab in indication specific cohort(s). Up to approximately 6-12 participants will be enrolled.\n* Arm 3: CHS-114 + toripalimab combination dose-expansion portion of the study will evaluate the safety, efficacy, tolerability, pharmacokinetics, and pharmacodynamics of CHS-114 in combination with toripalimab in indication specific cohort(s). Up to approximately 40 participants will be randomized to two dosing arms."
   },
   {
     "id": "NCT05935098",
