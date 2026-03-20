@@ -1,4 +1,4 @@
-from src.utils import get_status_badge, get_update_badge, get_changed_count_badge, format_truncated_with_tooltip, escape_html
+from src.utils import get_status_badge, get_update_badge, get_changed_count_badge, format_truncated_with_tooltip, escape_html, format_enrollment
 
 def test_get_status_badge_enhanced():
     # Verify enhanced behavior
@@ -51,3 +51,13 @@ def test_format_truncated_with_tooltip():
     # Test empty/None
     assert format_truncated_with_tooltip("") == ""
     assert format_truncated_with_tooltip(None) == ""
+
+def test_format_enrollment():
+    assert format_enrollment(1234) == "1,234"
+    assert format_enrollment("5678") == "5,678"
+    assert format_enrollment("1234.5") == "1,234"
+    assert format_enrollment("1,234") == "1,234"
+    assert format_enrollment(None) == "N/A"
+    assert format_enrollment("") == "N/A"
+    assert format_enrollment("N/A") == "N/A"
+    assert format_enrollment("Pending") == "N/A"

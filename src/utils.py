@@ -1,5 +1,6 @@
 import re
 import html
+from typing import Any
 from functools import lru_cache
 
 
@@ -91,3 +92,18 @@ def get_changed_count_badge(count: int) -> str:
     if count > 0:
         return f'<span aria-label="{count} trials changed" title="{count} trials have updates">🔴 {count}</span>'
     return '<span aria-label="No trials changed" title="No trials have updates">🟢 0</span>'
+
+
+def format_enrollment(value: Any) -> str:
+    """
+    Format enrollment number with commas (e.g., 1,234) for better numerical readability.
+    Returns 'N/A' for None, empty, or non-numeric inputs.
+    """
+    if value is None or value == "" or value == "N/A":
+        return "N/A"
+    try:
+        # Handle cases where value might be a float string or already has commas
+        num_val = int(float(str(value).replace(",", "")))
+        return f"{num_val:,}"
+    except (ValueError, TypeError):
+        return "N/A"
