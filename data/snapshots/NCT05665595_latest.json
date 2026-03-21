@@ -1743,12 +1743,12 @@
         },
         {
           "facility": "Istituto Nazionale Tumori IRCCS Fondazione Pascale ( Site 1001)",
-          "city": "Napoli",
+          "city": "Naples",
           "zip": "80131",
           "country": "Italy",
           "geoPoint": {
-            "lat": 40.87618,
-            "lon": 14.5195
+            "lat": 40.85216,
+            "lon": 14.26811
           }
         },
         {
@@ -6147,7 +6147,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-19",
+      "versionHolder": "2026-03-20",
       "submissionTracking": {
         "firstMcpInfo": {
           "postDateStruct": {

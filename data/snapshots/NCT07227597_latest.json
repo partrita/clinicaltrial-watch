@@ -10,6 +10,16 @@
           "id": "MK-6070-003",
           "type": "OTHER",
           "domain": "MSD"
+        },
+        {
+          "id": "U1111-1318-5025",
+          "type": "REGISTRY",
+          "domain": "UTN"
+        },
+        {
+          "id": "2025-521032-11-00",
+          "type": "REGISTRY",
+          "domain": "EU CT"
         }
       ],
       "organization": {
@@ -20,7 +30,7 @@
       "officialTitle": "A Phase 1b/2 Open-label Study Evaluating Different MK-6070 and Ifinatamab Deruxtecan (MK-2400)-Based Regimens in First-line Extensive Stage Small Cell Lung Cancer"
     },
     "statusModule": {
-      "statusVerifiedDate": "2026-02",
+      "statusVerifiedDate": "2026-03",
       "overallStatus": "RECRUITING",
       "expandedAccessInfo": {
         "hasExpandedAccess": false
@@ -34,7 +44,7 @@
         "type": "ESTIMATED"
       },
       "completionDateStruct": {
-        "date": "2030-11-29",
+        "date": "2030-12-30",
         "type": "ESTIMATED"
       },
       "studyFirstSubmitDate": "2025-11-10",
@@ -43,9 +53,9 @@
         "date": "2025-11-12",
         "type": "ACTUAL"
       },
-      "lastUpdateSubmitDate": "2026-02-18",
+      "lastUpdateSubmitDate": "2026-03-18",
       "lastUpdatePostDateStruct": {
-        "date": "2026-02-20",
+        "date": "2026-03-20",
         "type": "ACTUAL"
       }
     },
@@ -429,7 +439,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-19"
+      "versionHolder": "2026-03-20"
     },
     "interventionBrowseModule": {
       "meshes": [

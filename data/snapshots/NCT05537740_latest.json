@@ -13,7 +13,7 @@
       "officialTitle": "First-in-human Dose-escalation and Expansion Study to Evaluate the Safety, Tolerability, and Pharmacokinetics of the Anti-CCR8 Antibody BAY 3375968 as Monotherapy and in Combination With Pembrolizumab in Participants With Selected Advanced Solid Tumors"
     },
     "statusModule": {
-      "statusVerifiedDate": "2026-02",
+      "statusVerifiedDate": "2026-03",
       "overallStatus": "ACTIVE_NOT_RECRUITING",
       "expandedAccessInfo": {
         "hasExpandedAccess": false
@@ -23,7 +23,7 @@
         "type": "ACTUAL"
       },
       "primaryCompletionDateStruct": {
-        "date": "2026-07-07",
+        "date": "2027-04-30",
         "type": "ESTIMATED"
       },
       "completionDateStruct": {
@@ -36,9 +36,9 @@
         "date": "2022-09-13",
         "type": "ACTUAL"
       },
-      "lastUpdateSubmitDate": "2026-02-20",
+      "lastUpdateSubmitDate": "2026-03-19",
       "lastUpdatePostDateStruct": {
-        "date": "2026-02-23",
+        "date": "2026-03-20",
         "type": "ACTUAL"
       }
     },
@@ -354,18 +354,9 @@
           }
         },
         {
-          "facility": "Institut Bergonie - Unicancer Nouvelle Aquitaine - Service Oncologie medicale",
-          "city": "Bordeaux",
-          "zip": "33000",
-          "country": "France",
-          "geoPoint": {
-            "lat": 44.84124,
-            "lon": -0.58046
-          }
-        },
-        {
           "facility": "Centre Oscar Lambret - Service Oncologie",
           "city": "Lille",
+          "state": "Hauts-de-France",
           "zip": "59000",
           "country": "France",
           "geoPoint": {
@@ -374,8 +365,20 @@
           }
         },
         {
+          "facility": "Institut Bergonie - Unicancer Nouvelle Aquitaine - Service Oncologie medicale",
+          "city": "Bordeaux",
+          "state": "Nouvelle-Aquitaine",
+          "zip": "33000",
+          "country": "France",
+          "geoPoint": {
+            "lat": 44.84124,
+            "lon": -0.58046
+          }
+        },
+        {
           "facility": "Institut de Cancerologie Ouest - Saint Herblain - Oncologie medicale",
           "city": "Saint-Herblain",
+          "state": "Pays de la Loire Region",
           "zip": "44800",
           "country": "France",
           "geoPoint": {
@@ -386,6 +389,7 @@
         {
           "facility": "Institut Gustave Roussy - Departement d'Innovation Therapeutique et d'Essais Precoces (DITEP)",
           "city": "Villejuif",
+          "state": "Île-de-France Region",
           "zip": "94805",
           "country": "France",
           "geoPoint": {
@@ -424,7 +428,7 @@
           }
         },
         {
-          "facility": "Clinica Universidad de Navarra | Pamplona | Oncologia",
+          "facility": "Clinica Universidad De Navarra | Pamplona | Oncologia",
           "city": "Pamplona",
           "state": "Navarre",
           "zip": "31008",
@@ -445,7 +449,7 @@
           }
         },
         {
-          "facility": "Clinica Universidad de Navarra | Madrid | Oncologia",
+          "facility": "Clinica Universidad De Navarra | Madrid | Oncologia",
           "city": "Madrid",
           "zip": "28027",
           "country": "Spain",
@@ -504,7 +508,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-19"
+      "versionHolder": "2026-03-20"
     },
     "conditionBrowseModule": {
       "meshes": [

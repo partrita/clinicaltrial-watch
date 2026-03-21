@@ -173,53 +173,8 @@ After the last subject in each dose group completed the dose limiting toxicity (
 When 1 DLT occurs in 3 subjects in a certain dose group, 3 subjects need to be added in the same dose group (up to 6 subjects in this dose group complete DLT evaluation): if the added 3 subjects have no DLT, the dose will continue to increase; If one of the three additional subjects has DLT, stop the dose increase; If more than one of the three additional subjects has DLT, stop the dose increase, and at the same time, reduce one dose to continue the DLT evaluation of the three subjects.
 
 The SRC can decide whether to increase or decrease the dose groups or adjust the dose of groups according to the pharmacokinetic results obtained during the study.",18,NCT05731219,2026-02-05,2023-02-15,No Change,UTAA06 Injection in the Treatment of Relapsed/Refractory Acute Myeloid Leukemia,PHASE1,Assessment of the safety after UTAA06 injection treatment (Safety),"PersonGen BioTherapeutics (Suzhou) Co., Ltd.",UNKNOWN,2025-09-26,2022-09-26,B7-H3
-Urothelial Carcinoma,"On the basis of established findings in the prognostic and functional properties of the three B7 family members, i.e., PD-L1, B7-H3, and B7-H4, we employed the IMVigor210 cohort as the discovery cohort to establish the concept of B7 Family Score (BFS). To maximize the prognostic value of the system, we introduced the R package survMisc (0.5.5) in the IMvigor210 cohort to determine the best cut-off value of mRNA expression level of the B7 family members (i.e. CD274, CD276, and VTCN1) by calculating the minimum log-rank P value accordingly.",215,NCT06169904,2026-02-05,2023-12-12,No Change,B7-Family Score in Urothelial Carcinoma,N/A,Death,Shanghai Zhongshan Hospital,COMPLETED,2022-11-22,2012-01-25,B7-H3
-"Melanoma, Non Small Cell Lung Cancer","This study is a Phase 1 open-label, dose escalation, and cohort expansion study of enoblituzumab administered intravenously (IV) on a weekly schedule for up to 51 doses in combination with IV ipilimumab administered on an every-3-week schedule for 4 doses.
-
-The dose escalation phase is designed to characterize the safety and tolerability of the combination of enoblituzumab and ipilimumab and to define the maximum tolerated or administered dose (MTD/MAD) in patients with B7-H3 expressing mesothelioma, urothelial cancer, NSCLC, SCCHN, Clear cell renal cell carcinoma (ccRCC), ovarian cancer, melanoma, thyroid cancer, Triple negative breast cancer (TNBC), pancreatic cancer, colon cancer, soft tissue sarcoma, or prostate cancer.
-
-The cohort expansion phase, 2 cohorts of 16 patients each will be enrolled to further evaluate the safety and potential efficacy of the combination administered at the MTD/MAD dose in patients with melanoma and NSCLC.
-
-All tumor evaluations will be carried out by both Response Evaluation Criteria in Solid Tumors (RECIST) and immune-related response criteria (irRC).",24,NCT02381314,2026-02-05,2022-02-04,No Change,Safety Study of Enoblituzumab (MGA271) in Combination With Ipilimumab in Refractory Cancer,PHASE1,Number of participants with adverse events,MacroGenics,COMPLETED,2018-09-26,2015-03-26,B7-H3
 Melanoma,"Patients with easily accessible tumors (generally, metastatic deposits involving skin, subcutaneous tissues, or peripheral lymph node whose excision would not require general anaesthesia or the invasion of a body cavity) at the screening visit for participation in Study CP-MGA271-01 (the main study) will be asked to participate in this substudy. After providing appropriate informed consent, patients will undergo excisional biopsy, punch biopsy, or core needle biopsy of the accessible tumor prior to receiving study drug in the main study and then again after the first cycle of study drug is completed.
 
 Some of the biopsy tissue will be sent to a central laboratory for research purposes. The central lab will analyze the tissue to see what effects that the study drug might have on tumors.",6,NCT01918930,2026-02-05,2022-02-04,No Change,Tissue Procurement Substudy for Participants in Study CP-MGA271-01,PHASE1,Mechanism of Action,MacroGenics,TERMINATED,2016-10,2013-07,B7-H3
-"Glioblastoma (GBM), Brain Metastasases","Phase 0:
-
-Patients with rGBM will enroll into Arm A. Arm A Cohort 1 will determine the optimal time interval (OTI) for surgery based on PK data assessed from two sub-cohorts (Cohort 1a and 1b). The OTI will be defined as the surgical time interval after dosing that corresponds to the highest median concentration of unbound risvutatug rezetecan payload in gadolinium (Gd) non enhancing rGBM tissue in either Cohort 1a or Cohort 1b.
-
-Arm A Cohort 2 will receive the IV infusion at the OTI schedule. Cohort 2 enrollment will begin once Arm A Cohort 1 enrollment is complete and the OTI has been determined.
-
-Patients with brain metastases will enroll into Arm B. Arm B will receive the IV infusion at the OTI schedule. Arm B enrollment will begin once Arm A Cohort 1 enrollment is complete and the OTI has been determined.
-
-After enrollment into Cohort 1 is complete, a written report will be submitted to the DSMB Chair (or qualified alternate) describing the time intervals, adverse events (AE) observed, and any safety reports. The DSMB Chair will review the report and provide written authorization to proceed with Arm A Cohort 2 and Arm B enrollment, or request more information within approximately two business days.
-
-Approval for enrollment initiation must be obtained prior to opening enrollment for Arm A Cohort 2 and Arm B.
-
-Only participants with tumors demonstrating positive PK response will proceed to the expansion Phase 1 component. Otherwise, participants will receive standard of care.
-
-Participants will complete the assessments and procedures noted for the End of Treatment (EOT) Visit. Participants will complete the 30-Day, 60-Day, and 90-Day Safety Follow-Up Visits and they will be monitored for survival as outlined in the ""All Participants"" section.
-
-To assess the PK and pharmacodynamic (PD) endpoints, blood, serum, cerebrospinal fluid (CSF), and brain tumor tissue will be collected intraoperatively (Gd enhancing and Gd non-enhancing tumor tissue will be collected and analyzed separately).
-
-Phase 1:
-
-Participants with tumors demonstrating positive PK response will continue risvutatug rezetecan treatment at the same dose received in Phase 0, administered once every three weeks (Q3W). Treatment will begin once the participant has recovered from surgery. Participants will receive risvutatug rezetecan until disease progression, unacceptable toxicity, death, withdrawal of consent, loss to follow-up, or study termination by the Sponsor.
-
-Participants will complete the assessments and procedures noted for the EOT Visit. Participants will complete the 30-day, 60-day, and 90-day Safety Follow-Up Visits and they will be monitored for survival as outlined in the ""All Participants"" section.
-
-All Participants:
-
-All participants will return to the clinic for safety monitoring per the schedule of activities following risvutatug rezetecan treatment discontinuation, and will be contacted approximately every 3 months for up to 12 months for survival data collection.
-
-Follow-up for long-term survival will begin after the final safety follow-up visit. MRI scans and RANO reviews will occur approximately every 2-3 months, per standard of care, to monitor disease progression.
-
-Participant Duration:
-
-Phase 0: The Phase 0 component will last up to approximately 2 months, starting at the 28-day screening window through the Post-Op Follow-Up Visit.
-
-Phase 1: Participants will take risvutatug rezetecan as long as the drug is tolerated and the Investigator believes the participant may be obtaining benefit. Treatment will continue until confirmed progression, unacceptable toxicity, death, withdrawal of consent, lost to follow-up, or end of treatment.
-
-All Participants: Participants will continue participating for 15 months following their last infusion of risvutatug rezetecan. Participants will return for a 30-day, 60-day, and 90 day Safety Follow-Up Visit. They will then be followed for survival for up to 12 months following the final Safety Follow-Up Visit.",15,NCT07268053,2026-03-10,2026-03-04,Changed,"A Phase 0/1 Clinical Trial With an Expansion Phase of GSK5764227, a B7-H3-Targeted Antibody-Drug Conjugate (ADC), in Patients With Recurrent Grade 4 Glioma and Patients With Brain Metastases",EARLY_PHASE1,"Phase 0: Total, Cleaved, and Unbound GSK5757810 Payload Concentration in Tumor Tissue",Nader Sanai,RECRUITING,2029-07,2026-02-11,B7-H3
 "Rare Malignant Neoplasm, Advanced Solid Tumors, Metastatic Solid Tumors","This is an open-label, non-randomized, multi-arm, single-center Phase I/II platform study (PLATFORM2). Based on the definition of rare tumors in China (incidence \< 2.5/100,000 or specific list), eligible patients will undergo multi-omics screening. Based on the molecular profiling results (gene variations or protein expression), patients will be assigned to corresponding treatment arms (Sub-studies). Therapies include small molecules, protein drugs, Cell and Gene Therapy (CGT) products, and therapeutic vaccines. The study employs a Clopper-Pearson Two-Stage Minimax design for each arm.",600,NCT07307053,2026-02-05,2025-12-13,No Change,Rare Tumor Focused Platform Study of Innovative Therapies and Technologies (PLATFORM2),"PHASE1, PHASE2",Objective Response Rate (ORR),"Cancer Institute and Hospital, Chinese Academy of Medical Sciences",NOT_YET_RECRUITING,2031-01-31,2026-01-01,B7-H3
 Nerve Sheath Tumors,"The purpose of the study is to evaluate safety and feasibility of neoadjuvant nivolumab plus ipilimumab prior to standard therapy (surgery, chemotherapy or radiation therapy) in patients with Neurofibromatosis Type 1 (NF1) and newly diagnosed pre-malignant and malignant peripheral nerve sheath tumors (MPNST) for whom surgery for resection of tumor is indicated.",13,NCT04465643,2026-02-05,2025-10-02,No Change,Neoadjuvant Nivolumab Plus Ipilimumab for Newly Diagnosed Malignant Peripheral Nerve Sheath Tumor,PHASE1,Safety of combination nivolumab and ipilimumab as assessed by number of participants who experience adverse events,Sidney Kimmel Comprehensive Cancer Center at Johns Hopkins,COMPLETED,2025-07-30,2021-06-08,B7-H3

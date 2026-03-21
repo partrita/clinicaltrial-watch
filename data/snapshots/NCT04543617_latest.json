@@ -1027,13 +1027,13 @@
         },
         {
           "facility": "Università degli Studi della Campania Luigi Vanvitelli",
-          "city": "Napoli",
+          "city": "Naples",
           "state": "Campania",
           "zip": "80131",
           "country": "Italy",
           "geoPoint": {
-            "lat": 40.87618,
-            "lon": 14.5195
+            "lat": 40.85216,
+            "lon": 14.26811
           }
         },
         {
@@ -1911,7 +1911,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-19",
+      "versionHolder": "2026-03-20",
       "removedCountries": [
         "Brazil",
         "Czechia"

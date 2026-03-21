@@ -9,12 +9,12 @@
     "name": "TIGIT",
     "description": "TIGIT 타겟 임상시험 모니터링",
     "trial_count": 133,
-    "changed_count": 19
+    "changed_count": 26
   },
   {
     "name": "B7-H3",
     "description": "B7-H3 타겟 임상시험 모니터링",
-    "trial_count": 118,
-    "changed_count": 2
+    "trial_count": 119,
+    "changed_count": 1
   }
 ]
