@@ -20,6 +20,7 @@ def sanitize_id(identifier: str) -> str:
     return sanitized if sanitized else "unknown"
 
 
+@lru_cache(maxsize=1024)
 def escape_html(text: str) -> str:
     """
     Escape HTML special characters in a string.
@@ -31,20 +32,22 @@ def escape_html(text: str) -> str:
     return escaped.replace("|", "&#124;")
 
 
+# Global map for status to (display_label, emoji, bootstrap_class)
+STATUS_CONFIGS = {
+    "RECRUITING": ("Recruiting", "🟢", "success"),
+    "ACTIVE_NOT_RECRUITING": ("Active (Not Recruiting)", "🔵", "info"),
+    "COMPLETED": ("Completed", "⚪", "secondary"),
+    "NOT_YET_RECRUITING": ("Not Yet Recruiting", "🟡", "warning"),
+    "SUSPENDED": ("Suspended", "🟠", "danger"),
+    "TERMINATED": ("Terminated", "🔴", "danger"),
+    "WITHDRAWN": ("Withdrawn", "🔴", "danger"),
+}
+
+
+@lru_cache(maxsize=128)
 def get_status_badge(status: str) -> str:
     """Return a Bootstrap badge for a trial status with emoji and ARIA label."""
-    # Maps raw status to (display_label, emoji, bootstrap_class)
-    status_configs = {
-        "RECRUITING": ("Recruiting", "🟢", "success"),
-        "ACTIVE_NOT_RECRUITING": ("Active (Not Recruiting)", "🔵", "info"),
-        "COMPLETED": ("Completed", "⚪", "secondary"),
-        "NOT_YET_RECRUITING": ("Not Yet Recruiting", "🟡", "warning"),
-        "SUSPENDED": ("Suspended", "🟠", "danger"),
-        "TERMINATED": ("Terminated", "🔴", "danger"),
-        "WITHDRAWN": ("Withdrawn", "🔴", "danger"),
-    }
-
-    label, emoji, bg_class = status_configs.get(
+    label, emoji, bg_class = STATUS_CONFIGS.get(
         status, (status.replace("_", " ").title(), "⚪", "light text-dark")
     )
 
@@ -59,6 +62,7 @@ def get_status_badge(status: str) -> str:
     )
 
 
+@lru_cache(maxsize=128)
 def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
     """Return a badge/emoji for monitoring status with ARIA label and title."""
     safe_status = escape_html(monitor_status)
@@ -87,6 +91,7 @@ def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
     return f'<span class="truncated-text" title="{safe_full}">{safe_truncated}</span>'
 
 
+@lru_cache(maxsize=128)
 def get_changed_count_badge(count: int) -> str:
     """Return a badge for changed trial count with title."""
     if count > 0:
