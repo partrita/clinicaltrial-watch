@@ -72,6 +72,7 @@ def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
     return f'<span aria-label="No recent changes" title="No changes detected since last crawl{title_extra}">🟢 {safe_status}</span>'
 
 
+@lru_cache(maxsize=128)  # Optimization: caches formatted HTML for repetitive trial metadata
 def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
     """
     Truncate text and provide a tooltip with the full text.
@@ -99,6 +100,7 @@ def get_changed_count_badge(count: int) -> str:
     return '<span aria-label="No trials changed" title="No trials have updates">🟢 0</span>'
 
 
+@lru_cache(maxsize=128)  # Optimization: caches formatted numbers for repetitive enrollment counts
 def format_enrollment(value: Any) -> str:
     """
     Format enrollment number with commas (e.g., 1,234) for better numerical readability.
@@ -114,6 +116,7 @@ def format_enrollment(value: Any) -> str:
         return "N/A"
 
 
+@lru_cache(maxsize=128)  # Optimization: caches regex-processed diff lines to avoid redundant string work
 def format_diff_line(line: str) -> str:
     """
     Format a diff line with color-coded changes.
