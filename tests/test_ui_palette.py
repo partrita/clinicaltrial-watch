@@ -61,3 +61,20 @@ def test_format_enrollment():
     assert format_enrollment("") == "N/A"
     assert format_enrollment("N/A") == "N/A"
     assert format_enrollment("Pending") == "N/A"
+
+def test_format_diff_line():
+    from src.utils import format_diff_line
+
+    # Test matching pattern
+    line = "Field `status` changed from `PENDING` to `RECRUITING`"
+    formatted = format_diff_line(line)
+    assert "changed from <span class='text-danger fw-bold'>`PENDING`</span>" in formatted
+    assert "to <span class='text-success fw-bold'>`RECRUITING`</span>" in formatted
+
+    # Test no match
+    line = "Initial data collection"
+    assert format_diff_line(line) == "Initial data collection"
+
+    # Test empty
+    assert format_diff_line("") == ""
+    assert format_diff_line(None) == ""
