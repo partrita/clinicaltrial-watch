@@ -92,7 +92,7 @@ if os.path.exists(csv_path):
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, escape_html
+from src.utils import sanitize_id, escape_html, format_diff_line
 
 target_name = "b7-h3"
 target_h_file = f"data/history/target_{target_name}.json"
@@ -120,7 +120,7 @@ else:
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, escape_html
+from src.utils import sanitize_id, escape_html, format_diff_line
 
 target_name = "b7-h3"
 summary_path = f"data/targets/{target_name}/status_summary.json"
@@ -156,7 +156,7 @@ for trial_id in target_trials:
                 for line in record['diff'].splitlines():
                     line = line.strip()
                     if line:
-                        print(f"- {escape_html(line)}")
+                        print(f"- {format_diff_line(line)}")
                 print("")
                 print("***")
 

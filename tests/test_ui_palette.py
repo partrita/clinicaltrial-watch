@@ -1,4 +1,4 @@
-from src.utils import get_status_badge, get_update_badge, get_changed_count_badge, format_truncated_with_tooltip, escape_html, format_enrollment
+from src.utils import get_status_badge, get_update_badge, get_changed_count_badge, format_truncated_with_tooltip, escape_html, format_enrollment, format_diff_line
 
 def test_get_status_badge_enhanced():
     # Verify enhanced behavior
@@ -61,3 +61,28 @@ def test_format_enrollment():
     assert format_enrollment("") == "N/A"
     assert format_enrollment("N/A") == "N/A"
     assert format_enrollment("Pending") == "N/A"
+
+def test_format_diff_line():
+    # Test DeepDiff format
+    line = "Field `statusModule.overallStatus` changed from `RECRUITING` to `COMPLETED`"
+    formatted = format_diff_line(line)
+    assert '<code class="text-danger fw-bold">RECRUITING</code>' in formatted
+    assert '<code class="text-success fw-bold">COMPLETED</code>' in formatted
+    assert 'Field `statusModule.overallStatus` changed from' in formatted
+
+    # Test Fallback format
+    line = "Status: `ACTIVE` -> `TERMINATED`"
+    formatted = format_diff_line(line)
+    assert '<code class="text-danger fw-bold">ACTIVE</code>' in formatted
+    assert '<code class="text-success fw-bold">TERMINATED</code>' in formatted
+    assert 'Status: ' in formatted
+
+    # Test no match
+    line = "Initial data collection"
+    assert format_diff_line(line) == "Initial data collection"
+
+    # Test HTML escaping in diff
+    line = "Field `name` changed from `A & B` to `A < B`"
+    formatted = format_diff_line(line)
+    assert 'A &amp; B' in formatted
+    assert 'A &lt; B' in formatted

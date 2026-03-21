@@ -107,3 +107,43 @@ def format_enrollment(value: Any) -> str:
         return f"{num_val:,}"
     except (ValueError, TypeError):
         return "N/A"
+
+
+def format_diff_line(line: str) -> str:
+    """
+    Format a diff line with Bootstrap colors for changes.
+    Supports both DeepDiff and fallback formats.
+    Replaces backticks with <code> tags for proper Markdown-in-HTML rendering.
+    """
+    if not line:
+        return ""
+
+    # Try DeepDiff format: "Field `path` changed from `old` to `new`"
+    # Captures: 1: Field `path`, 2: changed from, 3: old, 4:  to , 5: new
+    dd_pattern = r"^(.*?) (changed from) `(.*?)` (to) `(.*?)`$"
+    # Try Fallback format: "Label: `old` -> `new`"
+    fb_pattern = r"^(.*?): `(.*?)` (->) `(.*?)`$"
+
+    # Check DeepDiff pattern first
+    match = re.match(dd_pattern, line)
+    if match:
+        prefix, changed_from, old_val, to_str, new_val = match.groups()
+        return (
+            f"{escape_html(prefix)} {escape_html(changed_from)} "
+            f'<code class="text-danger fw-bold">{escape_html(old_val)}</code> '
+            f"{escape_html(to_str)} "
+            f'<code class="text-success fw-bold">{escape_html(new_val)}</code>'
+        )
+
+    # Check Fallback pattern
+    match = re.match(fb_pattern, line)
+    if match:
+        label, old_val, arrow, new_val = match.groups()
+        return (
+            f"{escape_html(label)}: "
+            f'<code class="text-danger fw-bold">{escape_html(old_val)}</code> '
+            f"{escape_html(arrow)} "
+            f'<code class="text-success fw-bold">{escape_html(new_val)}</code>'
+        )
+
+    return escape_html(line)

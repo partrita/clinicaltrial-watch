@@ -150,7 +150,7 @@ if os.path.exists(csv_path):
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, escape_html
+from src.utils import sanitize_id, escape_html, format_diff_line
 
 target_name = "'''
         + target_lower
@@ -180,7 +180,7 @@ else:
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, escape_html
+from src.utils import sanitize_id, escape_html, format_diff_line
 
 target_name = "'''
         + target_lower
@@ -218,7 +218,7 @@ for trial_id in target_trials:
                 for line in record['diff'].splitlines():
                     line = line.strip()
                     if line:
-                        print(f"- {escape_html(line)}")
+                        print(f"- {format_diff_line(line)}")
                 print("")
                 print("***")
 
