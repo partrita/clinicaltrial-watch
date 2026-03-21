@@ -2,5 +2,9 @@
   {
     "timestamp": "2026-02-05 15:10:47",
     "diff": "Initial data collection"
+  },
+  {
+    "timestamp": "2026-03-21 02:05:10",
+    "diff": "Field `contactsLocationsModule.locations.[24]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[24]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[24]geoPoint.lon` changed from `14.5195` to `14.26811`"
   }
 ]
