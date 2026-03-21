@@ -28,7 +28,8 @@ if os.path.exists(summary_path):
     for target in targets:
         name = target['name']
         desc = target.get('description', '')
-        link = f"targets/{name.lower()}.qmd"
+        target_id = sanitize_id(name).lower()
+        link = f"targets/{target_id}.qmd"
         changed_badge = get_changed_count_badge(target['changed_count'])
         print(f"| [{escape_html(name)}]({link}) | {escape_html(desc)} | {target['trial_count']} | {changed_badge} |")
 else:
@@ -44,7 +45,8 @@ else:
             for target in config.get('targets', []):
                 name = target['name']
                 desc = target.get('description', f"{name} 타겟 임상시험 모니터링")
-                print(f"| [{escape_html(name)}](targets/{name.lower()}.qmd) | {escape_html(desc)} |")
+                target_id = sanitize_id(name).lower()
+                print(f"| [{escape_html(name)}](targets/{target_id}.qmd) | {escape_html(desc)} |")
     except Exception as e:
         print(f"Error loading targets: {e}")
 ```
