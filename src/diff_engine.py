@@ -1,6 +1,7 @@
 import json
 import os
 from typing import Any, Dict, Optional
+from utils import sanitize_id
 
 try:
     from deepdiff import DeepDiff
@@ -16,7 +17,8 @@ def compare_snapshots(
     """
     Compares the new data with the previous snapshot of the trial using DeepDiff.
     """
-    previous_path = os.path.join(snapshot_dir, f"{trial_id}_latest.json")
+    safe_trial_id = sanitize_id(trial_id)
+    previous_path = os.path.join(snapshot_dir, f"{safe_trial_id}_latest.json")
 
     if not os.path.exists(previous_path):
         return None  # No previous data to compare with

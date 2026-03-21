@@ -50,3 +50,32 @@ def test_generation_escaping():
     os.remove(qmd)
     os.remove(yml)
     os.rmdir("tests/tmp_targets")
+
+def test_compare_snapshots_sanitization(mocker):
+    """Verify that compare_snapshots sanitizes the trial_id to prevent path traversal."""
+    from src.diff_engine import compare_snapshots
+    import os
+
+    # Mock os.path.exists to return False so it doesn't try to actually read files
+    # We want to check if the path passed to os.path.join was sanitized
+    mock_exists = mocker.patch("os.path.exists", return_value=False)
+    mock_join = mocker.spy(os.path, "join")
+
+    malicious_id = "../../../etc/passwd"
+    compare_snapshots(malicious_id, {})
+
+    # The first call to os.path.exists uses the result of os.path.join
+    # We check if any call to join used the unsanitized malicious_id
+    for call in mock_join.call_args_list:
+        args, kwargs = call
+        for arg in args:
+            assert malicious_id not in str(arg)
+
+    # Verify that the sanitized version was used
+    sanitized_id = "etc_passwd"
+    found_sanitized = False
+    for call in mock_join.call_args_list:
+        if f"{sanitized_id}_latest.json" in str(call):
+            found_sanitized = True
+            break
+    assert found_sanitized
