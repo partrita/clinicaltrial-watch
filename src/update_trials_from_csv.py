@@ -10,6 +10,11 @@ import os
 from typing import Any, Dict, List, Optional
 
 try:
+    from utils import is_valid_nct_id
+except ImportError:
+    from src.utils import is_valid_nct_id
+
+try:
     import yaml
 
     HAS_YAML = True
@@ -85,7 +90,11 @@ def read_csv_trials(csv_path: str) -> List[Dict[str, str]]:
                 nct_id = row.get("NCT Number", "").strip()
                 title = row.get("Study Title", "").strip()
                 if nct_id and title:
-                    trials.append({"id": nct_id, "name": title})
+                    # Security enhancement: Validate NCT ID format
+                    if is_valid_nct_id(nct_id):
+                        trials.append({"id": nct_id, "name": title})
+                    else:
+                        print(f"  Warning: Skipping invalid NCT ID: {nct_id}")
     except Exception as e:
         print(f"Error reading CSV: {e}")
     return trials
