@@ -864,8 +864,7 @@
     "primary_outcome": "Progression-Free Survival (PFS) According to Response Evaluation Criteria in Solid Tumors (RECIST Version 1.1) Assessed by Investigator",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[61]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[61]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[61]geoPoint.lon` changed from `14.5195` to `14.26811`\nField `contactsLocationsModule.locations.[62]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[62]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[62]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nThe purpose of this study is to assess the safety and efficacy of avelumab in combination with other anti-tumor agents as a maintenance treatment in participants with bladder cancer.",
-    "changed_today": true
+    "details": "The purpose of this study is to assess the safety and efficacy of avelumab in combination with other anti-tumor agents as a maintenance treatment in participants with bladder cancer."
   },
   {
     "id": "NCT04570839",
@@ -1120,8 +1119,7 @@
     "primary_outcome": "Number of Participants Randomized Across Sub-studies",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[25]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[25]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[25]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nThis study will compare the clinical activity of novel regimens (in combination or as single agents) to SoC in participants with relapsed/refractory advanced NSCLC. The study will be conducted in two parts. Part 1 is an open-label, optional, non-randomized part based on safety and pharmacokinetics/pharmacodynamics (PK/PD) evaluation intended to generate additional data to qualify novel regimens for the randomized study. Part 2 is a randomized, Phase II open-label part comparing the efficacy and safety of these novel regimens with SoC. Drug name mentioned as GSK4428859A (belrestotug) and EOS884448 are interchangeable for the same compound and will be referred to as GSK4428859A/EOS884448/belrestotug.",
-    "changed_today": true
+    "details": "This study will compare the clinical activity of novel regimens (in combination or as single agents) to SoC in participants with relapsed/refractory advanced NSCLC. The study will be conducted in two parts. Part 1 is an open-label, optional, non-randomized part based on safety and pharmacokinetics/pharmacodynamics (PK/PD) evaluation intended to generate additional data to qualify novel regimens for the randomized study. Part 2 is a randomized, Phase II open-label part comparing the efficacy and safety of these novel regimens with SoC. Drug name mentioned as GSK4428859A (belrestotug) and EOS884448 are interchangeable for the same compound and will be referred to as GSK4428859A/EOS884448/belrestotug."
   },
   {
     "id": "NCT04791839",
@@ -1393,8 +1391,7 @@
     "primary_outcome": "Objective response rate (ORR)",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[33]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[33]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[33]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nThis Phase II, open-label, uncontrolled, multicentre study evaluating the preliminary efficacy and safety of Volrustomig or Rilvegostomig as monotherapy (MONO) and/or in combination with anticancer agents (COMBO) in participants with advanced hepatobiliary cancer (e.g., HCC, BTC, etc.).\n\nThis study has a modular design with independent substudies. In Substudy 1, Volrustomig and Rilvegostomig will be evaluated as monotherapy and/or in combination with other anticancer drugs in approximately 200 evaluable participants with advanced HCC.\n\nIn Substudy 2, the efficacy and safety of Rilvegostomig or Volrustomig plus gemcitabine and cisplatin are investigated in approximately 90 evaluable participants with advanced BTC who have not received previous treatment for advanced/metastatic disease.",
-    "changed_today": true
+    "details": "This Phase II, open-label, uncontrolled, multicentre study evaluating the preliminary efficacy and safety of Volrustomig or Rilvegostomig as monotherapy (MONO) and/or in combination with anticancer agents (COMBO) in participants with advanced hepatobiliary cancer (e.g., HCC, BTC, etc.).\n\nThis study has a modular design with independent substudies. In Substudy 1, Volrustomig and Rilvegostomig will be evaluated as monotherapy and/or in combination with other anticancer drugs in approximately 200 evaluable participants with advanced HCC.\n\nIn Substudy 2, the efficacy and safety of Rilvegostomig or Volrustomig plus gemcitabine and cisplatin are investigated in approximately 90 evaluable participants with advanced BTC who have not received previous treatment for advanced/metastatic disease."
   },
   {
     "id": "NCT06338657",
@@ -1598,8 +1595,7 @@
     "primary_outcome": "Incidence and Severity of Adverse Events",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[24]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[24]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[24]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nThis study will evaluate the safety of tobemstomig alone or in combination with tiragolumab compared with atezolizumab in participants with previously untreated, locally advanced or metastatic urothelial cancer (mUC) who are ineligible to receive a platinum containing chemotherapy.",
-    "changed_today": true
+    "details": "This study will evaluate the safety of tobemstomig alone or in combination with tiragolumab compared with atezolizumab in participants with previously untreated, locally advanced or metastatic urothelial cancer (mUC) who are ineligible to receive a platinum containing chemotherapy."
   },
   {
     "id": "NCT04457778",
@@ -1990,8 +1986,7 @@
     "primary_outcome": "Arm A vs Arm C: Investigator-Assessed Progression-Free Survival (PFS)",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[76]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[76]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[76]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nThe purpose of this study is to evaluate the efficacy and safety of tiragolumab plus atezolizumab compared with placebo in participants with unresectable esophageal squamous cell carcinoma (or those who are unable or unwilling to undergo surgery) and whose cancers have not progressed following definitive concurrent chemoradiotherapy (dCRT). Participants will be randomized in a 1:1:1 ratio to receive either tiragolumab plus atezolizumab (Arm A), tiragolumab matching placebo plus atezolizumab (Arm B), or double placebo (Arm C).",
-    "changed_today": true
+    "details": "The purpose of this study is to evaluate the efficacy and safety of tiragolumab plus atezolizumab compared with placebo in participants with unresectable esophageal squamous cell carcinoma (or those who are unable or unwilling to undergo surgery) and whose cancers have not progressed following definitive concurrent chemoradiotherapy (dCRT). Participants will be randomized in a 1:1:1 ratio to receive either tiragolumab plus atezolizumab (Arm A), tiragolumab matching placebo plus atezolizumab (Arm B), or double placebo (Arm C)."
   },
   {
     "id": "NCT04305041",
@@ -2008,8 +2003,7 @@
     "primary_outcome": "Percentage of participants who experience an adverse event (AE)",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[29]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[29]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[29]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nSubstudy 02A is part of a larger research study that is testing experimental treatments for melanoma, a type of skin cancer. The larger study is the umbrella study.\n\nThe goal of substudy 02A is to evaluate the safety and efficacy of investigational treatment arms in participants with PD-1 refractory melanoma to identify the investigational agent(s) that, when used in combination, are superior to the current treatment options/historical control available.\n\nAs of Amendment 4 (effective date: 05JAN2022), a third arm has been opened to participant enrollment, treatment with pembrolizumab and all-trans retinoic acid (ATRA). Enrollment into the first two arms, treatment with pembrolizumab + quavonlimab+ vibostolimab and treatment with pembrolizumab + quavonlimab + lenvatinib has been completed per protocol as of September 2021.",
-    "changed_today": true
+    "details": "Substudy 02A is part of a larger research study that is testing experimental treatments for melanoma, a type of skin cancer. The larger study is the umbrella study.\n\nThe goal of substudy 02A is to evaluate the safety and efficacy of investigational treatment arms in participants with PD-1 refractory melanoma to identify the investigational agent(s) that, when used in combination, are superior to the current treatment options/historical control available.\n\nAs of Amendment 4 (effective date: 05JAN2022), a third arm has been opened to participant enrollment, treatment with pembrolizumab and all-trans retinoic acid (ATRA). Enrollment into the first two arms, treatment with pembrolizumab + quavonlimab+ vibostolimab and treatment with pembrolizumab + quavonlimab + lenvatinib has been completed per protocol as of September 2021."
   },
   {
     "id": "NCT06996782",
@@ -2043,8 +2037,7 @@
     "primary_outcome": "Recurrence-Free Survival (RFS)",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[142]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[142]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[142]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nWith Amendment 4, participants will discontinue treatment with pembrolizumab/vibostolimab.\n\nThe protocol-specified futility analysis of the primary outcome measure was completed with a data cut-off of 06-Mar-2024 (Primary Completion Date) and served as the final analysis of the primary outcome measure. Per protocol, 192 participants enrolled after the primary completion date and will be analyzed in the End of Trial analysis.",
-    "changed_today": true
+    "details": "With Amendment 4, participants will discontinue treatment with pembrolizumab/vibostolimab.\n\nThe protocol-specified futility analysis of the primary outcome measure was completed with a data cut-off of 06-Mar-2024 (Primary Completion Date) and served as the final analysis of the primary outcome measure. Per protocol, 192 participants enrolled after the primary completion date and will be analyzed in the End of Trial analysis."
   },
   {
     "id": "NCT06868277",
@@ -2061,8 +2054,7 @@
     "primary_outcome": "Overall Survival (OS)",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[197]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[197]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[197]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nThis is a Phase III, two-arm, randomized, double-blind, global, multicenter study assessing the efficacy and safety of rilvegostomig compared to pembrolizumab as a 1L treatment for patients with mNSCLC whose tumors express PD-L1.",
-    "changed_today": true
+    "details": "This is a Phase III, two-arm, randomized, double-blind, global, multicenter study assessing the efficacy and safety of rilvegostomig compared to pembrolizumab as a 1L treatment for patients with mNSCLC whose tumors express PD-L1."
   },
   {
     "id": "NCT06692738",
@@ -2113,8 +2105,7 @@
     "primary_outcome": "Investigator-Assessed Progression Free Survival (PFS) in the Primary Analysis Set (PAS)",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[52]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[52]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[52]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nThis study will evaluate the efficacy of tiragolumab plus atezolizumab and carboplatin and etoposide (CE) compared with placebo plus atezolizumab and CE in participants with chemotherapy-naive extensive-stage small cell lung cancer (ES-SCLC). Eligible participants will be stratified by Eastern Cooperative Oncology Group (ECOG) Performance Status (0 vs. 1), LDH (\\</= upper limit of normal \\[ULN\\] vs. \\> ULN), and presence or history of brain metastasis (yes vs. no) and randomly assigned in a 1:1 ratio to receive one of the following treatment regimens during induction phase:\n\n* Arm A: Tiragolumab plus atezolizumab plus CE\n* Arm B: Placebo plus atezolizumab plus CE\n\nFollowing the induction phase, participants will continue maintenance therapy with either atezolizumab plus tiragolumab (Arm A) or atezolizumab plus placebo (Arm B).",
-    "changed_today": true
+    "details": "This study will evaluate the efficacy of tiragolumab plus atezolizumab and carboplatin and etoposide (CE) compared with placebo plus atezolizumab and CE in participants with chemotherapy-naive extensive-stage small cell lung cancer (ES-SCLC). Eligible participants will be stratified by Eastern Cooperative Oncology Group (ECOG) Performance Status (0 vs. 1), LDH (\\</= upper limit of normal \\[ULN\\] vs. \\> ULN), and presence or history of brain metastasis (yes vs. no) and randomly assigned in a 1:1 ratio to receive one of the following treatment regimens during induction phase:\n\n* Arm A: Tiragolumab plus atezolizumab plus CE\n* Arm B: Placebo plus atezolizumab plus CE\n\nFollowing the induction phase, participants will continue maintenance therapy with either atezolizumab plus tiragolumab (Arm A) or atezolizumab plus placebo (Arm B)."
   },
   {
     "id": "NCT06989112",
@@ -2131,8 +2122,7 @@
     "primary_outcome": "Progression-free survival (PFS), as assessed by BICR",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[173]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[173]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[173]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nDESTINY-Endometrial01 will investigate the efficacy of first-line T-DXd + rilvegostomig (Arm A) and/or T-DXd+ pembrolizumab (Arm B) when compared to chemotherapy (carboplatin + paclitaxel) + pembrolizumab (Arm C), by assessment of progression free survival (PFS), as assessed by BICR, in participants with HER2-expressing (IHC 3+/2+), pMMR, primary advanced (Stage III/IV) or recurrent EC.",
-    "changed_today": true
+    "details": "DESTINY-Endometrial01 will investigate the efficacy of first-line T-DXd + rilvegostomig (Arm A) and/or T-DXd+ pembrolizumab (Arm B) when compared to chemotherapy (carboplatin + paclitaxel) + pembrolizumab (Arm C), by assessment of progression free survival (PFS), as assessed by BICR, in participants with HER2-expressing (IHC 3+/2+), pMMR, primary advanced (Stage III/IV) or recurrent EC."
   },
   {
     "id": "NCT05816460",
@@ -2183,8 +2173,7 @@
     "primary_outcome": "Percentage of participants who experience a dose-limiting toxicity (DLT): Safety lead-in phase",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[45]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[45]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[45]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nWith Amendment 6, all arms are closed to enrollment. Participants in arms 2 (pembrolizumab), 3 (coformulation pembrolizumab/quavonlimab), and 4 (coformulation pembrolizumab/quavonlimab + lenvatinib) who complete study treatment or otherwise meet end of treatment (EOT) criteria will be discontinued from the study after completing the EOT visit and any required safety follow-up visits. Participants in arm 6 (coformulation favezelimab/pembrolizumab + All-trans Retinoic Acid \\[ATRA\\]) will discontinue ATRA and participants in arms 5 and 6 can continue on coformulation favezelimab/pembrolizumab or pembrolizumab.",
-    "changed_today": true
+    "details": "With Amendment 6, all arms are closed to enrollment. Participants in arms 2 (pembrolizumab), 3 (coformulation pembrolizumab/quavonlimab), and 4 (coformulation pembrolizumab/quavonlimab + lenvatinib) who complete study treatment or otherwise meet end of treatment (EOT) criteria will be discontinued from the study after completing the EOT visit and any required safety follow-up visits. Participants in arm 6 (coformulation favezelimab/pembrolizumab + All-trans Retinoic Acid \\[ATRA\\]) will discontinue ATRA and participants in arms 5 and 6 can continue on coformulation favezelimab/pembrolizumab or pembrolizumab."
   },
   {
     "id": "NCT04294810",
@@ -2201,8 +2190,7 @@
     "primary_outcome": "Investigator-Assessed Progression-Free Survival (PFS) in the Primary Analysis Set",
     "monitor_status": "Changed",
     "last_monitored_change": "2026-03-21",
-    "details": "**[RECENT CHANGES FOUND]**\nField `contactsLocationsModule.locations.[48]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[48]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[48]geoPoint.lon` changed from `14.5195` to `14.26811`\n\n***\nThe purpose of the study is to evaluate the efficacy and safety of tiragolumab plus atezolizumab compared with placebo plus atezolizumab in participants with previously untreated locally advanced, unresectable or metastatic PD-L1-selected non-small cell lung cancer (NSCLC), with no epidermal growth factor receptor (EGFR) mutation or anaplastic lymphoma kinase (ALK) translocation. Eligible participants will be randomized in a 1:1 ratio to receive either tiragolumab plus atezolizumab or placebo plus atezolizumab.",
-    "changed_today": true
+    "details": "The purpose of the study is to evaluate the efficacy and safety of tiragolumab plus atezolizumab compared with placebo plus atezolizumab in participants with previously untreated locally advanced, unresectable or metastatic PD-L1-selected non-small cell lung cancer (NSCLC), with no epidermal growth factor receptor (EGFR) mutation or anaplastic lymphoma kinase (ALK) translocation. Eligible participants will be randomized in a 1:1 ratio to receive either tiragolumab plus atezolizumab or placebo plus atezolizumab."
   },
   {
     "id": "NCT03198546",
