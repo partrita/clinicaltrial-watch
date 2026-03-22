@@ -17,22 +17,26 @@ def test_get_status_badge_unknown():
 
 def test_get_update_badge():
     badge = get_update_badge("Changed", "2024-03-20")
+    assert 'class="badge rounded-pill bg-danger"' in badge
     assert 'aria-label="Changes detected"' in badge
     assert 'title="Changes detected since last crawl. Last change: 2024-03-20"' in badge
     assert '🔴 Changed' in badge
 
     badge = get_update_badge("No Change")
+    assert 'class="badge rounded-pill bg-success"' in badge
     assert 'aria-label="No recent changes"' in badge
     assert 'title="No changes detected since last crawl"' in badge
     assert '🟢 No Change' in badge
 
 def test_get_changed_count_badge():
     badge = get_changed_count_badge(5)
+    assert 'class="badge rounded-pill bg-danger"' in badge
     assert 'aria-label="5 trials changed"' in badge
     assert 'title="5 trials have updates"' in badge
     assert '🔴 5' in badge
 
     badge = get_changed_count_badge(0)
+    assert 'class="badge rounded-pill bg-success"' in badge
     assert 'aria-label="No trials changed"' in badge
     assert 'title="No trials have updates"' in badge
     assert '🟢 0' in badge
@@ -70,6 +74,16 @@ def test_format_diff_line():
     formatted = format_diff_line(line)
     assert "changed from <span class='text-danger fw-bold'>`PENDING`</span>" in formatted
     assert "to <span class='text-success fw-bold'>`RECRUITING`</span>" in formatted
+
+    # Test new field added
+    line = "New field added: `statusModule.overallStatus`"
+    formatted = format_diff_line(line)
+    assert "<span class='text-success fw-bold'>New field added</span>" in formatted
+
+    # Test field removed
+    line = "Field removed: `designModule.phases`"
+    formatted = format_diff_line(line)
+    assert "<span class='text-danger fw-bold'>Field removed</span>" in formatted
 
     # Test no match
     line = "Initial data collection"

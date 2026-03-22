@@ -31,6 +31,11 @@
     outline-offset: 2px;
 }
 
+/* Indicate that badges with titles have tooltips */
+.badge[title] {
+    cursor: help;
+}
+
 /* Smooth scrolling for anchor links */
 html {
     scroll-behavior: smooth;

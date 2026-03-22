@@ -68,8 +68,8 @@ def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
     safe_status = escape_html(monitor_status)
     title_extra = f". Last change: {escape_html(last_change_date)}" if last_change_date else ""
     if monitor_status == "Changed":
-        return f'<span aria-label="Changes detected" title="Changes detected since last crawl{title_extra}">🔴 {safe_status}</span>'
-    return f'<span aria-label="No recent changes" title="No changes detected since last crawl{title_extra}">🟢 {safe_status}</span>'
+        return f'<span class="badge rounded-pill bg-danger" aria-label="Changes detected" title="Changes detected since last crawl{title_extra}">🔴 {safe_status}</span>'
+    return f'<span class="badge rounded-pill bg-success" aria-label="No recent changes" title="No changes detected since last crawl{title_extra}">🟢 {safe_status}</span>'
 
 
 def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
@@ -95,8 +95,8 @@ def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
 def get_changed_count_badge(count: int) -> str:
     """Return a badge for changed trial count with title."""
     if count > 0:
-        return f'<span aria-label="{count} trials changed" title="{count} trials have updates">🔴 {count}</span>'
-    return '<span aria-label="No trials changed" title="No trials have updates">🟢 0</span>'
+        return f'<span class="badge rounded-pill bg-danger" aria-label="{count} trials changed" title="{count} trials have updates">🔴 {count}</span>'
+    return '<span class="badge rounded-pill bg-success" aria-label="No trials changed" title="No trials have updates">🟢 0</span>'
 
 
 def format_enrollment(value: Any) -> str:
@@ -117,15 +117,28 @@ def format_enrollment(value: Any) -> str:
 def format_diff_line(line: str) -> str:
     """
     Format a diff line with color-coded changes.
-    Highlights 'changed from `old` to `new`' with Bootstrap classes.
+    Highlights 'changed from `old` to `new`' and additions/removals with Bootstrap classes.
     """
     if not line:
         return ""
 
     safe_line = escape_html(line)
 
+    # Handle "New field added" and "Field removed" messages
+    if "New field added" in safe_line:
+        return re.sub(
+            r"(New field added)(: )(`.*?`)",
+            r"<span class='text-success fw-bold'>\1</span>\2\3",
+            safe_line,
+        )
+    if "Field removed" in safe_line:
+        return re.sub(
+            r"(Field removed)(: )(`.*?`)",
+            r"<span class='text-danger fw-bold'>\1</span>\2\3",
+            safe_line,
+        )
+
     # Regex to find: changed from `old` to `new`
-    # We use non-greedy matching for the backticked values
     pattern = r"(changed from )(`.*?`)( to )(`.*?`)"
 
     def replace_match(match):
