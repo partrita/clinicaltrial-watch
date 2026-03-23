@@ -78,7 +78,7 @@ class TestProcessTrial:
         monkeypatch.chdir(tmp_path)
         mock_fetch.return_value = None
 
-        trial = {"id": "NCT_MISSING", "name": "Missing Trial"}
+        trial = {"id": "NCT00000002", "name": "Missing Trial"}
         report, raw = process_trial(trial, "TestTarget")
 
         assert report is None
@@ -102,10 +102,10 @@ class TestProcessTrial:
         # Create a local snapshot
         snapshot_dir = tmp_path / "data" / "snapshots"
         snapshot_dir.mkdir(parents=True)
-        snapshot_file = snapshot_dir / "NCT_LOCAL_latest.json"
+        snapshot_file = snapshot_dir / "NCT00000003_latest.json"
         snapshot_file.write_text(json.dumps(SAMPLE_TRIAL_DATA), encoding="utf-8")
 
-        trial = {"id": "NCT_LOCAL", "name": "Local Trial"}
+        trial = {"id": "NCT00000003", "name": "Local Trial"}
         report, raw = process_trial(trial, "TestTarget")
 
         assert report is not None
@@ -129,10 +129,10 @@ class TestProcessTrial:
         # Create a corrupted local snapshot
         snapshot_dir = tmp_path / "data" / "snapshots"
         snapshot_dir.mkdir(parents=True)
-        snapshot_file = snapshot_dir / "NCT_BADLOCAL_latest.json"
+        snapshot_file = snapshot_dir / "NCT00000004_latest.json"
         snapshot_file.write_text("CORRUPTED {{{", encoding="utf-8")
 
-        trial = {"id": "NCT_BADLOCAL", "name": "Corrupted Local"}
+        trial = {"id": "NCT00000004", "name": "Corrupted Local"}
         report, raw = process_trial(trial, "TestTarget")
 
         assert report is None
@@ -158,7 +158,7 @@ class TestProcessTrial:
             "Status": {"old": "RECRUITING", "new": "COMPLETED"}
         }
 
-        trial = {"id": "NCT_CHANGED", "name": "Changed Trial"}
+        trial = {"id": "NCT00000005", "name": "Changed Trial"}
 
         # Need to handle the case where diff_engine doesn't have deepdiff
         import diff_engine
@@ -193,7 +193,7 @@ class TestProcessTrial:
         }
         mock_fetch.return_value = minimal_data
 
-        trial = {"id": "NCT_MINIMAL", "name": "Minimal Trial"}
+        trial = {"id": "NCT00000006", "name": "Minimal Trial"}
         report, raw = process_trial(trial, "TestTarget")
 
         assert report is not None

@@ -63,3 +63,46 @@ def test_generation_escaping():
     os.remove(qmd)
     os.remove(yml)
     os.rmdir("tests/tmp_targets")
+
+def test_process_trial_validation():
+    """Verify that process_trial skips invalid NCT IDs."""
+    from src.main import process_trial
+
+    invalid_trial = {"id": "evil", "name": "Evil Trial"}
+    report, raw = process_trial(invalid_trial, "TestTarget")
+
+    assert report is None
+    assert raw is None
+
+def test_extract_trials_validation():
+    """Verify that extract_trials filters out invalid NCT IDs."""
+    from src.auto_discover_trials import extract_trials
+
+    api_studies = [
+        {
+            "protocolSection": {
+                "identificationModule": {
+                    "nctId": "NCT12345678",
+                    "briefTitle": "Valid Trial"
+                }
+            }
+        },
+        {
+            "protocolSection": {
+                "identificationModule": {
+                    "nctId": "evil",
+                    "briefTitle": "Invalid Trial"
+                }
+            }
+        }
+    ]
+
+    extracted = extract_trials(api_studies)
+    assert len(extracted) == 1
+    assert extracted[0]["id"] == "NCT12345678"
+
+def test_remove_trial_validation():
+    """Verify that remove_trial rejects invalid NCT IDs."""
+    from src.manage_trials import remove_trial
+
+    assert remove_trial("evil") is False
