@@ -121,5 +121,6 @@ def save_snapshot(
     filepath = os.path.join(snapshot_dir, f"{safe_trial_id}_latest.json")
 
     with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+        # Optimized: Removed indent to reduce serialization time and file size
+        json.dump(data, f, ensure_ascii=False)
     return filepath
