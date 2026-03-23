@@ -8,7 +8,7 @@ import argparse
 import os
 import json
 from typing import Any, Dict, Optional
-from utils import sanitize_id
+from utils import sanitize_id, is_valid_nct_id
 from generate_target_pages import main as generate_pages
 
 try:
@@ -51,6 +51,11 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
 
 def remove_trial(trial_id: str, target_name: Optional[str] = None, cleanup: bool = False):
     """Remove a trial by ID from trials.yaml and optionally clean up data."""
+    # Security enhancement: Validate NCT ID format
+    if not is_valid_nct_id(trial_id):
+        print(f"Error: Invalid NCT ID format: {trial_id}")
+        return False
+
     data = load_yaml()
     targets = data.get("targets", [])
     
