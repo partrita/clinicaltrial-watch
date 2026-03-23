@@ -76,7 +76,7 @@ def get_status_badge(status: str) -> str:
     display_text = f"{emoji} {safe_label}" if emoji else safe_label
 
     return (
-        f'<span class="badge bg-{bg_class}" '
+        f'<span class="badge rounded-pill bg-{bg_class}" '
         f'title="Original status: {safe_status}" '
         f'aria-label="Status: {safe_label}">{display_text}</span>'
     )
@@ -84,12 +84,18 @@ def get_status_badge(status: str) -> str:
 
 @lru_cache(maxsize=128)
 def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
-    """Return a badge/emoji for monitoring status with ARIA label and title."""
+    """Return a badge for monitoring status with ARIA label and title."""
     safe_status = escape_html(monitor_status)
     title_extra = f". Last change: {escape_html(last_change_date)}" if last_change_date else ""
     if monitor_status == "Changed":
-        return f'<span aria-label="Changes detected" title="Changes detected since last crawl{title_extra}">🔴 {safe_status}</span>'
-    return f'<span aria-label="No recent changes" title="No changes detected since last crawl{title_extra}">🟢 {safe_status}</span>'
+        return (
+            f'<span class="badge rounded-pill bg-danger" aria-label="Changes detected" '
+            f'title="Changes detected since last crawl{title_extra}">🔴 {safe_status}</span>'
+        )
+    return (
+        f'<span class="badge rounded-pill bg-success" aria-label="No recent changes" '
+        f'title="No changes detected since last crawl{title_extra}">🟢 {safe_status}</span>'
+    )
 
 
 @lru_cache(maxsize=128)
@@ -117,8 +123,14 @@ def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
 def get_changed_count_badge(count: int) -> str:
     """Return a badge for changed trial count with title."""
     if count > 0:
-        return f'<span aria-label="{count} trials changed" title="{count} trials have updates">🔴 {count}</span>'
-    return '<span aria-label="No trials changed" title="No trials have updates">🟢 0</span>'
+        return (
+            f'<span class="badge rounded-pill bg-danger" aria-label="{count} trials changed" '
+            f'title="{count} trials have updates">🔴 {count}</span>'
+        )
+    return (
+        '<span class="badge rounded-pill bg-success" aria-label="No trials changed" '
+        'title="No trials have updates">🟢 0</span>'
+    )
 
 
 @lru_cache(maxsize=128)
