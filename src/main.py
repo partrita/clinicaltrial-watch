@@ -203,7 +203,8 @@ def update_history(
     history.append({"timestamp": timestamp, "diff": diff_text})
 
     with open(history_file, "w", encoding="utf-8") as f:
-        json.dump(history, f, indent=2, ensure_ascii=False)
+        # Optimized: Removed indent to reduce serialization time and file size
+        json.dump(history, f, ensure_ascii=False)
 
     return history
 
@@ -236,7 +237,8 @@ def update_target_history(
         history.append({"timestamp": timestamp, "event": message})
 
         with open(history_file, "w", encoding="utf-8") as f:
-            json.dump(history, f, indent=2, ensure_ascii=False)
+            # Optimized: Removed indent to reduce serialization time and file size
+            json.dump(history, f, ensure_ascii=False)
         print(f"  Updated target history for {target_name}")
 
 
@@ -432,7 +434,8 @@ def save_target_data(
 
     # Save JSON summary
     with open(f"{target_dir}/status_summary.json", "w", encoding="utf-8") as f:
-        json.dump(summary_report, f, indent=2, ensure_ascii=False)
+        # Optimized: Removed indent to reduce serialization time and file size
+        json.dump(summary_report, f, ensure_ascii=False)
 
     # Save CSV summary
     if summary_report:
@@ -579,7 +582,8 @@ def main() -> None:
 
     # Save global target summary
     with open("data/targets_summary.json", "w", encoding="utf-8") as f:
-        json.dump(target_summaries, f, indent=2, ensure_ascii=False)
+        # Optimized: Removed indent to reduce serialization time and file size
+        json.dump(target_summaries, f, ensure_ascii=False)
 
     print(f"\n✓ Processed {len(targets)} targets, {len(all_reports)} total trial entries")
 

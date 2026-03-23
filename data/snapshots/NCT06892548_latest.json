@@ -19,7 +19,7 @@
       "officialTitle": "A Phase Ib/II, Multi-site, Open-label, Two-part Trial to Evaluate the Efficacy, Safety, Pharmacokinetics, and Recommended Combination Dose of BNT324 With BNT327 in Participants With Advanced Lung Cancer"
     },
     "statusModule": {
-      "statusVerifiedDate": "2026-02",
+      "statusVerifiedDate": "2026-03",
       "overallStatus": "RECRUITING",
       "expandedAccessInfo": {
         "hasExpandedAccess": false
@@ -42,9 +42,9 @@
         "date": "2025-03-24",
         "type": "ACTUAL"
       },
-      "lastUpdateSubmitDate": "2026-02-10",
+      "lastUpdateSubmitDate": "2026-03-18",
       "lastUpdatePostDateStruct": {
-        "date": "2026-02-11",
+        "date": "2026-03-19",
         "type": "ACTUAL"
       }
     },
@@ -332,6 +332,18 @@
       ],
       "locations": [
         {
+          "facility": "Mayo Clinic Arizona",
+          "status": "RECRUITING",
+          "city": "Phoenix",
+          "state": "Arizona",
+          "zip": "13400",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 33.44838,
+            "lon": -112.07404
+          }
+        },
+        {
           "facility": "Precision NextGen Oncology and Research Center",
           "status": "RECRUITING",
           "city": "Beverly Hills",
@@ -368,6 +380,18 @@
           }
         },
         {
+          "facility": "Mayo Clinic in Florida",
+          "status": "RECRUITING",
+          "city": "Jacksonville",
+          "state": "Florida",
+          "zip": "32224",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 30.33218,
+            "lon": -81.65565
+          }
+        },
+        {
           "facility": "University of Iowa Hospitals & Clinics PARENT",
           "status": "RECRUITING",
           "city": "Iowa City",
@@ -377,6 +401,18 @@
           "geoPoint": {
             "lat": 41.66113,
             "lon": -91.53017
+          }
+        },
+        {
+          "facility": "Mayo Clinic-Rochester",
+          "status": "RECRUITING",
+          "city": "Rochester",
+          "state": "Minnesota",
+          "zip": "55905",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 44.02163,
+            "lon": -92.4699
           }
         },
         {
@@ -728,6 +764,28 @@
           }
         },
         {
+          "facility": "Jingzhou First People's Hospital",
+          "status": "RECRUITING",
+          "city": "Jingzhou",
+          "zip": "434000",
+          "country": "China",
+          "geoPoint": {
+            "lat": 30.35028,
+            "lon": 112.19028
+          }
+        },
+        {
+          "facility": "Henan Provincial Cancer Hospital",
+          "status": "RECRUITING",
+          "city": "Zhengzhou",
+          "zip": "450003",
+          "country": "China",
+          "geoPoint": {
+            "lat": 34.75778,
+            "lon": 113.64861
+          }
+        },
+        {
           "facility": "Kaohsiung Medical University Chung-Ho Memorial Hospital",
           "status": "RECRUITING",
           "city": "Kaohsiung City",
@@ -827,6 +885,28 @@
           }
         },
         {
+          "facility": "Koc University Hospital",
+          "status": "RECRUITING",
+          "city": "Istanbul",
+          "zip": "34010",
+          "country": "Turkey (Türkiye)",
+          "geoPoint": {
+            "lat": 41.01384,
+            "lon": 28.94966
+          }
+        },
+        {
+          "facility": "Sakarya Training and Research Hospital",
+          "status": "RECRUITING",
+          "city": "Sakarya",
+          "zip": "54187",
+          "country": "Turkey (Türkiye)",
+          "geoPoint": {
+            "lat": 39.50333,
+            "lon": 32.07583
+          }
+        },
+        {
           "facility": "Bristol Haematology and Oncology Centre",
           "status": "RECRUITING",
           "city": "Bristol",
@@ -867,7 +947,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-09"
+      "versionHolder": "2026-03-20"
     },
     "conditionBrowseModule": {
       "meshes": [

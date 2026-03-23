@@ -294,8 +294,8 @@
           "zip": "422000",
           "country": "China",
           "geoPoint": {
-            "lat": 32.99472,
-            "lon": 112.53278
+            "lat": 33.00524,
+            "lon": 112.54659
           }
         },
         {
@@ -459,7 +459,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-09"
+      "versionHolder": "2026-03-20"
     },
     "conditionBrowseModule": {
       "meshes": [

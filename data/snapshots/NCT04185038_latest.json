@@ -242,6 +242,11 @@
     "referencesModule": {
       "references": [
         {
+          "pmid": "41798119",
+          "type": "DERIVED",
+          "citation": "Ronsley R, Choe M, Wright J, Seidel K, Lee A, Wendler J, Annesley C, Jensen MC, Park JR, Vitanza NA, Gust J. Tumor inflammation-associated neurotoxicity in children with diffuse intrinsic pontine glioma receiving B7-H3-targeting CAR T cells on BrainChild-03. Neurooncol Pract. 2025 Aug 3;13(1):105-111. doi: 10.1093/nop/npaf080. eCollection 2026 Feb."
+        },
+        {
           "pmid": "39775044",
           "type": "DERIVED",
           "citation": "Vitanza NA, Ronsley R, Choe M, Seidel K, Huang W, Rawlings-Rhea SD, Beam M, Steinmetzer L, Wilson AL, Brown C, Beebe A, Lindgren C, Gustafson JA, Wein A, Holtzclaw S, Hoeppner C, Goldstein HE, Browd SR, Hauptman JS, Lee A, Ojemann JG, Crotty EE, Leary SES, Perez FA, Wright JN, Alonso MM, Dun MD, Foster JB, Hurst D, Kong A, Thomsen A, Orentas RJ, Albert CM, Pinto N, Annesley C, Gardner RA, Ho O, Pattabhi S, Gust J, Wendler JP, Park JR, Jensen MC. Intracerebroventricular B7-H3-targeting CAR T cells for diffuse intrinsic pontine glioma: a phase 1 trial. Nat Med. 2025 Mar;31(3):861-868. doi: 10.1038/s41591-024-03451-3. Epub 2025 Jan 7."
@@ -265,7 +270,7 @@
   },
   "derivedSection": {
     "miscInfoModule": {
-      "versionHolder": "2026-03-09"
+      "versionHolder": "2026-03-20"
     },
     "conditionBrowseModule": {
       "meshes": [
