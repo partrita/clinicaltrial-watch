@@ -9,6 +9,11 @@ try:
 except ImportError:
     HAS_DEEPDIFF = False
 
+try:
+    from utils import sanitize_id
+except ImportError:
+    from src.utils import sanitize_id
+
 
 def compare_snapshots(
     trial_id: str, new_data: Dict[str, Any], snapshot_dir: str = "data/snapshots"
@@ -16,7 +21,9 @@ def compare_snapshots(
     """
     Compares the new data with the previous snapshot of the trial using DeepDiff.
     """
-    previous_path = os.path.join(snapshot_dir, f"{trial_id}_latest.json")
+    # Sanitize trial_id to prevent path traversal
+    safe_trial_id = sanitize_id(trial_id)
+    previous_path = os.path.join(snapshot_dir, f"{safe_trial_id}_latest.json")
 
     if not os.path.exists(previous_path):
         return None  # No previous data to compare with
