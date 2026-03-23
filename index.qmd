@@ -24,7 +24,7 @@ if os.path.exists(summary_path):
         targets = []
     
     print("| Target | Description | Trials | Changed |")
-    print("| --- | --- | --- | --- |")
+    print("| --- | --- | ---:| ---:|")
     for target in targets:
         name = target['name']
         desc = target.get('description', '')
