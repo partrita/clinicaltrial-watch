@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
 from crawler import fetch_trial_data, save_snapshot, reset_session
-from utils import sanitize_id
+from utils import sanitize_id, is_valid_nct_id
 from diff_engine import compare_snapshots, format_diff
 from generate_target_pages import main as generate_pages
 
@@ -305,6 +305,12 @@ def process_trial(
 ) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
     """Process a single trial and return report data."""
     trial_id = trial["id"]
+
+    # Security enhancement: Validate NCT ID format
+    if not is_valid_nct_id(trial_id):
+        print(f"  Warning: Skipping invalid NCT ID: {trial_id}")
+        return None, None
+
     print(f"Processing {trial_id}...")
 
     # Load trial history once to avoid redundant I/O
