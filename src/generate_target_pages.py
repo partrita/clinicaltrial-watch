@@ -277,7 +277,7 @@ if os.path.exists(summary_path):
     
     print('<div style="font-size:0.8em">')
     print("| Trial ID | Sponsor | Update | Status | Conditions | Phases | Start | End | Enroll | Last Updated |")
-    print("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
+    print("| --- | --- | --- | --- | --- | --- | --- | --- | ---:| --- |")
     for item in summary:
         update_badge = get_update_badge(item.get('monitor_status', 'No Change'), item.get('last_monitored_change'))
         status_badge = get_status_badge(item.get('status', 'N/A'))
@@ -333,7 +333,7 @@ if os.path.exists(summary_path):
         targets = []
     
     print("| Target | Description | Trials | Changed |")
-    print("| --- | --- | --- | --- |")
+    print("| --- | --- | ---:| ---:|")
     for target in targets:
         name = target['name']
         desc = target.get('description', '')
