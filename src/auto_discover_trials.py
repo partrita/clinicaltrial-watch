@@ -8,6 +8,7 @@ import os
 import time
 import random
 from typing import Any, Dict, List, Optional
+from utils import is_valid_nct_id
 
 try:
     import requests
@@ -104,7 +105,11 @@ def extract_trials(api_studies: List[Dict[str, Any]]) -> List[Dict[str, str]]:
             nct_id = identity.get("nctId")
             title = identity.get("briefTitle")
             if nct_id and title:
-                trials.append({"id": nct_id, "name": title})
+                # Security enhancement: Validate NCT ID format
+                if is_valid_nct_id(nct_id):
+                    trials.append({"id": nct_id, "name": title})
+                else:
+                    print(f"  Warning: Skipping invalid NCT ID from API: {nct_id}")
         except Exception as e:
             print(f"Error extracting study data: {e}")
     return trials
