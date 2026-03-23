@@ -4,6 +4,16 @@ from typing import Any
 from functools import lru_cache
 
 
+def is_valid_nct_id(nct_id: str) -> bool:
+    """
+    Check if a string is a valid ClinicalTrials.gov NCT ID.
+    Format: NCT followed by 8 digits.
+    """
+    if not nct_id or not isinstance(nct_id, str):
+        return False
+    return bool(re.match(r"^NCT\d{8}$", nct_id))
+
+
 @lru_cache(maxsize=1024)
 def sanitize_id(identifier: str) -> str:
     """
@@ -24,12 +34,18 @@ def sanitize_id(identifier: str) -> str:
 def escape_html(text: str) -> str:
     """
     Escape HTML special characters in a string.
-    Also explicitly escapes the pipe character '|' to prevent breaking Markdown tables.
+    Also explicitly escapes the pipe character '|' and brackets '[' ']'
+    to prevent breaking Markdown tables and link/attribute injection.
     """
     if text is None:
         return ""
     escaped = html.escape(str(text))
-    return escaped.replace("|", "&#124;")
+    # Escape characters that have special meaning in Markdown/Quarto tables or links
+    return (
+        escaped.replace("|", "&#124;")
+        .replace("[", "&#91;")
+        .replace("]", "&#93;")
+    )
 
 
 # Pre-compiled regex for diff formatting
