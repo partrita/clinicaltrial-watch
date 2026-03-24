@@ -3,7 +3,7 @@ import os
 import time
 import random
 from typing import Any, Dict, Optional
-from utils import sanitize_id
+from utils import sanitize_id, is_valid_nct_id
 
 try:
     import requests
@@ -62,6 +62,11 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
     Fetches clinical trial data from ClinicalTrials.gov API v2.
     Uses connection pooling and retries for speed and reliability.
     """
+    # Security enhancement: Validate NCT ID format
+    if not is_valid_nct_id(trial_id):
+        print(f"Error: Invalid NCT ID format: {trial_id}")
+        return None
+
     # Sanitize trial_id to prevent injection and traversal
     safe_trial_id = sanitize_id(trial_id)
     url = f"https://clinicaltrials.gov/api/v2/studies/{safe_trial_id}"

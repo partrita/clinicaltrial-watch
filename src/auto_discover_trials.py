@@ -18,6 +18,7 @@ try:
     HAS_REQUESTS = True
 except ImportError:
     import urllib.request
+    import urllib.parse
     import json
 
     HAS_REQUESTS = False
@@ -56,13 +57,14 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
     """Search ClinicalTrials.gov API for a given term."""
     # Searching with max 1000 items (maximum allowed by pageSize)
     # If there are more than 1000, we might need pagination, but it's unlikely for specific targets
-    url = f"https://clinicaltrials.gov/api/v2/studies?query.term={query_term}&pageSize=1000"
+    base_url = "https://clinicaltrials.gov/api/v2/studies"
+    params = {"query.term": query_term, "pageSize": "1000"}
 
     if HAS_REQUESTS:
         session = get_session()
         try:
             time.sleep(random.uniform(0.5, 1.0))  # Be polite to API
-            response = session.get(url, timeout=(5, 15))
+            response = session.get(base_url, params=params, timeout=(5, 15))
             if response.status_code == 200:
                 data = response.json()
                 return data.get("studies", [])
@@ -78,7 +80,9 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             return []
     else:
         try:
-            req = urllib.request.Request(url)
+            query_string = urllib.parse.urlencode(params)
+            full_url = f"{base_url}?{query_string}"
+            req = urllib.request.Request(full_url)
             req.add_header("User-Agent", "ClinicalTrialWatch/AutoDiscover/1.0")
             time.sleep(random.uniform(0.5, 1.0))
             with urllib.request.urlopen(req, timeout=15) as response:
