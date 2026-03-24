@@ -5,9 +5,13 @@
     cursor: help;
 }
 
-/* Improve table scannability */
-.table-hover tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+/* Improve table scannability and row tracking */
+table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important;
 }
 
 /* Ensure badges have enough spacing */
