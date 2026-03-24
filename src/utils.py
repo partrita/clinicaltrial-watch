@@ -20,11 +20,17 @@ def sanitize_id(identifier: str) -> str:
     Sanitize an identifier (trial ID or target name) to prevent
     path traversal and code injection.
     Allows only alphanumeric characters, dashes, and underscores.
+    Length limited to 255 characters to prevent DoS.
     """
     if not identifier:
         return "unknown"
+
+    # Limit identifier length to prevent potential DoS from extremely long strings
+    # 255 is more than enough for NCT IDs and target names
+    identifier = str(identifier)[:255]
+
     # Replace any non-alphanumeric, non-dash, non-underscore characters with an underscore
-    sanitized = re.sub(r"[^a-zA-Z0-9_-]", "_", str(identifier))
+    sanitized = re.sub(r"[^a-zA-Z0-9_-]", "_", identifier)
     # Remove leading/trailing underscores and prevent empty string
     sanitized = sanitized.strip("_")
     return sanitized if sanitized else "unknown"

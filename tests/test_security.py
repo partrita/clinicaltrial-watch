@@ -14,6 +14,12 @@ def test_sanitize_id_special_chars():
     assert sanitize_id("") == "unknown"
     assert sanitize_id(None) == "unknown"
 
+def test_sanitize_id_length_limit():
+    long_id = "A" * 300
+    sanitized = sanitize_id(long_id)
+    assert len(sanitized) <= 255
+    assert sanitized == "A" * 255
+
 def test_escape_html_basic():
     # html.escape escapes ' as &#x27;
     assert escape_html("<script>alert('xss')</script>") == "&lt;script&gt;alert(&#x27;xss&#x27;)&lt;/script&gt;"
@@ -106,3 +112,10 @@ def test_remove_trial_validation():
     from src.manage_trials import remove_trial
 
     assert remove_trial("evil") is False
+
+def test_fetch_trial_data_validation():
+    """Verify that fetch_trial_data rejects invalid NCT IDs."""
+    from src.crawler import fetch_trial_data
+
+    assert fetch_trial_data("evil") is None
+    assert fetch_trial_data("NCT1234") is None # Too short
