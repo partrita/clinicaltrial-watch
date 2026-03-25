@@ -55,7 +55,8 @@ def test_generation_escaping():
     qmd = generate_target_qmd(name, desc, output_dir="tests/tmp_targets")
     with open(qmd, "r") as f:
         content = f.read()
-    assert 'title: "Target &#124; Pipe"' in content
+    # yaml.safe_dump might not use quotes for this string
+    assert "title: Target &#124; Pipe" in content
     assert "Desc &lt;script&gt;" in content
 
     # Test YAML generation
@@ -63,7 +64,7 @@ def test_generation_escaping():
     update_quarto_yml([{"name": name}], yml)
     with open(yml, "r") as f:
         content = f.read()
-    assert 'text: "Target &#124; Pipe"' in content
+    assert "text: Target &#124; Pipe" in content
 
     # Cleanup
     os.remove(qmd)
@@ -119,3 +120,63 @@ def test_fetch_trial_data_validation():
 
     assert fetch_trial_data("evil") is None
     assert fetch_trial_data("NCT1234") is None # Too short
+
+def test_yaml_injection_prevention():
+    """Verify that malicious target names cannot inject YAML into configuration files."""
+    from src.generate_target_pages import generate_target_qmd, update_quarto_yml
+    import os
+    import yaml
+
+    malicious_name = 'Target\n      - href: https://evil.com\n        text: "Injected"'
+    desc = "Test Description"
+
+    # Test QMD generation
+    output_dir = "tests/tmp_yaml_test"
+    qmd = generate_target_qmd(malicious_name, desc, output_dir=output_dir)
+    with open(qmd, "r") as f:
+        content = f.read()
+
+    # The title should be properly escaped/quoted in YAML, not raw
+    # When yaml.safe_dump dumps a string with newline, it might use | or > style
+    # but it will definitely not let it be interpreted as multiple fields
+    qmd_frontmatter = content.split('---')[1]
+    data = yaml.safe_load(qmd_frontmatter)
+    # Note: escape_html is called on the name before yaml.safe_dump
+    from src.utils import escape_html
+    assert data['title'] == escape_html(malicious_name)
+    # The string should be quoted, making it a literal, not a new field
+    # In YAML, a quoted string "Target\n      - href: ..." is a single scalar.
+    # It would only be a new field if it was not quoted and started at a new line at the same indentation level.
+    # safe_dump handles this correctly.
+    assert 'title: "' in qmd_frontmatter or 'title: |' in qmd_frontmatter or 'title: >' in qmd_frontmatter
+
+    # Test _quarto.yml generation
+    yml_path = "tests/tmp_quarto_injection.yml"
+    targets = [{"name": malicious_name}]
+    update_quarto_yml(targets, yml_path)
+
+    with open(yml_path, "r") as f:
+        yml_content = f.read()
+        yml_data = yaml.safe_load(yml_content)
+
+    # Check that the malicious name is stored as a single text value
+    found = False
+    from src.utils import escape_html
+    escaped_malicious_name = escape_html(malicious_name)
+    for item in yml_data['website']['navbar']['left']:
+        if isinstance(item, dict) and item.get('text') == 'Targets':
+            for menu_item in item['menu']:
+                if menu_item['text'] == escaped_malicious_name:
+                    found = True
+                    break
+    assert found is True
+
+    # Ensure no external link was injected as a top-level menu item
+    for item in yml_data['website']['navbar']['left']:
+        if isinstance(item, dict):
+            assert item.get('href') != "https://evil.com"
+
+    # Cleanup
+    os.remove(qmd)
+    os.remove(yml_path)
+    os.rmdir(output_dir)
