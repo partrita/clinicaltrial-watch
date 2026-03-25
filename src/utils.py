@@ -4,6 +4,10 @@ from typing import Any
 from functools import lru_cache
 
 
+# Pre-compiled regex for NCT ID validation (faster than string pattern)
+NCT_ID_PATTERN = re.compile(r"^NCT\d{8}$")
+
+
 def is_valid_nct_id(nct_id: str) -> bool:
     """
     Check if a string is a valid ClinicalTrials.gov NCT ID.
@@ -11,7 +15,7 @@ def is_valid_nct_id(nct_id: str) -> bool:
     """
     if not nct_id or not isinstance(nct_id, str):
         return False
-    return bool(re.match(r"^NCT\d{8}$", nct_id))
+    return bool(NCT_ID_PATTERN.match(nct_id))
 
 
 @lru_cache(maxsize=1024)
