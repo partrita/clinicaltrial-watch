@@ -1,5 +1,5 @@
 ---
-title: "TIGIT"
+title: TIGIT
 ---
 
 ::: {.callout-note}

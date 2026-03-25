@@ -1,5 +1,5 @@
 ---
-title: "B7-H3"
+title: B7-H3
 ---
 
 ::: {.callout-note}
