@@ -1,5 +1,5 @@
 ---
-title: "CCR8"
+title: CCR8
 ---
 
 ::: {.callout-note}

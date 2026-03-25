@@ -2,32 +2,29 @@ project:
   type: website
   output-dir: docs
   execute-dir: project
-
 website:
-  title: "Clinical Trial Watch"
+  title: Clinical Trial Watch
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - text: Targets
-        menu:
-          - href: targets/ccr8.qmd
-            text: "CCR8"
-          - href: targets/tigit.qmd
-            text: "TIGIT"
-          - href: targets/b7-h3.qmd
-            text: "B7-H3"
-      - about.qmd
-
+    - href: index.qmd
+      text: Home
+    - text: Targets
+      menu:
+      - href: targets/ccr8.qmd
+        text: CCR8
+      - href: targets/tigit.qmd
+        text: TIGIT
+      - href: targets/b7-h3.qmd
+        text: B7-H3
+    - about.qmd
 format:
   html:
     link-external-icon: true
     link-external-newwindow: true
     theme:
-      - cosmo
-      - brand
+    - cosmo
+    - brand
     css: styles.css
     toc: true
-
 execute:
   freeze: auto

@@ -54,10 +54,13 @@ def generate_target_qmd(
     target_id = sanitize_id(target_name).lower()
     qmd_path = os.path.join(output_dir, f"{target_id}.qmd")
 
-    # Using a literal string for most of the content to avoid f-string brace hell
+    # Use yaml.safe_dump for frontmatter to prevent YAML injection
     safe_name = escape_html(target_name)
+    frontmatter = {"title": safe_name}
+    yaml_header = yaml.safe_dump(frontmatter, sort_keys=False, allow_unicode=True)
+
     safe_description = escape_html(description)
-    header = f'---\ntitle: "{safe_name}"\n---\n\n::: {{.callout-note}}\n{safe_description}\n:::\n'
+    header = f"---\n{yaml_header}---\n\n::: {{.callout-note}}\n{safe_description}\n:::\n"
 
     body = (
         r'''
@@ -372,50 +375,51 @@ def update_quarto_yml(
 ) -> None:
     """Update _quarto.yml with navbar for all targets."""
 
-    # Build navbar menu items
-    menu_items = []
+    # Build navbar menu items safely
+    menu = []
     for target in targets:
         target_name = target["name"]
         target_id = sanitize_id(target_name).lower()
-        safe_name = escape_html(target_name)
-        menu_items.append(
-            f"          - href: targets/{target_id}.qmd\n            text: \"{safe_name}\""
-        )
+        menu.append({
+            "href": f"targets/{target_id}.qmd",
+            "text": escape_html(target_name)
+        })
 
-    menu_str = "\n".join(menu_items)
-
-    content = f"""project:
-  type: website
-  output-dir: docs
-  execute-dir: project
-
-website:
-  title: "Clinical Trial Watch"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - text: Targets
-        menu:
-{menu_str}
-      - about.qmd
-
-format:
-  html:
-    link-external-icon: true
-    link-external-newwindow: true
-    theme:
-      - cosmo
-      - brand
-    css: styles.css
-    toc: true
-
-execute:
-  freeze: auto
-"""
+    config = {
+        "project": {
+            "type": "website",
+            "output-dir": "docs",
+            "execute-dir": "project"
+        },
+        "website": {
+            "title": "Clinical Trial Watch",
+            "navbar": {
+                "left": [
+                    {"href": "index.qmd", "text": "Home"},
+                    {
+                        "text": "Targets",
+                        "menu": menu
+                    },
+                    "about.qmd"
+                ]
+            }
+        },
+        "format": {
+            "html": {
+                "link-external-icon": True,
+                "link-external-newwindow": True,
+                "theme": ["cosmo", "brand"],
+                "css": "styles.css",
+                "toc": True
+            }
+        },
+        "execute": {
+            "freeze": "auto"
+        }
+    }
 
     with open(quarto_path, "w", encoding="utf-8") as f:
-        f.write(content)
+        yaml.safe_dump(config, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
 
     print(f"Updated: {quarto_path}")
 
