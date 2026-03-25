@@ -1,4 +1,37 @@
-from src.utils import get_status_badge, get_update_badge, get_changed_count_badge, format_truncated_with_tooltip, escape_html, format_enrollment
+from src.utils import get_status_badge, get_update_badge, get_changed_count_badge, format_truncated_with_tooltip, escape_html, format_enrollment, get_phase_badge
+
+def test_get_phase_badge():
+    # Test single phase
+    badge = get_phase_badge("PHASE1")
+    assert 'class="badge rounded-pill bg-primary"' in badge
+    assert 'aria-label="Phase: Phase 1"' in badge
+    assert '>Phase 1</span>' in badge
+
+    # Test multi phase
+    badge = get_phase_badge("PHASE1, PHASE2")
+    assert 'bg-primary' in badge
+    assert 'bg-info' in badge
+    assert 'Phase 1' in badge
+    assert 'Phase 2' in badge
+
+    # Test early phase
+    badge = get_phase_badge("EARLY_PHASE1")
+    assert 'bg-primary' in badge
+    assert 'Early Phase 1' in badge
+
+    # Test NA
+    badge = get_phase_badge("NA")
+    assert 'bg-secondary' in badge
+    assert 'Na' in badge # title() makes it Na
+
+    # Test unknown
+    badge = get_phase_badge("UNKNOWN")
+    assert 'bg-light text-dark' in badge
+
+    # Test empty/None/N/A
+    assert 'bg-light text-dark' in get_phase_badge(None)
+    assert 'bg-light text-dark' in get_phase_badge("")
+    assert 'bg-light text-dark' in get_phase_badge("N/A")
 
 def test_get_status_badge_enhanced():
     # Verify enhanced behavior
