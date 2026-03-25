@@ -73,7 +73,7 @@ def generate_target_qmd(
 import pandas as pd
 import plotly.express as px
 import os
-from src.utils import sanitize_id, get_status_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment
+from src.utils import sanitize_id, get_status_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment, get_phase_badge
 
 target_id = "'''
         + target_id
@@ -260,7 +260,7 @@ if not history_found:
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, get_status_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment
+from src.utils import sanitize_id, get_status_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment, get_phase_badge
 
 target_id = "'''
         + target_id
@@ -277,10 +277,11 @@ if os.path.exists(summary_path):
     
     print('::: {.table-responsive style="font-size: 0.85em;"}')
     print("| Trial ID | Sponsor | Update | Status | Conditions | Phases | Start | End | Enroll | Last Updated |")
-    print("| --- | --- | --- | --- | --- | --- | --- | --- | ---:| --- |")
+    print("| --- | --- | --- | --- | --- | --- | --- | --- | ---:| ---:|")
     for item in summary:
         update_badge = get_update_badge(item.get('monitor_status', 'No Change'), item.get('last_monitored_change'))
         status_badge = get_status_badge(item.get('status', 'N/A'))
+        phase_badge = get_phase_badge(item.get('phases', 'N/A'))
 
         safe_sponsor = format_truncated_with_tooltip(item.get('sponsor', 'N/A'), 30)
         safe_conditions = format_truncated_with_tooltip(item.get('conditions', 'N/A'), 30)
@@ -289,7 +290,7 @@ if os.path.exists(summary_path):
         safe_trial_id = sanitize_id(trial_id)
         escaped_trial_id = escape_html(trial_id)
         safe_enrollment = format_enrollment(item.get('enrollment', 'N/A'))
-        print(f"| [{escaped_trial_id}](https://clinicaltrials.gov/study/{safe_trial_id}){{aria-label='View trial {escaped_trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {safe_enrollment} | {escape_html(item.get('last_updated', 'N/A'))} |")
+        print(f"| [{escaped_trial_id}](https://clinicaltrials.gov/study/{safe_trial_id}){{aria-label='View trial {escaped_trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {phase_badge} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {safe_enrollment} | {escape_html(item.get('last_updated', 'N/A'))} |")
     print(':::')
 else:
     print(f"No monitoring data available yet for {target_id} at {os.path.abspath(summary_path)}. Run the data collection script first.")
