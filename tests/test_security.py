@@ -121,6 +121,19 @@ def test_fetch_trial_data_validation():
     assert fetch_trial_data("evil") is None
     assert fetch_trial_data("NCT1234") is None # Too short
 
+def test_sanitize_csv_value():
+    """Verify that CSV formula injection is prevented."""
+    from src.utils import sanitize_csv_value
+
+    assert sanitize_csv_value("=SUM(A1:A10)") == "'=SUM(A1:A10)"
+    assert sanitize_csv_value("+42") == "'+42"
+    assert sanitize_csv_value("-5") == "'-5"
+    assert sanitize_csv_value("@something") == "'@something"
+    assert sanitize_csv_value("Normal text") == "Normal text"
+    assert sanitize_csv_value(123) == 123
+    assert sanitize_csv_value(None) is None
+    assert sanitize_csv_value("") == ""
+
 def test_yaml_injection_prevention():
     """Verify that malicious target names cannot inject YAML into configuration files."""
     from src.generate_target_pages import generate_target_qmd, update_quarto_yml
