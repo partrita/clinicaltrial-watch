@@ -32,7 +32,7 @@ def load_yaml(yaml_path: str = "trials.yaml") -> Dict[str, Any]:
 def save_yaml(data: Dict[str, Any], yaml_path: str = "trials.yaml") -> None:
     """Save YAML data to file."""
     with open(yaml_path, "w", encoding="utf-8") as f:
-        yaml.dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+        yaml.safe_dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
     print(f"Updated {yaml_path}")
 
 def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"):
@@ -46,7 +46,7 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
     if trial_id not in data["excluded_ids"]:
         data["excluded_ids"].append(trial_id)
         with open(yaml_path, "w", encoding="utf-8") as f:
-            yaml.dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+            yaml.safe_dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
         print(f"Added {trial_id} to exclusion list ({yaml_path})")
 
 def remove_trial(trial_id: str, target_name: Optional[str] = None, cleanup: bool = False):

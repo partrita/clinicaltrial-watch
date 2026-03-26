@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
 from crawler import fetch_trial_data, save_snapshot, reset_session
-from utils import sanitize_id, is_valid_nct_id
+from utils import sanitize_id, is_valid_nct_id, sanitize_csv_value
 from diff_engine import compare_snapshots, format_diff
 from generate_target_pages import main as generate_pages
 
@@ -463,7 +463,12 @@ def save_target_data(
         ) as f:
             dict_writer = csv.DictWriter(f, fieldnames=headers, extrasaction="ignore")
             dict_writer.writeheader()
-            dict_writer.writerows(summary_report)
+            # Sanitize all values to prevent CSV formula injection
+            sanitized_summary = [
+                {k: sanitize_csv_value(v) for k, v in row.items()}
+                for row in summary_report
+            ]
+            dict_writer.writerows(sanitized_summary)
 
     # Save raw data CSV
     if all_raw_data:
@@ -477,7 +482,12 @@ def save_target_data(
         ) as f:
             writer = csv.DictWriter(f, fieldnames=headers)
             writer.writeheader()
-            writer.writerows(all_raw_data)
+            # Sanitize all values to prevent CSV formula injection
+            sanitized_raw = [
+                {k: sanitize_csv_value(v) for k, v in row.items()}
+                for row in all_raw_data
+            ]
+            writer.writerows(sanitized_raw)
 
     print(f"  Saved target data to {target_dir}/")
 
