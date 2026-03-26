@@ -62,7 +62,7 @@ def save_yaml(data: Dict[str, Any], yaml_path: str) -> None:
     """Save YAML data to file."""
     if HAS_YAML:
         with open(yaml_path, "w", encoding="utf-8") as f:
-            yaml.dump(
+            yaml.safe_dump(
                 data, f, default_flow_style=False, allow_unicode=True, sort_keys=False
             )
     else:

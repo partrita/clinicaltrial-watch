@@ -58,6 +58,20 @@ def escape_html(text: str) -> str:
     )
 
 
+def sanitize_csv_value(value: Any) -> Any:
+    """
+    Sanitize a value for CSV export to prevent formula injection.
+    If the value is a string starting with '=', '+', '-', or '@',
+    it is prefixed with a single quote.
+    """
+    if not isinstance(value, str) or not value:
+        return value
+
+    if value[0] in ("=", "+", "-", "@"):
+        return f"'{value}"
+    return value
+
+
 # Pre-compiled regex for diff formatting
 DIFF_CHANGE_PATTERN = re.compile(r"(changed from )(`.*?`)( to )(`.*?`)")
 
