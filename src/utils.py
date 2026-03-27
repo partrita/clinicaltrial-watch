@@ -65,13 +65,19 @@ def escape_html(text: str) -> str:
 def sanitize_csv_value(value: Any) -> Any:
     """
     Sanitize a value for CSV export to prevent formula injection.
-    If the value is a string starting with '=', '+', '-', or '@',
-    it is prefixed with a single quote.
+    If the value is a string that starts with dangerous characters
+    (even after leading whitespace), it is prefixed with a single quote.
+    Dangerous characters: '=', '+', '-', '@', tab (0x09), or carriage return (0x0D).
     """
     if not isinstance(value, str) or not value:
         return value
 
-    if value[0] in ("=", "+", "-", "@"):
+    # Check the first non-whitespace character
+    stripped_value = value.lstrip()
+    if not stripped_value:
+        return value
+
+    if stripped_value[0] in ("=", "+", "-", "@", "\t", "\r"):
         return f"'{value}"
     return value
 
