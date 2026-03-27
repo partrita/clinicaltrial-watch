@@ -105,39 +105,6 @@ STATUS_CONFIGS = {
 }
 
 
-# Global map for phase to bootstrap_class
-PHASE_CONFIGS = {
-    "EARLY_PHASE1": "primary",
-    "PHASE1": "primary",
-    "PHASE2": "info",
-    "PHASE3": "warning text-dark",
-    "PHASE4": "success",
-    "NA": "secondary",
-}
-
-
-@lru_cache(maxsize=1024)
-def get_phase_badge(phases: str) -> str:
-    """Return Bootstrap badges for trial phases with ARIA labels."""
-    if not phases or phases == "N/A":
-        return '<span class="badge rounded-pill bg-light text-dark">N/A</span>'
-
-    badges = []
-    # Handle comma-separated phases (ClinicalTrials.gov often lists multiple)
-    for phase in str(phases).split(", "):
-        clean_phase = phase.strip()
-        bg_class = PHASE_CONFIGS.get(clean_phase, "light text-dark")
-        # Format "PHASE1" -> "Phase 1", "EARLY_PHASE1" -> "Early Phase 1"
-        display_label = clean_phase.replace("PHASE", "Phase ").replace("_", " ").title()
-
-        badges.append(
-            f'<span class="badge rounded-pill bg-{bg_class}" '
-            f'aria-label="Phase: {display_label}">{display_label}</span>'
-        )
-
-    return "".join(badges)
-
-
 @lru_cache(maxsize=1024)
 def get_status_badge(status: str) -> str:
     """Return a Bootstrap badge for a trial status with emoji and ARIA label."""
