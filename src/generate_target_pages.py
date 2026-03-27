@@ -278,7 +278,7 @@ if os.path.exists(summary_path):
         print(f"Error loading data: {e}")
         summary = []
     
-    print('::: {.table-responsive style="font-size: 0.85em;"}')
+    print('<div style="font-size:0.8em">')
     print("| Trial ID | Sponsor | Update | Status | Conditions | Phases | Start | End | Enroll | Last Updated |")
     print("| --- | --- | --- | --- | --- | --- | --- | --- | ---:| --- |")
     for item in summary:
@@ -293,7 +293,7 @@ if os.path.exists(summary_path):
         escaped_trial_id = escape_html(trial_id)
         safe_enrollment = format_enrollment(item.get('enrollment', 'N/A'))
         print(f"| [{escaped_trial_id}](https://clinicaltrials.gov/study/{safe_trial_id}){{aria-label='View trial {escaped_trial_id} on ClinicalTrials.gov'}} | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {safe_enrollment} | {escape_html(item.get('last_updated', 'N/A'))} |")
-    print(':::')
+    print('</div>')
 else:
     print(f"No monitoring data available yet for {target_id} at {os.path.abspath(summary_path)}. Run the data collection script first.")
 ```
