@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; font-family: sans-serif; }
+        .section { margin-bottom: 20px; }
+        .badge { margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <h3>Status Badges</h3>
+        <span class="badge bg-success" title="Original status: RECRUITING" aria-label="Status: Recruiting">🟢 Recruiting</span><span class="badge bg-info" title="Original status: ACTIVE_NOT_RECRUITING" aria-label="Status: Active (Not Recruiting)">🔵 Active (Not Recruiting)</span><span class="badge bg-secondary" title="Original status: COMPLETED" aria-label="Status: Completed">⚪ Completed</span><span class="badge bg-warning" title="Original status: NOT_YET_RECRUITING" aria-label="Status: Not Yet Recruiting">🟡 Not Yet Recruiting</span><span class="badge bg-danger" title="Original status: SUSPENDED" aria-label="Status: Suspended">🟠 Suspended</span><span class="badge bg-danger" title="Original status: TERMINATED" aria-label="Status: Terminated">🔴 Terminated</span><span class="badge bg-light text-dark" title="Original status: UNKNOWN" aria-label="Status: Unknown">⚪ Unknown</span>
+    </div>
+    <div class="section">
+        <h3>Update Badges</h3>
+        <span aria-label="Changes detected" title="Changes detected since last crawl">🔴 Changed</span><span aria-label="No recent changes" title="No changes detected since last crawl">🟢 No Change</span>
+    </div>
+    <div class="section">
+        <h3>Changed Counts</h3>
+        <span aria-label="5 trials changed" title="5 trials have updates">🔴 5</span><span aria-label="No trials changed" title="No trials have updates">🟢 0</span>
+    </div>
+</body>
+</html>
