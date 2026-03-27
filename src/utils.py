@@ -93,57 +93,39 @@ def _replace_diff_match(match: re.Match) -> str:
     )
 
 
-# Global map for status to (display_label, emoji, bootstrap_class)
+# Global map for status to bootstrap_class
 STATUS_CONFIGS = {
-    "RECRUITING": ("Recruiting", "🟢", "success"),
-    "ACTIVE_NOT_RECRUITING": ("Active (Not Recruiting)", "🔵", "info"),
-    "COMPLETED": ("Completed", "⚪", "secondary"),
-    "NOT_YET_RECRUITING": ("Not Yet Recruiting", "🟡", "warning"),
-    "SUSPENDED": ("Suspended", "🟠", "danger"),
-    "TERMINATED": ("Terminated", "🔴", "danger"),
-    "WITHDRAWN": ("Withdrawn", "🔴", "danger"),
+    "RECRUITING": "success",
+    "ACTIVE_NOT_RECRUITING": "info",
+    "COMPLETED": "secondary",
+    "NOT_YET_RECRUITING": "warning",
+    "SUSPENDED": "danger",
+    "TERMINATED": "danger",
+    "WITHDRAWN": "danger",
 }
 
 
 @lru_cache(maxsize=1024)
 def get_status_badge(status: str) -> str:
-    """Return a Bootstrap badge for a trial status with emoji and ARIA label."""
-    label, emoji, bg_class = STATUS_CONFIGS.get(
-        status, (status.replace("_", " ").title(), "⚪", "light text-dark")
-    )
-
-    safe_label = escape_html(label)
-    safe_status = escape_html(status)
-    display_text = f"{emoji} {safe_label}" if emoji else safe_label
-
-    return (
-        f'<span class="badge rounded-pill bg-{bg_class}" '
-        f'title="Original status: {safe_status}" '
-        f'aria-label="Status: {safe_label}">{display_text}</span>'
-    )
+    """Return a Bootstrap badge for a trial status."""
+    bg_class = STATUS_CONFIGS.get(status, "light text-dark")
+    safe_status = escape_html(status.replace("_", " ").title())
+    return f'<span class="badge bg-{bg_class}">{safe_status}</span>'
 
 
 @lru_cache(maxsize=1024)
 def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
-    """Return a badge for monitoring status with ARIA label and title."""
+    """Return a badge for monitoring status."""
     safe_status = escape_html(monitor_status)
-    title_extra = f". Last change: {escape_html(last_change_date)}" if last_change_date else ""
     if monitor_status == "Changed":
-        return (
-            f'<span class="badge rounded-pill bg-danger" aria-label="Changes detected" '
-            f'title="Changes detected since last crawl{title_extra}">🔴 {safe_status}</span>'
-        )
-    return (
-        f'<span class="badge rounded-pill bg-success" aria-label="No recent changes" '
-        f'title="No changes detected since last crawl{title_extra}">🟢 {safe_status}</span>'
-    )
+        return f'<span class="badge bg-danger">{safe_status}</span>'
+    return f'<span class="badge bg-success">{safe_status}</span>'
 
 
 @lru_cache(maxsize=1024)
 def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
     """
     Truncate text and provide a tooltip with the full text.
-    Uses 'truncated-text' class for styling and 'title' for accessibility.
     Performance: Caching provides ~7x speedup for repetitive metadata.
     """
     if not text:
@@ -154,7 +136,6 @@ def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
 
     truncated = text[:max_length] + "..."
     safe_full = escape_html(text)
-    # Truncate BEFORE escaping to avoid breaking entities
     safe_truncated = escape_html(truncated)
 
     return f'<span class="truncated-text" title="{safe_full}">{safe_truncated}</span>'
@@ -162,16 +143,10 @@ def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
 
 @lru_cache(maxsize=1024)
 def get_changed_count_badge(count: int) -> str:
-    """Return a badge for changed trial count with title."""
+    """Return a badge for changed trial count."""
     if count > 0:
-        return (
-            f'<span class="badge rounded-pill bg-danger" aria-label="{count} trials changed" '
-            f'title="{count} trials have updates">🔴 {count}</span>'
-        )
-    return (
-        '<span class="badge rounded-pill bg-success" aria-label="No trials changed" '
-        'title="No trials have updates">🟢 0</span>'
-    )
+        return f'<span class="badge bg-danger">{count}</span>'
+    return f'<span class="badge bg-success">0</span>'
 
 
 @lru_cache(maxsize=1024)
