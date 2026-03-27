@@ -3,13 +3,6 @@
 .truncated-text {
     text-decoration: underline dotted;
     cursor: help;
-    transition: background-color 0.2s ease;
-    border-radius: 2px;
-}
-
-.truncated-text:hover {
-    background-color: rgba(13, 110, 253, 0.1);
-    text-decoration: underline;
 }
 
 /* Improve table scannability and row tracking */

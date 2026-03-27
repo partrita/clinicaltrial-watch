@@ -190,10 +190,7 @@ def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
     # Truncate BEFORE escaping to avoid breaking entities
     safe_truncated = escape_html(truncated)
 
-    return (
-        f'<span class="truncated-text" role="note" tabindex="0" '
-        f'aria-label="Full text: {safe_full}" title="{safe_full}">{safe_truncated}</span>'
-    )
+    return f'<span class="truncated-text" title="{safe_full}">{safe_truncated}</span>'
 
 
 @lru_cache(maxsize=1024)
