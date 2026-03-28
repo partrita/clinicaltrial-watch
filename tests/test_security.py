@@ -139,6 +139,41 @@ def test_sanitize_csv_value():
     assert sanitize_csv_value("") == ""
     assert sanitize_csv_value("   ") == "   "
 
+def test_backtick_escaping_and_diff_formatting():
+    """Verify that backticks are escaped and don't break diff highlighting."""
+    from src.utils import escape_html, format_diff_line
+
+    # Test escaping
+    assert escape_html("text with `backtick`") == "text with &#96;backtick&#96;"
+
+    # Test diff formatting with backticks in values
+    # Original diff line from diff_engine.py might look like:
+    # Field `status` changed from `Old` to `New`
+
+    malicious_val = "Normal ` value"
+    diff_line = f"Field `status` changed from `Old` to `{malicious_val}`"
+
+    formatted = format_diff_line(diff_line)
+
+    # Check that it is properly formatted with spans
+    assert "text-danger" in formatted
+    assert "text-success" in formatted
+    assert "&#96;Old&#96;" in formatted
+    assert "&#96;Normal &#96; value&#96;" in formatted
+
+    # Test devious injection that previously broke the regex
+    # With escaped backticks and greedy matching for the second value,
+    # it matches as much as possible until the last backtick.
+    devious_val = "Old` to `New` changed from `Evil"
+    diff_line = f"Field `status` changed from `Old` to `{devious_val}`"
+    formatted = format_diff_line(diff_line)
+
+    # It matches:
+    # (changed from )(&#96;Old&#96;)( to )(&#96;Old&#96; to &#96;New&#96; changed from &#96;Evil&#96;)
+    assert "text-danger" in formatted
+    assert "text-success" in formatted
+    assert "&#96;Evil&#96;</span>" in formatted
+
 def test_yaml_injection_prevention():
     """Verify that malicious target names cannot inject YAML into configuration files."""
     from src.generate_target_pages import generate_target_qmd, update_quarto_yml

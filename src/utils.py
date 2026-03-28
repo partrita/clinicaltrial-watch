@@ -45,7 +45,8 @@ def sanitize_id(identifier: str) -> str:
 MARKDOWN_ESCAPE_TABLE = str.maketrans({
     "|": "&#124;",
     "[": "&#91;",
-    "]": "&#93;"
+    "]": "&#93;",
+    "`": "&#96;"
 })
 
 
@@ -83,7 +84,8 @@ def sanitize_csv_value(value: Any) -> Any:
 
 
 # Pre-compiled regex for diff formatting
-DIFF_CHANGE_PATTERN = re.compile(r"(changed from )(`.*?`)( to )(`.*?`)")
+# Note: Backticks are escaped to &#96; in escape_html()
+DIFF_CHANGE_PATTERN = re.compile(r"(changed from )(&#96;.*?&#96;)( to )(&#96;.*&#96;)")
 
 
 def _replace_diff_match(match: re.Match) -> str:
