@@ -129,10 +129,15 @@ def test_sanitize_csv_value():
     assert sanitize_csv_value("+42") == "'+42"
     assert sanitize_csv_value("-5") == "'-5"
     assert sanitize_csv_value("@something") == "'@something"
+    assert sanitize_csv_value("\t=SUM(A1)") == "'\t=SUM(A1)"
+    assert sanitize_csv_value("\r-5") == "'\r-5"
+    assert sanitize_csv_value("  =SUM(A1)") == "'  =SUM(A1)"
+    assert sanitize_csv_value(" \t @info") == "' \t @info"
     assert sanitize_csv_value("Normal text") == "Normal text"
     assert sanitize_csv_value(123) == 123
     assert sanitize_csv_value(None) is None
     assert sanitize_csv_value("") == ""
+    assert sanitize_csv_value("   ") == "   "
 
 def test_yaml_injection_prevention():
     """Verify that malicious target names cannot inject YAML into configuration files."""
