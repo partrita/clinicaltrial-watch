@@ -198,3 +198,36 @@ def test_yaml_injection_prevention():
     os.remove(qmd)
     os.remove(yml_path)
     os.rmdir(output_dir)
+
+def test_backtick_escaping_and_diff_formatting():
+    """Verify that backticks are escaped and diff formatting is robust."""
+    from src.utils import escape_html, format_diff_line
+
+    # Test backtick escaping
+    assert escape_html("`code`") == "&#96;code&#96;"
+
+    # Test diff formatting with escaped backticks
+    diff_line = "Field `status` changed from `RECRUITING` to `COMPLETED`"
+    formatted = format_diff_line(diff_line)
+    assert "text-danger fw-bold" in formatted
+    assert "text-success fw-bold" in formatted
+    assert "&#96;RECRUITING&#96;" in formatted
+    assert "&#96;COMPLETED&#96;" in formatted
+
+    # Test robustness with complex values containing escaped backticks
+    complex_line = "Field `desc` changed from `Old` to `New with &#96;inner&#96; code`"
+    # Note: escape_html will be called inside format_diff_line
+    # "New with &#96;inner&#96; code" becomes "New with &amp;#96;inner&amp;#96; code"
+    # But format_diff_line takes raw line and escapes it.
+    raw_complex_line = "Field `desc` changed from `Old` to `New with `inner` code`"
+    formatted_complex = format_diff_line(raw_complex_line)
+
+    assert "text-danger fw-bold" in formatted_complex
+    assert "text-success fw-bold" in formatted_complex
+    assert "&#96;Old&#96;" in formatted_complex
+    # Check that it correctly matched the greedy part
+    assert "&#96;New with &#96;inner&#96; code&#96;" in formatted_complex
+
+    # Test new field/removal highlighting
+    assert "text-success fw-bold" in format_diff_line("New field added: `test`")
+    assert "text-danger fw-bold" in format_diff_line("Field removed: `test`")
