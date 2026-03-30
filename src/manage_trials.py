@@ -121,7 +121,8 @@ def perform_cleanup(trial_id: str):
                     
                     if len(new_summary) < len(summary):
                         with open(summary_path, "w", encoding="utf-8") as f:
-                            json.dump(new_summary, f, indent=2, ensure_ascii=False)
+                            # Optimized: Removed indent for performance and smaller file sizes
+                            json.dump(new_summary, f, ensure_ascii=False)
                         print(f"Updated {summary_path}")
                 except Exception as e:
                     print(f"Error updating {summary_path}: {e}")
