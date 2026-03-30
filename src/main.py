@@ -132,7 +132,9 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
                 ):
                     existing_trial["name"] = trial["name"]
                 total_duplicates += 1
-                print(f"  Note: Duplicate trial {trial_id} merged within target {target_name}")
+                print(
+                    f"  Note: Duplicate trial {trial_id} merged within target {target_name}"
+                )
             else:
                 seen_in_target[trial_id] = len(unique_target_trials)
                 unique_target_trials.append(trial)
@@ -147,7 +149,9 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
         target["trials"] = unique_target_trials
 
     if total_duplicates > 0:
-        print(f"\n✓ Integrity check: Merged {total_duplicates} duplicate trial entries.")
+        print(
+            f"\n✓ Integrity check: Merged {total_duplicates} duplicate trial entries."
+        )
         save_config(config)
 
     return config
@@ -458,9 +462,21 @@ def save_target_data(
     if summary_report:
         # Optimized: Use fixed headers for summary_report (fastest)
         headers = [
-            "id", "name", "target", "sponsor", "status", "conditions", "phases",
-            "last_updated", "study_start", "study_end", "enrollment",
-            "primary_outcome", "monitor_status", "last_monitored_change", "details"
+            "id",
+            "name",
+            "target",
+            "sponsor",
+            "status",
+            "conditions",
+            "phases",
+            "last_updated",
+            "study_start",
+            "study_end",
+            "enrollment",
+            "primary_outcome",
+            "monitor_status",
+            "last_monitored_change",
+            "details",
         ]
         if any("changed_today" in r for r in summary_report):
             headers.append("changed_today")
@@ -554,9 +570,13 @@ def main() -> None:
                         processed_results[trial_id] = (report, raw)
                     print(f"[{current_idx}/{total_unique}] Processed {trial_id}")
                 except TimeoutError:
-                    print(f"[{current_idx}/{total_unique}] Timeout processing {trial_id}")
+                    print(
+                        f"[{current_idx}/{total_unique}] Timeout processing {trial_id}"
+                    )
                 except Exception as e:
-                    print(f"[{current_idx}/{total_unique}] Error processing {trial_id}: {e}")
+                    print(
+                        f"[{current_idx}/{total_unique}] Error processing {trial_id}: {e}"
+                    )
         except TimeoutError:
             print(f"  ⚠ Processing timed out after {TOTAL_TIMEOUT}s")
 
@@ -614,7 +634,9 @@ def main() -> None:
         # Optimized: Removed indent to reduce serialization time and file size
         json.dump(target_summaries, f, ensure_ascii=False)
 
-    print(f"\n✓ Processed {len(targets)} targets, {total_processed_entries} total trial entries")
+    print(
+        f"\n✓ Processed {len(targets)} targets, {total_processed_entries} total trial entries"
+    )
 
     # Automatically update target pages and _quarto.yml
     print("\nUpdating website pages...")

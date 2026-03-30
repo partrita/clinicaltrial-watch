@@ -42,12 +42,9 @@ def sanitize_id(identifier: str) -> str:
 
 # Pre-computed translation table for Markdown/Quarto specific escapes
 # Performance: ~15-20% faster than multiple .replace() calls
-MARKDOWN_ESCAPE_TABLE = str.maketrans({
-    "|": "&#124;",
-    "[": "&#91;",
-    "]": "&#93;",
-    "`": "&#96;"
-})
+MARKDOWN_ESCAPE_TABLE = str.maketrans(
+    {"|": "&#124;", "[": "&#91;", "]": "&#93;", "`": "&#96;"}
+)
 
 
 @lru_cache(maxsize=1024)
@@ -112,6 +109,17 @@ def _replace_diff_match(match: re.Match) -> str:
     )
 
 
+def _replace_diff_match_markdown(match: re.Match) -> str:
+    """Helper for format_diff_line_markdown to avoid nested function overhead."""
+    prefix = match.group(1)
+    old_val = match.group(2)
+    connector = match.group(3)
+    new_val = match.group(4)
+
+    # Use Markdown bolding instead of HTML span tags
+    return f"{prefix}**{old_val}**{connector}**{new_val}**"
+
+
 # Global map for status to bootstrap_class
 STATUS_CONFIGS = {
     "RECRUITING": "success",
@@ -165,7 +173,7 @@ def get_changed_count_badge(count: int) -> str:
     """Return a badge for changed trial count."""
     if count > 0:
         return f'<span class="badge bg-danger">{count}</span>'
-    return f'<span class="badge bg-success">0</span>'
+    return '<span class="badge bg-success">0</span>'
 
 
 @lru_cache(maxsize=1024)
@@ -205,3 +213,24 @@ def format_diff_line(line: str) -> str:
         return f"<span class='text-danger fw-bold'>{escaped_line}</span>"
 
     return DIFF_CHANGE_PATTERN.sub(_replace_diff_match, escaped_line)
+
+
+@lru_cache(maxsize=1024)
+def format_diff_line_markdown(line: str) -> str:
+    """
+    Format a diff line with Markdown bolding for changes.
+    Highlights 'changed from `old` to `new`' with native Markdown bolding.
+    Also highlights new fields added and fields removed.
+    """
+    if not line:
+        return ""
+
+    escaped_line = escape_html(line)
+
+    # Highlight additions/removals with Markdown bolding
+    if escaped_line.startswith("New field added:"):
+        return f"**{escaped_line}**"
+    if escaped_line.startswith("Field removed:"):
+        return f"**{escaped_line}**"
+
+    return DIFF_CHANGE_PATTERN.sub(_replace_diff_match_markdown, escaped_line)
