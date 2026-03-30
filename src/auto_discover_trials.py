@@ -4,7 +4,6 @@ Auto-discover new clinical trials from ClinicalTrials.gov based on targets in tr
 Queries the API for each target and appends new trials to trials.yaml.
 """
 
-import os
 import time
 import random
 from typing import Any, Dict, List, Optional
@@ -154,17 +153,6 @@ def main() -> int:
             else set()
         )
 
-        # Load excluded trials for logging/filtering
-        excluded_ids = set()
-        exclusion_yaml = "excluded_trials.yaml"
-        if os.path.exists(exclusion_yaml):
-            try:
-                import yaml
-                with open(exclusion_yaml, "r", encoding="utf-8") as f:
-                    ex_data = yaml.safe_load(f) or {}
-                    excluded_ids = set(ex_data.get("excluded_ids", []))
-            except Exception:
-                pass
 
         # Perform the update
         data = update_target(data, target_name, new_trials, target.get("description"))

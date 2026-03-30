@@ -167,13 +167,9 @@ if os.path.exists(target_h_file):
         print(f"Error loading history: {e}")
         history = []
     
+    print("")
     for record in reversed(history[-10:]):
-        print(f'<div class="card mb-3 shadow-sm">')
-        print(f'  <div class="card-header bg-light"><strong>Date:</strong> {escape_html(record["timestamp"])}</div>')
-        print(f'  <div class="card-body">')
-        print(f'    <p class="card-text">{escape_html(record["event"])}</p>')
-        print(f'  </div>')
-        print(f'</div>')
+        print(f'- **{escape_html(record["timestamp"])}**: {escape_html(record["event"])}')
 else:
     print(f"No target-level milestones recorded yet for {target_id}.")
 ```
@@ -185,11 +181,11 @@ else:
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, escape_html, format_diff_line
+from src.utils import sanitize_id, escape_html, format_diff_line_markdown
 
 target_id = "'''
         + target_id
-        + r""""
+        + r'''"
 summary_path = f"data/targets/{target_id}/status_summary.json"
 
 # Get trial IDs for this target
@@ -217,23 +213,17 @@ for trial_id in target_trials:
         if real_changes:
             if not history_found:
                 history_found = True
+            print("")
             print(f"#### {escape_html(trial_id)}")
+            print("")
             for record in reversed(real_changes[-5:]):
-                print(f'<div class="card mb-3 shadow-sm">')
-                print(f'  <div class="card-header d-flex justify-content-between align-items-center">')
-                print(f'    <span><strong>{escape_html(record["timestamp"])}</strong></span>')
-                print(f'    <span class="badge bg-primary rounded-pill">Trial Update</span>')
-                print(f'  </div>')
-                print(f'  <div class="card-body">')
-                print(f'    <ul class="list-group list-group-flush">')
+                print(f'- **{escape_html(record["timestamp"])} (Trial Update)**')
                 for line in record['diff'].splitlines():
                     line = line.strip()
                     if line:
-                        formatted_line = format_diff_line(line)
-                        print(f'      <li class="list-group-item">{formatted_line}</li>')
-                print(f'    </ul>')
-                print(f'  </div>')
-                print(f'</div>')
+                        formatted_line = format_diff_line_markdown(line)
+                        print(f'    - {formatted_line}')
+                print("")
 
 if not history_found:
     print(f"No specific trial changes (beyond initial collection) recorded yet for {target_id}.")
@@ -243,7 +233,7 @@ if not history_found:
 
 ---
 
-<a href="../data/targets/"""
+<a href="../data/targets/'''
         + target_id
         + r'''/all_trials_raw.csv" class="btn btn-primary" role="button" aria-label="Download all raw trial data for '''
         + safe_name
@@ -267,7 +257,7 @@ from src.utils import sanitize_id, get_status_badge, get_update_badge, escape_ht
 
 target_id = "'''
         + target_id
-        + r""""
+        + r'''"
 summary_path = f"data/targets/{target_id}/status_summary.json"
 
 if os.path.exists(summary_path):
@@ -278,7 +268,9 @@ if os.path.exists(summary_path):
         print(f"Error loading data: {e}")
         summary = []
     
-    print('<div style="font-size:0.8em">')
+    print("")
+    print('<div style="font-size: 0.8em">')
+    print("")
     print("| Trial ID | Sponsor | Update | Status | Conditions | Phases | Start | End | Enroll | Last Updated |")
     print("| --- | --- | --- | --- | --- | --- | --- | --- | ---:| --- |")
     for item in summary:
@@ -293,11 +285,13 @@ if os.path.exists(summary_path):
         escaped_trial_id = escape_html(trial_id)
         safe_enrollment = format_enrollment(item.get('enrollment', 'N/A'))
         print(f"| [{escaped_trial_id}](https://clinicaltrials.gov/study/{safe_trial_id}) | {safe_sponsor} | {update_badge} | {status_badge} | {safe_conditions} | {escape_html(item.get('phases', 'N/A'))} | {escape_html(item.get('study_start', 'N/A'))} | {escape_html(item.get('study_end', 'N/A'))} | {safe_enrollment} | {escape_html(item.get('last_updated', 'N/A'))} |")
+    print("")
     print('</div>')
+    print("")
 else:
     print(f"No monitoring data available yet for {target_id} at {os.path.abspath(summary_path)}. Run the data collection script first.")
 ```
-"""
+'''
     )
 
     with open(qmd_path, "w", encoding="utf-8") as f:
@@ -379,29 +373,21 @@ def update_quarto_yml(
     for target in targets:
         target_name = target["name"]
         target_id = sanitize_id(target_name).lower()
-        menu.append({
-            "href": f"targets/{target_id}.qmd",
-            "text": escape_html(target_name)
-        })
+        menu.append(
+            {"href": f"targets/{target_id}.qmd", "text": escape_html(target_name)}
+        )
 
     config = {
-        "project": {
-            "type": "website",
-            "output-dir": "docs",
-            "execute-dir": "project"
-        },
+        "project": {"type": "website", "output-dir": "docs", "execute-dir": "project"},
         "website": {
             "title": "Clinical Trial Watch",
             "navbar": {
                 "left": [
                     {"href": "index.qmd", "text": "Home"},
-                    {
-                        "text": "Targets",
-                        "menu": menu
-                    },
-                    "about.qmd"
+                    {"text": "Targets", "menu": menu},
+                    "about.qmd",
                 ]
-            }
+            },
         },
         "format": {
             "html": {
@@ -409,16 +395,16 @@ def update_quarto_yml(
                 "link-external-newwindow": True,
                 "theme": ["cosmo", "brand"],
                 "css": "styles.css",
-                "toc": True
+                "toc": True,
             }
         },
-        "execute": {
-            "freeze": "auto"
-        }
+        "execute": {"freeze": "auto"},
     }
 
     with open(quarto_path, "w", encoding="utf-8") as f:
-        yaml.safe_dump(config, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+        yaml.safe_dump(
+            config, f, default_flow_style=False, sort_keys=False, allow_unicode=True
+        )
 
     print(f"Updated: {quarto_path}")
 
