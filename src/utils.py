@@ -56,11 +56,16 @@ def escape_html(text: str) -> str:
     Escape HTML special characters in a string.
     Also explicitly escapes the pipe character '|' and brackets '[' ']'
     to prevent breaking Markdown tables and link/attribute injection.
+    Length limited to 65,536 characters to prevent memory exhaustion in lru_cache.
     """
     if text is None:
         return ""
+
+    # Limit length to prevent DoS from extremely long API responses
+    text_str = str(text)[:65536]
+
     # html.escape is fast, then use .translate() for bulk character replacement
-    return html.escape(str(text)).translate(MARKDOWN_ESCAPE_TABLE)
+    return html.escape(text_str).translate(MARKDOWN_ESCAPE_TABLE)
 
 
 def sanitize_csv_value(value: Any) -> Any:
@@ -68,17 +73,21 @@ def sanitize_csv_value(value: Any) -> Any:
     Sanitize a value for CSV export to prevent formula injection.
     If the value is a string that starts with dangerous characters
     (even after leading whitespace), it is prefixed with a single quote.
-    Dangerous characters: '=', '+', '-', '@', tab (0x09), or carriage return (0x0D).
+    Dangerous characters: '=', '+', '-', '@', ';', '%', tab (0x09), or carriage return (0x0D).
+    Length limited to 32,767 characters to prevent DoS and comply with Excel cell limits.
     """
     if not isinstance(value, str) or not value:
         return value
+
+    # Limit length to prevent DoS and comply with Excel's 32,767 character limit per cell
+    value = value[:32767]
 
     # Check the first non-whitespace character
     stripped_value = value.lstrip()
     if not stripped_value:
         return value
 
-    if stripped_value[0] in ("=", "+", "-", "@", "\t", "\r"):
+    if stripped_value[0] in ("=", "+", "-", "@", ";", "%", "\t", "\r"):
         return f"'{value}"
     return value
 
