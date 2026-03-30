@@ -84,7 +84,9 @@ def sanitize_csv_value(value: Any) -> Any:
 
 
 # Pre-compiled regex for diff formatting
-# Note: Backticks are escaped to &#96; in escape_html()
+# Updated to match escaped backticks (&#96;) for security and robust highlighting.
+# The second value uses greedy matching to ensure it captures the full new value
+# even if it contains inner escaped backticks.
 DIFF_CHANGE_PATTERN = re.compile(r"(changed from )(&#96;.*?&#96;)( to )(&#96;.*&#96;)")
 
 
@@ -179,10 +181,18 @@ def format_diff_line(line: str) -> str:
     """
     Format a diff line with color-coded changes.
     Highlights 'changed from `old` to `new`' with Bootstrap classes.
+    Also highlights new fields added and fields removed.
     Performance: Caching and pre-compiled regex yield ~10-20x speedup.
     """
     if not line:
         return ""
 
-    # Move heavy work outside of inner loop if possible, but here we just sub
-    return DIFF_CHANGE_PATTERN.sub(_replace_diff_match, escape_html(line))
+    escaped_line = escape_html(line)
+
+    # Highlight additions/removals with Bootstrap classes
+    if escaped_line.startswith("New field added:"):
+        return f"<span class='text-success fw-bold'>{escaped_line}</span>"
+    if escaped_line.startswith("Field removed:"):
+        return f"<span class='text-danger fw-bold'>{escaped_line}</span>"
+
+    return DIFF_CHANGE_PATTERN.sub(_replace_diff_match, escaped_line)
