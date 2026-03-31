@@ -5,7 +5,8 @@ from functools import lru_cache
 
 
 # Pre-compiled regex for NCT ID validation (faster than string pattern)
-NCT_ID_PATTERN = re.compile(r"^NCT\d{8}$")
+# Uses \Z instead of $ to prevent matching strings with trailing newlines.
+NCT_ID_PATTERN = re.compile(r"^NCT\d{8}\Z")
 
 
 def is_valid_nct_id(nct_id: str) -> bool:
