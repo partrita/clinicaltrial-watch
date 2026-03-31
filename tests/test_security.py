@@ -54,6 +54,7 @@ def test_is_valid_nct_id():
     assert is_valid_nct_id("NCT1234567") is False  # Too short
     assert is_valid_nct_id("NCT123456789") is False  # Too long
     assert is_valid_nct_id("nct12345678") is False  # Case sensitive
+    assert is_valid_nct_id("NCT12345678\n") is False  # Should not accept trailing newline
     assert is_valid_nct_id("NCTabcdefgh") is False  # Not digits
     assert is_valid_nct_id("") is False
     assert is_valid_nct_id(None) is False
