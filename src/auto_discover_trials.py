@@ -108,6 +108,8 @@ def extract_trials(api_studies: List[Dict[str, Any]]) -> List[Dict[str, str]]:
             nct_id = identity.get("nctId")
             title = identity.get("briefTitle")
             if nct_id and title:
+                # Security enhancement: Truncate title to prevent DoS
+                title = title[:1000]
                 # Security enhancement: Validate NCT ID format
                 if is_valid_nct_id(nct_id):
                     trials.append({"id": nct_id, "name": title})

@@ -276,3 +276,51 @@ def test_yaml_injection_prevention():
     os.remove(qmd)
     os.remove(yml_path)
     os.rmdir(output_dir)
+
+def test_yaml_injection_prevention_regression():
+    """Verify that YAML delimiters in trial data are correctly escaped in the YAML configuration."""
+    import yaml
+    import os
+    from src.update_trials_from_csv import save_yaml, load_yaml
+
+    test_yaml = "tests/test_injection_regression.yaml"
+    if os.path.exists(test_yaml):
+        os.remove(test_yaml)
+
+    # Malicious data that could break a naive manual YAML writer
+    malicious_trial_name = "Normal' \n      - id: 'NCT00000000'\n        name: 'Injected Trial"
+    data = {
+        "targets": [
+            {
+                "name": "TargetName",
+                "description": "Desc",
+                "trials": [
+                    {
+                        "id": "NCT12345678",
+                        "name": malicious_trial_name
+                    }
+                ]
+            }
+        ]
+    }
+
+    try:
+        # Save using the now mandatory PyYAML-based save_yaml
+        save_yaml(data, test_yaml)
+
+        # Load it back
+        loaded_data = load_yaml(test_yaml)
+
+        # Verify the data was preserved exactly (literal) and not interpreted as YAML structure
+        loaded_trials = loaded_data["targets"][0]["trials"]
+        assert len(loaded_trials) == 1
+        assert loaded_trials[0]["id"] == "NCT12345678"
+        assert loaded_trials[0]["name"] == malicious_trial_name
+
+        # Verify that the injected ID is NOT in the loaded data
+        all_ids = [t["id"] for target in loaded_data["targets"] for t in target["trials"]]
+        assert "NCT00000000" not in all_ids
+
+    finally:
+        if os.path.exists(test_yaml):
+            os.remove(test_yaml)
