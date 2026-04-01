@@ -16,62 +16,14 @@ from utils import sanitize_id, is_valid_nct_id, sanitize_csv_value
 from diff_engine import compare_snapshots, format_diff
 from generate_target_pages import main as generate_pages
 
-try:
-    import yaml
-
-    HAS_YAML = True
-except ImportError:
-    HAS_YAML = False
+import yaml
 
 
 def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     """Load trials configuration from YAML file."""
     data = {}
-    if HAS_YAML:
-        with open(config_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {}
-    else:
-        # Fallback manual parser for targets structure
-        print("Warning: 'yaml' module not found. Using simple manual parser.")
-        targets = []
-        current_target = None
-        current_trial = {}
-
-        with open(config_path, "r", encoding="utf-8") as f:
-            for line in f:
-                stripped = line.strip()
-                if not stripped or stripped.startswith("#"):
-                    continue
-
-                if stripped.startswith("- name:"):
-                    if current_target:
-                        targets.append(current_target)
-                    current_target = {
-                        "name": stripped.split(":", 1)[1].strip().strip('"').strip("'"),
-                        "description": "",
-                        "trials": [],
-                    }
-                elif stripped.startswith("description:") and current_target:
-                    current_target["description"] = (
-                        stripped.split(":", 1)[1].strip().strip('"').strip("'")
-                    )
-                elif stripped.startswith("- id:") and current_target:
-                    if current_trial:
-                        current_target["trials"].append(current_trial)
-                    current_trial = {
-                        "id": stripped.split(":", 1)[1].strip().strip('"').strip("'")
-                    }
-                elif stripped.startswith("name:") and current_trial:
-                    current_trial["name"] = (
-                        stripped.split(":", 1)[1].strip().strip('"').strip("'")
-                    )
-
-            if current_trial and current_target:
-                current_target["trials"].append(current_trial)
-            if current_target:
-                targets.append(current_target)
-
-        data = {"targets": targets}
+    with open(config_path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
 
     # Handle legacy format (flat trials list)
     if "trials" in data and "targets" not in data:
@@ -159,10 +111,6 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
 
 def save_config(config: Dict[str, Any], config_path: str = "trials.yaml") -> None:
     """Save cleaned trials configuration back to YAML file."""
-    if not HAS_YAML:
-        print("Warning: Cannot save cleaned config because 'yaml' module is missing.")
-        return
-
     try:
         with open(config_path, "w", encoding="utf-8") as f:
             yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)

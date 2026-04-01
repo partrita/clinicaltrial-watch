@@ -14,12 +14,7 @@ try:
 except ImportError:
     from src.utils import is_valid_nct_id
 
-try:
-    import yaml
-
-    HAS_YAML = True
-except ImportError:
-    HAS_YAML = False
+import yaml
 
 
 def load_yaml(yaml_path: str) -> Dict[str, Any]:
@@ -27,13 +22,8 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
     if not os.path.exists(yaml_path):
         return {"targets": []}
 
-    if HAS_YAML:
-        with open(yaml_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {}
-    else:
-        # Simple fallback parser
-        data = {"targets": []}
-        print("Warning: 'yaml' module not found. Creating new structure.")
+    with open(yaml_path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
 
     # Handle legacy format (flat trials list)
     if "trials" in data and "targets" not in data:
@@ -60,23 +50,10 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
 
 def save_yaml(data: Dict[str, Any], yaml_path: str) -> None:
     """Save YAML data to file."""
-    if HAS_YAML:
-        with open(yaml_path, "w", encoding="utf-8") as f:
-            yaml.safe_dump(
-                data, f, default_flow_style=False, allow_unicode=True, sort_keys=False
-            )
-    else:
-        # Manual YAML writer
-        with open(yaml_path, "w", encoding="utf-8") as f:
-            f.write("targets:\n")
-            for target in data.get("targets", []):
-                f.write(f"  - name: {target['name']}\n")
-                f.write(f'    description: "{target.get("description", "")}"\n')
-                f.write("    trials:\n")
-                for trial in target.get("trials", []):
-                    name = trial["name"].replace("'", "''")
-                    f.write(f"      - id: '{trial['id']}'\n")
-                    f.write(f"        name: '{name}'\n")
+    with open(yaml_path, "w", encoding="utf-8") as f:
+        yaml.safe_dump(
+            data, f, default_flow_style=False, allow_unicode=True, sort_keys=False
+        )
     print(f"Saved to {yaml_path}")
 
 
@@ -90,6 +67,8 @@ def read_csv_trials(csv_path: str) -> List[Dict[str, str]]:
                 nct_id = row.get("NCT Number", "").strip()
                 title = row.get("Study Title", "").strip()
                 if nct_id and title:
+                    # Security enhancement: Truncate title to prevent DoS
+                    title = title[:1000]
                     # Security enhancement: Validate NCT ID format
                     if is_valid_nct_id(nct_id):
                         trials.append({"id": nct_id, "name": title})
