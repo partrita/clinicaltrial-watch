@@ -13,36 +13,11 @@ def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
         return []
 
     with open(path, "r", encoding="utf-8") as f:
-        # Use a more robust way to load if it's very large or has special tags
-        try:
-            data = yaml.safe_load(f)
-            if data and "targets" in data:
-                return data["targets"]
-        except Exception:
-            # Fallback to simple parsing if yaml fails
-            pass
+        data = yaml.safe_load(f)
+        if data and "targets" in data:
+            return data["targets"]
 
-    # Simple fallback parser for trials.yaml
-    data = {"targets": []}
-    with open(path, "r", encoding="utf-8") as f:
-        current_target = None
-        for line in f:
-            stripped = line.strip()
-            if stripped.startswith("- name:"):
-                if current_target:
-                    data["targets"].append(current_target)
-                current_target = {
-                    "name": stripped.split(":", 1)[1].strip().strip('"').strip("'"),
-                    "trials": [],
-                }
-            elif stripped.startswith("description:") and current_target:
-                current_target["description"] = (
-                    stripped.split(":", 1)[1].strip().strip('"').strip("'")
-                )
-        if current_target:
-            data["targets"].append(current_target)
-
-    return data.get("targets", [])
+    return []
 
 
 def generate_target_qmd(
