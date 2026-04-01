@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:25",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:25", "diff": "Initial data collection"}, {"timestamp": "2026-04-01 02:42:41", "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-05` to `2026-03`\nField `statusModule.overallStatus` changed from `RECRUITING` to `ACTIVE_NOT_RECRUITING`\nField `statusModule.primaryCompletionDateStruct.date` changed from `2028-01` to `2026-02-06`\nField `statusModule.primaryCompletionDateStruct.type` changed from `ESTIMATED` to `ACTUAL`\nField `statusModule.completionDateStruct.date` changed from `2031-01` to `2030-01-31`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-05-02` to `2026-03-25`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-05-07` to `2026-03-31`\nField `designModule.enrollmentInfo.count` changed from `26` to `8`\nField `designModule.enrollmentInfo.type` changed from `ESTIMATED` to `ACTUAL`\nField removed: `root['statusModule']['expandedAccessInfo']`\nField removed: `root['oversightModule']['isUsExport']`\nField removed: `root['contactsLocationsModule']['centralContacts']`\nField removed: `root['contactsLocationsModule']['locations'][0]['status']`\nField removed: `root['contactsLocationsModule']['locations'][0]['contacts']`"}]
