@@ -21,9 +21,16 @@ import yaml
 
 def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     """Load trials configuration from YAML file."""
+    if not os.path.exists(config_path):
+        return {"targets": []}
+
     data = {}
-    with open(config_path, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f) or {}
+    try:
+        with open(config_path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+    except (yaml.YAMLError, OSError) as e:
+        print(f"  Warning: Failed to load config {config_path}: {e}")
+        return {"targets": []}
 
     # Handle legacy format (flat trials list)
     if "trials" in data and "targets" not in data:
@@ -49,16 +56,34 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
     """
     Check for duplicate trial IDs within and across targets.
     Merges trial configurations for the same ID within a target.
+    Also validates IDs and truncates long metadata to prevent DoS.
     """
     targets = config.get("targets", [])
     if not targets:
         return config
 
     total_duplicates = 0
+    total_invalid = 0
+    any_truncation = False
     seen_globally = {}  # trial_id -> target_name
 
     for target in targets:
-        target_name = target.get("name", "Unknown")
+        # Security enhancement: Truncate metadata
+        orig_name = target.get("name")
+        if orig_name is not None:
+            target["name"] = str(orig_name)[:255]
+            if len(str(orig_name)) > 255:
+                any_truncation = True
+        else:
+            target["name"] = "Unknown"
+
+        orig_desc = target.get("description")
+        if orig_desc is not None:
+            target["description"] = str(orig_desc)[:2000]
+            if len(str(orig_desc)) > 2000:
+                any_truncation = True
+
+        target_name = target["name"]
         trials = target.get("trials", [])
         if not trials:
             continue
@@ -68,8 +93,19 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
 
         for trial in trials:
             trial_id = trial.get("id")
-            if not trial_id:
+
+            # Security enhancement: Validate NCT ID format
+            if not is_valid_nct_id(trial_id):
+                print(f"  Warning: Removing invalid trial ID: {trial_id}")
+                total_invalid += 1
                 continue
+
+            # Security enhancement: Truncate trial name
+            orig_trial_name = trial.get("name")
+            if orig_trial_name is not None:
+                trial["name"] = str(orig_trial_name)[:1000]
+                if len(str(orig_trial_name)) > 1000:
+                    any_truncation = True
 
             if trial_id in seen_in_target:
                 idx = seen_in_target[trial_id]
@@ -100,10 +136,15 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
 
         target["trials"] = unique_target_trials
 
-    if total_duplicates > 0:
-        print(
-            f"\n✓ Integrity check: Merged {total_duplicates} duplicate trial entries."
-        )
+    if total_duplicates > 0 or total_invalid > 0 or any_truncation:
+        print("\n✓ Integrity check summary:")
+        if total_duplicates > 0:
+            print(f"  - Merged {total_duplicates} duplicate trial entries.")
+        if total_invalid > 0:
+            print(f"  - Removed {total_invalid} invalid trial entries.")
+        if any_truncation:
+            print("  - Truncated excessively long metadata fields.")
+
         save_config(config)
 
     return config
