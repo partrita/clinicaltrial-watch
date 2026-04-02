@@ -324,3 +324,58 @@ def test_yaml_injection_prevention_regression():
     finally:
         if os.path.exists(test_yaml):
             os.remove(test_yaml)
+
+
+def test_deduplicate_config_security():
+    """Verify that deduplicate_config validates IDs and truncates long strings."""
+    from src.main import deduplicate_config
+    import os
+
+    test_yaml = "tests/test_dedup_security.yaml"
+    if os.path.exists(test_yaml):
+        os.remove(test_yaml)
+
+    config = {
+        "targets": [
+            {
+                "name": "A" * 300,  # Too long
+                "description": "B" * 3000,  # Too long
+                "trials": [
+                    {"id": "NCT12345678", "name": "Valid Trial"},
+                    {"id": "invalid_id", "name": "Invalid ID Trial"},
+                    {"id": "NCT12345678", "name": "C" * 1500},  # Duplicate and too long
+                ],
+            }
+        ]
+    }
+
+    try:
+        # This will also trigger a save to test_dedup_security.yaml because of changes
+        # But we need to make sure it uses our test path.
+        # deduplicate_config calls save_config(config) which defaults to trials.yaml.
+        # To avoid overwriting trials.yaml, we should mock or temporarily change the behavior.
+        # Actually, deduplicate_config uses the global save_config which takes config_path.
+        # But deduplicate_config itself doesn't take a path.
+
+        # Let's monkeypatch save_config to use our test path
+        import src.main
+        original_save = src.main.save_config
+        src.main.save_config = lambda cfg: original_save(cfg, test_yaml)
+
+        try:
+            cleaned = deduplicate_config(config)
+
+            target = cleaned["targets"][0]
+            assert len(target["name"]) == 255
+            assert len(target["description"]) == 2000
+            assert len(target["trials"]) == 1
+            assert target["trials"][0]["id"] == "NCT12345678"
+            assert len(target["trials"][0]["name"]) == 1000
+
+            assert os.path.exists(test_yaml)
+        finally:
+            src.main.save_config = original_save
+
+    finally:
+        if os.path.exists(test_yaml):
+            os.remove(test_yaml)
