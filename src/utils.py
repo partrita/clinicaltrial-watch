@@ -13,27 +13,16 @@ def is_valid_nct_id(nct_id: str) -> bool:
     """
     Check if a string is a valid ClinicalTrials.gov NCT ID.
     Format: NCT followed by 8 digits.
+    Length limited to 32 characters for defense-in-depth.
     """
-    if not nct_id or not isinstance(nct_id, str):
+    if not nct_id or not isinstance(nct_id, str) or len(nct_id) > 32:
         return False
     return bool(NCT_ID_PATTERN.match(nct_id))
 
 
 @lru_cache(maxsize=1024)
-def sanitize_id(identifier: str) -> str:
-    """
-    Sanitize an identifier (trial ID or target name) to prevent
-    path traversal and code injection.
-    Allows only alphanumeric characters, dashes, and underscores.
-    Length limited to 255 characters to prevent DoS.
-    """
-    if not identifier:
-        return "unknown"
-
-    # Limit identifier length to prevent potential DoS from extremely long strings
-    # 255 is more than enough for NCT IDs and target names
-    identifier = str(identifier)[:255]
-
+def _sanitize_id_cached(identifier: str) -> str:
+    """Internal cached helper for sanitize_id."""
     # Replace any non-alphanumeric, non-dash, non-underscore characters with an underscore
     sanitized = re.sub(r"[^a-zA-Z0-9_-]", "_", identifier)
     # Remove leading/trailing underscores and prevent empty string
@@ -41,29 +30,56 @@ def sanitize_id(identifier: str) -> str:
     return sanitized if sanitized else "unknown"
 
 
+def sanitize_id(identifier: str) -> str:
+    """
+    Sanitize an identifier (trial ID or target name) to prevent
+    path traversal and code injection.
+    Allows only alphanumeric characters, dashes, and underscores.
+    Truncates input BEFORE caching to prevent memory exhaustion DoS.
+    """
+    if not identifier:
+        return "unknown"
+
+    # Limit identifier length before caching
+    safe_identifier = str(identifier)[:255]
+    return _sanitize_id_cached(safe_identifier)
+
+
 # Pre-computed translation table for Markdown/Quarto specific escapes
 # Performance: ~15-20% faster than multiple .replace() calls
+# Also escapes '$' to prevent MathJax injection and '\' for general Markdown safety.
 MARKDOWN_ESCAPE_TABLE = str.maketrans(
-    {"|": "&#124;", "[": "&#91;", "]": "&#93;", "`": "&#96;"}
+    {
+        "|": "&#124;",
+        "[": "&#91;",
+        "]": "&#93;",
+        "`": "&#96;",
+        "$": "&#36;",
+        "\\": "&#92;",
+    }
 )
 
 
 @lru_cache(maxsize=1024)
+def _escape_html_cached(text: str) -> str:
+    """Internal cached helper for escape_html."""
+    # html.escape is fast, then use .translate() for bulk character replacement
+    return html.escape(text).translate(MARKDOWN_ESCAPE_TABLE)
+
+
 def escape_html(text: str) -> str:
     """
     Escape HTML special characters in a string.
-    Also explicitly escapes the pipe character '|' and brackets '[' ']'
-    to prevent breaking Markdown tables and link/attribute injection.
-    Length limited to 65,536 characters to prevent memory exhaustion in lru_cache.
+    Also explicitly escapes the pipe character '|', brackets '[' ']',
+    backticks '`', and MathJax '$' to prevent injection in generated pages.
+    Truncates input BEFORE caching to prevent memory exhaustion DoS.
     """
     if text is None:
         return ""
 
-    # Limit length to prevent DoS from extremely long API responses
+    # Limit length before caching to prevent memory exhaustion from large keys
     text_str = str(text)[:65536]
-
-    # html.escape is fast, then use .translate() for bulk character replacement
-    return html.escape(text_str).translate(MARKDOWN_ESCAPE_TABLE)
+    return _escape_html_cached(text_str)
 
 
 def sanitize_csv_value(value: Any) -> Any:
@@ -151,14 +167,8 @@ def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
 
 
 @lru_cache(maxsize=1024)
-def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
-    """
-    Truncate text and provide a tooltip with the full text.
-    Performance: Caching provides ~7x speedup for repetitive metadata.
-    """
-    if not text:
-        return ""
-
+def _format_truncated_with_tooltip_cached(text: str, max_length: int) -> str:
+    """Internal cached helper for format_truncated_with_tooltip."""
     if len(text) <= max_length:
         return escape_html(text)
 
@@ -167,6 +177,19 @@ def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
     safe_truncated = escape_html(truncated)
 
     return f'<span class="truncated-text" title="{safe_full}">{safe_truncated}</span>'
+
+
+def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
+    """
+    Truncate text and provide a tooltip with the full text.
+    Truncates input BEFORE caching to prevent memory exhaustion DoS.
+    """
+    if not text:
+        return ""
+
+    # Limit total text length before caching
+    safe_text = str(text)[:10000]
+    return _format_truncated_with_tooltip_cached(safe_text, max_length)
 
 
 @lru_cache(maxsize=1024)
@@ -195,16 +218,8 @@ def format_enrollment(value: Any) -> str:
 
 
 @lru_cache(maxsize=1024)
-def format_diff_line(line: str) -> str:
-    """
-    Format a diff line with color-coded changes.
-    Highlights 'changed from `old` to `new`' with Bootstrap classes.
-    Also highlights new fields added and fields removed.
-    Performance: Caching and pre-compiled regex yield ~10-20x speedup.
-    """
-    if not line:
-        return ""
-
+def _format_diff_line_cached(line: str) -> str:
+    """Internal cached helper for format_diff_line."""
     escaped_line = escape_html(line)
 
     # Highlight additions/removals with Bootstrap classes
@@ -216,16 +231,22 @@ def format_diff_line(line: str) -> str:
     return DIFF_CHANGE_PATTERN.sub(_replace_diff_match, escaped_line)
 
 
-@lru_cache(maxsize=1024)
-def format_diff_line_markdown(line: str) -> str:
+def format_diff_line(line: str) -> str:
     """
-    Format a diff line with Markdown bolding for changes.
-    Highlights 'changed from `old` to `new`' with native Markdown bolding.
-    Also highlights new fields added and fields removed.
+    Format a diff line with color-coded changes.
+    Truncates input BEFORE caching to prevent memory exhaustion DoS.
     """
     if not line:
         return ""
 
+    # Limit line length before caching
+    safe_line = str(line)[:10000]
+    return _format_diff_line_cached(safe_line)
+
+
+@lru_cache(maxsize=1024)
+def _format_diff_line_markdown_cached(line: str) -> str:
+    """Internal cached helper for format_diff_line_markdown."""
     escaped_line = escape_html(line)
 
     # Highlight additions/removals with Markdown bolding
@@ -235,3 +256,16 @@ def format_diff_line_markdown(line: str) -> str:
         return f"**{escaped_line}**"
 
     return DIFF_CHANGE_PATTERN.sub(_replace_diff_match_markdown, escaped_line)
+
+
+def format_diff_line_markdown(line: str) -> str:
+    """
+    Format a diff line with Markdown bolding for changes.
+    Truncates input BEFORE caching to prevent memory exhaustion DoS.
+    """
+    if not line:
+        return ""
+
+    # Limit line length before caching
+    safe_line = str(line)[:10000]
+    return _format_diff_line_markdown_cached(safe_line)
