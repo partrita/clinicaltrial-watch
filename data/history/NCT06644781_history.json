@@ -1,10 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 17:03:07",
-    "diff": "Initial data collection"
-  },
-  {
-    "timestamp": "2026-03-21 02:15:17",
-    "diff": "Field `contactsLocationsModule.locations.[40]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[40]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[40]geoPoint.lon` changed from `14.5195` to `14.26811`"
-  }
-]
+[{"timestamp": "2026-02-05 17:03:07", "diff": "Initial data collection"}, {"timestamp": "2026-03-21 02:15:17", "diff": "Field `contactsLocationsModule.locations.[40]city` changed from `Napoli` to `Naples`\nField `contactsLocationsModule.locations.[40]geoPoint.lat` changed from `40.87618` to `40.85216`\nField `contactsLocationsModule.locations.[40]geoPoint.lon` changed from `14.5195` to `14.26811`"}, {"timestamp": "2026-04-04 02:41:53", "diff": "Field `contactsLocationsModule.locations.[41]city` changed from `Padua` to `Padova`\nField `contactsLocationsModule.locations.[41]geoPoint.lat` changed from `45.40797` to `44.38225`\nField `contactsLocationsModule.locations.[41]geoPoint.lon` changed from `11.88586` to `11.14261`"}]
