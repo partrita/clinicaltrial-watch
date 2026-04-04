@@ -42,6 +42,9 @@ def test_escape_html_markdown():
     assert escape_html("Data | with | pipes") == "Data &#124; with &#124; pipes"
     # Brackets should be escaped to prevent Markdown link injection
     assert escape_html("Link [text](url)") == "Link &#91;text&#93;(url)"
+    # Backslash and dollar sign should be escaped for defense-in-depth
+    assert escape_html("Path \\ to \\ file") == "Path &#92; to &#92; file"
+    assert escape_html("Price is $100") == "Price is &#36;100"
 
 
 def test_escape_html_none():

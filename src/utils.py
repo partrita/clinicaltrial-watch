@@ -20,20 +20,8 @@ def is_valid_nct_id(nct_id: str) -> bool:
 
 
 @lru_cache(maxsize=1024)
-def sanitize_id(identifier: str) -> str:
-    """
-    Sanitize an identifier (trial ID or target name) to prevent
-    path traversal and code injection.
-    Allows only alphanumeric characters, dashes, and underscores.
-    Length limited to 255 characters to prevent DoS.
-    """
-    if not identifier:
-        return "unknown"
-
-    # Limit identifier length to prevent potential DoS from extremely long strings
-    # 255 is more than enough for NCT IDs and target names
-    identifier = str(identifier)[:255]
-
+def _sanitize_id_cached(identifier: str) -> str:
+    """Internal cached helper for sanitize_id."""
     # Replace any non-alphanumeric, non-dash, non-underscore characters with an underscore
     sanitized = re.sub(r"[^a-zA-Z0-9_-]", "_", identifier)
     # Remove leading/trailing underscores and prevent empty string
@@ -41,14 +29,43 @@ def sanitize_id(identifier: str) -> str:
     return sanitized if sanitized else "unknown"
 
 
-# Pre-computed translation table for Markdown/Quarto specific escapes
+def sanitize_id(identifier: str) -> str:
+    """
+    Sanitize an identifier (trial ID or target name) to prevent
+    path traversal and code injection.
+    Allows only alphanumeric characters, dashes, and underscores.
+    Length limited to 255 characters to prevent DoS by ensuring small cache keys.
+    """
+    if not identifier:
+        return "unknown"
+
+    # Truncate BEFORE caching to prevent memory exhaustion DoS from large keys
+    # 255 is more than enough for NCT IDs and target names
+    return _sanitize_id_cached(str(identifier)[:255])
+
+
+# Pre-computed translation table for Markdown/Quarto/MathJax specific escapes
+# Includes \ and $ to prevent Markdown escaping and MathJax injection.
 # Performance: ~15-20% faster than multiple .replace() calls
 MARKDOWN_ESCAPE_TABLE = str.maketrans(
-    {"|": "&#124;", "[": "&#91;", "]": "&#93;", "`": "&#96;"}
+    {
+        "|": "&#124;",
+        "[": "&#91;",
+        "]": "&#93;",
+        "`": "&#96;",
+        "\\": "&#92;",
+        "$": "&#36;",
+    }
 )
 
 
 @lru_cache(maxsize=1024)
+def _escape_html_cached(text_str: str) -> str:
+    """Internal cached helper for escape_html."""
+    # html.escape is fast, then use .translate() for bulk character replacement
+    return html.escape(text_str).translate(MARKDOWN_ESCAPE_TABLE)
+
+
 def escape_html(text: str) -> str:
     """
     Escape HTML special characters in a string.
@@ -59,11 +76,8 @@ def escape_html(text: str) -> str:
     if text is None:
         return ""
 
-    # Limit length to prevent DoS from extremely long API responses
-    text_str = str(text)[:65536]
-
-    # html.escape is fast, then use .translate() for bulk character replacement
-    return html.escape(text_str).translate(MARKDOWN_ESCAPE_TABLE)
+    # Truncate BEFORE caching to prevent memory exhaustion DoS from large keys
+    return _escape_html_cached(str(text)[:65536])
 
 
 def sanitize_csv_value(value: Any) -> Any:
@@ -195,6 +209,17 @@ def format_enrollment(value: Any) -> str:
 
 
 @lru_cache(maxsize=1024)
+def _format_diff_line_cached(escaped_line: str) -> str:
+    """Internal cached helper for format_diff_line."""
+    # Highlight additions/removals with Bootstrap classes
+    if escaped_line.startswith("New field added:"):
+        return f"<span class='text-success fw-bold'>{escaped_line}</span>"
+    if escaped_line.startswith("Field removed:"):
+        return f"<span class='text-danger fw-bold'>{escaped_line}</span>"
+
+    return DIFF_CHANGE_PATTERN.sub(_replace_diff_match, escaped_line)
+
+
 def format_diff_line(line: str) -> str:
     """
     Format a diff line with color-coded changes.
@@ -205,18 +230,23 @@ def format_diff_line(line: str) -> str:
     if not line:
         return ""
 
+    # escape_html already handles truncation and internal caching
     escaped_line = escape_html(line)
-
-    # Highlight additions/removals with Bootstrap classes
-    if escaped_line.startswith("New field added:"):
-        return f"<span class='text-success fw-bold'>{escaped_line}</span>"
-    if escaped_line.startswith("Field removed:"):
-        return f"<span class='text-danger fw-bold'>{escaped_line}</span>"
-
-    return DIFF_CHANGE_PATTERN.sub(_replace_diff_match, escaped_line)
+    return _format_diff_line_cached(escaped_line)
 
 
 @lru_cache(maxsize=1024)
+def _format_diff_line_markdown_cached(escaped_line: str) -> str:
+    """Internal cached helper for format_diff_line_markdown."""
+    # Highlight additions/removals with Markdown bolding
+    if escaped_line.startswith("New field added:"):
+        return f"**{escaped_line}**"
+    if escaped_line.startswith("Field removed:"):
+        return f"**{escaped_line}**"
+
+    return DIFF_CHANGE_PATTERN.sub(_replace_diff_match_markdown, escaped_line)
+
+
 def format_diff_line_markdown(line: str) -> str:
     """
     Format a diff line with Markdown bolding for changes.
@@ -226,12 +256,6 @@ def format_diff_line_markdown(line: str) -> str:
     if not line:
         return ""
 
+    # escape_html already handles truncation and internal caching
     escaped_line = escape_html(line)
-
-    # Highlight additions/removals with Markdown bolding
-    if escaped_line.startswith("New field added:"):
-        return f"**{escaped_line}**"
-    if escaped_line.startswith("Field removed:"):
-        return f"**{escaped_line}**"
-
-    return DIFF_CHANGE_PATTERN.sub(_replace_diff_match_markdown, escaped_line)
+    return _format_diff_line_markdown_cached(escaped_line)
