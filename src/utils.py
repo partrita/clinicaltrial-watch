@@ -148,6 +148,15 @@ STATUS_CONFIGS = {
     "WITHDRAWN": "danger",
 }
 
+# Global map for phase to bootstrap_class
+PHASE_CONFIGS = {
+    "PHASE1": "primary",
+    "PHASE2": "info",
+    "PHASE3": "warning",
+    "PHASE4": "success",
+    "EARLY_PHASE1": "primary",
+}
+
 
 @lru_cache(maxsize=1024)
 def get_status_badge(status: str) -> str:
@@ -158,12 +167,37 @@ def get_status_badge(status: str) -> str:
 
 
 @lru_cache(maxsize=1024)
+def get_phase_badge(phase: str) -> str:
+    """
+    Return Bootstrap badges for trial phases.
+    Handles multi-phase strings (e.g., 'PHASE1, PHASE2') by splitting.
+    """
+    if not phase or phase == "N/A":
+        return escape_html("N/A")
+
+    phases = [p.strip() for p in phase.split(",")]
+    badges = []
+    for p in phases:
+        key = p.upper().replace(" ", "")
+        bg_class = PHASE_CONFIGS.get(key, "light text-dark")
+        safe_phase = escape_html(p)
+        badges.append(f'<span class="badge bg-{bg_class}">{safe_phase}</span>')
+
+    return " ".join(badges)
+
+
+@lru_cache(maxsize=1024)
 def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
     """Return a badge for monitoring status."""
     safe_status = escape_html(monitor_status)
+    title_attr = ""
+    if last_change_date:
+        safe_date = escape_html(last_change_date)
+        title_attr = f' title="Last changed: {safe_date}"'
+
     if monitor_status == "Changed":
-        return f'<span class="badge bg-danger">{safe_status}</span>'
-    return f'<span class="badge bg-success">{safe_status}</span>'
+        return f'<span class="badge bg-danger"{title_attr}>{safe_status}</span>'
+    return f'<span class="badge bg-success"{title_attr}>{safe_status}</span>'
 
 
 @lru_cache(maxsize=1024)
@@ -176,7 +210,7 @@ def _format_truncated_with_tooltip_cached(text: str, max_length: int) -> str:
     safe_full = escape_html(text)
     safe_truncated = escape_html(truncated)
 
-    return f'<span class="truncated-text" title="{safe_full}">{safe_truncated}</span>'
+    return f'<span class="truncated-text" tabindex="0" role="note" aria-label="{safe_full}" title="{safe_full}">{safe_truncated}</span>'
 
 
 def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
@@ -195,9 +229,10 @@ def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
 @lru_cache(maxsize=1024)
 def get_changed_count_badge(count: int) -> str:
     """Return a badge for changed trial count."""
+    safe_count = escape_html(str(count))
     if count > 0:
-        return f'<span class="badge bg-danger">{count}</span>'
-    return '<span class="badge bg-success">0</span>'
+        return f'<span class="badge bg-danger" aria-label="{safe_count} trials changed">{safe_count}</span>'
+    return f'<span class="badge bg-success" aria-label="0 trials changed">0</span>'
 
 
 @lru_cache(maxsize=1024)
@@ -213,7 +248,7 @@ def format_enrollment(value: Any) -> str:
         # Handle cases where value might be a float string or already has commas
         num_val = int(float(str(value).replace(",", "")))
         return f"{num_val:,}"
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, OverflowError):
         return "N/A"
 
 
