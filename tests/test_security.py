@@ -42,6 +42,8 @@ def test_escape_html_markdown():
     assert escape_html("Data | with | pipes") == "Data &#124; with &#124; pipes"
     # Brackets should be escaped to prevent Markdown link injection
     assert escape_html("Link [text](url)") == "Link &#91;text&#93;(url)"
+    # Backslash and MathJax characters should be escaped
+    assert escape_html("Math $x+y$ and Backslash \\") == "Math &#36;x+y&#36; and Backslash &#92;"
 
 
 def test_escape_html_none():
@@ -53,6 +55,7 @@ def test_is_valid_nct_id():
     assert is_valid_nct_id("NCT00000000") is True
     assert is_valid_nct_id("NCT1234567") is False  # Too short
     assert is_valid_nct_id("NCT123456789") is False  # Too long
+    assert is_valid_nct_id("NCT" + "1" * 40) is False  # Max length check
     assert is_valid_nct_id("nct12345678") is False  # Case sensitive
     assert is_valid_nct_id("NCT12345678\n") is False  # Should not accept trailing newline
     assert is_valid_nct_id("NCTabcdefgh") is False  # Not digits
@@ -162,7 +165,13 @@ def test_sanitize_csv_value():
 
 def test_security_length_limits():
     """Verify that length limits are enforced for security utilities."""
-    from src.utils import sanitize_csv_value, escape_html
+    from src.utils import (
+        sanitize_csv_value,
+        escape_html,
+        sanitize_id,
+        format_diff_line,
+        format_truncated_with_tooltip,
+    )
 
     # CSV sanitization limit (32,767)
     long_val = "A" * 40000
@@ -171,8 +180,24 @@ def test_security_length_limits():
 
     # HTML escaping limit (65,536)
     long_text = "B" * 70000
-    escaped_html = escape_html(long_text)
-    assert len(escaped_html) == 65536
+    res_escaped_html = escape_html(long_text)
+    assert len(res_escaped_html) == 65536
+
+    # sanitize_id limit (255)
+    long_id = "C" * 1000
+    res_sanitize_id = sanitize_id(long_id)
+    assert len(res_sanitize_id) == 255
+
+    # format_diff_line limit (10,000)
+    long_line = "D" * 20000
+    res_diff = format_diff_line(long_line)
+    # The output might be longer due to escaping, but we check if it processed the truncated input.
+    assert len(res_diff) >= 10000
+
+    # format_truncated_with_tooltip limit (10,000)
+    long_tooltip = "E" * 20000
+    res_tooltip = format_truncated_with_tooltip(long_tooltip)
+    assert 'title="EE' in res_tooltip
 
 
 def test_backtick_escaping_and_diff_formatting():

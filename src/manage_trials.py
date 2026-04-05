@@ -45,6 +45,10 @@ def save_yaml(data: Dict[str, Any], yaml_path: str = "trials.yaml") -> None:
 
 def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"):
     """Add a trial ID to the exclusion list."""
+    if not HAS_YAML:
+        print("Warning: Cannot update exclusion list because 'yaml' module is missing.")
+        return
+
     if not os.path.exists(yaml_path):
         data = {"excluded_ids": []}
     else:
