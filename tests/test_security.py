@@ -163,6 +163,73 @@ def test_sanitize_csv_value():
     assert sanitize_csv_value("   ") == "   "
 
 
+def test_get_phase_badge():
+    """Verify that get_phase_badge correctly handles various inputs and escapes data."""
+    from src.utils import get_phase_badge
+
+    # Simple phase
+    res = get_phase_badge("PHASE1")
+    assert "badge bg-primary" in res
+    assert "PHASE1" in res
+
+    # Multiple phases
+    res = get_phase_badge("PHASE1, PHASE2")
+    assert "badge bg-primary" in res
+    assert "badge bg-info" in res
+    assert "PHASE1" in res
+    assert "PHASE2" in res
+
+    # Unknown phase
+    res = get_phase_badge("Unknown Phase")
+    assert "badge bg-light text-dark" in res
+    assert "Unknown Phase" in res
+
+    # XSS attempt
+    res = get_phase_badge("<script>alert(1)</script>")
+    assert "&lt;script&gt;" in res
+    assert "<script>" not in res
+
+    # Empty/N/A
+    assert get_phase_badge("") == "N/A"
+    assert get_phase_badge("N/A") == "N/A"
+
+
+def test_ui_helpers_accessibility():
+    """Verify the presence of ARIA and accessibility attributes in UI helpers."""
+    from src.utils import get_update_badge, get_changed_count_badge, format_truncated_with_tooltip
+
+    # get_update_badge with date
+    res = get_update_badge("Changed", "2023-10-27")
+    assert 'title="Last changed: 2023-10-27"' in res
+
+    # get_changed_count_badge
+    res = get_changed_count_badge(5)
+    assert 'aria-label="5 trials changed"' in res
+    res_zero = get_changed_count_badge(0)
+    assert 'aria-label="0 trials changed"' in res_zero
+
+    # format_truncated_with_tooltip
+    long_text = "This is a very long text that should be truncated"
+    res = format_truncated_with_tooltip(long_text, max_length=10)
+    assert 'tabindex="0"' in res
+    assert 'role="note"' in res
+    assert f'aria-label="{long_text}"' in res
+    assert f'title="{long_text}"' in res
+
+
+def test_format_enrollment_robustness():
+    """Verify numeric overflow handling in format_enrollment."""
+    from src.utils import format_enrollment
+
+    # Normal case
+    assert format_enrollment(1234) == "1,234"
+
+    # Extreme case that might cause OverflowError in some environments/versions
+    # (though Python handles large ints, float conversion or other steps might fail)
+    huge_val = "1" * 1000
+    assert format_enrollment(huge_val) == "N/A"
+
+
 def test_security_length_limits():
     """Verify that length limits are enforced for security utilities."""
     from src.utils import (
