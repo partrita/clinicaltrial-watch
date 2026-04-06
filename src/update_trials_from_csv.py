@@ -22,8 +22,15 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
     if not os.path.exists(yaml_path):
         return {"targets": []}
 
-    with open(yaml_path, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f) or {}
+    try:
+        with open(yaml_path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+            if not isinstance(data, dict):
+                print(f"Warning: {yaml_path} is not a valid YAML dictionary. Resetting.")
+                return {"targets": []}
+    except (yaml.YAMLError, OSError) as e:
+        print(f"Error: Failed to load {yaml_path}: {e}")
+        return {"targets": []}
 
     # Handle legacy format (flat trials list)
     if "trials" in data and "targets" not in data:
@@ -42,7 +49,7 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
     if "topics" in data and "targets" not in data:
         data["targets"] = data.pop("topics")
 
-    if "targets" not in data:
+    if "targets" not in data or not isinstance(data["targets"], list):
         data["targets"] = []
 
     return data
@@ -88,8 +95,11 @@ def update_target(
     """Update or create a target with new trials."""
     # Find existing target
     target = None
+    if "targets" not in data or not isinstance(data["targets"], list):
+        data["targets"] = []
+
     for t in data["targets"]:
-        if t["name"].lower() == target_name.lower():
+        if isinstance(t, dict) and t.get("name", "").lower() == target_name.lower():
             target = t
             break
 
@@ -102,8 +112,11 @@ def update_target(
         }
         data["targets"].append(target)
 
+    if "trials" not in target or not isinstance(target["trials"], list):
+        target["trials"] = []
+
     # Get existing trial IDs
-    existing_ids = {trial["id"] for trial in target.get("trials", [])}
+    existing_ids = {trial.get("id") for trial in target.get("trials", []) if isinstance(trial, dict) and trial.get("id")}
 
     # Load excluded trials
     excluded_ids = set()
@@ -111,14 +124,18 @@ def update_target(
     if os.path.exists(exclusion_yaml):
         try:
             with open(exclusion_yaml, "r", encoding="utf-8") as f:
-                ex_data = yaml.safe_load(f) or {}
-                excluded_ids = set(ex_data.get("excluded_ids", []))
-        except Exception as e:
+                ex_data = yaml.safe_load(f)
+                if isinstance(ex_data, dict) and isinstance(ex_data.get("excluded_ids"), list):
+                    excluded_ids = set(ex_data.get("excluded_ids", []))
+        except (yaml.YAMLError, OSError) as e:
             print(f"Warning: Could not load exclusion list: {e}")
 
     # Add new trials
     added = 0
     for trial in new_trials:
+        if not isinstance(trial, dict) or "id" not in trial:
+            continue
+
         if trial["id"] in excluded_ids:
             # print(f"  Skipping excluded trial {trial['id']}")
             continue
@@ -175,8 +192,8 @@ def main() -> int:
 
     # If replace mode, clear existing trials for this target
     if args.replace:
-        for target in data["targets"]:
-            if target["name"].lower() == args.target.lower():
+        for target in data.get("targets", []):
+            if isinstance(target, dict) and target.get("name", "").lower() == args.target.lower():
                 target["trials"] = []
                 break
 
