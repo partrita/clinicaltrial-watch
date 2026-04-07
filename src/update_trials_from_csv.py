@@ -22,8 +22,14 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
     if not os.path.exists(yaml_path):
         return {"targets": []}
 
-    with open(yaml_path, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f) or {}
+    try:
+        with open(yaml_path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+            if not isinstance(data, dict):
+                data = {}
+    except (yaml.YAMLError, OSError) as e:
+        print(f"Warning: Failed to load {yaml_path}: {e}")
+        return {"targets": []}
 
     # Handle legacy format (flat trials list)
     if "trials" in data and "targets" not in data:

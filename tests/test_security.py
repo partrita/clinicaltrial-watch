@@ -418,6 +418,91 @@ def test_yaml_injection_prevention_regression():
             os.remove(test_yaml)
 
 
+def test_malformed_yaml_handling():
+    """Verify that YAML loaders handle non-dictionary content gracefully."""
+    import os
+    from src.main import load_config
+    from src.manage_trials import load_yaml as load_yaml_manage
+    from src.update_trials_from_csv import load_yaml as load_yaml_update
+
+    test_yaml = "tests/test_malformed.yaml"
+    try:
+        # 1. Test with a string instead of a dictionary
+        with open(test_yaml, "w", encoding="utf-8") as f:
+            f.write("Just a string, not a dict")
+
+        assert load_config(test_yaml) == {"targets": []}
+        assert load_yaml_manage(test_yaml) == {"targets": []}
+        # update_trials_from_csv returns empty dict for malformed content but main loop handles it
+        assert load_yaml_update(test_yaml) == {"targets": []}
+
+        # 2. Test with a list
+        with open(test_yaml, "w", encoding="utf-8") as f:
+            f.write("- item1\n- item2")
+
+        assert load_config(test_yaml) == {"targets": []}
+        assert load_yaml_manage(test_yaml) == {"targets": []}
+        assert load_yaml_update(test_yaml) == {"targets": []}
+
+        # 3. Test with invalid YAML syntax
+        with open(test_yaml, "w", encoding="utf-8") as f:
+            f.write("key: [unclosed list")
+
+        assert load_config(test_yaml) == {"targets": []}
+        assert load_yaml_manage(test_yaml) == {"targets": []}
+        assert load_yaml_update(test_yaml) == {"targets": []}
+
+    finally:
+        if os.path.exists(test_yaml):
+            os.remove(test_yaml)
+
+
+def test_add_to_exclusion_list_hardening():
+    """Verify hardening of add_to_exclusion_list."""
+    import os
+    from src.manage_trials import add_to_exclusion_list
+    import yaml
+
+    test_yaml = "tests/test_exclusion_harden.yaml"
+    try:
+        # 1. Test invalid ID rejection
+        add_to_exclusion_list("invalid_id", test_yaml)
+        assert not os.path.exists(test_yaml)
+
+        # 2. Test malformed exclusion file (string instead of dict)
+        with open(test_yaml, "w", encoding="utf-8") as f:
+            f.write("malicious string content")
+
+        add_to_exclusion_list("NCT12345678", test_yaml)
+        with open(test_yaml, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+            assert isinstance(data, dict)
+            assert "NCT12345678" in data["excluded_ids"]
+
+        # 3. Test malformed exclusion file (list instead of dict)
+        with open(test_yaml, "w", encoding="utf-8") as f:
+            f.write("- item1\n- item2")
+
+        add_to_exclusion_list("NCT87654321", test_yaml)
+        with open(test_yaml, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+            assert isinstance(data, dict)
+            assert "NCT87654321" in data["excluded_ids"]
+
+        # 4. Test missing 'excluded_ids' key or wrong type
+        with open(test_yaml, "w", encoding="utf-8") as f:
+            f.write("other_key: some_value")
+
+        add_to_exclusion_list("NCT11111111", test_yaml)
+        with open(test_yaml, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+            assert "NCT11111111" in data["excluded_ids"]
+
+    finally:
+        if os.path.exists(test_yaml):
+            os.remove(test_yaml)
+
+
 def test_deduplicate_config_security():
     """Verify that deduplicate_config validates IDs and truncates long strings."""
     from src.main import deduplicate_config

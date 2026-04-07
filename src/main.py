@@ -24,10 +24,12 @@ def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     if not os.path.exists(config_path):
         return {"targets": []}
 
-    data = {}
+    data = {"targets": []}
     try:
         with open(config_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {}
+            data = yaml.safe_load(f)
+            if not isinstance(data, dict):
+                data = {"targets": []}
     except (yaml.YAMLError, OSError) as e:
         print(f"  Warning: Failed to load config {config_path}: {e}")
         return {"targets": []}
@@ -48,6 +50,9 @@ def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     # Handle old 'topics' naming
     if "topics" in data and "targets" not in data:
         data["targets"] = data.pop("topics")
+
+    if "targets" not in data:
+        data["targets"] = []
 
     return data
 

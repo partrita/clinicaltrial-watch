@@ -25,8 +25,17 @@ def load_yaml(yaml_path: str = "trials.yaml") -> Dict[str, Any]:
         return {"targets": []}
 
     if HAS_YAML:
-        with open(yaml_path, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f) or {"targets": []}
+        try:
+            with open(yaml_path, "r", encoding="utf-8") as f:
+                data = yaml.safe_load(f)
+                if not isinstance(data, dict):
+                    return {"targets": []}
+                if "targets" not in data:
+                    data["targets"] = []
+                return data
+        except (yaml.YAMLError, OSError) as e:
+            print(f"Warning: Failed to load {yaml_path}: {e}")
+            return {"targets": []}
     else:
         # Simplistic fallback isn't ideal here for writing back
         raise ImportError(
@@ -45,6 +54,10 @@ def save_yaml(data: Dict[str, Any], yaml_path: str = "trials.yaml") -> None:
 
 def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"):
     """Add a trial ID to the exclusion list."""
+    if not is_valid_nct_id(trial_id):
+        print(f"Error: Invalid NCT ID for exclusion: {trial_id}")
+        return
+
     if not HAS_YAML:
         print("Warning: Cannot update exclusion list because 'yaml' module is missing.")
         return
@@ -52,8 +65,17 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
     if not os.path.exists(yaml_path):
         data = {"excluded_ids": []}
     else:
-        with open(yaml_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {"excluded_ids": []}
+        try:
+            with open(yaml_path, "r", encoding="utf-8") as f:
+                data = yaml.safe_load(f)
+                if not isinstance(data, dict):
+                    data = {"excluded_ids": []}
+        except (yaml.YAMLError, OSError) as e:
+            print(f"Warning: Failed to load exclusion list {yaml_path}: {e}")
+            data = {"excluded_ids": []}
+
+    if "excluded_ids" not in data or not isinstance(data["excluded_ids"], list):
+        data["excluded_ids"] = []
 
     if trial_id not in data["excluded_ids"]:
         data["excluded_ids"].append(trial_id)
