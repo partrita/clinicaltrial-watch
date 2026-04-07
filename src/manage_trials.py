@@ -25,8 +25,18 @@ def load_yaml(yaml_path: str = "trials.yaml") -> Dict[str, Any]:
         return {"targets": []}
 
     if HAS_YAML:
-        with open(yaml_path, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f) or {"targets": []}
+        try:
+            with open(yaml_path, "r", encoding="utf-8") as f:
+                data = yaml.safe_load(f)
+                if not isinstance(data, dict):
+                    print(f"Warning: {yaml_path} is not a valid YAML dictionary. Resetting.")
+                    return {"targets": []}
+                if "targets" not in data:
+                    data["targets"] = []
+                return data
+        except (yaml.YAMLError, OSError) as e:
+            print(f"Error: Failed to load {yaml_path}: {e}")
+            return {"targets": []}
     else:
         # Simplistic fallback isn't ideal here for writing back
         raise ImportError(
@@ -49,11 +59,23 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
         print("Warning: Cannot update exclusion list because 'yaml' module is missing.")
         return
 
-    if not os.path.exists(yaml_path):
-        data = {"excluded_ids": []}
-    else:
-        with open(yaml_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {"excluded_ids": []}
+    # Security enhancement: Validate NCT ID format before adding to exclusion list
+    if not is_valid_nct_id(trial_id):
+        print(f"Warning: Invalid NCT ID format, not adding to exclusion: {trial_id}")
+        return
+
+    data = {"excluded_ids": []}
+    if os.path.exists(yaml_path):
+        try:
+            with open(yaml_path, "r", encoding="utf-8") as f:
+                loaded_data = yaml.safe_load(f)
+                if isinstance(loaded_data, dict):
+                    data = loaded_data
+        except (yaml.YAMLError, OSError):
+            print(f"Warning: Could not read {yaml_path}, initializing new exclusion list.")
+
+    if "excluded_ids" not in data or not isinstance(data["excluded_ids"], list):
+        data["excluded_ids"] = []
 
     if trial_id not in data["excluded_ids"]:
         data["excluded_ids"].append(trial_id)
@@ -80,16 +102,18 @@ def remove_trial(
     new_targets = []
 
     for target in targets:
-        if target_name and target["name"].lower() != target_name.lower():
+        if not isinstance(target, dict):
+            continue
+        if target_name and target.get("name", "").lower() != target_name.lower():
             new_targets.append(target)
             continue
 
         original_count = len(target.get("trials", []))
-        target["trials"] = [t for t in target.get("trials", []) if t["id"] != trial_id]
+        target["trials"] = [t for t in target.get("trials", []) if isinstance(t, dict) and t.get("id") != trial_id]
 
         if len(target["trials"]) < original_count:
             found = True
-            print(f"Removed {trial_id} from target '{target['name']}'")
+            print(f"Removed {trial_id} from target '{target.get('name', 'Unknown')}'")
 
         new_targets.append(target)
 
@@ -137,8 +161,11 @@ def perform_cleanup(trial_id: str):
                     with open(summary_path, "r", encoding="utf-8") as f:
                         summary = json.load(f)
 
+                    if not isinstance(summary, list):
+                        continue
+
                     new_summary = [
-                        item for item in summary if item.get("id") != trial_id
+                        item for item in summary if isinstance(item, dict) and item.get("id") != trial_id
                     ]
 
                     if len(new_summary) < len(summary):
