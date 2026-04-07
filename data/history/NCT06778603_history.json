@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 17:02:41",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 17:02:41", "diff": "Initial data collection"}, {"timestamp": "2026-04-07 02:32:49", "diff": "Field `referencesModule.references.[0]type` changed from `BACKGROUND` to `RESULT`\nField removed: `root['oversightModule']['isUsExport']`"}]
