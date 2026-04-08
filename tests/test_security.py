@@ -226,8 +226,16 @@ def test_format_enrollment_robustness():
 
     # Extreme case that might cause OverflowError in some environments/versions
     # (though Python handles large ints, float conversion or other steps might fail)
-    huge_val = "1" * 1000
-    assert format_enrollment(huge_val) == "N/A"
+    # Note: After hardening, input is truncated to 255 chars.
+    # float() of 1000 ones fails, but float() of 255 ones succeeds in Python.
+    # We'll use a string that is still too large for float even after truncation to 255 if we want N/A,
+    # or just test that it handles the truncated input.
+    huge_val = "9" * 400
+    # After truncation to 255, 9*255 is ~1e255, which is < 1e308 (max float)
+    # So it will now return a formatted string instead of N/A.
+    res = format_enrollment(huge_val)
+    assert res != "N/A"
+    assert len(res) > 255 # due to commas
 
 
 def test_security_length_limits():
@@ -265,6 +273,75 @@ def test_security_length_limits():
     long_tooltip = "E" * 20000
     res_tooltip = format_truncated_with_tooltip(long_tooltip)
     assert 'title="EE' in res_tooltip
+
+
+def test_ui_helpers_length_limits_new():
+    """Verify newly hardened UI helpers length limits."""
+    from src.utils import get_status_badge, get_phase_badge, get_update_badge, format_enrollment
+
+    # get_status_badge limit (255)
+    long_status = "S" * 300
+    res_status = get_status_badge(long_status)
+    # .title() is called, so it becomes S followed by s...
+    expected_inner = "S" + "s" * 254
+    assert expected_inner in res_status
+    assert expected_inner + "s" not in res_status
+
+    # get_phase_badge limit (255)
+    long_phase = "P" * 300
+    res_phase = get_phase_badge(long_phase)
+    assert "P" * 255 in res_phase
+    assert "P" * 256 not in res_phase
+
+    # get_update_badge limit (255)
+    long_update = "U" * 300
+    long_date = "D" * 300
+    res_update = get_update_badge(long_update, long_date)
+    assert "U" * 255 in res_update
+    assert 'title="Last changed: ' + "D" * 255 in res_update
+
+    # format_enrollment limit (255)
+    long_enroll = "1" * 300
+    res_enroll = format_enrollment(long_enroll)
+    # After truncation to 255, it still fits in a float and is a valid int
+    assert res_enroll != "N/A"
+    assert len(res_enroll) > 255 # due to commas
+
+
+def test_flatten_key_length_limit():
+    """Verify _get_flatten_key length limits in src/main.py."""
+    from src.main import _get_flatten_key
+
+    long_parent = "P" * 300
+    long_k = "K" * 300
+    res = _get_flatten_key(long_parent, long_k)
+    assert "P" * 255 in res
+    assert "K" * 255 in res
+
+
+def test_load_config_robustness():
+    """Verify load_config robustness in src/main.py."""
+    from src.main import load_config
+    import os
+
+    test_yaml = "tests/test_robust_config.yaml"
+
+    # Test with non-dictionary content
+    with open(test_yaml, "w") as f:
+        f.write("- item1\n- item2")
+
+    try:
+        res = load_config(test_yaml)
+        assert res == {"targets": []}
+
+        # Test with empty file
+        with open(test_yaml, "w") as f:
+            f.write("")
+        res = load_config(test_yaml)
+        assert res == {"targets": []}
+    finally:
+        if os.path.exists(test_yaml):
+            os.remove(test_yaml)
 
 
 def test_backtick_escaping_and_diff_formatting():
