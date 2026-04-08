@@ -159,19 +159,28 @@ PHASE_CONFIGS = {
 
 
 @lru_cache(maxsize=1024)
-def get_status_badge(status: str) -> str:
-    """Return a Bootstrap badge for a trial status."""
+def _get_status_badge_cached(status: str) -> str:
+    """Internal cached helper for get_status_badge."""
     bg_class = STATUS_CONFIGS.get(status, "light text-dark")
     safe_status = escape_html(status.replace("_", " ").title())
     return f'<span class="badge bg-{bg_class}">{safe_status}</span>'
 
 
+def get_status_badge(status: str) -> str:
+    """
+    Return a Bootstrap badge for a trial status.
+    Truncates input BEFORE caching to prevent memory exhaustion DoS.
+    """
+    if not status:
+        return ""
+    # Limit status string length before caching
+    safe_status = str(status)[:255]
+    return _get_status_badge_cached(safe_status)
+
+
 @lru_cache(maxsize=1024)
-def get_phase_badge(phase: str) -> str:
-    """
-    Return Bootstrap badges for trial phases.
-    Handles multi-phase strings (e.g., 'PHASE1, PHASE2') by splitting.
-    """
+def _get_phase_badge_cached(phase: str) -> str:
+    """Internal cached helper for get_phase_badge."""
     if not phase or phase == "N/A":
         return escape_html("N/A")
 
@@ -186,9 +195,23 @@ def get_phase_badge(phase: str) -> str:
     return " ".join(badges)
 
 
+def get_phase_badge(phase: str) -> str:
+    """
+    Return Bootstrap badges for trial phases.
+    Handles multi-phase strings (e.g., 'PHASE1, PHASE2') by splitting.
+    Truncates input BEFORE caching to prevent memory exhaustion DoS.
+    """
+    if not phase:
+        return escape_html("N/A")
+
+    # Limit phase string length before caching
+    safe_phase = str(phase)[:255]
+    return _get_phase_badge_cached(safe_phase)
+
+
 @lru_cache(maxsize=1024)
-def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
-    """Return a badge for monitoring status."""
+def _get_update_badge_cached(monitor_status: str, last_change_date: str = None) -> str:
+    """Internal cached helper for get_update_badge."""
     safe_status = escape_html(monitor_status)
     title_attr = ""
     if last_change_date:
@@ -198,6 +221,20 @@ def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
     if monitor_status == "Changed":
         return f'<span class="badge bg-danger"{title_attr}>{safe_status}</span>'
     return f'<span class="badge bg-success"{title_attr}>{safe_status}</span>'
+
+
+def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
+    """
+    Return a badge for monitoring status.
+    Truncates input BEFORE caching to prevent memory exhaustion DoS.
+    """
+    if not monitor_status:
+        return ""
+
+    # Limit string lengths before caching
+    safe_status = str(monitor_status)[:255]
+    safe_date = str(last_change_date)[:255] if last_change_date else None
+    return _get_update_badge_cached(safe_status, safe_date)
 
 
 @lru_cache(maxsize=1024)
@@ -236,20 +273,30 @@ def get_changed_count_badge(count: int) -> str:
 
 
 @lru_cache(maxsize=1024)
+def _format_enrollment_cached(value_str: str) -> str:
+    """Internal cached helper for format_enrollment."""
+    if value_str == "N/A" or not value_str:
+        return "N/A"
+    try:
+        # Handle cases where value might be a float string or already has commas
+        num_val = int(float(value_str.replace(",", "")))
+        return f"{num_val:,}"
+    except (ValueError, TypeError, OverflowError):
+        return "N/A"
+
+
 def format_enrollment(value: Any) -> str:
     """
     Format enrollment number with commas (e.g., 1,234) for better numerical readability.
     Returns 'N/A' for None, empty, or non-numeric inputs.
-    Performance: Caching avoids redundant type conversion and string formatting.
+    Truncates input BEFORE caching to prevent memory exhaustion DoS.
     """
     if value is None or value == "" or value == "N/A":
         return "N/A"
-    try:
-        # Handle cases where value might be a float string or already has commas
-        num_val = int(float(str(value).replace(",", "")))
-        return f"{num_val:,}"
-    except (ValueError, TypeError, OverflowError):
-        return "N/A"
+
+    # Limit string length before caching
+    safe_value = str(value)[:255]
+    return _format_enrollment_cached(safe_value)
 
 
 @lru_cache(maxsize=1024)
