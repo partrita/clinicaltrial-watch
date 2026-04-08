@@ -24,12 +24,17 @@ def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     if not os.path.exists(config_path):
         return {"targets": []}
 
-    data = {}
     try:
         with open(config_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {}
+            data = yaml.safe_load(f)
+            if not isinstance(data, dict):
+                print(f"  Warning: {config_path} is not a valid YAML dictionary. Resetting.")
+                return {"targets": []}
     except (yaml.YAMLError, OSError) as e:
         print(f"  Warning: Failed to load config {config_path}: {e}")
+        return {"targets": []}
+
+    if data is None:
         return {"targets": []}
 
     # Handle legacy format (flat trials list)
@@ -247,8 +252,8 @@ FLATTEN_STRIP_PREFIXES = {"Prot", "Deriv", "Annot", "Res"}
 
 
 @lru_cache(maxsize=2048)
-def _get_flatten_key(parent_key: str, k: str, sep: str = "_") -> str:
-    """Helper for cached key transformation during flattening."""
+def _get_flatten_key_cached(parent_key: str, k: str, sep: str = "_") -> str:
+    """Internal cached helper for _get_flatten_key."""
     clean_k = k
     if k.endswith(("Module", "Struct")):
         clean_k = k[:-6]
@@ -266,6 +271,19 @@ def _get_flatten_key(parent_key: str, k: str, sep: str = "_") -> str:
         return clean_k
 
     return parent_key + sep + clean_k
+
+
+def _get_flatten_key(parent_key: str, k: str, sep: str = "_") -> str:
+    """
+    Helper for cached key transformation during flattening.
+    Truncates input BEFORE caching to prevent memory exhaustion DoS.
+    """
+    # Limit string lengths before caching
+    safe_parent = str(parent_key)[:255]
+    safe_k = str(k)[:255]
+    safe_sep = str(sep)[:10]
+
+    return _get_flatten_key_cached(safe_parent, safe_k, safe_sep)
 
 
 def flatten_dict(
