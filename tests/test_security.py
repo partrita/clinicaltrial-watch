@@ -344,6 +344,61 @@ def test_load_config_robustness():
             os.remove(test_yaml)
 
 
+def test_malformed_config_robustness():
+    """Verify that load_config and deduplicate_config handle malformed structures gracefully."""
+    from src.main import load_config, deduplicate_config
+    import os
+
+    test_yaml = "tests/test_malformed_robustness.yaml"
+
+    # 1. Test load_config with malformed YAML (not a dict)
+    with open(test_yaml, "w") as f:
+        f.write("- item1\n- item2")
+
+    try:
+        res = load_config(test_yaml)
+        assert isinstance(res, dict)
+        assert "targets" in res
+        assert res["targets"] == []
+
+        # 2. Test deduplicate_config with malformed dict (not containing targets list)
+        malformed_config = {"not_targets": []}
+        res_dedup = deduplicate_config(malformed_config)
+        assert isinstance(res_dedup, dict)
+        assert "targets" in res_dedup
+        assert res_dedup["targets"] == []
+
+        # 3. Test deduplicate_config with targets being a string instead of a list
+        malformed_config_2 = {"targets": "not a list"}
+        res_dedup_2 = deduplicate_config(malformed_config_2)
+        assert isinstance(res_dedup_2, dict)
+        assert "targets" in res_dedup_2
+        assert res_dedup_2["targets"] == []
+
+        # 4. Test deduplicate_config with one target being a string instead of a dict
+        malformed_config_3 = {
+            "targets": [
+                "not a target dict",
+                {"name": "Valid Target", "trials": []}
+            ]
+        }
+        res_dedup_3 = deduplicate_config(malformed_config_3)
+        assert len(res_dedup_3["targets"]) == 1
+        assert res_dedup_3["targets"][0]["name"] == "Valid Target"
+
+        # 5. Test load_config with legacy format (trials list at root)
+        with open(test_yaml, "w") as f:
+            f.write("trials:\n  - id: NCT12345678\n    name: Legacy Trial")
+        res_legacy = load_config(test_yaml)
+        assert len(res_legacy["targets"]) == 1
+        assert res_legacy["targets"][0]["name"] == "Default"
+        assert res_legacy["targets"][0]["trials"][0]["id"] == "NCT12345678"
+
+    finally:
+        if os.path.exists(test_yaml):
+            os.remove(test_yaml)
+
+
 def test_backtick_escaping_and_diff_formatting():
     """Verify that backticks are escaped and don't break diff highlighting."""
     from src.utils import escape_html, format_diff_line
