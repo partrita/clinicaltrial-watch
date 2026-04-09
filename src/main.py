@@ -34,25 +34,33 @@ def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
         print(f"  Warning: Failed to load config {config_path}: {e}")
         return {"targets": []}
 
-    if data is None:
+    if data is None or not isinstance(data, dict):
         return {"targets": []}
 
-    # Handle legacy format (flat trials list)
-    if "trials" in data and "targets" not in data:
-        print("Converting legacy format to target-based structure...")
-        data = {
-            "targets": [
-                {
-                    "name": "Default",
-                    "description": "Migrated from legacy format",
-                    "trials": data["trials"],
-                }
-            ]
-        }
+    if "targets" not in data:
+        # Handle legacy format (flat trials list)
+        if "trials" in data:
+            print("Converting legacy format to target-based structure...")
+            data = {
+                "targets": [
+                    {
+                        "name": "Default",
+                        "description": "Migrated from legacy format",
+                        "trials": data.get("trials", []),
+                    }
+                ]
+            }
+
+    # Re-check type after possible conversion
+    if not isinstance(data, dict):
+        return {"targets": []}
 
     # Handle old 'topics' naming
     if "topics" in data and "targets" not in data:
         data["targets"] = data.pop("topics")
+
+    if "targets" not in data or not isinstance(data["targets"], list):
+        data["targets"] = []
 
     return data
 
@@ -63,16 +71,26 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
     Merges trial configurations for the same ID within a target.
     Also validates IDs and truncates long metadata to prevent DoS.
     """
+    if not isinstance(config, dict):
+        return {"targets": []}
+
     targets = config.get("targets", [])
-    if not targets:
+    if not isinstance(targets, list):
+        print("  Warning: 'targets' in config is not a list. Resetting.")
+        config["targets"] = []
         return config
 
     total_duplicates = 0
     total_invalid = 0
     any_truncation = False
     seen_globally = {}  # trial_id -> target_name
+    valid_targets = []
 
     for target in targets:
+        if not isinstance(target, dict):
+            print(f"  Warning: Removing invalid target entry (not a dictionary): {target}")
+            continue
+
         # Security enhancement: Truncate metadata
         orig_name = target.get("name")
         if orig_name is not None:
@@ -90,10 +108,15 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
 
         target_name = target["name"]
         trials = target.get("trials", [])
-        if not trials:
-            continue
+        if not isinstance(trials, list):
+            trials = []
 
         unique_target_trials = []
+        if not trials:
+            target["trials"] = []
+            valid_targets.append(target)
+            continue
+
         seen_in_target = {}  # trial_id -> index in unique_target_trials
 
         for trial in trials:
@@ -140,6 +163,9 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
                     seen_globally[trial_id] = target_name
 
         target["trials"] = unique_target_trials
+        valid_targets.append(target)
+
+    config["targets"] = valid_targets
 
     if total_duplicates > 0 or total_invalid > 0 or any_truncation:
         print("\n✓ Integrity check summary:")
