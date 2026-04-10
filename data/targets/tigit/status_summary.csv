@@ -563,13 +563,19 @@ The mechanism(s) by which EPA might influence post-operative survival are not we
 
 EMT2 trial participants are ideally placed to provide biospecimens that can be analysed in order to understand the mechanism(s) of action of EPA given that the laboratory data can eventually be linked to the clinical outcomes from the trial. Biospecimens can be obtained without interference with the EMT2 trial protocol. Stool, urine, and blood samples will be obtained 1) after EMT2 trial randomization, before starting EPA or placebo, 2) just before surgery, and 3) at 6-monthly intervals thereafter, plus liver metastases tumour tissue during surgery. Using these biospecimens, the microbiome and immune pathways altered by EPA will be investigated in relation to participant survival. Mechanistic insights about the anti-CRC activity of EPA from the biospecimen collection project will maximize the knowledge and insights gained from the EMT2 trial and its participants, thereby leading to personalized use of EPA, which will be targeted at those most likely to benefit.",
 NCT05123482,"A Phase I/IIa Study of AZD8205 Given Alone or Combined, in Participants With Advanced/Metastatic Solid Malignancies",TIGIT,AstraZeneca,RECRUITING,"Breast Cancer, Biliary Tract Carcinoma, Ovarian Cancer, Endometrial Cancer, Squamous Non-Small Cell Lung Cancer","PHASE1, PHASE2",2026-03-20,2021-10-18,2027-09-29,460,The number of patients with adverse events,Changed,2026-03-24,"This study is a Phase I/IIa Multi-center, Open-label Master Protocol Dose Escalation and Expansion Study of AZD8205 as Monotherapy and in Combination with Anticancer Agents in Participants with Advanced Solid Tumors",
-NCT07161414,A Study to Investigate the Pharmacokinetics and Safety of Subcutaneous Rilvegostomig in Adult Participants With Advanced Solid Tumors Previously Treated With Standard of Care Therapy,TIGIT,AstraZeneca,RECRUITING,Advanced Solid Tumors,PHASE1,2026-03-16,2025-11-25,2029-07-24,40,Area under the Concentration-time Curve During One Dosing Interval (AUCtau),Changed,2026-03-18,"This is a Phase I, open-label, multicenter, multi-part, dose finding and dose confirmation study to evaluate the PK and safety of SC rilvegostomig.
+NCT07161414,A Study to Investigate the Pharmacokinetics and Safety of Subcutaneous Rilvegostomig in Adult Participants With Advanced Solid Tumors Previously Treated With Standard of Care Therapy,TIGIT,AstraZeneca,RECRUITING,Advanced Solid Tumors,PHASE1,2026-04-08,2025-11-25,2029-07-24,40,Area under the Concentration-time Curve During One Dosing Interval (AUCtau),Changed,2026-04-10,"**[RECENT CHANGES FOUND]**
+Field `statusModule.statusVerifiedDate` changed from `2026-03` to `2026-04`
+Field `statusModule.lastUpdateSubmitDate` changed from `2026-03-16` to `2026-04-08`
+Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-03-17` to `2026-04-09`
+
+***
+This is a Phase I, open-label, multicenter, multi-part, dose finding and dose confirmation study to evaluate the PK and safety of SC rilvegostomig.
 
 The study includes 2 parts: Part 1 (Dose Finding) and Part 2 (Dose Confirmation).
 
 Part 1 will determine a SC rilvegostomig dose co-administered with rHu that yields drug exposure comparable with IV rilvegostomig. It will include 2 planned dose levels (DL1 in Cohort A and DL2 in Cohort B). Additional dose levels will be added, if needed.
 
-Part 2 will be initiated once a dose has been identified based on Part 1. This part will evaluate the bioavailability, safety, and tolerability of SC rilvegostomig + rHu.",
+Part 2 will be initiated once a dose has been identified based on Part 1. This part will evaluate the bioavailability, safety, and tolerability of SC rilvegostomig + rHu.",True
 NCT07015164,"Role of Viral Reservoir, Immune Activation and Depletion in Persistent Viremia Persistent Viremia in People Living With HIV on Antiretroviral Therapy",TIGIT,Assistance Publique - Hôpitaux de Paris,NOT_YET_RECRUITING,HIV,N/A,2025-06-03,2025-06-10,2026-09-11,80,Quantification of HIV-1 cellular reservoir parameters using molecular techniques,No Change,2026-02-05,"The aim of antiretroviral (ARV) treatment is to inhibit viral replication in order to achieve an undetectable plasma viral load. The threshold of undetectability to be achieved differs from country to country and from learned societies to learned societies, and is set at 50 copies/mL at 6 months of treatment initiation in French recommendations (Morlat, 2018), 200 copies/mL in US recommendations (Thompson et al., 2021), and 1,000 copies/mL in recommendations published by the World Health Organization (WHO) (World Health Organization, 2016), the latter threshold being the one used by all resource-limited countries.
 
 Currently, the vast majority of patients treated with ARVs are virologically suppressed, with viral load below the quantification threshold of the viral load technique (20 to 50 copies/mL, classically) (Elvstam et al., 2023). Nevertheless, a non-negligible percentage of patients, up to 10% in a recent American study (Fleming et al., 2019), may present persistent viremia (i.e., on several consecutive viral loads) of low level (between 51 and 1,000 copies/mL).The risk of persistent viral replication under antiretroviral pressure is to favor the emergence of resistance mutations, which can impact the activity of an ARV molecule or all the molecules in a therapeutic class (Assoumou et al., JAC, 2017; Elvstam et al., CID, 2023). The phenomenon of persistent plasma viremia has been shown to be more frequently observed with certain ARV classes such as protease inhibitors. However, few data are currently available on the most recent ARVs, such as 2nd-generation integrase inhibitors (INIs) and the most recent non-nucleoside reverse transcriptase inhibitor (NNRTI), doravirin. These latest-generation molecules have specific profiles. For example, 2nd-generation INIs present a high genetic barrier to resistance, while doravirine has the advantage of having a genotypic resistance profile distinct from other NNRTIs, and of diffusing well across compartments.
@@ -697,175 +703,7 @@ NCT04374877,Study of CHS-388 (Formerly Known as SRF388) in Patients With Advance
 * Part B: CHS-388 monotherapy expansion cohorts will evaluate the safety, efficacy, tolerability, PK, and pharmacodynamics of CHS-388 monotherapy in patients with advanced or metastatic ccRCC, advanced or metastatic HCC, and advanced or metastatic NSCLC in indication specific cohorts.
 * Part C will evaluate the safety, preliminary efficacy, tolerability, and PK of CHS-388 in combination with pembrolizumab in patients with advanced RCC,HCC, or NSCLC.
 * Part D will evaluate the safety, preliminary efficacy, tolerability, and PK of CHS-388 in combination with toripalimab in patients with advanced NSCLC.",
-NCT06346197,Combination of Immune Checkpoint in Locally Advanced or Metastatic MSI/dMMR Esogastric Adenocarcinomas,TIGIT,Centre Leon Berard,RECRUITING,"Gastric Cancer, MSI-H, Metastatic Cancer, Advanced Cancer",PHASE3,2026-04-02,2025-12-08,2028-05-15,132,Survival of patients,Changed,2026-04-09,"**[RECENT CHANGES FOUND]**
-Field `statusModule.statusVerifiedDate` changed from `2026-03` to `2026-04`
-Field `statusModule.lastUpdateSubmitDate` changed from `2026-03-23` to `2026-04-02`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-03-25` to `2026-04-08`
-Field `eligibilityModule.eligibilityCriteria` changed from `Inclusion Criteria:
-
-* Male or female patient ≥18 years of age at time of informed consent form signature.
-* Patient with MSI-H/dMMR, HER2 negativeadvanced or metastatic gastric, gastro-oesophageal junction or oesophageal adenocarcinoma whose tumours express PD-L1 with a combined positive score (CPS) ≥ 5.
-* Patient to be treated with a first line therapy for locally advanced/metastatic disease.
-* No prior treatment with chemotherapy for locally advanced/metastatic disease.
-
-  o Note - adjuvant or neoadjuvant chemotherapy is allowed providing that 6 months have relapsed between completion of adjuvant chemotherapy and recurrence.
-* Measurable disease (outside any previous irradiated field within the past 6 months) defined as at least one unidimensional lesion that can be accurately measured as ≥ 10 mm with CT scan according to RECIST V1.1 (Appendix 01).
-
-  * Note: Lesions intended to be biopsied should not be defined as target lesions.
-  * Note: previously irradiated lesions can be selected as target lesion only if recurrence/PD is documented after RT.
-* Patient with PS ECOG 0 or 1 (Appendix 02).
-* Adequate hematologic and end-organ function, defined by the following laboratory test results:
-
-Absolute neutrophil count ≥ 1.5 109/L (without growth factor support within 14 d) Platelets ≥ 100 109/L (without transfusion for platelets within 7 d) Hemoglobin ≥ 9 g/dL (without transfusion within 7 d) Creatinine clearance according to CKD-EPI ≥ 30 mL/min/1.73 m2 Serum total bilirubin ≤ 1.5 x ULN (except for patients with Gilbert disease for whom a total serum bilirubin ≤ 3 x ULN is acceptable) ASAT and ALAT ≤ 3 x ULN (or up to 5 x ULN in case of liver metastasis or hepatic infiltration)
-
-* Availability of a representative formalin-fixed paraffin-embedded (FFPE) sample of the primary or metastatic tumor tissue (resection or biopsy) with an associated pathology report must be available. This tumor sample must meet the following quality/quantity control criteria: ≥30 % of tumor cells and a tumor surface area ≥ 5mm2 or biopsiable disease (see next inclusion criteria).
-* Tumor lesion visible by medical imaging and accessible to repeatable percutaneous or endoscopic sampling that permits core needle biopsy without unacceptable risk of a significant procedural complications, and suitable for retrieval of a minimum of 4 cores with a needle minimum diameter :16-gauge.
-
-  * Note 1: Fine needle aspirates, bone biopsies do not satisfy the requirement for tumor tissue.
-  * Note 2: Tumor lesions used for biopsy should not be lesions used as RECIST 1.1 target lesions unless there are no other lesions suitable for biopsy. If a RECIST target lesion is used for biopsy, the lesion must be ≥ 2 cm in longest diameter.
-* Women of childbearing potential (WOCBP) must have a negative serum pregnancy test at the Screening Visit (within 72 hours of first dose of study drugs) and must agree to use highly effective contraceptive measures starting with the Screening Visit through
-
-  * 9 months after the end of the treatment with oxaliplatin
-  * 6 months after the end of the treatment with fluorouracil
-  * 5 months after the end of the treatment with nivolumab or botensilimab or Balstilimab
-  * 6 months for capecitabine
-
-    * Highly effective contraception is defined in Appendix 03.
-
-Note Non-childbearing potential is defined as:
-
-1. ≥ 50 years of age and has not had menses for greater than 1 year.
-2. Amenorrheic for ≥ 2 years without a hysterectomy and bilateral oophorectomy and a follicle-stimulating hormone value in the postmenopausal range upon pre-study (screening) evaluation.
-3. Status is post-hysterectomy, bilateral oophorectomy, or tubal ligation.
-
-   * Male patients with a female partner(s) of childbearing potential must agree to use highly effective contraceptive measures throughout the study starting with the screening visit through 6 months after the end of the treatment with oxaliplatine or 3 months after the last dose for other study treatments is received. Males with pregnant partners must agree to use a condom; no additional method of contraception is required for the pregnant partner.
-   * Patient should understand, sign, and date the written voluntary informed consent form prior to any protocol-specific procedures performed and should be able and willing to comply with study visits and procedures as per protocol.
-   * Patients must be covered by a medical insurance.
-
-Exclusion Criteria:
-
-* Oesogastric cancer eligible to treatment with curative intent
-* Patients previously treated by anti-PD-1, anti-PD-L1, or anti-CTLA-4 or any other immunotherapy
-* Patients with surgery or radiotherapy within less than 4 weeks before C1D1
-* Patients with persistent AE Grade \>1 related to previous anti-cancer treatment, except alopecia (all grades), laboratory value according to criteria I7.
-* Patients with: hypokalemia, hypomagnesemia, hypocalcemia less than normal
-* Patients with known prolongation QT/QTc interval i.e. QT/QTc interval longer than 450 msec for men and longer than 470 msec for women according to the inclusion ECG.
-* Symptomatic, untreated, or actively progressing central nervous system (CNS) metastases.
-
-Note: Asymptomatic patients with treated CNS lesions are eligible, provided that all of the following criteria are met:
-
-* Measurable disease, per RECIST v1.1, must be present outside the CNS.
-* The patient has no history of intracranial hemorrhage or spinal cord hemorrhage.
-* Metastases are limited to the cerebellum or the supratentorial region (i.e., no metastases to the midbrain, pons, medulla, or spinal cord).
-* There is no evidence of interim progression between completion of CNS-directed therapy and initiation of study treatment.
-* The patient has not undergone stereotactic radiotherapy within 7 days prior to initiation of study treatment, whole-brain radiotherapy within 14 days prior to initiation of study treatment, neurosurgical resection within 21 days prior to initiation of study treatment.
-* The patient has no ongoing requirement for corticosteroids as therapy for CNS disease. Anticonvulsant therapy at a stable dose is permitted. A minimal wash-out period of 10days for corticosteroids is required.
-
-  * Patients with other malignancy unless this malignancy is not expected to interfere with the evaluation of study endpoints (basal or squamous cell carcinoma of the skin, in-situ carcinoma of the cervix, localized prostate cancer), or with no evidence of disease for ≥ 2 years.
-  * Known allergy or hypersensitivity to any of the study drugs or any of the study drug excipients.
-  * of ILD or non-infectious pneumonitis requiring glucocorticoids.
-  * History of allogeneic organ transplant.
-  * Psychiatric or substance abuse disorders that would interfere with cooperation with the requirements of the study.
-  * Patient with peripheral sensory neuropathy with functional impairment.
-  * Patients with clinically significant active heart disease or myocardial infarction within 6 months, history of uncontrolled or symptomatic cardiac disease.
-  * Patient with recent (within 7d before C1D1) or concomitant treatment with brivudine.
-  * Patient with complete absence of dihydropyrimidine dehydrogenase (DPD) activity (blood uracil level ≥ 150 ng/mL) or partial deficit in DPD (i.e. blood uracil level between ≥ 16 ng/ml and \< 150 ng/mL)
-  * Patients with a condition requiring systemic treatment with either corticosteroids (\> 10 mg daily prednisone equivalent) within 14 days or another immunosuppressive medication within 30 days of the first dose of study treatment. Inhaled or topical steroids, and adrenal replacement steroid doses (≤ 10 mg daily prednisone equivalent) are permitted in the absence of active autoimmune disease.
-  * Patient with Live vaccines injection within 4 weeks before C1D1. Examples of live vaccines include, but are not limited to, the following: measles, mumps, rubella, chicken pox, yellow fever and BCG. Seasonal influenza vaccines for injection are generally killed virus vaccines and are allowed; however intranasal influenza vaccines (e.g. Flu-Mist®) are live attenuated vaccines, and are not allowed.
-  * Active autoimmune disease or history of autoimmune disease that required systemic treatment within 2 years of the start of study treatment (i.e., with use of disease-modifying agents or immunosuppressive drugs).
-  * History or current evidence of any condition, co-morbidity, therapy, any active infections, or laboratory abnormality that might confound the results of the study, interfere with the patient's participation for the full duration of the study, or is not in the best interest of the patient to participate, in the opinion of the treating Investigator.
-  * Patients with documented:
-* Active hepatitis B (chronic or acute; defined as having a positive hepatitis B surface antigen \[HBsAg\] test at screening) unless their HBV is stably controlled on nucleoside analogs (eg entecavir or tenofovir) which will be continued for the duration of the study. Note: Patients with past hepatitis B virus (HBV) infection or resolved HBV infection (defined as the presence of hepatitis B core antibody \[anti-HBc\] and absence of HBsAg) are eligible. HBV DNA test must be performed in these patients prior to C1D1.
-* Active hepatitis C. Patients positive for hepatitis C virus (HCV) antibody are eligible only if PCR is negative for HCV RNA, or
-* HIV infection
-
-  * Prior organ or bone marrow transplant.
-  * Pregnant or lactating women.` to `Inclusion Criteria:
-
-* Male or female patient ≥18 years of age at time of informed consent form signature.
-* Patient with MSI-H/dMMR, HER2 negativeadvanced or metastatic gastric, gastro-oesophageal junction or oesophageal adenocarcinoma whose tumours express PD-L1 with a combined positive score (CPS) ≥ 5. Note :The claudin 18.2 status must be known and documented before inclusion.
-* Patient to be treated with a first line therapy for locally advanced/metastatic disease.
-* No prior treatment with chemotherapy for locally advanced/metastatic disease.
-
-  o Note - adjuvant or neoadjuvant chemotherapy is allowed providing that 6 months have relapsed between completion of adjuvant chemotherapy and recurrence.
-* Measurable disease (outside any previous irradiated field within the past 6 months) defined as at least one unidimensional lesion that can be accurately measured as ≥ 10 mm with CT scan according to RECIST V1.1 (Appendix 01).
-
-  * Note: Lesions intended to be biopsied should not be defined as target lesions.
-  * Note: previously irradiated lesions can be selected as target lesion only if recurrence/PD is documented after RT.
-* Patient with PS ECOG 0 or 1 (Appendix 02).
-* Adequate hematologic and end-organ function, defined by the following laboratory test results:
-
-Absolute neutrophil count ≥ 1.5 109/L (without growth factor support within 14 d) Platelets ≥ 100 109/L (without transfusion for platelets within 7 d) Hemoglobin ≥ 9 g/dL (without transfusion within 7 d) Creatinine clearance according to CKD-EPI ≥ 30 mL/min/1.73 m2 Serum total bilirubin ≤ 1.5 x ULN (except for patients with Gilbert disease for whom a total serum bilirubin ≤ 3 x ULN is acceptable) ASAT and ALAT ≤ 3 x ULN (or up to 5 x ULN in case of liver metastasis or hepatic infiltration)
-
-* Availability of a representative formalin-fixed paraffin-embedded (FFPE) sample of the primary or metastatic tumor tissue (resection or biopsy) with an associated pathology report must be available. This tumor sample must meet the following quality/quantity control criteria: ≥30 % of tumor cells and a tumor surface area ≥ 5mm2 or biopsiable disease (see next inclusion criteria).
-* Tumor lesion visible by medical imaging and accessible to repeatable percutaneous or endoscopic sampling that permits core needle biopsy without unacceptable risk of a significant procedural complications, and suitable for retrieval of a minimum of 4 cores with a needle minimum diameter :16-gauge.
-
-  * Note 1: Fine needle aspirates, bone biopsies do not satisfy the requirement for tumor tissue.
-  * Note 2: Tumor lesions used for biopsy should not be lesions used as RECIST 1.1 target lesions unless there are no other lesions suitable for biopsy. If a RECIST target lesion is used for biopsy, the lesion must be ≥ 2 cm in longest diameter.
-* Women of childbearing potential (WOCBP) must have a negative serum pregnancy test at the Screening Visit (within 72 hours of first dose of study drugs) and must agree to use highly effective contraceptive measures starting with the Screening Visit through
-
-  * 9 months after the end of the treatment with oxaliplatin
-  * 6 months after the end of the treatment with fluorouracil
-  * 5 months after the end of the treatment with nivolumab or botensilimab or Balstilimab
-  * 6 months for capecitabine
-
-    * Highly effective contraception is defined in Appendix 03.
-
-Note Non-childbearing potential is defined as:
-
-1. ≥ 50 years of age and has not had menses for greater than 1 year.
-2. Amenorrheic for ≥ 2 years without a hysterectomy and bilateral oophorectomy and a follicle-stimulating hormone value in the postmenopausal range upon pre-study (screening) evaluation.
-3. Status is post-hysterectomy, bilateral oophorectomy, or tubal ligation.
-
-   * Male patients with a female partner(s) of childbearing potential must agree to use highly effective contraceptive measures throughout the study starting with the screening visit through 6 months after the end of the treatment with oxaliplatine or 3 months after the last dose for other study treatments is received. Males with pregnant partners must agree to use a condom; no additional method of contraception is required for the pregnant partner.
-   * Patient should understand, sign, and date the written voluntary informed consent form prior to any protocol-specific procedures performed and should be able and willing to comply with study visits and procedures as per protocol.
-   * Patients must be covered by a medical insurance.
-
-Exclusion Criteria:
-
-* Oesogastric cancer eligible to treatment with curative intent
-* Patients previously treated by anti-PD-1, anti-PD-L1, or anti-CTLA-4 or any other immunotherapy
-* Patients with surgery or radiotherapy within less than 4 weeks before C1D1
-* Patients with persistent AE Grade \>1 related to previous anti-cancer treatment, except alopecia (all grades), laboratory value according to criteria I7.
-* Patients with: hypokalemia, hypomagnesemia, hypocalcemia less than normal
-* Patients with known prolongation QT/QTc interval i.e. QT/QTc interval longer than 450 msec for men and longer than 470 msec for women according to the inclusion ECG.
-* Symptomatic, untreated, or actively progressing central nervous system (CNS) metastases.
-
-Note: Asymptomatic patients with treated CNS lesions are eligible, provided that all of the following criteria are met:
-
-* Measurable disease, per RECIST v1.1, must be present outside the CNS.
-* The patient has no history of intracranial hemorrhage or spinal cord hemorrhage.
-* Metastases are limited to the cerebellum or the supratentorial region (i.e., no metastases to the midbrain, pons, medulla, or spinal cord).
-* There is no evidence of interim progression between completion of CNS-directed therapy and initiation of study treatment.
-* The patient has not undergone stereotactic radiotherapy within 7 days prior to initiation of study treatment, whole-brain radiotherapy within 14 days prior to initiation of study treatment, neurosurgical resection within 21 days prior to initiation of study treatment.
-* The patient has no ongoing requirement for corticosteroids as therapy for CNS disease. Anticonvulsant therapy at a stable dose is permitted. A minimal wash-out period of 10days for corticosteroids is required.
-
-  * Patients with other malignancy unless this malignancy is not expected to interfere with the evaluation of study endpoints (basal or squamous cell carcinoma of the skin, in-situ carcinoma of the cervix, localized prostate cancer), or with no evidence of disease for ≥ 2 years.
-  * Known allergy or hypersensitivity to any of the study drugs or any of the study drug excipients.
-  * of ILD or non-infectious pneumonitis requiring glucocorticoids.
-  * History of allogeneic organ transplant.
-  * Psychiatric or substance abuse disorders that would interfere with cooperation with the requirements of the study.
-  * Patient with peripheral sensory neuropathy with functional impairment.
-  * Patients with clinically significant active heart disease or myocardial infarction within 6 months, history of uncontrolled or symptomatic cardiac disease.
-  * Patient with recent (within 7d before C1D1) or concomitant treatment with brivudine.
-  * Patient with complete absence of dihydropyrimidine dehydrogenase (DPD) activity (blood uracil level ≥ 150 ng/mL) or partial deficit in DPD (i.e. blood uracil level between ≥ 16 ng/ml and \< 150 ng/mL)
-  * Patients with a condition requiring systemic treatment with either corticosteroids (\> 10 mg daily prednisone equivalent) within 14 days or another immunosuppressive medication within 30 days of the first dose of study treatment. Inhaled or topical steroids, and adrenal replacement steroid doses (≤ 10 mg daily prednisone equivalent) are permitted in the absence of active autoimmune disease.
-  * Patient with Live vaccines injection within 4 weeks before C1D1. Examples of live vaccines include, but are not limited to, the following: measles, mumps, rubella, chicken pox, yellow fever and BCG. Seasonal influenza vaccines for injection are generally killed virus vaccines and are allowed; however intranasal influenza vaccines (e.g. Flu-Mist®) are live attenuated vaccines, and are not allowed.
-  * Active autoimmune disease or history of autoimmune disease that required systemic treatment within 2 years of the start of study treatment (i.e., with use of disease-modifying agents or immunosuppressive drugs).
-  * History or current evidence of any condition, co-morbidity, therapy, any active infections, or laboratory abnormality that might confound the results of the study, interfere with the patient's participation for the full duration of the study, or is not in the best interest of the patient to participate, in the opinion of the treating Investigator.
-  * Patients with documented:
-* Active hepatitis B (chronic or acute; defined as having a positive hepatitis B surface antigen \[HBsAg\] test at screening) unless their HBV is stably controlled on nucleoside analogs (eg entecavir or tenofovir) which will be continued for the duration of the study. Note: Patients with past hepatitis B virus (HBV) infection or resolved HBV infection (defined as the presence of hepatitis B core antibody \[anti-HBc\] and absence of HBsAg) are eligible. HBV DNA test must be performed in these patients prior to C1D1.
-* Active hepatitis C. Patients positive for hepatitis C virus (HCV) antibody are eligible only if PCR is negative for HCV RNA, or
-* HIV infection
-
-  * Prior organ or bone marrow transplant.
-  * Pregnant or lactating women.`
-Field `contactsLocationsModule.locations.[0]contacts.[0]email` changed from `chloe.verner2@gmail.com` to `chloe.vernet2@gmail.com`
-New field added: `root['contactsLocationsModule']['locations'][1]['zip']`
-New field added: `root['contactsLocationsModule']['locations'][2]['zip']`
-
-***
-CIME is a multicenter, randomised, comparative, open-label phase III study aiming to compare the survival of patients suffering from MSI-H/dMMR locally advanced or metastatic oeasogastric adenocarcinoma treated by a bi-immunotherapy (experimental arm) versus standard current treatment (FOLFOX/XELOX + nivolumab : standard arm).",True
+NCT06346197,Combination of Immune Checkpoint in Locally Advanced or Metastatic MSI/dMMR Esogastric Adenocarcinomas,TIGIT,Centre Leon Berard,RECRUITING,"Gastric Cancer, MSI-H, Metastatic Cancer, Advanced Cancer",PHASE3,2026-04-02,2025-12-08,2028-05-15,132,Survival of patients,Changed,2026-04-09,"CIME is a multicenter, randomised, comparative, open-label phase III study aiming to compare the survival of patients suffering from MSI-H/dMMR locally advanced or metastatic oeasogastric adenocarcinoma treated by a bi-immunotherapy (experimental arm) versus standard current treatment (FOLFOX/XELOX + nivolumab : standard arm).",
 NCT05780073,Safety and Impact of Dasatinib on Viral Persistence and Inflammation in People With HIV Under Antiretroviral Treatment,TIGIT,Fundació Institut Germans Trias i Pujol,COMPLETED,HIV Infection Primary,PHASE2,2025-09-16,2023-10-16,2025-04-01,60,Grade 3 or 4 treatment-related adverse events or laboratory abnormalities during the study (based on the Common Terminology Criteria for Adverse Events (CTCAE) v5.0 grading scale).,No Change,2026-02-05,"This is a Phase II, single-center, randomized, double-blind, placebo-controlled clinical trial in People with Human Immunodeficiency Virus (PWH) on suppressive Combined Antiretroviral Therapy (cART).
 
 The aim is to assess safety, tolerability and Impact of low dose Dasatinib, during 24 weeks, on Viral Persistence and Inflammation in this population.
@@ -1006,39 +844,10 @@ NCT04256421,A Study of Atezolizumab Plus Carboplatin and Etoposide With or Witho
 * Arm B: Placebo plus atezolizumab plus CE
 
 Following the induction phase, participants will continue maintenance therapy with either atezolizumab plus tiragolumab (Arm A) or atezolizumab plus placebo (Arm B).",
-NCT06989112,"DESTINY-Endometrial01: A Phase III Study of Trastuzumab Deruxtecan Plus Rilvegostomig or Pembrolizumab as First-Line Treatment of HER2-Expressing (IHC 3+/2+), Mismatch Repair Proficient (pMMR) Endometrial Cancer",TIGIT,AstraZeneca,RECRUITING,Endometrial Cancer,PHASE3,2026-04-07,2025-03-27,2031-02-19,600,"Progression-free survival (PFS), as assessed by BICR",Changed,2026-04-09,"**[RECENT CHANGES FOUND]**
-Field `statusModule.statusVerifiedDate` changed from `2026-03` to `2026-04`
-Field `statusModule.lastUpdateSubmitDate` changed from `2026-03-11` to `2026-04-07`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-03-12` to `2026-04-08`
-Field `contactsLocationsModule.locations.[4]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[70]city` changed from `Ghent` to `Oklahoma City`
-Field `contactsLocationsModule.locations.[70]zip` changed from `9000` to `73104`
-Field `contactsLocationsModule.locations.[70]country` changed from `Belgium` to `United States`
-Field `contactsLocationsModule.locations.[70]geoPoint.lat` changed from `51.05` to `35.46756`
-Field `contactsLocationsModule.locations.[70]geoPoint.lon` changed from `3.71667` to `-97.51643`
-Field `contactsLocationsModule.locations.[54]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[88]status` changed from `NOT_YET_RECRUITING` to `WITHDRAWN`
-Field `contactsLocationsModule.locations.[139]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[143]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[149]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[167]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[208]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[229]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-New field added: `root['contactsLocationsModule']['locations'][70]['state']`
-
-***
-DESTINY-Endometrial01 will investigate the efficacy of first-line T-DXd + rilvegostomig (Arm A) and/or T-DXd+ pembrolizumab (Arm B) when compared to chemotherapy (carboplatin + paclitaxel) + pembrolizumab (Arm C), by assessment of progression free survival (PFS), as assessed by BICR, in participants with HER2-expressing (IHC 3+/2+), pMMR, primary advanced (Stage III/IV) or recurrent EC.",True
+NCT06989112,"DESTINY-Endometrial01: A Phase III Study of Trastuzumab Deruxtecan Plus Rilvegostomig or Pembrolizumab as First-Line Treatment of HER2-Expressing (IHC 3+/2+), Mismatch Repair Proficient (pMMR) Endometrial Cancer",TIGIT,AstraZeneca,RECRUITING,Endometrial Cancer,PHASE3,2026-04-07,2025-03-27,2031-02-19,600,"Progression-free survival (PFS), as assessed by BICR",Changed,2026-04-09,"DESTINY-Endometrial01 will investigate the efficacy of first-line T-DXd + rilvegostomig (Arm A) and/or T-DXd+ pembrolizumab (Arm B) when compared to chemotherapy (carboplatin + paclitaxel) + pembrolizumab (Arm C), by assessment of progression free survival (PFS), as assessed by BICR, in participants with HER2-expressing (IHC 3+/2+), pMMR, primary advanced (Stage III/IV) or recurrent EC.",
 NCT05816460,The Sleepio After Cancer Study,TIGIT,University College Dublin,UNKNOWN,"Insomnia, Cancer",NA,2023-05-19,2023-05-22,2024-06-10,308,Mean continuous change in the intervention group compared to the control arm as measured by the Sleep Condition Indicator Score,No Change,2026-02-05,"Women who are eligible and provide informed consent will be enrolled into this 2-armed, parallel group open label randomised controlled trial. Participants will be randomised 1:1 to receive dCBT-I (intervention arm) or to sleep hygiene education (control arm). The primary outcome will be the mean continuous change in sleep condition indicator (SCI) score in the intervention arm compared to the control arm at 6 months. In addition to this, the proportion of women with an SCI \> 16 at 6 months will be assessed. Secondary outcomes will include fatigue, sleep related quality of life, depression, anxiety, as well as hot flush interference in those experiencing vasomotor symptoms.",
 NCT06627647,A Global Phase III Study of Rilvegostomig or Pembrolizumab Plus Chemotherapy for First-Line Treatment of Metastatic Non-squamous NSCLC,TIGIT,AstraZeneca,RECRUITING,Non-squamous Non-small Cell Lung Cancer,PHASE3,2026-03-26,2024-11-27,2030-03-25,878,Overall survival (OS),Changed,2026-03-28,"This is a Phase III, two-arm, randomized, double-blind, global, multicenter study assessing the efficacy and safety of rilvegostomig compared to pembrolizumab, both in combination with platinum-based doublet chemotherapy, as a 1L treatment for patients with non-squamous mNSCLC whose tumors express PD-L1 (TC ≥ 1%).",
-NCT04305054,Substudy 02B: Safety and Efficacy of Pembrolizumab in Combination With Investigational Agents or Pembrolizumab Alone in Participants With First Line (1L) Advanced Melanoma (MK-3475-02B/KEYMAKER-U02),TIGIT,Merck Sharp & Dohme LLC,ACTIVE_NOT_RECRUITING,Melanoma,"PHASE1, PHASE2",2026-04-07,2020-07-01,2026-05-20,315,Percentage of participants who experience a dose-limiting toxicity (DLT): Safety lead-in phase,Changed,2026-04-09,"**[RECENT CHANGES FOUND]**
-Field `statusModule.statusVerifiedDate` changed from `2025-08` to `2026-03`
-Field `statusModule.primaryCompletionDateStruct.date` changed from `2026-04-20` to `2026-05-20`
-Field `statusModule.completionDateStruct.date` changed from `2026-04-20` to `2026-05-20`
-Field `statusModule.lastUpdateSubmitDate` changed from `2025-08-28` to `2026-04-07`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2025-08-29` to `2026-04-08`
-
-***
-With Amendment 6, all arms are closed to enrollment. Participants in arms 2 (pembrolizumab), 3 (coformulation pembrolizumab/quavonlimab), and 4 (coformulation pembrolizumab/quavonlimab + lenvatinib) who complete study treatment or otherwise meet end of treatment (EOT) criteria will be discontinued from the study after completing the EOT visit and any required safety follow-up visits. Participants in arm 6 (coformulation favezelimab/pembrolizumab + All-trans Retinoic Acid \[ATRA\]) will discontinue ATRA and participants in arms 5 and 6 can continue on coformulation favezelimab/pembrolizumab or pembrolizumab.",True
+NCT04305054,Substudy 02B: Safety and Efficacy of Pembrolizumab in Combination With Investigational Agents or Pembrolizumab Alone in Participants With First Line (1L) Advanced Melanoma (MK-3475-02B/KEYMAKER-U02),TIGIT,Merck Sharp & Dohme LLC,ACTIVE_NOT_RECRUITING,Melanoma,"PHASE1, PHASE2",2026-04-07,2020-07-01,2026-05-20,315,Percentage of participants who experience a dose-limiting toxicity (DLT): Safety lead-in phase,Changed,2026-04-09,"With Amendment 6, all arms are closed to enrollment. Participants in arms 2 (pembrolizumab), 3 (coformulation pembrolizumab/quavonlimab), and 4 (coformulation pembrolizumab/quavonlimab + lenvatinib) who complete study treatment or otherwise meet end of treatment (EOT) criteria will be discontinued from the study after completing the EOT visit and any required safety follow-up visits. Participants in arm 6 (coformulation favezelimab/pembrolizumab + All-trans Retinoic Acid \[ATRA\]) will discontinue ATRA and participants in arms 5 and 6 can continue on coformulation favezelimab/pembrolizumab or pembrolizumab.",
 NCT04294810,A Study of Tiragolumab in Combination With Atezolizumab Compared With Placebo in Combination With Atezolizumab in Patients With Previously Untreated Locally Advanced Unresectable or Metastatic PD-L1-Selected Non-Small Cell Lung Cancer,TIGIT,Hoffmann-La Roche,COMPLETED,Non-Small Cell Lung Cancer,PHASE3,2026-01-29,2020-03-04,2025-12-30,620,Investigator-Assessed Progression-Free Survival (PFS) in the Primary Analysis Set,Changed,2026-04-04,"The purpose of the study is to evaluate the efficacy and safety of tiragolumab plus atezolizumab compared with placebo plus atezolizumab in participants with previously untreated locally advanced, unresectable or metastatic PD-L1-selected non-small cell lung cancer (NSCLC), with no epidermal growth factor receptor (EGFR) mutation or anaplastic lymphoma kinase (ALK) translocation. Eligible participants will be randomized in a 1:1 ratio to receive either tiragolumab plus atezolizumab or placebo plus atezolizumab.",
 NCT03198546,GPC3-CAR-T Cells for Immunotherapy of Cancer With GPC3 Expression,TIGIT,Second Affiliated Hospital of Guangzhou Medical University,RECRUITING,"Hepatocellular Carcinoma, Immunotherapy, CAR, GPC3 Gene Inactivation, T Cell, Squamous Cell Lung Cancer",PHASE1,2024-06-22,2017-07-01,2036-08-01,30,Number of Patients with Dose Limiting Toxicity,No Change,2026-02-05,"1. Choose appropriate patients with advanced hepatocellular carcinoma,with written consent for this study;
 2. Perform biopsy to determine the expression of GPC3 of the tumor by western blotting or IHC;

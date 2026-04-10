@@ -1,14 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:41",
-    "diff": "Initial data collection"
-  },
-  {
-    "timestamp": "2026-02-24 00:57:05",
-    "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-12` to `2026-02`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-12-18` to `2026-02-20`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-12-24` to `2026-02-23`\nField `contactsLocationsModule.locations.[8]status` changed from `NOT_YET_RECRUITING` to `SUSPENDED`\nField `contactsLocationsModule.locations.[9]status` changed from `NOT_YET_RECRUITING` to `SUSPENDED`"
-  },
-  {
-    "timestamp": "2026-03-18 02:24:04",
-    "diff": "Field `statusModule.statusVerifiedDate` changed from `2026-02` to `2026-03`\nField `statusModule.lastUpdateSubmitDate` changed from `2026-02-20` to `2026-03-16`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2026-02-23` to `2026-03-17`\nField `contactsLocationsModule.locations.[6]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`\nField `contactsLocationsModule.locations.[7]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`\nField `contactsLocationsModule.locations.[8]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:41", "diff": "Initial data collection"}, {"timestamp": "2026-02-24 00:57:05", "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-12` to `2026-02`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-12-18` to `2026-02-20`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-12-24` to `2026-02-23`\nField `contactsLocationsModule.locations.[8]status` changed from `NOT_YET_RECRUITING` to `SUSPENDED`\nField `contactsLocationsModule.locations.[9]status` changed from `NOT_YET_RECRUITING` to `SUSPENDED`"}, {"timestamp": "2026-03-18 02:24:04", "diff": "Field `statusModule.statusVerifiedDate` changed from `2026-02` to `2026-03`\nField `statusModule.lastUpdateSubmitDate` changed from `2026-02-20` to `2026-03-16`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2026-02-23` to `2026-03-17`\nField `contactsLocationsModule.locations.[6]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`\nField `contactsLocationsModule.locations.[7]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`\nField `contactsLocationsModule.locations.[8]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`"}, {"timestamp": "2026-04-10 02:39:09", "diff": "Field `statusModule.statusVerifiedDate` changed from `2026-03` to `2026-04`\nField `statusModule.lastUpdateSubmitDate` changed from `2026-03-16` to `2026-04-08`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2026-03-17` to `2026-04-09`"}]
