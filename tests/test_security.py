@@ -58,6 +58,8 @@ def test_is_valid_nct_id():
     assert is_valid_nct_id("NCT" + "1" * 40) is False  # Max length check
     assert is_valid_nct_id("nct12345678") is False  # Case sensitive
     assert is_valid_nct_id("NCT12345678\n") is False  # Should not accept trailing newline
+    # Persian digits should be rejected (must be ASCII [0-9])
+    assert is_valid_nct_id("NCT\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667") is False
     assert is_valid_nct_id("NCTabcdefgh") is False  # Not digits
     assert is_valid_nct_id("") is False
     assert is_valid_nct_id(None) is False
