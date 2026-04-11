@@ -120,6 +120,11 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
         seen_in_target = {}  # trial_id -> index in unique_target_trials
 
         for trial in trials:
+            if not isinstance(trial, dict):
+                print(f"  Warning: Removing invalid trial entry (not a dictionary): {trial}")
+                total_invalid += 1
+                continue
+
             trial_id = trial.get("id")
 
             # Security enhancement: Validate NCT ID format
