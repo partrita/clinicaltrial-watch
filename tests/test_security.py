@@ -44,6 +44,8 @@ def test_escape_html_markdown():
     assert escape_html("Link [text](url)") == "Link &#91;text&#93;(url)"
     # Backslash and MathJax characters should be escaped
     assert escape_html("Math $x+y$ and Backslash \\") == "Math &#36;x+y&#36; and Backslash &#92;"
+    # Curly braces should be escaped to prevent Quarto/Pandoc attribute injection
+    assert escape_html("Text { .class }") == "Text &#123; .class &#125;"
 
 
 def test_escape_html_none():
@@ -156,7 +158,9 @@ def test_sanitize_csv_value():
     assert sanitize_csv_value("%something") == "'%something"
     assert sanitize_csv_value("\t=SUM(A1)") == "'\t=SUM(A1)"
     assert sanitize_csv_value("\r-5") == "'\r-5"
+    assert sanitize_csv_value("\n=1+1") == "'\n=1+1"
     assert sanitize_csv_value("  =SUM(A1)") == "'  =SUM(A1)"
+    assert sanitize_csv_value(" \n @info") == "' \n @info"
     assert sanitize_csv_value(" \t @info") == "' \t @info"
     assert sanitize_csv_value("Normal text") == "Normal text"
     assert sanitize_csv_value(123) == 123
