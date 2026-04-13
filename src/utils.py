@@ -48,7 +48,8 @@ def sanitize_id(identifier: str) -> str:
 
 # Pre-computed translation table for Markdown/Quarto specific escapes
 # Performance: ~15-20% faster than multiple .replace() calls
-# Also escapes '$' to prevent MathJax injection and '\' for general Markdown safety.
+# Also escapes '$' to prevent MathJax injection, '\' for general Markdown safety,
+# and curly braces '{}' to prevent Quarto/Pandoc attribute injection.
 MARKDOWN_ESCAPE_TABLE = str.maketrans(
     {
         "|": "&#124;",
@@ -57,6 +58,8 @@ MARKDOWN_ESCAPE_TABLE = str.maketrans(
         "`": "&#96;",
         "$": "&#36;",
         "\\": "&#92;",
+        "{": "&#123;",
+        "}": "&#125;",
     }
 )
 
@@ -102,7 +105,7 @@ def sanitize_csv_value(value: Any) -> Any:
     if not stripped_value:
         return value
 
-    if stripped_value[0] in ("=", "+", "-", "@", ";", "%", "\t", "\r"):
+    if stripped_value[0] in ("=", "+", "-", "@", ";", "%", "\t", "\r", "\n"):
         return f"'{value}"
     return value
 
