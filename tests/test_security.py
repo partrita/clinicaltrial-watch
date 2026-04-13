@@ -1,4 +1,4 @@
-from src.utils import sanitize_id, escape_html, is_valid_nct_id
+from src.utils import sanitize_id, escape_html, is_valid_nct_id, sanitize_csv_value
 
 
 def test_sanitize_id_path_traversal():
@@ -605,3 +605,17 @@ def test_deduplicate_config_security():
     finally:
         if os.path.exists(test_yaml):
             os.remove(test_yaml)
+
+
+def test_escape_html_curly_braces():
+    """Verify that curly braces are escaped to prevent Quarto/Pandoc attribute injection."""
+    assert escape_html("text {with} braces") == "text &#123;with&#125; braces"
+
+
+def test_sanitize_csv_value_enhanced():
+    """Verify that leading newlines and dangerous whitespace are handled for CSV formula injection."""
+    assert sanitize_csv_value("\nNormal") == "'\nNormal"
+    assert sanitize_csv_value("\tNormal") == "'\tNormal"
+    assert sanitize_csv_value(" \n=SUM(A1)") == "' \n=SUM(A1)"
+    # Ensure it doesn't crash on empty string (regression fix)
+    assert sanitize_csv_value("") == ""

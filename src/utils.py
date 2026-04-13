@@ -57,6 +57,8 @@ MARKDOWN_ESCAPE_TABLE = str.maketrans(
         "`": "&#96;",
         "$": "&#36;",
         "\\": "&#92;",
+        "{": "&#123;",
+        "}": "&#125;",
     }
 )
 
@@ -97,13 +99,19 @@ def sanitize_csv_value(value: Any) -> Any:
     # Limit length to prevent DoS and comply with Excel's 32,767 character limit per cell
     value = value[:32767]
 
-    # Check the first non-whitespace character
-    stripped_value = value.lstrip()
-    if not stripped_value:
-        return value
+    # Check for dangerous characters at the start of the string.
+    # We check the first character of the raw value to catch cases with leading whitespace
+    # that Excel/Google Sheets might still interpret as formulas.
+    # We also check the first NON-whitespace character.
+    dangerous_chars = ("=", "+", "-", "@", ";", "%", "\t", "\r", "\n")
 
-    if stripped_value[0] in ("=", "+", "-", "@", ";", "%", "\t", "\r"):
+    if value and value[0] in dangerous_chars:
         return f"'{value}"
+
+    stripped_value = value.lstrip()
+    if stripped_value and stripped_value[0] in dangerous_chars:
+        return f"'{value}"
+
     return value
 
 
