@@ -71,16 +71,37 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
     safe_trial_id = sanitize_id(trial_id)
     url = f"https://clinicaltrials.gov/api/v2/studies/{safe_trial_id}"
 
+    # Max response size: 10MB (to prevent memory exhaustion DoS)
+    MAX_RESPONSE_SIZE = 10 * 1024 * 1024
+
     if HAS_REQUESTS:
         session = get_session()
         try:
             # Adding a tiny random jitter to avoid perfectly synchronized requests
-            # which can sometimes trigger bot protection
             time.sleep(random.uniform(0.05, 0.1))
 
-            response = session.get(url, timeout=(3, 5))  # (connect, read) timeout
+            # Use stream=True to check Content-Length before downloading full body
+            response = session.get(url, timeout=(3, 15), stream=True)
             if response.status_code == 200:
-                return response.json()
+                # Check Content-Length header if present
+                content_length = response.headers.get("Content-Length")
+                if content_length and int(content_length) > MAX_RESPONSE_SIZE:
+                    print(f"Error: Response too large for {safe_trial_id}: {content_length} bytes")
+                    response.close()
+                    return None
+
+                # Read in chunks to enforce limit even if header is missing/wrong
+                content = []
+                size = 0
+                for chunk in response.iter_content(chunk_size=128 * 1024):
+                    size += len(chunk)
+                    if size > MAX_RESPONSE_SIZE:
+                        print(f"Error: Response exceeded size limit for {safe_trial_id}")
+                        response.close()
+                        return None
+                    content.append(chunk)
+
+                return json.loads(b"".join(content).decode("utf-8"))
             elif response.status_code == 404:
                 print(f"Trial {safe_trial_id} not found (404).")
                 return None
@@ -99,9 +120,27 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
         try:
             req = urllib.request.Request(url)
             req.add_header("User-Agent", "ClinicalTrialWatch/1.0")
-            with urllib.request.urlopen(req, timeout=10) as response:
+            with urllib.request.urlopen(req, timeout=15) as response:
                 if response.status == 200:
-                    return json.loads(response.read().decode("utf-8"))
+                    # Check Content-Length for urllib
+                    content_length = response.headers.get("Content-Length")
+                    if content_length and int(content_length) > MAX_RESPONSE_SIZE:
+                        print(f"Error: Response too large for {safe_trial_id}")
+                        return None
+
+                    content = []
+                    size = 0
+                    while True:
+                        chunk = response.read(128 * 1024)
+                        if not chunk:
+                            break
+                        size += len(chunk)
+                        if size > MAX_RESPONSE_SIZE:
+                            print(f"Error: Response exceeded size limit for {safe_trial_id}")
+                            return None
+                        content.append(chunk)
+
+                    return json.loads(b"".join(content).decode("utf-8"))
                 else:
                     print(
                         f"Error fetching data for {safe_trial_id} (urllib): {response.status}"

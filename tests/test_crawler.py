@@ -61,9 +61,11 @@ class TestFetchTrialData:
     @patch("crawler.get_session")
     def test_successful_fetch(self, mock_get_session: MagicMock) -> None:
         """Should return parsed JSON on 200 response."""
+        data = {"protocolSection": {"statusModule": {}}}
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = {"protocolSection": {"statusModule": {}}}
+        mock_response.headers = {}
+        mock_response.iter_content.return_value = [json.dumps(data).encode("utf-8")]
 
         mock_session = MagicMock()
         mock_session.get.return_value = mock_response

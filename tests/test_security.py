@@ -350,6 +350,52 @@ def test_load_config_robustness():
             os.remove(test_yaml)
 
 
+def test_api_response_size_limit():
+    """Verify that fetch_trial_data and search_trials respect the 10MB response size limit."""
+    from src.crawler import fetch_trial_data
+    from src.auto_discover_trials import search_trials
+    from unittest.mock import patch, MagicMock
+
+    # Mock responses for requests (HAS_REQUESTS=True)
+    with patch("src.crawler.get_session") as mock_get_session, \
+         patch("src.auto_discover_trials.get_session") as mock_get_session_auto:
+
+        # 1. Test fetch_trial_data with large Content-Length header
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.headers = {"Content-Length": str(11 * 1024 * 1024)} # 11MB
+        mock_session.get.return_value = mock_response
+
+        assert fetch_trial_data("NCT12345678") is None
+        mock_response.close.assert_called_once()
+
+        # 2. Test fetch_trial_data with actual large body (chunked)
+        mock_response_chunked = MagicMock()
+        mock_response_chunked.status_code = 200
+        mock_response_chunked.headers = {} # No content length
+        # Generate 11MB worth of chunks (88 chunks of 128KB)
+        mock_response_chunked.iter_content.return_value = [b"A" * (128 * 1024)] * 88
+        mock_session.get.return_value = mock_response_chunked
+
+        assert fetch_trial_data("NCT12345678") is None
+        mock_response_chunked.close.assert_called_once()
+
+        # 3. Test search_trials with large Content-Length header
+        mock_session_auto = MagicMock()
+        mock_get_session_auto.return_value = mock_session_auto
+
+        mock_response_auto = MagicMock()
+        mock_response_auto.status_code = 200
+        mock_response_auto.headers = {"Content-Length": str(11 * 1024 * 1024)}
+        mock_session_auto.get.return_value = mock_response_auto
+
+        assert search_trials("Target") == []
+        mock_response_auto.close.assert_called_once()
+
+
 def test_malformed_config_robustness():
     """Verify that load_config and deduplicate_config handle malformed structures gracefully."""
     from src.main import load_config, deduplicate_config
