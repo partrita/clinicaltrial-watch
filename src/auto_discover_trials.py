@@ -86,7 +86,7 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                         return []
                     content.append(chunk)
 
-                data = json.loads(b"".join(content).decode("utf-8"))
+                data = json.loads(b"".join(content))
                 return data.get("studies", [])
             else:
                 print(
