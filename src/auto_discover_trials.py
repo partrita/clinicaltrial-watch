@@ -55,17 +55,38 @@ def get_session() -> Optional[Any]:
 def search_trials(query_term: str) -> List[Dict[str, Any]]:
     """Search ClinicalTrials.gov API for a given term."""
     # Searching with max 1000 items (maximum allowed by pageSize)
-    # If there are more than 1000, we might need pagination, but it's unlikely for specific targets
     base_url = "https://clinicaltrials.gov/api/v2/studies"
     params = {"query.term": query_term, "pageSize": "1000"}
+
+    # Max response size: 10MB (to prevent memory exhaustion DoS)
+    MAX_RESPONSE_SIZE = 10 * 1024 * 1024
 
     if HAS_REQUESTS:
         session = get_session()
         try:
             time.sleep(random.uniform(0.5, 1.0))  # Be polite to API
-            response = session.get(base_url, params=params, timeout=(5, 15))
+            # Use stream=True to check Content-Length before downloading full body
+            response = session.get(base_url, params=params, timeout=(5, 20), stream=True)
             if response.status_code == 200:
-                data = response.json()
+                # Check Content-Length header if present
+                content_length = response.headers.get("Content-Length")
+                if content_length and int(content_length) > MAX_RESPONSE_SIZE:
+                    print(f"Error: Search response too large for {query_term}: {content_length} bytes")
+                    response.close()
+                    return []
+
+                # Read in chunks to enforce limit
+                content = []
+                size = 0
+                for chunk in response.iter_content(chunk_size=128 * 1024):
+                    size += len(chunk)
+                    if size > MAX_RESPONSE_SIZE:
+                        print(f"Error: Search response exceeded size limit for {query_term}")
+                        response.close()
+                        return []
+                    content.append(chunk)
+
+                data = json.loads(b"".join(content).decode("utf-8"))
                 return data.get("studies", [])
             else:
                 print(
@@ -84,9 +105,27 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             req = urllib.request.Request(full_url)
             req.add_header("User-Agent", "ClinicalTrialWatch/AutoDiscover/1.0")
             time.sleep(random.uniform(0.5, 1.0))
-            with urllib.request.urlopen(req, timeout=15) as response:
+            with urllib.request.urlopen(req, timeout=20) as response:
                 if response.status == 200:
-                    data = json.loads(response.read().decode("utf-8"))
+                    # Check Content-Length for urllib
+                    content_length = response.headers.get("Content-Length")
+                    if content_length and int(content_length) > MAX_RESPONSE_SIZE:
+                        print(f"Error: Search response too large for {query_term}")
+                        return []
+
+                    content = []
+                    size = 0
+                    while True:
+                        chunk = response.read(128 * 1024)
+                        if not chunk:
+                            break
+                        size += len(chunk)
+                        if size > MAX_RESPONSE_SIZE:
+                            print(f"Error: Search response exceeded size limit for {query_term}")
+                            return []
+                        content.append(chunk)
+
+                    data = json.loads(b"".join(content).decode("utf-8"))
                     return data.get("studies", [])
                 else:
                     print(
