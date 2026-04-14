@@ -70,7 +70,7 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             if response.status_code == 200:
                 # Check Content-Length header if present
                 content_length = response.headers.get("Content-Length")
-                if content_length and int(content_length) > MAX_RESPONSE_SIZE:
+                if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
                     print(f"Error: Search response too large for {query_term}: {content_length} bytes")
                     response.close()
                     return []
