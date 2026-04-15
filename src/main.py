@@ -230,7 +230,7 @@ def update_history(
     if history is None:
         history = safe_json_load(history_file, default=[])
 
-    history.append({"timestamp": timestamp, "diff": diff_text})
+    history.append({"timestamp": timestamp, "diff": diff_text[:10000]})
 
     # Keep history size bounded (last 100 entries) to prevent DoS via disk exhaustion
     if len(history) > 100:
