@@ -230,7 +230,11 @@ def update_history(
     if history is None:
         history = safe_json_load(history_file, default=[])
 
-    history.append({"timestamp": timestamp, "diff": diff_text})
+    history.append({"timestamp": timestamp, "diff": diff_text[:10000]})
+
+    # Keep history size bounded (last 100 entries) to prevent DoS via disk exhaustion
+    if len(history) > 100:
+        history = history[-100:]
 
     with open(history_file, "w", encoding="utf-8") as f:
         # Optimized: Removed indent to reduce serialization time and file size
@@ -261,10 +265,19 @@ def update_target_history(
     if not history:
         message = f"Initial data collection: {len(current_reports)} trials found."
     elif changed_today:
-        message = f"Changes detected in {len(changed_today)} trials: {', '.join(changed_today)}"
+        # Limit displayed IDs to prevent extremely large message strings
+        display_limit = 10
+        display_ids = changed_today[:display_limit]
+        message = f"Changes detected in {len(changed_today)} trials: {', '.join(display_ids)}"
+        if len(changed_today) > display_limit:
+            message += f" (and {len(changed_today) - display_limit} more)"
 
     if message:
         history.append({"timestamp": timestamp, "event": message})
+
+        # Keep history size bounded (last 100 entries) to prevent DoS via disk exhaustion
+        if len(history) > 100:
+            history = history[-100:]
 
         with open(history_file, "w", encoding="utf-8") as f:
             # Optimized: Removed indent to reduce serialization time and file size

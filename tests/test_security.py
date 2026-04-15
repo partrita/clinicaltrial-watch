@@ -655,3 +655,61 @@ def test_deduplicate_config_security():
     finally:
         if os.path.exists(test_yaml):
             os.remove(test_yaml)
+
+def test_history_size_limit():
+    """Verify that trial and target history are bounded to 100 entries."""
+    from src.main import update_history, update_target_history
+    import os
+    import json
+    import shutil
+
+    test_history_dir = "tests/tmp_history"
+    if os.path.exists(test_history_dir):
+        shutil.rmtree(test_history_dir)
+    os.makedirs(test_history_dir)
+
+    try:
+        # 1. Test update_history limit
+        trial_id = "NCT00000001"
+        # Create a history with 105 entries
+        history = [{"timestamp": f"2023-01-01 00:00:{i:02d}", "diff": "initial"} for i in range(105)]
+
+        # This should truncate to 100
+        updated = update_history(trial_id, "latest change", history_dir=test_history_dir, history=history)
+
+        assert len(updated) == 100
+        assert updated[-1]["diff"] == "latest change"
+
+        # Verify file content
+        history_file = os.path.join(test_history_dir, f"{trial_id}_history.json")
+        with open(history_file, "r") as f:
+            saved_history = json.load(f)
+            assert len(saved_history) == 100
+
+        # 2. Test update_target_history limit and message truncation
+        target_name = "LargeTarget"
+        # Create many changed trials
+        current_reports = [{"id": f"NCT{i:08d}", "changed_today": True} for i in range(50)]
+
+        # Pre-fill history with 105 entries
+        target_history_file = os.path.join(test_history_dir, "target_largetarget.json")
+        initial_target_history = [{"timestamp": "...", "event": "..."}] * 105
+        with open(target_history_file, "w") as f:
+            json.dump(initial_target_history, f)
+
+        update_target_history(target_name, current_reports, history_dir=test_history_dir)
+
+        with open(target_history_file, "r") as f:
+            saved_target_history = json.load(f)
+            assert len(saved_target_history) == 100
+
+            latest_event = saved_target_history[-1]["event"]
+            assert "Changes detected in 50 trials" in latest_event
+            # Should show 10 IDs and "and 40 more"
+            assert "(and 40 more)" in latest_event
+            # Verify it doesn't list all 50 IDs (just a quick check on length or count of commas)
+            assert latest_event.count(",") == 9
+
+    finally:
+        if os.path.exists(test_history_dir):
+            shutil.rmtree(test_history_dir)
