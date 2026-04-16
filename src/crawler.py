@@ -83,6 +83,13 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
             # Use stream=True to check Content-Length before downloading full body
             response = session.get(url, timeout=(3, 15), stream=True)
             if response.status_code == 200:
+                # Security enhancement: Validate Content-Type
+                content_type = response.headers.get("Content-Type", "")
+                if not content_type or not content_type.startswith("application/json"):
+                    print(f"Error: Unexpected Content-Type for {safe_trial_id}: {content_type}")
+                    response.close()
+                    return None
+
                 # Check Content-Length header if present
                 content_length = response.headers.get("Content-Length")
                 if content_length and int(content_length) > MAX_RESPONSE_SIZE:
@@ -120,8 +127,16 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
         try:
             req = urllib.request.Request(url)
             req.add_header("User-Agent", "ClinicalTrialWatch/1.0")
+            # Security enhancement: Add Accept header
+            req.add_header("Accept", "application/json")
             with urllib.request.urlopen(req, timeout=15) as response:
                 if response.status == 200:
+                    # Security enhancement: Validate Content-Type
+                    content_type = response.headers.get("Content-Type", "")
+                    if not content_type or not content_type.startswith("application/json"):
+                        print(f"Error: Unexpected Content-Type for {safe_trial_id} (urllib): {content_type}")
+                        return None
+
                     # Check Content-Length for urllib
                     content_length = response.headers.get("Content-Length")
                     if content_length and int(content_length) > MAX_RESPONSE_SIZE:

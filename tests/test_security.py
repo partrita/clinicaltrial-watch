@@ -396,6 +396,41 @@ def test_api_response_size_limit():
         mock_response_auto.close.assert_called_once()
 
 
+def test_api_content_type_validation():
+    """Verify that fetch_trial_data and search_trials validate the Content-Type header."""
+    from src.crawler import fetch_trial_data
+    from src.auto_discover_trials import search_trials
+    from unittest.mock import patch, MagicMock
+
+    # Mock responses for requests (HAS_REQUESTS=True)
+    with patch("src.crawler.get_session") as mock_get_session, \
+         patch("src.auto_discover_trials.get_session") as mock_get_session_auto:
+
+        # 1. Test fetch_trial_data with unexpected Content-Type (e.g. text/html)
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.headers = {"Content-Type": "text/html"}
+        mock_session.get.return_value = mock_response
+
+        assert fetch_trial_data("NCT12345678") is None
+        mock_response.close.assert_called_once()
+
+        # 2. Test search_trials with unexpected Content-Type
+        mock_session_auto = MagicMock()
+        mock_get_session_auto.return_value = mock_session_auto
+
+        mock_response_auto = MagicMock()
+        mock_response_auto.status_code = 200
+        mock_response_auto.headers = {"Content-Type": "text/html"}
+        mock_session_auto.get.return_value = mock_response_auto
+
+        assert search_trials("Target") == []
+        mock_response_auto.close.assert_called_once()
+
+
 def test_malformed_config_robustness():
     """Verify that load_config and deduplicate_config handle malformed structures gracefully."""
     from src.main import load_config, deduplicate_config
