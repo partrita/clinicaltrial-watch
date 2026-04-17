@@ -68,6 +68,13 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             # Use stream=True to check Content-Length before downloading full body
             response = session.get(base_url, params=params, timeout=(5, 20), stream=True)
             if response.status_code == 200:
+                # Security enhancement: Validate Content-Type
+                content_type = response.headers.get("Content-Type", "")
+                if not content_type or not content_type.lower().startswith("application/json"):
+                    print(f"Error: Unexpected Content-Type for {query_term}: {content_type}")
+                    response.close()
+                    return []
+
                 # Check Content-Length header if present
                 content_length = response.headers.get("Content-Length")
                 if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
@@ -104,9 +111,17 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             full_url = f"{base_url}?{query_string}"
             req = urllib.request.Request(full_url)
             req.add_header("User-Agent", "ClinicalTrialWatch/AutoDiscover/1.0")
+            # Security enhancement: Add Accept header
+            req.add_header("Accept", "application/json")
             time.sleep(random.uniform(0.5, 1.0))
             with urllib.request.urlopen(req, timeout=20) as response:
                 if response.status == 200:
+                    # Security enhancement: Validate Content-Type
+                    content_type = response.headers.get("Content-Type", "")
+                    if not content_type or not content_type.lower().startswith("application/json"):
+                        print(f"Error: Unexpected Content-Type for {query_term} (urllib): {content_type}")
+                        return []
+
                     # Check Content-Length for urllib
                     content_length = response.headers.get("Content-Length")
                     if content_length and int(content_length) > MAX_RESPONSE_SIZE:
