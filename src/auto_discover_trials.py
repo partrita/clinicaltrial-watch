@@ -70,7 +70,7 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             if response.status_code == 200:
                 # Security enhancement: Validate Content-Type
                 content_type = response.headers.get("Content-Type", "")
-                if not content_type or not content_type.startswith("application/json"):
+                if not content_type or not content_type.lower().startswith("application/json"):
                     print(f"Error: Unexpected Content-Type for {query_term}: {content_type}")
                     response.close()
                     return []
