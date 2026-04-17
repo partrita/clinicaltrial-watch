@@ -368,9 +368,10 @@ def test_api_response_size_limit():
         mock_response.status_code = 200
         mock_response.headers = {"Content-Length": str(11 * 1024 * 1024)} # 11MB
         mock_session.get.return_value = mock_response
+        mock_response.__enter__.return_value = mock_response
 
         assert fetch_trial_data("NCT12345678") is None
-        mock_response.close.assert_called_once()
+        mock_response.__exit__.assert_called_once()
 
         # 2. Test fetch_trial_data with actual large body (chunked)
         mock_response_chunked = MagicMock()
@@ -379,9 +380,10 @@ def test_api_response_size_limit():
         # Generate 11MB worth of chunks (88 chunks of 128KB)
         mock_response_chunked.iter_content.return_value = [b"A" * (128 * 1024)] * 88
         mock_session.get.return_value = mock_response_chunked
+        mock_response_chunked.__enter__.return_value = mock_response_chunked
 
         assert fetch_trial_data("NCT12345678") is None
-        mock_response_chunked.close.assert_called_once()
+        mock_response_chunked.__exit__.assert_called_once()
 
         # 3. Test search_trials with large Content-Length header
         mock_session_auto = MagicMock()
@@ -391,9 +393,10 @@ def test_api_response_size_limit():
         mock_response_auto.status_code = 200
         mock_response_auto.headers = {"Content-Length": str(11 * 1024 * 1024)}
         mock_session_auto.get.return_value = mock_response_auto
+        mock_response_auto.__enter__.return_value = mock_response_auto
 
         assert search_trials("Target") == []
-        mock_response_auto.close.assert_called_once()
+        mock_response_auto.__exit__.assert_called_once()
 
 
 def test_api_content_type_validation():
@@ -414,9 +417,10 @@ def test_api_content_type_validation():
         mock_response.status_code = 200
         mock_response.headers = {"Content-Type": "text/html"}
         mock_session.get.return_value = mock_response
+        mock_response.__enter__.return_value = mock_response
 
         assert fetch_trial_data("NCT12345678") is None
-        mock_response.close.assert_called_once()
+        mock_response.__exit__.assert_called_once()
 
         # 2. Test search_trials with unexpected Content-Type
         mock_session_auto = MagicMock()
@@ -426,9 +430,10 @@ def test_api_content_type_validation():
         mock_response_auto.status_code = 200
         mock_response_auto.headers = {"Content-Type": "text/html"}
         mock_session_auto.get.return_value = mock_response_auto
+        mock_response_auto.__enter__.return_value = mock_response_auto
 
         assert search_trials("Target") == []
-        mock_response_auto.close.assert_called_once()
+        mock_response_auto.__exit__.assert_called_once()
 
 
 def test_malformed_config_robustness():
@@ -748,3 +753,60 @@ def test_history_size_limit():
     finally:
         if os.path.exists(test_history_dir):
             shutil.rmtree(test_history_dir)
+
+
+def test_http_response_closure():
+    """Verify that HTTP response objects are always closed to prevent resource leaks."""
+    from src.crawler import fetch_trial_data
+    from src.auto_discover_trials import search_trials
+    from unittest.mock import patch, MagicMock
+
+    # 1. Test fetch_trial_data closure (requests path)
+    with patch("src.crawler.get_session") as mock_get_session:
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+
+        # Test 404 case
+        mock_response_404 = MagicMock()
+        mock_response_404.status_code = 404
+        mock_session.get.return_value = mock_response_404
+        mock_response_404.__enter__.return_value = mock_response_404
+        fetch_trial_data("NCT12345678")
+        assert mock_response_404.__enter__.called
+        assert mock_response_404.__exit__.called
+
+        # Test success case
+        mock_response_200 = MagicMock()
+        mock_response_200.status_code = 200
+        mock_response_200.headers = {"Content-Type": "application/json"}
+        mock_response_200.iter_content.return_value = [b'{"foo": "bar"}']
+        mock_session.get.return_value = mock_response_200
+        mock_response_200.__enter__.return_value = mock_response_200
+        fetch_trial_data("NCT12345678")
+        assert mock_response_200.__enter__.called
+        assert mock_response_200.__exit__.called
+
+    # 2. Test search_trials closure (requests path)
+    with patch("src.auto_discover_trials.get_session") as mock_get_session_auto:
+        mock_session_auto = MagicMock()
+        mock_get_session_auto.return_value = mock_session_auto
+
+        # Test error case
+        mock_response_err = MagicMock()
+        mock_response_err.status_code = 500
+        mock_session_auto.get.return_value = mock_response_err
+        mock_response_err.__enter__.return_value = mock_response_err
+        search_trials("Target")
+        assert mock_response_err.__enter__.called
+        assert mock_response_err.__exit__.called
+
+        # Test success case
+        mock_response_200_auto = MagicMock()
+        mock_response_200_auto.status_code = 200
+        mock_response_200_auto.headers = {"Content-Type": "application/json"}
+        mock_response_200_auto.iter_content.return_value = [b'{"studies": []}']
+        mock_session_auto.get.return_value = mock_response_200_auto
+        mock_response_200_auto.__enter__.return_value = mock_response_200_auto
+        search_trials("Target")
+        assert mock_response_200_auto.__enter__.called
+        assert mock_response_200_auto.__exit__.called
