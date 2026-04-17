@@ -133,7 +133,7 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                 if response.status == 200:
                     # Security enhancement: Validate Content-Type
                     content_type = response.headers.get("Content-Type", "")
-                    if not content_type or not content_type.startswith("application/json"):
+                    if not content_type or not content_type.lower().startswith("application/json"):
                         print(f"Error: Unexpected Content-Type for {safe_trial_id} (urllib): {content_type}")
                         return None
 
