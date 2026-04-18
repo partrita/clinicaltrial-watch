@@ -81,42 +81,40 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
             time.sleep(random.uniform(0.05, 0.1))
 
             # Use stream=True to check Content-Length before downloading full body
-            response = session.get(url, timeout=(3, 15), stream=True)
-            if response.status_code == 200:
-                # Security enhancement: Validate Content-Type
-                content_type = response.headers.get("Content-Type", "")
-                if not content_type or not content_type.lower().startswith("application/json"):
-                    print(f"Error: Unexpected Content-Type for {safe_trial_id}: {content_type}")
-                    response.close()
-                    return None
-
-                # Check Content-Length header if present
-                content_length = response.headers.get("Content-Length")
-                if content_length and int(content_length) > MAX_RESPONSE_SIZE:
-                    print(f"Error: Response too large for {safe_trial_id}: {content_length} bytes")
-                    response.close()
-                    return None
-
-                # Read in chunks to enforce limit even if header is missing/wrong
-                content = []
-                size = 0
-                for chunk in response.iter_content(chunk_size=128 * 1024):
-                    size += len(chunk)
-                    if size > MAX_RESPONSE_SIZE:
-                        print(f"Error: Response exceeded size limit for {safe_trial_id}")
-                        response.close()
+            # Using context manager to ensure connection is closed (CWE-400)
+            with session.get(url, timeout=(3, 15), stream=True) as response:
+                if response.status_code == 200:
+                    # Security enhancement: Validate Content-Type
+                    content_type = response.headers.get("Content-Type", "")
+                    if not content_type or not content_type.lower().startswith("application/json"):
+                        print(f"Error: Unexpected Content-Type for {safe_trial_id}: {content_type}")
                         return None
-                    content.append(chunk)
 
-                return json.loads(b"".join(content).decode("utf-8"))
-            elif response.status_code == 404:
-                print(f"Trial {safe_trial_id} not found (404).")
-                return None
-            else:
-                print(
-                    f"Error fetching data for {safe_trial_id}: {response.status_code}"
-                )
-                return None
+                    # Check Content-Length header if present
+                    content_length = response.headers.get("Content-Length")
+                    if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
+                        print(f"Error: Response too large for {safe_trial_id}: {content_length} bytes")
+                        return None
+
+                    # Read in chunks to enforce limit even if header is missing/wrong
+                    content = []
+                    size = 0
+                    for chunk in response.iter_content(chunk_size=128 * 1024):
+                        size += len(chunk)
+                        if size > MAX_RESPONSE_SIZE:
+                            print(f"Error: Response exceeded size limit for {safe_trial_id}")
+                            return None
+                        content.append(chunk)
+
+                    return json.loads(b"".join(content).decode("utf-8"))
+                elif response.status_code == 404:
+                    print(f"Trial {safe_trial_id} not found (404).")
+                    return None
+                else:
+                    print(
+                        f"Error fetching data for {safe_trial_id}: {response.status_code}"
+                    )
+                    return None
         except Exception as e:
             print(f"Exception fetching data for {safe_trial_id}: {e}")
             # Reset session on connection errors to avoid stuck connections

@@ -66,40 +66,38 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
         try:
             time.sleep(random.uniform(0.5, 1.0))  # Be polite to API
             # Use stream=True to check Content-Length before downloading full body
-            response = session.get(base_url, params=params, timeout=(5, 20), stream=True)
-            if response.status_code == 200:
-                # Security enhancement: Validate Content-Type
-                content_type = response.headers.get("Content-Type", "")
-                if not content_type or not content_type.lower().startswith("application/json"):
-                    print(f"Error: Unexpected Content-Type for {query_term}: {content_type}")
-                    response.close()
-                    return []
-
-                # Check Content-Length header if present
-                content_length = response.headers.get("Content-Length")
-                if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
-                    print(f"Error: Search response too large for {query_term}: {content_length} bytes")
-                    response.close()
-                    return []
-
-                # Read in chunks to enforce limit
-                content = []
-                size = 0
-                for chunk in response.iter_content(chunk_size=128 * 1024):
-                    size += len(chunk)
-                    if size > MAX_RESPONSE_SIZE:
-                        print(f"Error: Search response exceeded size limit for {query_term}")
-                        response.close()
+            # Using context manager to ensure connection is closed (CWE-400)
+            with session.get(base_url, params=params, timeout=(5, 20), stream=True) as response:
+                if response.status_code == 200:
+                    # Security enhancement: Validate Content-Type
+                    content_type = response.headers.get("Content-Type", "")
+                    if not content_type or not content_type.lower().startswith("application/json"):
+                        print(f"Error: Unexpected Content-Type for {query_term}: {content_type}")
                         return []
-                    content.append(chunk)
 
-                data = json.loads(b"".join(content))
-                return data.get("studies", [])
-            else:
-                print(
-                    f"Error fetching data for term {query_term}: {response.status_code}"
-                )
-                return []
+                    # Check Content-Length header if present
+                    content_length = response.headers.get("Content-Length")
+                    if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
+                        print(f"Error: Search response too large for {query_term}: {content_length} bytes")
+                        return []
+
+                    # Read in chunks to enforce limit
+                    content = []
+                    size = 0
+                    for chunk in response.iter_content(chunk_size=128 * 1024):
+                        size += len(chunk)
+                        if size > MAX_RESPONSE_SIZE:
+                            print(f"Error: Search response exceeded size limit for {query_term}")
+                            return []
+                        content.append(chunk)
+
+                    data = json.loads(b"".join(content))
+                    return data.get("studies", [])
+                else:
+                    print(
+                        f"Error fetching data for term {query_term}: {response.status_code}"
+                    )
+                    return []
         except Exception as e:
             print(f"Exception fetching data for term {query_term}: {e}")
             global _session

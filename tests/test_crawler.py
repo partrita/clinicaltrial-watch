@@ -66,6 +66,7 @@ class TestFetchTrialData:
         mock_response.status_code = 200
         mock_response.headers = {"Content-Type": "application/json"}
         mock_response.iter_content.return_value = [json.dumps(data).encode("utf-8")]
+        mock_response.__enter__.return_value = mock_response
 
         mock_session = MagicMock()
         mock_session.get.return_value = mock_response
@@ -87,6 +88,7 @@ class TestFetchTrialData:
         """Should return None for a 404 (trial not found)."""
         mock_response = MagicMock()
         mock_response.status_code = 404
+        mock_response.__enter__.return_value = mock_response
 
         mock_session = MagicMock()
         mock_session.get.return_value = mock_response
@@ -107,6 +109,7 @@ class TestFetchTrialData:
         """Should return None for server errors (500)."""
         mock_response = MagicMock()
         mock_response.status_code = 500
+        mock_response.__enter__.return_value = mock_response
 
         mock_session = MagicMock()
         mock_session.get.return_value = mock_response

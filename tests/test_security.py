@@ -367,21 +367,24 @@ def test_api_response_size_limit():
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_response.headers = {"Content-Length": str(11 * 1024 * 1024)} # 11MB
+        mock_response.__enter__.return_value = mock_response
         mock_session.get.return_value = mock_response
 
         assert fetch_trial_data("NCT12345678") is None
-        mock_response.close.assert_called_once()
+        # close() is called automatically by the context manager
+        mock_response.__exit__.assert_called_once()
 
         # 2. Test fetch_trial_data with actual large body (chunked)
         mock_response_chunked = MagicMock()
         mock_response_chunked.status_code = 200
         mock_response_chunked.headers = {} # No content length
+        mock_response_chunked.__enter__.return_value = mock_response_chunked
         # Generate 11MB worth of chunks (88 chunks of 128KB)
         mock_response_chunked.iter_content.return_value = [b"A" * (128 * 1024)] * 88
         mock_session.get.return_value = mock_response_chunked
 
         assert fetch_trial_data("NCT12345678") is None
-        mock_response_chunked.close.assert_called_once()
+        mock_response_chunked.__exit__.assert_called_once()
 
         # 3. Test search_trials with large Content-Length header
         mock_session_auto = MagicMock()
@@ -390,10 +393,11 @@ def test_api_response_size_limit():
         mock_response_auto = MagicMock()
         mock_response_auto.status_code = 200
         mock_response_auto.headers = {"Content-Length": str(11 * 1024 * 1024)}
+        mock_response_auto.__enter__.return_value = mock_response_auto
         mock_session_auto.get.return_value = mock_response_auto
 
         assert search_trials("Target") == []
-        mock_response_auto.close.assert_called_once()
+        mock_response_auto.__exit__.assert_called_once()
 
 
 def test_api_content_type_validation():
@@ -413,10 +417,11 @@ def test_api_content_type_validation():
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_response.headers = {"Content-Type": "text/html"}
+        mock_response.__enter__.return_value = mock_response
         mock_session.get.return_value = mock_response
 
         assert fetch_trial_data("NCT12345678") is None
-        mock_response.close.assert_called_once()
+        mock_response.__exit__.assert_called_once()
 
         # 2. Test search_trials with unexpected Content-Type
         mock_session_auto = MagicMock()
@@ -425,10 +430,11 @@ def test_api_content_type_validation():
         mock_response_auto = MagicMock()
         mock_response_auto.status_code = 200
         mock_response_auto.headers = {"Content-Type": "text/html"}
+        mock_response_auto.__enter__.return_value = mock_response_auto
         mock_session_auto.get.return_value = mock_response_auto
 
         assert search_trials("Target") == []
-        mock_response_auto.close.assert_called_once()
+        mock_response_auto.__exit__.assert_called_once()
 
 
 def test_malformed_config_robustness():
