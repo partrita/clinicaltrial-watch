@@ -68,7 +68,9 @@ class TestFetchTrialData:
         mock_response.iter_content.return_value = [json.dumps(data).encode("utf-8")]
 
         mock_session = MagicMock()
+        # Mocking context manager behavior for 'with session.get(...) as response'
         mock_session.get.return_value = mock_response
+        mock_response.__enter__.return_value = mock_response
         mock_get_session.return_value = mock_session
 
         import crawler
@@ -90,6 +92,7 @@ class TestFetchTrialData:
 
         mock_session = MagicMock()
         mock_session.get.return_value = mock_response
+        mock_response.__enter__.return_value = mock_response
         mock_get_session.return_value = mock_session
 
         import crawler
@@ -110,6 +113,7 @@ class TestFetchTrialData:
 
         mock_session = MagicMock()
         mock_session.get.return_value = mock_response
+        mock_response.__enter__.return_value = mock_response
         mock_get_session.return_value = mock_session
 
         import crawler
