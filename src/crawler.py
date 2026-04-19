@@ -105,7 +105,7 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                             return None
                         content.append(chunk)
 
-                    return json.loads(b"".join(content).decode("utf-8"))
+                    return json.loads(b"".join(content))
                 elif response.status_code == 404:
                     print(f"Trial {safe_trial_id} not found (404).")
                     return None
