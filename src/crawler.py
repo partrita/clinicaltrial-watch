@@ -5,6 +5,8 @@ import random
 from typing import Any, Dict, Optional
 from utils import sanitize_id, is_valid_nct_id
 
+import urllib.request
+
 try:
     import requests
     from requests.adapters import HTTPAdapter
@@ -12,8 +14,6 @@ try:
 
     HAS_REQUESTS = True
 except ImportError:
-    import urllib.request
-
     HAS_REQUESTS = False
 
 # Global session to reuse connections (much faster)
@@ -136,7 +136,7 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
 
                     # Check Content-Length for urllib
                     content_length = response.headers.get("Content-Length")
-                    if content_length and int(content_length) > MAX_RESPONSE_SIZE:
+                    if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
                         print(f"Error: Response too large for {safe_trial_id}")
                         return None
 
@@ -152,7 +152,7 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                             return None
                         content.append(chunk)
 
-                    return json.loads(b"".join(content).decode("utf-8"))
+                    return json.loads(b"".join(content))
                 else:
                     print(
                         f"Error fetching data for {safe_trial_id} (urllib): {response.status}"
