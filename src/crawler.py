@@ -91,7 +91,7 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
 
                     # Check Content-Length header if present
                     content_length = response.headers.get("Content-Length")
-                    if content_length and int(content_length) > MAX_RESPONSE_SIZE:
+                    if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
                         print(f"Error: Response too large for {safe_trial_id}: {content_length} bytes")
                         return None
 
