@@ -810,3 +810,54 @@ def test_http_response_closure():
         search_trials("Target")
         assert mock_response_200_auto.__enter__.called
         assert mock_response_200_auto.__exit__.called
+
+def test_urllib_fallback_security():
+    """Verify that the urllib fallback path correctly handles malformed Content-Length and size limits."""
+    from src.crawler import fetch_trial_data
+    from src.auto_discover_trials import search_trials
+    from unittest.mock import patch, MagicMock
+    import src.crawler
+    import src.auto_discover_trials
+
+    with patch("urllib.request.urlopen") as mock_urlopen:
+        # Force urllib path
+        with patch.object(src.crawler, "HAS_REQUESTS", False), \
+             patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
+
+            # 1. Test malformed Content-Length (non-numeric)
+            mock_response_malformed = MagicMock()
+            mock_response_malformed.status = 200
+            mock_response_malformed.headers = {"Content-Type": "application/json", "Content-Length": "not-a-number"}
+            mock_response_malformed.read.side_effect = [b'{"foo": "bar"}', b""]
+            mock_urlopen.return_value.__enter__.return_value = mock_response_malformed
+
+            # Should NOT return None if Content-Length is malformed (it skips the check and proceeds to read)
+            # unless the read also fails. But wait, if it's malformed, .isdigit() is False,
+            # so it proceeds to read. This is fine as the size is still checked during read.
+            res = fetch_trial_data("NCT12345678")
+            assert res == {"foo": "bar"}
+
+            # 2. Test large Content-Length header (e.g. " 11000000 ")
+            mock_response_large = MagicMock()
+            mock_response_large.status = 200
+            mock_response_large.headers = {"Content-Type": "application/json", "Content-Length": " 11000000 "}
+            mock_urlopen.return_value.__enter__.return_value = mock_response_large
+
+            assert fetch_trial_data("NCT12345678") is None
+
+            # 3. Test Search with malformed Content-Length
+            mock_response_search = MagicMock()
+            mock_response_search.status = 200
+            mock_response_search.headers = {"Content-Type": "application/json", "Content-Length": "invalid"}
+            mock_response_search.read.side_effect = [b'{"studies": []}', b""]
+            mock_urlopen.return_value.__enter__.return_value = mock_response_search
+
+            assert search_trials("Target") == []
+
+            # 4. Test Search with large Content-Length
+            mock_response_search_large = MagicMock()
+            mock_response_search_large.status = 200
+            mock_response_search_large.headers = {"Content-Type": "application/json", "Content-Length": "11000000"}
+            mock_urlopen.return_value.__enter__.return_value = mock_response_search_large
+
+            assert search_trials("Target") == []
