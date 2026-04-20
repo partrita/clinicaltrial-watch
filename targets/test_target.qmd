@@ -1,9 +1,9 @@
 ---
-title: CCR8
+title: Test Target
 ---
 
 ::: {.callout-note}
-CCR8 타겟 임상시험 모니터링
+Test Target 타겟 임상시험 모니터링
 :::
 
 ## Visual Summary
@@ -20,7 +20,7 @@ import plotly.express as px
 import os
 from src.utils import sanitize_id, get_status_badge, get_phase_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment
 
-target_id = "ccr8"
+target_id = "test_target"
 csv_path = f"data/targets/{target_id}/all_trials_raw.csv"
 
 if os.path.exists(csv_path):
@@ -94,7 +94,7 @@ import json
 import os
 from src.utils import sanitize_id, escape_html
 
-target_id = "ccr8"
+target_id = "test_target"
 target_h_file = f"data/history/target_{target_id}.json"
 
 if os.path.exists(target_h_file):
@@ -121,7 +121,7 @@ import json
 import os
 from src.utils import sanitize_id, escape_html, format_diff_line_markdown
 
-target_id = "ccr8"
+target_id = "test_target"
 summary_path = f"data/targets/{target_id}/status_summary.json"
 
 # Get trial IDs for this target
@@ -169,8 +169,8 @@ if not history_found:
 
 ---
 
-<a href="../data/targets/ccr8/all_trials_raw.csv" class="btn btn-primary" role="button" aria-label="Download all raw trial data for CCR8 in CSV format">📥 Download Full Data (CSV)</a>
-<a href="../data/targets/ccr8/status_summary.csv" class="btn btn-outline-secondary" role="button" aria-label="Download status summary for CCR8 in CSV format">📥 Download Status Summary (CSV)</a>
+<a href="../data/targets/test_target/all_trials_raw.csv" class="btn btn-primary" role="button" aria-label="Download all raw trial data for Test Target in CSV format">📥 Download Full Data (CSV)</a>
+<a href="../data/targets/test_target/status_summary.csv" class="btn btn-outline-secondary" role="button" aria-label="Download status summary for Test Target in CSV format">📥 Download Status Summary (CSV)</a>
 
 ---
 
@@ -183,7 +183,7 @@ import json
 import os
 from src.utils import sanitize_id, get_status_badge, get_phase_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment
 
-target_id = "ccr8"
+target_id = "test_target"
 summary_path = f"data/targets/{target_id}/status_summary.json"
 
 if os.path.exists(summary_path):

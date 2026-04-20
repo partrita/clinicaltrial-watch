@@ -13,11 +13,52 @@ def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
         return []
 
     with open(path, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f)
-        if data and "targets" in data:
-            return data["targets"]
+        try:
+            data = yaml.safe_load(f)
+            if data and "targets" in data:
+                return data["targets"]
+        except Exception:
+            return []
 
     return []
+
+
+def discover_all_targets() -> List[Dict[str, Any]]:
+    """Discover all targets from trials.yaml and data/targets directory."""
+    targets_dict = {}
+
+    # 1. Load from trials.yaml
+    for t in load_trials_yaml():
+        name = t["name"]
+        targets_dict[name.lower()] = {
+            "name": name,
+            "description": t.get("description", f"{name} 타겟 임상시험 모니터링"),
+        }
+
+    # 2. Discover from data/targets directory
+    targets_data_dir = "data/targets"
+    if os.path.exists(targets_data_dir):
+        for d in os.listdir(targets_data_dir):
+            if d.lower() in targets_dict:
+                continue
+
+            summary_path = os.path.join(targets_data_dir, d, "status_summary.json")
+            if os.path.exists(summary_path):
+                try:
+                    import json
+
+                    with open(summary_path, "r") as f:
+                        data = json.load(f)
+                        if data and isinstance(data, list):
+                            name = data[0].get("target", d)
+                            targets_dict[name.lower()] = {
+                                "name": name,
+                                "description": f"{name} 타겟 임상시험 모니터링",
+                            }
+                except Exception:
+                    continue
+
+    return list(targets_dict.values())
 
 
 def generate_target_qmd(
@@ -296,14 +337,44 @@ import os
 from src.utils import sanitize_id, get_changed_count_badge, escape_html
 
 summary_path = "data/targets_summary.json"
+targets_dir = "data/targets"
+targets = []
 
-if os.path.exists(summary_path):
+# Try to gather data from individual target summaries for maximum accuracy
+if os.path.exists(targets_dir):
+    for d in os.listdir(targets_dir):
+        t_summary_path = os.path.join(targets_dir, d, "status_summary.json")
+        if os.path.exists(t_summary_path):
+            try:
+                with open(t_summary_path, "r") as f:
+                    trials = json.load(f)
+                    if trials:
+                        name = trials[0].get('target', d)
+                        trial_count = len(trials)
+                        changed_count = sum(1 for t in trials if t.get('monitor_status') == 'Changed')
+                        
+                        # Find description from targets_summary.json if available
+                        desc = f"{name} 타겟 임상시험 모니터링"
+                        targets.append({
+                            'name': name,
+                            'description': desc,
+                            'trial_count': trial_count,
+                            'changed_count': changed_count
+                        })
+            except Exception:
+                continue
+
+# If no data found in directories, fallback to global summary or config
+if not targets and os.path.exists(summary_path):
     try:
         with open(summary_path, "r") as f:
             targets = json.load(f)
-    except Exception as e:
-        print(f"Error loading summary: {e}")
+    except Exception:
         targets = []
+
+if targets:
+    # Sort targets by name
+    targets.sort(key=lambda x: x['name'])
     
     print("| Target | Description | Trials | Changed |")
     print("| --- | --- | ---:| ---:|")
@@ -386,29 +457,29 @@ def update_quarto_yml(
 
 
 def main() -> None:
-    # Load targets
-    targets = load_trials_yaml()
+    # Discover all targets from trials.yaml AND data directory
+    targets = discover_all_targets()
 
     if not targets:
-        print("No targets found in trials.yaml")
+        print("No targets found in trials.yaml or data/targets/")
         return
 
     print(f"Found {len(targets)} targets")
 
-    # Generate QMD pages
+    # Generate QMD pages for all targets
     for target in targets:
         generate_target_qmd(
             target["name"],
             target.get("description", f"{target['name']} 타겟 임상시험 모니터링"),
         )
 
-    # Update index.qmd
+    # Update index.qmd (now uses dynamic discovery internally)
     generate_index_qmd()
 
-    # Update _quarto.yml
+    # Update _quarto.yml with all discovered targets
     update_quarto_yml(targets)
 
-    print(f"\n✓ Generated {len(targets)} target pages and updated index.qmd")
+    print(f"\n✓ Generated/Updated {len(targets)} target pages and updated index.qmd")
 
 
 if __name__ == "__main__":
