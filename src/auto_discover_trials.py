@@ -9,6 +9,10 @@ import random
 from typing import Any, Dict, List, Optional
 from utils import is_valid_nct_id
 
+import urllib.request
+import urllib.parse
+import json
+
 try:
     import requests
     from requests.adapters import HTTPAdapter
@@ -16,10 +20,6 @@ try:
 
     HAS_REQUESTS = True
 except ImportError:
-    import urllib.request
-    import urllib.parse
-    import json
-
     HAS_REQUESTS = False
 
 from update_trials_from_csv import load_yaml, save_yaml, update_target
@@ -121,7 +121,7 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
 
                     # Check Content-Length for urllib
                     content_length = response.headers.get("Content-Length")
-                    if content_length and int(content_length) > MAX_RESPONSE_SIZE:
+                    if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
                         print(f"Error: Search response too large for {query_term}")
                         return []
 
@@ -137,7 +137,7 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                             return []
                         content.append(chunk)
 
-                    data = json.loads(b"".join(content).decode("utf-8"))
+                    data = json.loads(b"".join(content))
                     return data.get("studies", [])
                 else:
                     print(
