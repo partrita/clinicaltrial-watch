@@ -7,11 +7,9 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
-  build-and-deploy:
+  update-data:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -22,7 +20,7 @@ jobs:
       - name: Setup Pixi
         uses: prefix-dev/setup-pixi@v0.8.1
         with:
-          pixi-version: v0.39.5
+          pixi-version: v0.46.0
 
       - name: Run Tests
         run: |
@@ -37,14 +35,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update clinical trial data [skip ci]" && git push)
-
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Render and Deploy to GitHub Pages
-        run: |
-          pixi run quarto publish gh-pages --no-prompt
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Stage all modified files including config and generated pages
+          git add data/ trials.yaml _quarto.yml index.qmd targets/
+          git diff --staged --quiet || (git commit -m "Update clinical trial data and configuration" && git push)

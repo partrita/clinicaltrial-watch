@@ -5,11 +5,14 @@ on:
 
 name: Quarto Publish
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
