@@ -755,6 +755,24 @@ def test_history_size_limit():
             shutil.rmtree(test_history_dir)
 
 
+def test_update_target_truncation():
+    """Verify that update_target in src/update_trials_from_csv.py truncates long metadata."""
+    from src.update_trials_from_csv import update_target
+
+    data = {"targets": []}
+    long_target_name = "T" * 300
+    long_description = "D" * 3000
+    new_trials = [{"id": "NCT12345678", "name": "Trial"}]
+
+    updated_data = update_target(data, long_target_name, new_trials, description=long_description)
+
+    target = updated_data["targets"][0]
+    assert len(target["name"]) == 255
+    assert target["name"] == "T" * 255
+    assert len(target["description"]) == 2000
+    assert target["description"] == "D" * 2000
+
+
 def test_http_response_closure():
     """Verify that HTTP response objects are always closed to prevent resource leaks."""
     from src.crawler import fetch_trial_data
