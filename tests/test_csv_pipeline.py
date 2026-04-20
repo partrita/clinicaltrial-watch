@@ -204,7 +204,7 @@ class TestPublishWorkflowDataAvailability:
     """Verify that data generation runs before Quarto render."""
 
     def test_daily_watch_generates_before_render(self) -> None:
-        """daily-watch.yml must run main.py BEFORE quarto render."""
+        """daily-watch.yml must run main.py BEFORE pushing changes (which triggers render)."""
         yml_path = os.path.join(
             os.path.dirname(__file__), "..", ".github", "workflows", "daily-watch.yml"
         )
@@ -212,12 +212,14 @@ class TestPublishWorkflowDataAvailability:
             content = f.read()
 
         main_pos = content.find("src/main.py")
-        render_pos = content.find("quarto publish")
+        # In the split workflow, main.py updates data, then we push.
+        # The push triggers the separate publish.yml workflow.
+        push_pos = content.find("git push")
 
         assert main_pos != -1, "daily-watch.yml must run main.py"
-        assert render_pos != -1, "daily-watch.yml must run quarto"
-        assert main_pos < render_pos, (
-            "main.py must run BEFORE quarto render in daily-watch.yml"
+        assert push_pos != -1, "daily-watch.yml must push changes"
+        assert main_pos < push_pos, (
+            "main.py must run BEFORE pushing changes in daily-watch.yml"
         )
 
     def test_publish_renders(self) -> None:
