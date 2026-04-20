@@ -104,7 +104,7 @@ def update_target(
         data["targets"] = []
 
     for t in data["targets"]:
-        if isinstance(t, dict) and str(t.get("name", "")).lower() == target_name.lower():
+        if isinstance(t, dict) and str(t.get("name", ""))[:255].lower() == target_name.lower():
             target = t
             break
 
