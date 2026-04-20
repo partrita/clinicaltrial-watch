@@ -93,13 +93,18 @@ def update_target(
     description: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Update or create a target with new trials."""
+    # Security enhancement: Truncate target name and description to prevent DoS
+    target_name = str(target_name)[:255]
+    if description:
+        description = str(description)[:2000]
+
     # Find existing target
     target = None
     if "targets" not in data or not isinstance(data["targets"], list):
         data["targets"] = []
 
     for t in data["targets"]:
-        if isinstance(t, dict) and t.get("name", "").lower() == target_name.lower():
+        if isinstance(t, dict) and str(t.get("name", ""))[:255].lower() == target_name.lower():
             target = t
             break
 
