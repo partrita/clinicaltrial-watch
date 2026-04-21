@@ -436,6 +436,8 @@ def process_trial(
         "detailedDescription",
         protocol.get("descriptionModule", {}).get("briefSummary", "N/A"),
     )
+    # Security enhancement: Truncate excessively long descriptions to prevent DoS
+    detailed_desc = str(detailed_desc)[:10000]
 
     diff = compare_snapshots(trial_id, new_data)
 
@@ -463,11 +465,14 @@ def process_trial(
         # Reuse pre-loaded history
         history = update_history(trial_id, diff_text, history=history)
         last_monitored = datetime.now().strftime("%Y-%m-%d")
+
+        # Security enhancement: Truncate combined details to prevent DoS
+        combined_details = f"**[RECENT CHANGES FOUND]**\n{diff_text}\n\n***\n{detailed_desc}"
         report_item.update(
             {
                 "changed_today": True,
                 "last_monitored_change": last_monitored,
-                "details": f"**[RECENT CHANGES FOUND]**\n{diff_text}\n\n***\n{detailed_desc}",
+                "details": combined_details[:20000],
             }
         )
     elif not history:
