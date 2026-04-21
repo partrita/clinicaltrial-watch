@@ -78,7 +78,10 @@ def format_diff(diff: Any) -> str:
         # Format the simple fallback diff
         lines = []
         for label, change in diff.items():
-            lines.append(f"{label}: `{change['old']}` -> `{change['new']}`")
+            # Security enhancement: Truncate large values to prevent DoS
+            old_val = str(change['old'])[:1000]
+            new_val = str(change['new'])[:1000]
+            lines.append(f"{label}: `{old_val}` -> `{new_val}`")
         return "\n".join(lines)
 
     summary = []
@@ -89,8 +92,11 @@ def format_diff(diff: Any) -> str:
             clean_path = (
                 path.replace("root", "").replace("['", "").replace("']", ".").strip(".")
             )
+            # Security enhancement: Truncate large values to prevent DoS
+            old_val = str(change['old_value'])[:1000]
+            new_val = str(change['new_value'])[:1000]
             summary.append(
-                f"Field `{clean_path}` changed from `{change['old_value']}` to `{change['new_value']}`"
+                f"Field `{clean_path}` changed from `{old_val}` to `{new_val}`"
             )
 
     # Dictionary items added/removed
