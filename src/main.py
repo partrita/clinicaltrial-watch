@@ -467,7 +467,7 @@ def process_trial(
         last_monitored = datetime.now().strftime("%Y-%m-%d")
 
         # Security enhancement: Truncate combined details to prevent DoS
-        combined_details = f"**[RECENT CHANGES FOUND]**\n{diff_text}\n\n***\n{detailed_desc}"
+        combined_details = f"**[RECENT CHANGES FOUND]**\n{diff_text[:10000]}\n\n***\n{detailed_desc}"
         report_item.update(
             {
                 "changed_today": True,
