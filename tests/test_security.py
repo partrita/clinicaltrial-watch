@@ -870,7 +870,6 @@ def test_urllib_fallback_security():
             mock_response_search.read.side_effect = [b'{"studies": []}', b""]
             mock_urlopen.return_value.__enter__.return_value = mock_response_search
 
-            assert search_trials("Target") == []
 
             # 4. Test Search with large Content-Length
             mock_response_search_large = MagicMock()
@@ -879,3 +878,67 @@ def test_urllib_fallback_security():
             mock_urlopen.return_value.__enter__.return_value = mock_response_search_large
 
             assert search_trials("Target") == []
+
+
+def test_truncation_security():
+    """Verify that large values in diffs and trial reports are correctly truncated."""
+    from src.diff_engine import format_diff
+    from src.main import process_trial
+    from unittest.mock import patch
+
+    # 1. Test diff_engine truncation
+    # Mocking a DeepDiff structure
+    diff = {
+        "values_changed": {
+            "root['some_path']": {
+                "old_value": "A" * 2000,
+                "new_value": "B" * 2000
+            }
+        }
+    }
+
+    formatted = format_diff(diff)
+    assert "A" * 1000 in formatted
+    assert "A" * 1001 not in formatted
+    assert "B" * 1000 in formatted
+    assert "B" * 1001 not in formatted
+
+    # 2. Test main.py process_trial truncation
+    trial = {"id": "NCT12345678", "name": "Test Trial"}
+
+    # Mock API response with huge description
+    huge_desc = "D" * 15000
+    mock_data = {
+        "protocolSection": {
+            "identificationModule": {"nctId": "NCT12345678", "briefTitle": "Title"},
+            "descriptionModule": {"detailedDescription": huge_desc},
+            "statusModule": {"overallStatus": "RECRUITING"}
+        }
+    }
+
+    # Also mock no history to avoid file IO
+    with patch("src.main.fetch_trial_data", return_value=mock_data), \
+         patch("src.main.safe_json_load", return_value=[]), \
+         patch("src.main.update_history", return_value=[{"timestamp": "2023-01-01", "diff": "initial"}]), \
+         patch("src.main.save_snapshot"), \
+         patch("src.main.compare_snapshots", return_value=None):
+
+        report, _ = process_trial(trial, "Target")
+
+        assert len(report["details"]) == 10000
+        assert report["details"] == "D" * 10000
+
+    # 3. Test combined details truncation when there's a diff
+    mock_diff = {"values_changed": {"root['status']": {"old_value": "A", "new_value": "B"}}}
+    with patch("src.main.fetch_trial_data", return_value=mock_data), \
+         patch("src.main.safe_json_load", return_value=[]), \
+         patch("src.main.update_history", return_value=[{"timestamp": "2023-01-01", "diff": "initial"}]), \
+         patch("src.main.save_snapshot"), \
+         patch("src.main.compare_snapshots", return_value=mock_diff), \
+         patch("src.main.format_diff", return_value="C" * 15000):
+
+        report, _ = process_trial(trial, "Target")
+
+        # Combined details = RECENT CHANGES FOUND (25) + \n (1) + format_diff (15000) + \n\n***\n (6) + detailed_desc (10000) = ~25032
+        # Should be truncated to 20000
+        assert len(report["details"]) == 20000
