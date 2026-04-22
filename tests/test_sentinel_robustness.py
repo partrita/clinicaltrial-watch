@@ -30,9 +30,10 @@ def test_load_yaml_malformed_trials_yaml(tmp_path):
     with open(yaml_path, "w") as f:
         f.write("targets: [unclosed bracket")
 
-    # Should not crash, should return empty targets
-    data = load_yaml(yaml_path)
-    assert data == {"targets": []}
+    # Should now raise an exception to prevent data loss if it were a transient error
+    # but since it's a YAMLError (syntax error), it's also caught and raised by our hardened loaders.
+    with pytest.raises(yaml.YAMLError):
+        load_yaml(yaml_path)
 
 def test_load_yaml_csv_malformed_trials_yaml(tmp_path):
     os.chdir(tmp_path)
@@ -42,9 +43,9 @@ def test_load_yaml_csv_malformed_trials_yaml(tmp_path):
     with open(yaml_path, "w") as f:
         f.write("targets: [unclosed bracket")
 
-    # Should not crash, should return empty targets
-    data = load_yaml_csv(yaml_path)
-    assert data == {"targets": []}
+    # Should now raise an exception
+    with pytest.raises(yaml.YAMLError):
+        load_yaml_csv(yaml_path)
 
 def test_remove_trial_invalid_id_format(tmp_path):
     assert remove_trial("not-an-id") is False

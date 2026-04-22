@@ -942,3 +942,36 @@ def test_truncation_security():
         # Combined details = RECENT CHANGES FOUND (25) + \n (1) + format_diff (15000) + \n\n***\n (6) + detailed_desc (10000) = ~25032
         # Should be truncated to 20000
         assert len(report["details"]) == 20000
+
+def test_yaml_load_security_against_data_loss():
+    """Verify that YAML loaders raise exception on critical load failures instead of returning empty state."""
+    from src.main import load_config
+    from src.update_trials_from_csv import load_yaml as load_yaml_update
+    from src.manage_trials import load_yaml as load_yaml_manage
+    from unittest.mock import patch
+    import pytest
+    import os
+
+    test_yaml = "tests/test_data_loss_prevention.yaml"
+    # Create the file so it exists
+    with open(test_yaml, "w") as f:
+        f.write("targets: []")
+
+    try:
+        # Mock OSError (other than FileNotFoundError)
+        with patch("builtins.open", side_effect=OSError("Disk failure")):
+            # 1. Test src/main.py load_config
+            with pytest.raises(OSError, match="Disk failure"):
+                load_config(test_yaml)
+
+            # 2. Test src/update_trials_from_csv.py load_yaml
+            with pytest.raises(OSError, match="Disk failure"):
+                load_yaml_update(test_yaml)
+
+            # 3. Test src/manage_trials.py load_yaml
+            with pytest.raises(OSError, match="Disk failure"):
+                load_yaml_manage(test_yaml)
+
+    finally:
+        if os.path.exists(test_yaml):
+            os.remove(test_yaml)

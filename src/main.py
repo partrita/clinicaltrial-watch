@@ -27,14 +27,19 @@ def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     try:
         with open(config_path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
-            if not isinstance(data, dict):
-                print(f"  Warning: {config_path} is not a valid YAML dictionary. Resetting.")
-                return {"targets": []}
+    except FileNotFoundError:
+        return {"targets": []}
     except (yaml.YAMLError, OSError) as e:
-        print(f"  Warning: Failed to load config {config_path}: {e}")
+        # Security enhancement: If the file exists but fails to load (e.g. Permission Error, Disk Error),
+        # do NOT return an empty config that might overwrite the real data later.
+        print(f"  Error: Critical failure loading config {config_path}: {e}")
+        raise
+
+    if data is None:
         return {"targets": []}
 
-    if data is None or not isinstance(data, dict):
+    if not isinstance(data, dict):
+        print(f"  Warning: {config_path} is not a valid YAML dictionary. Using empty structure.")
         return {"targets": []}
 
     if "targets" not in data:

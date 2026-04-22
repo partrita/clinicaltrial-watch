@@ -12,13 +12,19 @@ def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
     if not os.path.exists(path):
         return []
 
-    with open(path, "r", encoding="utf-8") as f:
-        try:
+    try:
+        with open(path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
-            if data and "targets" in data:
-                return data["targets"]
-        except Exception:
-            return []
+    except FileNotFoundError:
+        return []
+    except (yaml.YAMLError, OSError) as e:
+        # Security enhancement: If the file exists but fails to load (e.g. Permission Error, Disk Error),
+        # do NOT return an empty list that might result in empty generation.
+        print(f"Error: Critical failure loading {path}: {e}")
+        raise
+
+    if data and isinstance(data, dict) and "targets" in data:
+        return data["targets"]
 
     return []
 

@@ -25,11 +25,19 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
     try:
         with open(yaml_path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
-            if not isinstance(data, dict):
-                print(f"Warning: {yaml_path} is not a valid YAML dictionary. Resetting.")
-                return {"targets": []}
+    except FileNotFoundError:
+        return {"targets": []}
     except (yaml.YAMLError, OSError) as e:
-        print(f"Error: Failed to load {yaml_path}: {e}")
+        # Security enhancement: If the file exists but fails to load (e.g. Permission Error, Disk Error),
+        # do NOT return an empty config that might overwrite the real data later.
+        print(f"Error: Critical failure loading {yaml_path}: {e}")
+        raise
+
+    if data is None:
+        return {"targets": []}
+
+    if not isinstance(data, dict):
+        print(f"Warning: {yaml_path} is not a valid YAML dictionary. Resetting.")
         return {"targets": []}
 
     # Handle legacy format (flat trials list)
