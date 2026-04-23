@@ -1,3 +1,4 @@
+import pytest
 from src.utils import sanitize_id, escape_html, is_valid_nct_id
 
 
@@ -337,8 +338,8 @@ def test_load_config_robustness():
         f.write("- item1\n- item2")
 
     try:
-        res = load_config(test_yaml)
-        assert res == {"targets": []}
+        with pytest.raises(ValueError):
+            load_config(test_yaml)
 
         # Test with empty file
         with open(test_yaml, "w") as f:
@@ -436,10 +437,59 @@ def test_api_content_type_validation():
         mock_response_auto.__exit__.assert_called_once()
 
 
+def test_yaml_load_security_against_data_loss():
+    """Verify that configuration loaders fail loudly on read/parse errors to prevent data loss."""
+    from src.main import load_config
+    from src.manage_trials import load_yaml
+    from src.update_trials_from_csv import load_yaml as load_yaml_csv
+    from src.generate_target_pages import load_trials_yaml
+    import yaml
+    import os
+    import pytest
+
+    test_yaml = "tests/test_unreadable.yaml"
+
+    # 1. Test malformed YAML (not a dict) - should raise ValueError or YAMLError
+    with open(test_yaml, "w") as f:
+        f.write("- item1\n- item2")
+
+    try:
+        with pytest.raises(ValueError):
+            load_config(test_yaml)
+        with pytest.raises(ValueError):
+            load_yaml(test_yaml)
+        with pytest.raises(ValueError):
+            load_yaml_csv(test_yaml)
+        # load_trials_yaml returns [] for non-dict but we should check if it raises on OSError
+    finally:
+        if os.path.exists(test_yaml):
+            os.remove(test_yaml)
+
+    # 2. Test unreadable file (OSError)
+    # Since we can't easily change permissions in the sandbox to trigger OSError,
+    # we can use a directory path as a file path to trigger an OSError (IsADirectoryError).
+    test_dir = "tests/test_dir_as_file"
+    if not os.path.exists(test_dir):
+        os.makedirs(test_dir)
+
+    try:
+        with pytest.raises(OSError):
+            load_config(test_dir)
+        with pytest.raises(OSError):
+            load_yaml(test_dir)
+        with pytest.raises(OSError):
+            load_yaml_csv(test_dir)
+        with pytest.raises(OSError):
+            load_trials_yaml(test_dir)
+    finally:
+        if os.path.exists(test_dir):
+            os.rmdir(test_dir)
+
 def test_malformed_config_robustness():
     """Verify that load_config and deduplicate_config handle malformed structures gracefully."""
     from src.main import load_config, deduplicate_config
     import os
+    import pytest
 
     test_yaml = "tests/test_malformed_robustness.yaml"
 
@@ -448,10 +498,8 @@ def test_malformed_config_robustness():
         f.write("- item1\n- item2")
 
     try:
-        res = load_config(test_yaml)
-        assert isinstance(res, dict)
-        assert "targets" in res
-        assert res["targets"] == []
+        with pytest.raises(ValueError):
+            load_config(test_yaml)
 
         # 2. Test deduplicate_config with malformed dict (not containing targets list)
         malformed_config = {"not_targets": []}
