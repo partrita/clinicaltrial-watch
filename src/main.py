@@ -27,15 +27,18 @@ def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     try:
         with open(config_path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
-            if not isinstance(data, dict):
-                print(f"  Warning: {config_path} is not a valid YAML dictionary. Resetting.")
-                return {"targets": []}
+    except FileNotFoundError:
+        return {"targets": []}
     except (yaml.YAMLError, OSError) as e:
-        print(f"  Warning: Failed to load config {config_path}: {e}")
+        print(f"Error: Failed to load config {config_path}: {e}")
+        raise
+
+    if data is None:
         return {"targets": []}
 
-    if data is None or not isinstance(data, dict):
-        return {"targets": []}
+    if not isinstance(data, dict):
+        print(f"Error: {config_path} is not a valid YAML dictionary.")
+        raise ValueError(f"{config_path} must be a dictionary")
 
     if "targets" not in data:
         # Handle legacy format (flat trials list)

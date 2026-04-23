@@ -12,13 +12,24 @@ def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
     if not os.path.exists(path):
         return []
 
-    with open(path, "r", encoding="utf-8") as f:
-        try:
+    try:
+        with open(path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
-            if data and "targets" in data:
-                return data["targets"]
-        except Exception:
-            return []
+    except FileNotFoundError:
+        return []
+    except (yaml.YAMLError, OSError) as e:
+        print(f"Error: Failed to load trials YAML {path}: {e}")
+        raise
+
+    if data is None:
+        return []
+
+    if not isinstance(data, dict):
+        print(f"Error: {path} is not a valid YAML dictionary.")
+        raise ValueError(f"{path} must be a dictionary")
+
+    if "targets" in data and isinstance(data["targets"], list):
+        return data["targets"]
 
     return []
 
