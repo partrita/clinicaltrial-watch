@@ -460,7 +460,8 @@ def test_yaml_load_security_against_data_loss():
             load_yaml(test_yaml)
         with pytest.raises(ValueError):
             load_yaml_csv(test_yaml)
-        # load_trials_yaml returns [] for non-dict but we should check if it raises on OSError
+        with pytest.raises(ValueError):
+            load_trials_yaml(test_yaml)
     finally:
         if os.path.exists(test_yaml):
             os.remove(test_yaml)
