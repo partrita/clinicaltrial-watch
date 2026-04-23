@@ -21,7 +21,14 @@ def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
         print(f"Error: Failed to load trials YAML {path}: {e}")
         raise
 
-    if data and isinstance(data, dict) and "targets" in data:
+    if data is None:
+        return []
+
+    if not isinstance(data, dict):
+        print(f"Error: {path} is not a valid YAML dictionary.")
+        raise ValueError(f"{path} must be a dictionary")
+
+    if "targets" in data and isinstance(data["targets"], list):
         return data["targets"]
 
     return []
