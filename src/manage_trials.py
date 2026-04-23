@@ -28,15 +28,22 @@ def load_yaml(yaml_path: str = "trials.yaml") -> Dict[str, Any]:
         try:
             with open(yaml_path, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f)
-                if not isinstance(data, dict):
-                    print(f"Warning: {yaml_path} is not a valid YAML dictionary. Resetting.")
-                    return {"targets": []}
-                if "targets" not in data:
-                    data["targets"] = []
-                return data
+        except FileNotFoundError:
+            return {"targets": []}
         except (yaml.YAMLError, OSError) as e:
             print(f"Error: Failed to load {yaml_path}: {e}")
+            raise
+
+        if data is None:
             return {"targets": []}
+
+        if not isinstance(data, dict):
+            print(f"Error: {yaml_path} is not a valid YAML dictionary.")
+            raise ValueError(f"{yaml_path} must be a dictionary")
+
+        if "targets" not in data:
+            data["targets"] = []
+        return data
     else:
         # Simplistic fallback isn't ideal here for writing back
         raise ImportError(

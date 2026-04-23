@@ -25,12 +25,18 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
     try:
         with open(yaml_path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
-            if not isinstance(data, dict):
-                print(f"Warning: {yaml_path} is not a valid YAML dictionary. Resetting.")
-                return {"targets": []}
+    except FileNotFoundError:
+        return {"targets": []}
     except (yaml.YAMLError, OSError) as e:
         print(f"Error: Failed to load {yaml_path}: {e}")
+        raise
+
+    if data is None:
         return {"targets": []}
+
+    if not isinstance(data, dict):
+        print(f"Error: {yaml_path} is not a valid YAML dictionary.")
+        raise ValueError(f"{yaml_path} must be a dictionary")
 
     # Handle legacy format (flat trials list)
     if "trials" in data and "targets" not in data:
