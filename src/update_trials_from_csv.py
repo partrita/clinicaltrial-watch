@@ -37,8 +37,8 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
         return {"targets": []}
 
     if not isinstance(data, dict):
-        print(f"Warning: {yaml_path} is not a valid YAML dictionary. Resetting.")
-        return {"targets": []}
+        print(f"Error: Critical failure loading {yaml_path}: Not a valid YAML dictionary.")
+        raise ValueError(f"{yaml_path} must be a dictionary to prevent accidental data loss.")
 
     # Handle legacy format (flat trials list)
     if "trials" in data and "targets" not in data:
