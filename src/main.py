@@ -39,8 +39,8 @@ def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
         return {"targets": []}
 
     if not isinstance(data, dict):
-        print(f"  Warning: {config_path} is not a valid YAML dictionary. Using empty structure.")
-        return {"targets": []}
+        print(f"  Error: Critical failure loading config {config_path}: Not a valid YAML dictionary.")
+        raise ValueError(f"{config_path} must be a dictionary to prevent accidental data loss.")
 
     if "targets" not in data:
         # Handle legacy format (flat trials list)
