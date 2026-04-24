@@ -9,14 +9,14 @@ def test_add_to_exclusion_list_malformed_yaml(tmp_path):
     yaml_path = "excluded_trials.yaml"
 
     # Create malformed YAML (a list instead of a dict)
-    with open(yaml_path, "w") as f:
+    with open(yaml_path, "w", encoding="utf-8") as f:
         f.write("- item1\n- item2")
 
     # Should not crash, should just reset or handle it
     add_to_exclusion_list("NCT12345678", yaml_path=yaml_path)
 
     # Verify it fixed it
-    with open(yaml_path, "r") as f:
+    with open(yaml_path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
         assert isinstance(data, dict)
         assert "excluded_ids" in data
@@ -27,7 +27,7 @@ def test_load_yaml_malformed_trials_yaml(tmp_path):
     yaml_path = "trials.yaml"
 
     # Create malformed YAML (invalid syntax)
-    with open(yaml_path, "w") as f:
+    with open(yaml_path, "w", encoding="utf-8") as f:
         f.write("targets: [unclosed bracket")
 
     # Should raise YAMLError
@@ -39,7 +39,7 @@ def test_load_yaml_csv_malformed_trials_yaml(tmp_path):
     yaml_path = "trials.yaml"
 
     # Create malformed YAML (invalid syntax)
-    with open(yaml_path, "w") as f:
+    with open(yaml_path, "w", encoding="utf-8") as f:
         f.write("targets: [unclosed bracket")
 
     # Should raise YAMLError

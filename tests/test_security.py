@@ -77,7 +77,7 @@ def test_generation_escaping():
     name, desc = "Target | Pipe", "Desc <script>"
     # Test QMD generation
     qmd = generate_target_qmd(name, desc, output_dir="tests/tmp_targets")
-    with open(qmd, "r") as f:
+    with open(qmd, "r", encoding="utf-8") as f:
         content = f.read()
     # yaml.safe_dump might not use quotes for this string
     assert "title: Target &#124; Pipe" in content
@@ -86,7 +86,7 @@ def test_generation_escaping():
     # Test YAML generation
     yml = "tests/tmp_quarto.yml"
     update_quarto_yml([{"name": name}], yml)
-    with open(yml, "r") as f:
+    with open(yml, "r", encoding="utf-8") as f:
         content = f.read()
     assert "text: Target &#124; Pipe" in content
 
@@ -334,7 +334,7 @@ def test_load_config_robustness():
     test_yaml = "tests/test_robust_config.yaml"
 
     # Test with non-dictionary content
-    with open(test_yaml, "w") as f:
+    with open(test_yaml, "w", encoding="utf-8") as f:
         f.write("- item1\n- item2")
 
     try:
@@ -342,7 +342,7 @@ def test_load_config_robustness():
             load_config(test_yaml)
 
         # Test with empty file
-        with open(test_yaml, "w") as f:
+        with open(test_yaml, "w", encoding="utf-8") as f:
             f.write("")
         res = load_config(test_yaml)
         assert res == {"targets": []}
@@ -450,7 +450,7 @@ def test_yaml_load_security_against_data_loss():
     test_yaml = "tests/test_unreadable.yaml"
 
     # 1. Test malformed YAML (not a dict) - should raise ValueError or YAMLError
-    with open(test_yaml, "w") as f:
+    with open(test_yaml, "w", encoding="utf-8") as f:
         f.write("- item1\n- item2")
 
     try:
@@ -495,7 +495,7 @@ def test_malformed_config_robustness():
     test_yaml = "tests/test_malformed_robustness.yaml"
 
     # 1. Test load_config with malformed YAML (not a dict)
-    with open(test_yaml, "w") as f:
+    with open(test_yaml, "w", encoding="utf-8") as f:
         f.write("- item1\n- item2")
 
     try:
@@ -528,7 +528,7 @@ def test_malformed_config_robustness():
         assert res_dedup_3["targets"][0]["name"] == "Valid Target"
 
         # 5. Test load_config with legacy format (trials list at root)
-        with open(test_yaml, "w") as f:
+        with open(test_yaml, "w", encoding="utf-8") as f:
             f.write("trials:\n  - id: NCT12345678\n    name: Legacy Trial")
         res_legacy = load_config(test_yaml)
         assert len(res_legacy["targets"]) == 1
@@ -588,7 +588,7 @@ def test_yaml_injection_prevention():
     # Test QMD generation
     output_dir = "tests/tmp_yaml_test"
     qmd = generate_target_qmd(malicious_name, desc, output_dir=output_dir)
-    with open(qmd, "r") as f:
+    with open(qmd, "r", encoding="utf-8") as f:
         content = f.read()
 
     # The title should be properly escaped/quoted in YAML, not raw
@@ -615,7 +615,7 @@ def test_yaml_injection_prevention():
     targets = [{"name": malicious_name}]
     update_quarto_yml(targets, yml_path)
 
-    with open(yml_path, "r") as f:
+    with open(yml_path, "r", encoding="utf-8") as f:
         yml_content = f.read()
         yml_data = yaml.safe_load(yml_content)
 
@@ -771,7 +771,7 @@ def test_history_size_limit():
 
         # Verify file content
         history_file = os.path.join(test_history_dir, f"{trial_id}_history.json")
-        with open(history_file, "r") as f:
+        with open(history_file, "r", encoding="utf-8") as f:
             saved_history = json.load(f)
             assert len(saved_history) == 100
 
@@ -783,12 +783,12 @@ def test_history_size_limit():
         # Pre-fill history with 105 entries
         target_history_file = os.path.join(test_history_dir, "target_largetarget.json")
         initial_target_history = [{"timestamp": "...", "event": "..."}] * 105
-        with open(target_history_file, "w") as f:
+        with open(target_history_file, "w", encoding="utf-8") as f:
             json.dump(initial_target_history, f)
 
         update_target_history(target_name, current_reports, history_dir=test_history_dir)
 
-        with open(target_history_file, "r") as f:
+        with open(target_history_file, "r", encoding="utf-8") as f:
             saved_target_history = json.load(f)
             assert len(saved_target_history) == 100
 

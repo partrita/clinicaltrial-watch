@@ -41,7 +41,7 @@ class TestSaveSnapshot:
         save_snapshot("NCT_OW", new_data, snapshot_dir=str(tmp_path))
 
         filepath = os.path.join(str(tmp_path), "NCT_OW_latest.json")
-        with open(filepath, "r") as f:
+        with open(filepath, "r", encoding="utf-8") as f:
             loaded = json.load(f)
         assert loaded == new_data
 

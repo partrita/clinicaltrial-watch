@@ -1,4 +1,5 @@
 import os
+import json
 import yaml
 from typing import Any, Dict, List
 try:
@@ -56,9 +57,7 @@ def discover_all_targets() -> List[Dict[str, Any]]:
             summary_path = os.path.join(targets_data_dir, d, "status_summary.json")
             if os.path.exists(summary_path):
                 try:
-                    import json
-
-                    with open(summary_path, "r") as f:
+                    with open(summary_path, "r", encoding="utf-8") as f:
                         data = json.load(f)
                         if data and isinstance(data, list):
                             name = data[0].get("target", d)
@@ -188,7 +187,7 @@ target_h_file = f"data/history/target_{target_id}.json"
 
 if os.path.exists(target_h_file):
     try:
-        with open(target_h_file, "r") as f:
+        with open(target_h_file, "r", encoding="utf-8") as f:
             history = json.load(f)
     except Exception as e:
         print(f"Error loading history: {e}")
@@ -219,7 +218,7 @@ summary_path = f"data/targets/{target_id}/status_summary.json"
 target_trials = []
 if os.path.exists(summary_path):
     try:
-        with open(summary_path, "r") as f:
+        with open(summary_path, "r", encoding="utf-8") as f:
             target_trials = [item['id'] for item in json.load(f)]
     except Exception:
         target_trials = []
@@ -229,7 +228,7 @@ for trial_id in target_trials:
     h_file = f"data/history/{trial_id}_history.json"
     if os.path.exists(h_file):
         try:
-            with open(h_file, "r") as f:
+            with open(h_file, "r", encoding="utf-8") as f:
                 history = json.load(f)
         except Exception:
             continue
@@ -289,7 +288,7 @@ summary_path = f"data/targets/{target_id}/status_summary.json"
 
 if os.path.exists(summary_path):
     try:
-        with open(summary_path, "r") as f:
+        with open(summary_path, "r", encoding="utf-8") as f:
             summary = json.load(f)
     except Exception as e:
         print(f"Error loading data: {e}")
@@ -357,7 +356,7 @@ if os.path.exists(targets_dir):
         t_summary_path = os.path.join(targets_dir, d, "status_summary.json")
         if os.path.exists(t_summary_path):
             try:
-                with open(t_summary_path, "r") as f:
+                with open(t_summary_path, "r", encoding="utf-8") as f:
                     trials = json.load(f)
                     if trials:
                         name = trials[0].get('target', d)
@@ -378,7 +377,7 @@ if os.path.exists(targets_dir):
 # If no data found in directories, fallback to global summary or config
 if not targets and os.path.exists(summary_path):
     try:
-        with open(summary_path, "r") as f:
+        with open(summary_path, "r", encoding="utf-8") as f:
             targets = json.load(f)
     except Exception:
         targets = []
