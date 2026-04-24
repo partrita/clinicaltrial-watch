@@ -112,7 +112,7 @@ class TestUpdateHistory:
         history_file = os.path.join(history_dir, "NCT00000001_history.json")
         assert os.path.exists(history_file)
 
-        with open(history_file, "r") as f:
+        with open(history_file, "r", encoding="utf-8") as f:
             history = json.load(f)
         assert len(history) == 1
         assert history[0]["diff"] == "Initial data collection"
@@ -125,7 +125,7 @@ class TestUpdateHistory:
         update_history("NCT00000002", "Second change", history_dir=history_dir)
 
         history_file = os.path.join(history_dir, "NCT00000002_history.json")
-        with open(history_file, "r") as f:
+        with open(history_file, "r", encoding="utf-8") as f:
             history = json.load(f)
         assert len(history) == 2
         assert history[0]["diff"] == "First change"
@@ -138,7 +138,7 @@ class TestUpdateHistory:
         history_file = os.path.join(history_dir, "NCT00000003_history.json")
 
         # Write corrupted JSON
-        with open(history_file, "w") as f:
+        with open(history_file, "w", encoding="utf-8") as f:
             f.write('[{"timestamp": "2026-01-01",')
 
         # This should NOT raise, it should recover gracefully
@@ -146,7 +146,7 @@ class TestUpdateHistory:
             "NCT00000003", "New entry after corruption", history_dir=history_dir
         )
 
-        with open(history_file, "r") as f:
+        with open(history_file, "r", encoding="utf-8") as f:
             history = json.load(f)
         # Corrupted data is lost, but we have the new entry
         assert len(history) == 1
@@ -167,7 +167,7 @@ class TestUpdateTargetHistory:
 
         history_file = os.path.join(history_dir, "target_testtarget.json")
         assert os.path.exists(history_file)
-        with open(history_file, "r") as f:
+        with open(history_file, "r", encoding="utf-8") as f:
             history = json.load(f)
         assert len(history) == 1
         assert "Initial data collection" in history[0]["event"]
@@ -179,7 +179,7 @@ class TestUpdateTargetHistory:
         # Create initial history first
         os.makedirs(history_dir)
         history_file = os.path.join(history_dir, "target_testtarget.json")
-        with open(history_file, "w") as f:
+        with open(history_file, "w", encoding="utf-8") as f:
             json.dump([{"timestamp": "2026-01-01", "event": "Initial"}], f)
 
         reports = [
@@ -188,7 +188,7 @@ class TestUpdateTargetHistory:
         ]
         update_target_history("TestTarget", reports, history_dir=history_dir)
 
-        with open(history_file, "r") as f:
+        with open(history_file, "r", encoding="utf-8") as f:
             history = json.load(f)
         assert len(history) == 2
         assert "NCT001" in history[1]["event"]
@@ -198,7 +198,7 @@ class TestUpdateTargetHistory:
         history_dir = str(tmp_path / "history")
         os.makedirs(history_dir)
         history_file = os.path.join(history_dir, "target_testtarget.json")
-        with open(history_file, "w") as f:
+        with open(history_file, "w", encoding="utf-8") as f:
             json.dump([{"timestamp": "2026-01-01", "event": "Initial"}], f)
 
         reports = [
@@ -207,7 +207,7 @@ class TestUpdateTargetHistory:
         ]
         update_target_history("TestTarget", reports, history_dir=history_dir)
 
-        with open(history_file, "r") as f:
+        with open(history_file, "r", encoding="utf-8") as f:
             history = json.load(f)
         # Should still be just 1 entry (no changes detected)
         assert len(history) == 1
@@ -217,14 +217,14 @@ class TestUpdateTargetHistory:
         history_dir = str(tmp_path / "history")
         os.makedirs(history_dir)
         history_file = os.path.join(history_dir, "target_testtarget.json")
-        with open(history_file, "w") as f:
+        with open(history_file, "w", encoding="utf-8") as f:
             f.write("CORRUPTED DATA {{{")
 
         reports = [{"id": "NCT001", "name": "Trial 1"}]
         # Should not raise
         update_target_history("TestTarget", reports, history_dir=history_dir)
 
-        with open(history_file, "r") as f:
+        with open(history_file, "r", encoding="utf-8") as f:
             history = json.load(f)
         assert len(history) == 1
         assert "Initial data collection" in history[0]["event"]
@@ -293,7 +293,7 @@ class TestSaveTargetData:
         assert (target_dir / "all_trials_raw.csv").exists()
 
         # Verify JSON content
-        with open(target_dir / "status_summary.json", "r") as f:
+        with open(target_dir / "status_summary.json", "r", encoding="utf-8") as f:
             loaded = json.load(f)
         assert len(loaded) == 1
         assert loaded[0]["id"] == "NCT001"
