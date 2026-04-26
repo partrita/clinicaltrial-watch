@@ -18,6 +18,9 @@ try:
 except ImportError:
     HAS_YAML = False
 
+# Configuration limits for DoS protection (CWE-400)
+MAX_EXCLUDED_IDS = 5000
+
 
 def load_yaml(yaml_path: str = "trials.yaml") -> Dict[str, Any]:
     """Load trials configuration from YAML file."""
@@ -85,6 +88,11 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
         data["excluded_ids"] = []
 
     if trial_id not in data["excluded_ids"]:
+        # Security enhancement: Limit number of excluded trials to prevent DoS (CWE-400)
+        if len(data["excluded_ids"]) >= MAX_EXCLUDED_IDS:
+            print(f"Warning: Exclusion list has reached maximum capacity ({MAX_EXCLUDED_IDS}). Cannot add {trial_id}.")
+            return
+
         data["excluded_ids"].append(trial_id)
         with open(yaml_path, "w", encoding="utf-8") as f:
             yaml.safe_dump(

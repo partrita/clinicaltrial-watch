@@ -18,6 +18,11 @@ from generate_target_pages import main as generate_pages
 
 import yaml
 
+# Configuration limits for DoS protection (CWE-400)
+MAX_TARGETS = 100
+MAX_TRIALS_PER_TARGET = 1000
+MAX_HISTORY_ENTRIES = 100
+
 
 def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     """Load trials configuration from YAML file."""
@@ -77,15 +82,22 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(config, dict):
         return {"targets": []}
 
+    total_duplicates = 0
+    total_invalid = 0
+    any_truncation = False
+
     targets = config.get("targets", [])
     if not isinstance(targets, list):
         print("  Warning: 'targets' in config is not a list. Resetting.")
         config["targets"] = []
         return config
 
-    total_duplicates = 0
-    total_invalid = 0
-    any_truncation = False
+    # Security enhancement: Limit number of targets to prevent DoS (CWE-400)
+    if len(targets) > MAX_TARGETS:
+        print(f"  Warning: Configuration exceeds {MAX_TARGETS} targets. Truncating.")
+        targets = targets[:MAX_TARGETS]
+        any_truncation = True
+
     seen_globally = {}  # trial_id -> target_name
     valid_targets = []
 
@@ -113,6 +125,12 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
         trials = target.get("trials", [])
         if not isinstance(trials, list):
             trials = []
+
+        # Security enhancement: Limit trials per target to prevent DoS (CWE-400)
+        if len(trials) > MAX_TRIALS_PER_TARGET:
+            print(f"  Warning: Target '{target_name}' exceeds {MAX_TRIALS_PER_TARGET} trials. Truncating.")
+            trials = trials[:MAX_TRIALS_PER_TARGET]
+            any_truncation = True
 
         unique_target_trials = []
         if not trials:
@@ -235,9 +253,9 @@ def update_history(
 
     history.append({"timestamp": timestamp, "diff": diff_text[:10000]})
 
-    # Keep history size bounded (last 100 entries) to prevent DoS via disk exhaustion
-    if len(history) > 100:
-        history = history[-100:]
+    # Keep history size bounded to prevent DoS via disk exhaustion
+    if len(history) > MAX_HISTORY_ENTRIES:
+        history = history[-MAX_HISTORY_ENTRIES:]
 
     with open(history_file, "w", encoding="utf-8") as f:
         # Optimized: Removed indent to reduce serialization time and file size
@@ -278,9 +296,9 @@ def update_target_history(
     if message:
         history.append({"timestamp": timestamp, "event": message})
 
-        # Keep history size bounded (last 100 entries) to prevent DoS via disk exhaustion
-        if len(history) > 100:
-            history = history[-100:]
+        # Keep history size bounded to prevent DoS via disk exhaustion
+        if len(history) > MAX_HISTORY_ENTRIES:
+            history = history[-MAX_HISTORY_ENTRIES:]
 
         with open(history_file, "w", encoding="utf-8") as f:
             # Optimized: Removed indent to reduce serialization time and file size
