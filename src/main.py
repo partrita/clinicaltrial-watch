@@ -221,17 +221,22 @@ _SENTINEL = object()
 
 
 def safe_json_load(file_path: str, default: Any = _SENTINEL) -> Any:
-    """Safely load JSON from a file, returning default if error occurs."""
+    """
+    Safely load JSON from a file.
+    Returns the default value only if the file is missing (FileNotFoundError).
+    Raises an exception for other errors (OSError, JSONDecodeError) to prevent data loss.
+    """
     if default is _SENTINEL:
         default = []
-    if not os.path.exists(file_path):
-        return default
+
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             return json.load(f)
-    except (json.JSONDecodeError, Exception) as e:
-        print(f"  Warning: Failed to load {file_path}: {e}. Returning default.")
+    except FileNotFoundError:
         return default
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"Error: Failed to load {file_path}: {e}")
+        raise
 
 
 def update_history(
