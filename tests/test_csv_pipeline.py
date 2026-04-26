@@ -208,7 +208,7 @@ class TestPublishWorkflowDataAvailability:
         yml_path = os.path.join(
             os.path.dirname(__file__), "..", ".github", "workflows", "daily-watch.yml"
         )
-        with open(yml_path, "r") as f:
+        with open(yml_path, "r", encoding="utf-8") as f:
             content = f.read()
 
         main_pos = content.find("src/main.py")
@@ -227,7 +227,7 @@ class TestPublishWorkflowDataAvailability:
         yml_path = os.path.join(
             os.path.dirname(__file__), "..", ".github", "workflows", "publish.yml"
         )
-        with open(yml_path, "r") as f:
+        with open(yml_path, "r", encoding="utf-8") as f:
             content = f.read()
 
         render_pos = content.find("pixi run render")
