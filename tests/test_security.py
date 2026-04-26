@@ -738,12 +738,52 @@ def test_deduplicate_config_security():
             assert len(target["trials"][0]["name"]) == 1000
 
             assert os.path.exists(test_yaml)
+
+            # Test truncation of targets and trials
+            large_config = {
+                "targets": [{"name": f"Target{i}", "trials": [{"id": f"NCT{j:08d}"} for j in range(1100)]} for i in range(110)]
+            }
+            cleaned_large = deduplicate_config(large_config)
+            assert len(cleaned_large["targets"]) == 100
+            assert len(cleaned_large["targets"][0]["trials"]) == 1000
+
         finally:
             src.main.save_config = original_save
 
     finally:
         if os.path.exists(test_yaml):
             os.remove(test_yaml)
+
+
+def test_exclusion_list_limit():
+    """Verify that add_to_exclusion_list enforces the 5000 entry limit."""
+    from src.manage_trials import add_to_exclusion_list
+    import os
+    import yaml
+
+    test_exclusion_yaml = "tests/test_exclusion_limit.yaml"
+    if os.path.exists(test_exclusion_yaml):
+        os.remove(test_exclusion_yaml)
+
+    try:
+        # Create a list with 5000 entries
+        data = {"excluded_ids": [f"NCT{i:08d}" for i in range(5000)]}
+        with open(test_exclusion_yaml, "w", encoding="utf-8") as f:
+            yaml.safe_dump(data, f)
+
+        # Try to add one more
+        add_to_exclusion_list("NCT99999999", yaml_path=test_exclusion_yaml)
+
+        # Verify it wasn't added
+        with open(test_exclusion_yaml, "r", encoding="utf-8") as f:
+            saved_data = yaml.safe_load(f)
+            assert len(saved_data["excluded_ids"]) == 5000
+            assert "NCT99999999" not in saved_data["excluded_ids"]
+
+    finally:
+        if os.path.exists(test_exclusion_yaml):
+            os.remove(test_exclusion_yaml)
+
 
 def test_history_size_limit():
     """Verify that trial and target history are bounded to 100 entries."""
