@@ -122,7 +122,7 @@ class TestProcessTrial:
         tmp_path: Any,
         monkeypatch: Any,
     ) -> None:
-        """Corrupted local snapshot should not crash, should return None."""
+        """Corrupted local snapshot should raise an error to prevent data loss."""
         monkeypatch.chdir(tmp_path)
         mock_fetch.return_value = None
 
@@ -133,10 +133,9 @@ class TestProcessTrial:
         snapshot_file.write_text("CORRUPTED {{{", encoding="utf-8")
 
         trial = {"id": "NCT00000004", "name": "Corrupted Local"}
-        report, raw = process_trial(trial, "TestTarget")
-
-        assert report is None
-        assert raw is None
+        import pytest
+        with pytest.raises(json.JSONDecodeError):
+            process_trial(trial, "TestTarget")
 
     @patch("main.fetch_trial_data")
     @patch("main.save_snapshot")
