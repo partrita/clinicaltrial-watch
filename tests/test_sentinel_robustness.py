@@ -12,15 +12,9 @@ def test_add_to_exclusion_list_malformed_yaml(tmp_path):
     with open(yaml_path, "w", encoding="utf-8") as f:
         f.write("- item1\n- item2")
 
-    # Should not crash, should just reset or handle it
-    add_to_exclusion_list("NCT12345678", yaml_path=yaml_path)
-
-    # Verify it fixed it
-    with open(yaml_path, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f)
-        assert isinstance(data, dict)
-        assert "excluded_ids" in data
-        assert "NCT12345678" in data["excluded_ids"]
+    # Should raise ValueError as it's not a dictionary
+    with pytest.raises(ValueError, match="must be a dictionary"):
+        add_to_exclusion_list("NCT12345678", yaml_path=yaml_path)
 
 def test_load_yaml_malformed_trials_yaml(tmp_path):
     os.chdir(tmp_path)

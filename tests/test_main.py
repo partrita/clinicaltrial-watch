@@ -58,45 +58,49 @@ class TestSafeJsonLoad:
         result = safe_json_load(str(file_path), default=None)
         assert result == data
 
-    def test_corrupted_json_returns_default(self, tmp_path: Any) -> None:
-        """When JSON is corrupted (the original bug), should return default instead of crashing."""
+    def test_corrupted_json_raises_error(self, tmp_path: Any) -> None:
+        """When JSON is corrupted, should raise an error to prevent data loss."""
         file_path = tmp_path / "corrupted.json"
-        # This mimics the exact error from the GitHub Action:
-        # trailing comma causing "Expecting property name enclosed in double quotes"
+        # Trailing comma causing "Expecting property name enclosed in double quotes"
         corrupted_content = (
             '[\n  {\n    "timestamp": "2026-01-01",\n    "event": "test"\n  },\n]'
         )
         file_path.write_text(corrupted_content, encoding="utf-8")
-        result = safe_json_load(str(file_path), default=[])
-        assert result == []
+        import pytest
+        with pytest.raises(json.JSONDecodeError):
+            safe_json_load(str(file_path), default=[])
 
-    def test_empty_file_returns_default(self, tmp_path: Any) -> None:
-        """An empty file should return default, not crash."""
+    def test_empty_file_raises_error(self, tmp_path: Any) -> None:
+        """An empty file should raise an error, not return a default."""
         file_path = tmp_path / "empty.json"
         file_path.write_text("", encoding="utf-8")
-        result = safe_json_load(str(file_path), default=[])
-        assert result == []
+        import pytest
+        with pytest.raises(json.JSONDecodeError):
+            safe_json_load(str(file_path), default=[])
 
-    def test_invalid_json_syntax_returns_default(self, tmp_path: Any) -> None:
-        """Totally invalid JSON should return default."""
+    def test_invalid_json_syntax_raises_error(self, tmp_path: Any) -> None:
+        """Totally invalid JSON should raise an error."""
         file_path = tmp_path / "bad.json"
         file_path.write_text("this is not json at all {{{", encoding="utf-8")
-        result = safe_json_load(str(file_path), default=[])
-        assert result == []
+        import pytest
+        with pytest.raises(json.JSONDecodeError):
+            safe_json_load(str(file_path), default=[])
 
-    def test_truncated_json_returns_default(self, tmp_path: Any) -> None:
-        """Truncated JSON (e.g. from interrupted write) should return default."""
+    def test_truncated_json_raises_error(self, tmp_path: Any) -> None:
+        """Truncated JSON should raise an error."""
         file_path = tmp_path / "truncated.json"
         file_path.write_text('[{"timestamp": "2026-01-01"', encoding="utf-8")
-        result = safe_json_load(str(file_path), default=[])
-        assert result == []
+        import pytest
+        with pytest.raises(json.JSONDecodeError):
+            safe_json_load(str(file_path), default=[])
 
-    def test_json_with_single_quotes_returns_default(self, tmp_path: Any) -> None:
-        """JSON with single quotes (invalid) should return default."""
+    def test_json_with_single_quotes_raises_error(self, tmp_path: Any) -> None:
+        """JSON with single quotes should raise an error."""
         file_path = tmp_path / "single_quotes.json"
         file_path.write_text("{'key': 'value'}", encoding="utf-8")
-        result = safe_json_load(str(file_path), default={})
-        assert result == {}
+        import pytest
+        with pytest.raises(json.JSONDecodeError):
+            safe_json_load(str(file_path), default={})
 
 
 class TestUpdateHistory:
@@ -131,8 +135,8 @@ class TestUpdateHistory:
         assert history[0]["diff"] == "First change"
         assert history[1]["diff"] == "Second change"
 
-    def test_recovers_from_corrupted_history(self, tmp_path: Any) -> None:
-        """If existing history file is corrupted, should start fresh instead of crashing."""
+    def test_crashes_on_corrupted_history(self, tmp_path: Any) -> None:
+        """If existing history file is corrupted, should crash to prevent data loss."""
         history_dir = str(tmp_path / "history")
         os.makedirs(history_dir)
         history_file = os.path.join(history_dir, "NCT00000003_history.json")
@@ -141,16 +145,11 @@ class TestUpdateHistory:
         with open(history_file, "w", encoding="utf-8") as f:
             f.write('[{"timestamp": "2026-01-01",')
 
-        # This should NOT raise, it should recover gracefully
-        update_history(
-            "NCT00000003", "New entry after corruption", history_dir=history_dir
-        )
-
-        with open(history_file, "r", encoding="utf-8") as f:
-            history = json.load(f)
-        # Corrupted data is lost, but we have the new entry
-        assert len(history) == 1
-        assert history[0]["diff"] == "New entry after corruption"
+        import pytest
+        with pytest.raises(json.JSONDecodeError):
+            update_history(
+                "NCT00000003", "New entry after corruption", history_dir=history_dir
+            )
 
 
 class TestUpdateTargetHistory:
@@ -212,8 +211,8 @@ class TestUpdateTargetHistory:
         # Should still be just 1 entry (no changes detected)
         assert len(history) == 1
 
-    def test_recovers_from_corrupted_target_history(self, tmp_path: Any) -> None:
-        """Corrupted target history should not crash the process."""
+    def test_crashes_on_corrupted_target_history(self, tmp_path: Any) -> None:
+        """Corrupted target history should crash the process to prevent data loss."""
         history_dir = str(tmp_path / "history")
         os.makedirs(history_dir)
         history_file = os.path.join(history_dir, "target_testtarget.json")
@@ -221,13 +220,9 @@ class TestUpdateTargetHistory:
             f.write("CORRUPTED DATA {{{")
 
         reports = [{"id": "NCT001", "name": "Trial 1"}]
-        # Should not raise
-        update_target_history("TestTarget", reports, history_dir=history_dir)
-
-        with open(history_file, "r", encoding="utf-8") as f:
-            history = json.load(f)
-        assert len(history) == 1
-        assert "Initial data collection" in history[0]["event"]
+        import pytest
+        with pytest.raises(json.JSONDecodeError):
+            update_target_history("TestTarget", reports, history_dir=history_dir)
 
 
 class TestFlattenDict:

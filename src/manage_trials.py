@@ -74,15 +74,21 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
         print(f"Warning: Invalid NCT ID format, not adding to exclusion: {trial_id}")
         return
 
-    data = {"excluded_ids": []}
-    if os.path.exists(yaml_path):
-        try:
-            with open(yaml_path, "r", encoding="utf-8") as f:
-                loaded_data = yaml.safe_load(f)
-                if isinstance(loaded_data, dict):
-                    data = loaded_data
-        except (yaml.YAMLError, OSError):
-            print(f"Warning: Could not read {yaml_path}, initializing new exclusion list.")
+    try:
+        with open(yaml_path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+    except FileNotFoundError:
+        data = {"excluded_ids": []}
+    except (yaml.YAMLError, OSError, UnicodeDecodeError) as e:
+        print(f"Error: Failed to load {yaml_path}: {e}")
+        raise
+
+    if data is None:
+        data = {"excluded_ids": []}
+
+    if not isinstance(data, dict):
+        print(f"Error: {yaml_path} is not a valid YAML dictionary.")
+        raise ValueError(f"{yaml_path} must be a dictionary")
 
     if "excluded_ids" not in data or not isinstance(data["excluded_ids"], list):
         data["excluded_ids"] = []
@@ -177,7 +183,7 @@ def perform_cleanup(trial_id: str):
                         summary = json.load(f)
 
                     if not isinstance(summary, list):
-                        continue
+                        raise ValueError(f"{summary_path} is not a JSON list")
 
                     new_summary = [
                         item for item in summary if isinstance(item, dict) and item.get("id") != trial_id

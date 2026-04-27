@@ -1031,3 +1031,68 @@ def test_truncation_security():
         # Combined details = RECENT CHANGES FOUND (25) + \n (1) + format_diff (15000) + \n\n***\n (6) + detailed_desc (10000) = ~25032
         # Should be truncated to 20000
         assert len(report["details"]) == 20000
+
+
+def test_safe_json_load_robustness():
+    """Verify that safe_json_load raises exceptions on errors other than FileNotFoundError."""
+    from src.main import safe_json_load
+    import os
+    import pytest
+    import json
+
+    test_json = "tests/test_unreadable.json"
+
+    # 1. Test malformed JSON
+    with open(test_json, "w", encoding="utf-8") as f:
+        f.write("{ invalid json }")
+
+    try:
+        with pytest.raises(json.JSONDecodeError):
+            safe_json_load(test_json)
+    finally:
+        if os.path.exists(test_json):
+            os.remove(test_json)
+
+    # 2. Test unreadable file (OSError)
+    test_dir = "tests/test_json_dir"
+    if not os.path.exists(test_dir):
+        os.makedirs(test_dir)
+
+    try:
+        with pytest.raises(OSError):
+            safe_json_load(test_dir)
+    finally:
+        if os.path.exists(test_dir):
+            os.rmdir(test_dir)
+
+
+def test_add_to_exclusion_list_robustness():
+    """Verify that add_to_exclusion_list raises exceptions on loading errors."""
+    from src.manage_trials import add_to_exclusion_list
+    import os
+    import pytest
+    import yaml
+
+    test_yaml = "tests/test_exclusion_robust.yaml"
+
+    # 1. Test malformed YAML
+    with open(test_yaml, "w", encoding="utf-8") as f:
+        f.write("{ invalid yaml : [")
+
+    try:
+        with pytest.raises(yaml.YAMLError):
+            add_to_exclusion_list("NCT12345678", yaml_path=test_yaml)
+    finally:
+        if os.path.exists(test_yaml):
+            os.remove(test_yaml)
+
+    # 2. Test YAML that is not a dictionary
+    with open(test_yaml, "w", encoding="utf-8") as f:
+        f.write("- item1\n- item2")
+
+    try:
+        with pytest.raises(ValueError, match="must be a dictionary"):
+            add_to_exclusion_list("NCT12345678", yaml_path=test_yaml)
+    finally:
+        if os.path.exists(test_yaml):
+            os.remove(test_yaml)
