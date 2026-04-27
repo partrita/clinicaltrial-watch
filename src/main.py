@@ -234,7 +234,7 @@ def safe_json_load(file_path: str, default: Any = _SENTINEL) -> Any:
             return json.load(f)
     except FileNotFoundError:
         return default
-    except (json.JSONDecodeError, OSError) as e:
+    except (json.JSONDecodeError, OSError, UnicodeDecodeError) as e:
         print(f"Error: Failed to load {file_path}: {e}")
         raise
 
