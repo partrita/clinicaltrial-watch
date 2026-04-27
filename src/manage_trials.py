@@ -79,7 +79,7 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
             data = yaml.safe_load(f)
     except FileNotFoundError:
         data = {"excluded_ids": []}
-    except (yaml.YAMLError, OSError) as e:
+    except (yaml.YAMLError, OSError, UnicodeDecodeError) as e:
         print(f"Error: Failed to load {yaml_path}: {e}")
         raise
 
