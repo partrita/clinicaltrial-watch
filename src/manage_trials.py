@@ -183,8 +183,7 @@ def perform_cleanup(trial_id: str):
                         summary = json.load(f)
 
                     if not isinstance(summary, list):
-                        print(f"  Warning: {summary_path} is not a JSON list. Skipping.")
-                        continue
+                        raise ValueError(f"{summary_path} is not a JSON list")
 
                     new_summary = [
                         item for item in summary if isinstance(item, dict) and item.get("id") != trial_id
