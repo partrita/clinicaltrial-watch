@@ -6,6 +6,7 @@ Queries the API for each target and appends new trials to trials.yaml.
 
 import time
 import random
+import threading
 from typing import Any, Dict, List, Optional
 from utils import is_valid_nct_id
 
@@ -25,6 +26,7 @@ except ImportError:
 from update_trials_from_csv import load_yaml, save_yaml, update_target
 
 _session = None
+_session_lock = threading.Lock()
 
 
 def get_session() -> Optional[Any]:
@@ -32,23 +34,27 @@ def get_session() -> Optional[Any]:
     if not HAS_REQUESTS:
         return None
 
+    # Double-checked locking for thread-safe singleton initialization
     if _session is None:
-        _session = requests.Session()
-        retry_strategy = Retry(
-            total=2,
-            backoff_factor=0.5,
-            status_forcelist=[429, 500, 502, 503, 504],
-        )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        _session.mount("https://", adapter)
-        _session.mount("http://", adapter)
+        with _session_lock:
+            if _session is None:
+                session = requests.Session()
+                retry_strategy = Retry(
+                    total=2,
+                    backoff_factor=0.5,
+                    status_forcelist=[429, 500, 502, 503, 504],
+                )
+                adapter = HTTPAdapter(max_retries=retry_strategy)
+                session.mount("https://", adapter)
+                session.mount("http://", adapter)
 
-        _session.headers.update(
-            {
-                "User-Agent": "ClinicalTrialWatch/AutoDiscover/1.0",
-                "Accept": "application/json",
-            }
-        )
+                session.headers.update(
+                    {
+                        "User-Agent": "ClinicalTrialWatch/AutoDiscover/1.0",
+                        "Accept": "application/json",
+                    }
+                )
+                _session = session
     return _session
 
 
@@ -100,7 +106,8 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
         except Exception as e:
             print(f"Exception fetching data for term {query_term}: {e}")
             global _session
-            _session = None
+            with _session_lock:
+                _session = None
             return []
     else:
         try:
