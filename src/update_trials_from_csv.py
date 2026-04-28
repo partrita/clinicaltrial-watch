@@ -16,6 +16,12 @@ except ImportError:
 
 import yaml
 
+# Configuration limits for DoS protection (CWE-400)
+MAX_TARGETS = 100
+MAX_TRIALS_PER_TARGET = 1000
+MAX_CSV_ROWS = 5000
+MAX_CSV_SIZE = 10 * 1024 * 1024  # 10MB
+
 
 def load_yaml(yaml_path: str) -> Dict[str, Any]:
     """Load existing YAML file or return empty structure."""
@@ -72,11 +78,29 @@ def save_yaml(data: Dict[str, Any], yaml_path: str) -> None:
 
 def read_csv_trials(csv_path: str) -> List[Dict[str, str]]:
     """Read trials from CSV file."""
+    if not os.path.exists(csv_path):
+        return []
+
+    # Security enhancement: Check file size before reading to prevent memory exhaustion DoS
+    try:
+        if os.path.getsize(csv_path) > MAX_CSV_SIZE:
+            print(f"Error: CSV file too large: {csv_path}")
+            return []
+    except OSError as e:
+        print(f"Error checking CSV file size: {e}")
+        return []
+
     trials = []
     try:
         with open(csv_path, mode="r", encoding="utf-8-sig") as f:
             reader = csv.DictReader(f)
+            row_count = 0
             for row in reader:
+                row_count += 1
+                if row_count > MAX_CSV_ROWS:
+                    print(f"  Warning: CSV exceeds {MAX_CSV_ROWS} rows. Truncating.")
+                    break
+
                 nct_id = row.get("NCT Number", "").strip()
                 title = row.get("Study Title", "").strip()
                 if nct_id and title:
@@ -116,6 +140,11 @@ def update_target(
 
     # Create new target if not found
     if target is None:
+        # Security enhancement: Limit number of targets to prevent DoS (CWE-400)
+        if len(data["targets"]) >= MAX_TARGETS:
+            print(f"Error: Maximum number of targets ({MAX_TARGETS}) reached. Cannot add '{target_name}'.")
+            return data
+
         target = {
             "name": target_name,
             "description": description or f"{target_name} 타겟 임상시험 모니터링",
@@ -152,6 +181,11 @@ def update_target(
             continue
 
         if trial["id"] not in existing_ids:
+            # Security enhancement: Limit trials per target to prevent DoS (CWE-400)
+            if len(target["trials"]) >= MAX_TRIALS_PER_TARGET:
+                print(f"  Warning: Target '{target_name}' reached maximum trials ({MAX_TRIALS_PER_TARGET}).")
+                break
+
             target["trials"].append(trial)
             existing_ids.add(trial["id"])
             added += 1
