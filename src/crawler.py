@@ -2,6 +2,7 @@ import json
 import os
 import time
 import random
+import threading
 from typing import Any, Dict, Optional
 from utils import sanitize_id, is_valid_nct_id
 
@@ -18,12 +19,14 @@ except ImportError:
 
 # Global session to reuse connections (much faster)
 _session = None
+_session_lock = threading.Lock()
 
 
 def reset_session() -> None:
     """Reset the cached session (e.g. to apply new settings)."""
     global _session
-    _session = None
+    with _session_lock:
+        _session = None
 
 
 def get_session() -> Optional[Any]:
@@ -32,28 +35,32 @@ def get_session() -> Optional[Any]:
     if not HAS_REQUESTS:
         return None
 
+    # Double-checked locking for thread-safe singleton initialization
     if _session is None:
-        _session = requests.Session()
-        # ClinicalTrials.gov API v2 is generally fast, but retries help with transient issues
-        retry_strategy = Retry(
-            total=2,
-            backoff_factor=0.5,
-            status_forcelist=[429, 500, 502, 503, 504],
-        )
-        # Increase pool size to match MAX_WORKERS in main.py for better concurrency
-        adapter = HTTPAdapter(
-            max_retries=retry_strategy, pool_connections=20, pool_maxsize=20
-        )
-        _session.mount("https://", adapter)
-        _session.mount("http://", adapter)
+        with _session_lock:
+            if _session is None:
+                session = requests.Session()
+                # ClinicalTrials.gov API v2 is generally fast, but retries help with transient issues
+                retry_strategy = Retry(
+                    total=2,
+                    backoff_factor=0.5,
+                    status_forcelist=[429, 500, 502, 503, 504],
+                )
+                # Increase pool size to match MAX_WORKERS in main.py for better concurrency
+                adapter = HTTPAdapter(
+                    max_retries=retry_strategy, pool_connections=20, pool_maxsize=20
+                )
+                session.mount("https://", adapter)
+                session.mount("http://", adapter)
 
-        # User-Agent is good practice to avoid being flagged as a generic bot
-        _session.headers.update(
-            {
-                "User-Agent": "ClinicalTrialWatch/1.0 (https://github.com/partrita/clinicaltrial-watch)",
-                "Accept": "application/json",
-            }
-        )
+                # User-Agent is good practice to avoid being flagged as a generic bot
+                session.headers.update(
+                    {
+                        "User-Agent": "ClinicalTrialWatch/1.0 (https://github.com/partrita/clinicaltrial-watch)",
+                        "Accept": "application/json",
+                    }
+                )
+                _session = session
     return _session
 
 
