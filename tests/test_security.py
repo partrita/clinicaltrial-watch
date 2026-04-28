@@ -351,6 +351,64 @@ def test_load_config_robustness():
             os.remove(test_yaml)
 
 
+def test_update_from_csv_security_limits():
+    """Verify that update_trials_from_csv.py enforces DoS limits."""
+    from src.update_trials_from_csv import read_csv_trials, update_target
+    import os
+    import csv
+
+    test_csv = "tests/test_dos.csv"
+
+    # 1. Test MAX_CSV_SIZE limit
+    # Create a 11MB file
+    with open(test_csv, "wb") as f:
+        f.write(b"A" * (11 * 1024 * 1024))
+
+    try:
+        res = read_csv_trials(test_csv)
+        assert res == []
+    finally:
+        if os.path.exists(test_csv):
+            os.remove(test_csv)
+
+    # 2. Test MAX_CSV_ROWS limit
+    with open(test_csv, "w", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["NCT Number", "Study Title"])
+        writer.writeheader()
+        for i in range(6000):
+            writer.writerow({"NCT Number": f"NCT{i:08d}", "Study Title": "Title"})
+
+    try:
+        res = read_csv_trials(test_csv)
+        assert len(res) == 5000
+    finally:
+        if os.path.exists(test_csv):
+            os.remove(test_csv)
+
+    # 3. Test MAX_TARGETS limit
+    data = {"targets": [{"name": f"Target{i}", "trials": []} for i in range(100)]}
+    new_trials = [{"id": "NCT12345678", "name": "Trial"}]
+
+    updated = update_target(data, "NewTarget", new_trials)
+    assert len(updated["targets"]) == 100
+    assert not any(t["name"] == "NewTarget" for t in updated["targets"])
+
+    # 4. Test MAX_TRIALS_PER_TARGET limit
+    target_data = {
+        "targets": [
+            {
+                "name": "Target",
+                "trials": [{"id": f"NCT{i:08d}", "name": "Trial"} for i in range(1000)]
+            }
+        ]
+    }
+    new_csv_trials = [{"id": "NCT99999999", "name": "New Trial"}]
+
+    updated_trials = update_target(target_data, "Target", new_csv_trials)
+    assert len(updated_trials["targets"][0]["trials"]) == 1000
+    assert not any(t["id"] == "NCT99999999" for t in updated_trials["targets"][0]["trials"])
+
+
 def test_api_response_size_limit():
     """Verify that fetch_trial_data and search_trials respect the 10MB response size limit."""
     from src.crawler import fetch_trial_data
