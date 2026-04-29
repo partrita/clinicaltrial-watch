@@ -563,35 +563,50 @@ def save_target_data(
         if any("changed_today" in r for r in summary_report):
             headers.append("changed_today")
 
+        # Security enhancement: Sanitize headers to prevent CSV formula injection
+        safe_headers = [sanitize_csv_value(h) for h in headers]
+
         with open(
             f"{target_dir}/status_summary.csv", "w", encoding="utf-8-sig", newline=""
         ) as f:
-            dict_writer = csv.DictWriter(f, fieldnames=headers, extrasaction="ignore")
+            dict_writer = csv.DictWriter(
+                f, fieldnames=safe_headers, extrasaction="ignore"
+            )
             dict_writer.writeheader()
-            # Sanitize all values to prevent CSV formula injection
-            sanitized_summary = [
-                {k: sanitize_csv_value(v) for k, v in row.items()}
-                for row in summary_report
-            ]
+            # Sanitize both keys and values to prevent CSV formula injection
+            sanitized_summary = []
+            for row in summary_report:
+                sanitized_row = {}
+                for k, v in row.items():
+                    safe_k = sanitize_csv_value(k)
+                    safe_v = sanitize_csv_value(v)
+                    sanitized_row[safe_k] = safe_v
+                sanitized_summary.append(sanitized_row)
             dict_writer.writerows(sanitized_summary)
 
     # Save raw data CSV
     if all_raw_data:
         # Optimized: Single-pass header collection using union of keys
-        # This avoid the redundant update() calls in a loop
         all_keys = set().union(*(row.keys() for row in all_raw_data))
+        sorted_keys = sorted(list(all_keys))
 
-        headers = sorted(list(all_keys))
+        # Security enhancement: Sanitize headers to prevent CSV formula injection
+        headers = [sanitize_csv_value(str(k)) for k in sorted_keys]
+
         with open(
             f"{target_dir}/all_trials_raw.csv", "w", newline="", encoding="utf-8-sig"
         ) as f:
             writer = csv.DictWriter(f, fieldnames=headers)
             writer.writeheader()
-            # Sanitize all values to prevent CSV formula injection
-            sanitized_raw = [
-                {k: sanitize_csv_value(v) for k, v in row.items()}
-                for row in all_raw_data
-            ]
+            # Sanitize both keys and values to prevent CSV formula injection
+            sanitized_raw = []
+            for row in all_raw_data:
+                sanitized_row = {}
+                for k, v in row.items():
+                    safe_k = sanitize_csv_value(str(k))
+                    safe_v = sanitize_csv_value(v)
+                    sanitized_row[safe_k] = safe_v
+                sanitized_raw.append(sanitized_row)
             writer.writerows(sanitized_raw)
 
     print(f"  Saved target data to {target_dir}/")
