@@ -91,7 +91,8 @@ def sanitize_csv_value(value: Any) -> Any:
     Sanitize a value for CSV export to prevent formula injection.
     If the value is a string that starts with dangerous characters
     (even after leading whitespace), it is prefixed with a single quote.
-    Dangerous characters: '=', '+', '-', '@', ';', '%', tab (0x09), or carriage return (0x0D).
+    Dangerous characters: '=', '+', '-', '@', ';', '%', tab (0x09), carriage return (0x0D),
+    line feed (0x0A), vertical tab (0x0B), form feed (0x0C), or ESC (0x1B).
     Length limited to 32,767 characters to prevent DoS and comply with Excel cell limits.
     """
     if not isinstance(value, str) or not value:
@@ -100,13 +101,18 @@ def sanitize_csv_value(value: Any) -> Any:
     # Limit length to prevent DoS and comply with Excel's 32,767 character limit per cell
     value = value[:32767]
 
-    # Check the first non-whitespace character
-    stripped_value = value.lstrip()
-    if not stripped_value:
-        return value
+    # List of dangerous characters that can trigger formula execution in Excel/Google Sheets
+    dangerous_chars = ("=", "+", "-", "@", ";", "%", "\t", "\r", "\n", "\v", "\f", "\x1b")
 
-    if stripped_value[0] in ("=", "+", "-", "@", ";", "%", "\t", "\r", "\n"):
+    # Check the original first character
+    if value[0] in dangerous_chars:
         return f"'{value}"
+
+    # Check the first non-whitespace character to prevent bypasses like " =SUM(1+1)"
+    stripped_value = value.lstrip()
+    if stripped_value and stripped_value[0] in dangerous_chars:
+        return f"'{value}"
+
     return value
 
 
