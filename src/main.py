@@ -578,18 +578,19 @@ def save_target_data(
     # Save raw data CSV
     if all_raw_data:
         # Optimized: Single-pass header collection using union of keys
-        # This avoid the redundant update() calls in a loop
         all_keys = set().union(*(row.keys() for row in all_raw_data))
 
-        headers = sorted(list(all_keys))
+        # Sanitize headers to prevent formula injection in CSV header row
+        headers = sorted([sanitize_csv_value(k) for k in all_keys])
+
         with open(
             f"{target_dir}/all_trials_raw.csv", "w", newline="", encoding="utf-8-sig"
         ) as f:
             writer = csv.DictWriter(f, fieldnames=headers)
             writer.writeheader()
-            # Sanitize all values to prevent CSV formula injection
+            # Sanitize both keys and values to prevent CSV formula injection
             sanitized_raw = [
-                {k: sanitize_csv_value(v) for k, v in row.items()}
+                {sanitize_csv_value(k): sanitize_csv_value(v) for k, v in row.items()}
                 for row in all_raw_data
             ]
             writer.writerows(sanitized_raw)
