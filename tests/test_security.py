@@ -1154,3 +1154,50 @@ def test_add_to_exclusion_list_robustness():
     finally:
         if os.path.exists(test_yaml):
             os.remove(test_yaml)
+
+def test_csv_header_injection_prevention():
+    """Verify that CSV headers (keys) starting with dangerous characters are sanitized."""
+    from src.main import save_target_data
+    import os
+    import csv
+    import shutil
+    from src.utils import sanitize_id
+
+    target_name = "HeaderTest"
+    summary_report = []
+    # Data with a malicious key and a malicious value
+    all_raw_data = [{"=malicious_key": "value", "normal_key": "=malicious_value"}]
+
+    safe_name = sanitize_id(target_name).lower()
+    target_path = f"data/targets/{safe_name}"
+
+    # Ensure clean state
+    if os.path.exists(target_path):
+        shutil.rmtree(target_path)
+
+    try:
+        save_target_data(target_name, summary_report, all_raw_data)
+
+        raw_csv_path = os.path.join(target_path, "all_trials_raw.csv")
+        assert os.path.exists(raw_csv_path)
+
+        with open(raw_csv_path, "r", encoding="utf-8-sig") as f:
+            # We read raw lines first to see the actual content before DictReader handles it
+            lines = f.readlines()
+            header = lines[0].strip()
+            # The header should contain the sanitized key
+            assert "'=malicious_key" in header
+
+            # Re-read with DictReader for convenience
+            f.seek(0)
+            reader = csv.DictReader(f)
+            assert "'=malicious_key" in reader.fieldnames
+
+            rows = list(reader)
+            assert len(rows) == 1
+            assert rows[0].get("'=malicious_key") == "value"
+            assert rows[0].get("normal_key") == "'=malicious_value"
+
+    finally:
+        if os.path.exists(target_path):
+            shutil.rmtree(target_path)
