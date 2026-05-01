@@ -5,7 +5,7 @@ from functools import lru_cache
 
 
 # List of dangerous characters that can trigger formula execution in Excel/Google Sheets
-DANGEROUS_CSV_CHARS = ("=", "+", "-", "@", ";", "%", "\t", "\r", "\n", "\v", "\f", "\x1b")
+DANGEROUS_CSV_CHARS = {"=", "+", "-", "@", ";", "%", "\t", "\r", "\n", "\v", "\f", "\x1b"}
 
 
 # Pre-compiled regex for NCT ID validation (faster than string pattern)
