@@ -4,6 +4,10 @@ from typing import Any
 from functools import lru_cache
 
 
+# List of dangerous characters that can trigger formula execution in Excel/Google Sheets
+DANGEROUS_CSV_CHARS = {"=", "+", "-", "@", ";", "%", "\t", "\r", "\n", "\v", "\f", "\x1b"}
+
+
 # Pre-compiled regex for NCT ID validation (faster than string pattern)
 # Uses \A and \Z for strict start/end of string matching.
 # Uses [0-9] instead of \d to ensure only ASCII digits are matched.
@@ -101,17 +105,13 @@ def sanitize_csv_value(value: Any) -> Any:
     # Limit length to prevent DoS and comply with Excel's 32,767 character limit per cell
     value = value[:32767]
 
-    # List of dangerous characters that can trigger formula execution in Excel/Google Sheets
-    # List of dangerous characters that can trigger formula execution in Excel/Google Sheets
-    DANGEROUS_CSV_CHARS = ("=", "+", "-", "@", ";", "%", "\t", "\r", "\n", "\v", "\f", "\x1b")
-
-    # Check the original first character
-    if value[0] in dangerous_chars:
+    # Check the original first character (safe because value is non-empty string here)
+    if value[0] in DANGEROUS_CSV_CHARS:
         return f"'{value}"
 
     # Check the first non-whitespace character to prevent bypasses like " =SUM(1+1)"
     stripped_value = value.lstrip()
-    if stripped_value and stripped_value[0] in dangerous_chars:
+    if stripped_value and stripped_value[0] in DANGEROUS_CSV_CHARS:
         return f"'{value}"
 
     return value
