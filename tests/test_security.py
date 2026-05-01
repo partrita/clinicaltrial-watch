@@ -351,6 +351,87 @@ def test_load_config_robustness():
             os.remove(test_yaml)
 
 
+def test_csv_header_injection_prevention():
+    """Verify that CSV headers and keys are sanitized against formula injection."""
+    from src.main import save_target_data
+    from src.utils import sanitize_csv_value
+    import os
+    import csv
+    import shutil
+
+    test_target = "InjectionTarget"
+    test_dir = "data/targets/injectiontarget"
+    if os.path.exists(test_dir):
+        shutil.rmtree(test_dir)
+
+    summary_report = [
+        {
+            "id": "=NCT12345678",
+            "name": "Trial 1",
+            "status": "RECRUITING"
+        }
+    ]
+    all_raw_data = [
+        {
+            "+Key": "Value 1",
+            "Normal": "@Formula"
+        }
+    ]
+
+    try:
+        save_target_data(test_target, summary_report, all_raw_data)
+
+        # 1. Check status_summary.csv values (headers are fixed)
+        summary_csv = os.path.join(test_dir, "status_summary.csv")
+        with open(summary_csv, "r", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            row = next(reader)
+            assert row["id"] == "'=NCT12345678"
+
+        # 2. Check all_trials_raw.csv headers and values
+        raw_csv = os.path.join(test_dir, "all_trials_raw.csv")
+        with open(raw_csv, "r", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            headers = reader.fieldnames
+            assert "'+Key" in headers
+            assert "Normal" in headers
+
+            row = next(reader)
+            assert row["'+Key"] == "Value 1"
+            assert row["Normal"] == "'@Formula"
+
+    finally:
+        if os.path.exists("data/targets/injectiontarget"):
+            shutil.rmtree("data/targets/injectiontarget")
+
+
+def test_sanitize_csv_value_extended():
+    """Verify improved sanitize_csv_value with extended dangerous characters and bypasses."""
+    from src.utils import sanitize_csv_value
+
+    # New dangerous characters
+    assert sanitize_csv_value("\x1b=SUM(1+1)") == "'\x1b=SUM(1+1)"
+    assert sanitize_csv_value("\v=SUM(1+1)") == "'\v=SUM(1+1)"
+    assert sanitize_csv_value("\f=SUM(1+1)") == "'\f=SUM(1+1)"
+
+    # Leading whitespace bypasses (including non-ASCII)
+    assert sanitize_csv_value(" \t\n\r=1+1") == "' \t\n\r=1+1"
+    assert sanitize_csv_value("\u00A0=SUM(1+1)") == "'\u00A0=SUM(1+1)"
+
+    # Single character dangerous inputs
+    assert sanitize_csv_value("=") == "'="
+    assert sanitize_csv_value("+") == "'+"
+    assert sanitize_csv_value("\t") == "'\t"
+
+    # Multiple dangerous characters in a row
+    assert sanitize_csv_value("==") == "'=="
+    assert sanitize_csv_value(" =") == "' ="
+
+    # Normal text
+    assert sanitize_csv_value("123") == "123"
+    assert sanitize_csv_value("Value") == "Value"
+
+
 def test_update_from_csv_security_limits():
     """Verify that update_trials_from_csv.py enforces DoS limits."""
     from src.update_trials_from_csv import read_csv_trials, update_target
