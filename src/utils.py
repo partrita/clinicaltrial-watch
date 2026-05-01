@@ -102,7 +102,8 @@ def sanitize_csv_value(value: Any) -> Any:
     value = value[:32767]
 
     # List of dangerous characters that can trigger formula execution in Excel/Google Sheets
-    dangerous_chars = ("=", "+", "-", "@", ";", "%", "\t", "\r", "\n", "\v", "\f", "\x1b")
+    # List of dangerous characters that can trigger formula execution in Excel/Google Sheets
+    DANGEROUS_CSV_CHARS = ("=", "+", "-", "@", ";", "%", "\t", "\r", "\n", "\v", "\f", "\x1b")
 
     # Check the original first character
     if value[0] in dangerous_chars:
