@@ -1282,3 +1282,60 @@ def test_csv_header_injection_prevention():
     finally:
         if os.path.exists(target_path):
             shutil.rmtree(target_path)
+
+def test_flatten_dict_dos_protection():
+    """Verify that flatten_dict limits list items and truncates strings."""
+    from src.main import flatten_dict
+
+    # Test list item limit (MAX_LIST_ITEMS = 1000)
+    large_list = [str(i) for i in range(2000)]
+    d = {"large_list": large_list}
+    flattened = flatten_dict(d)
+
+    # 1000 items, each with a number and most with a comma-space
+    # "0, 1, ..., 999"
+    val = flattened["large_list"]
+    assert "999" in val
+    assert "1000" not in val
+
+    # Test string truncation (MAX_VAL_LEN = 10000)
+    long_str_list = ["A" * 6000, "B" * 6000]
+    d2 = {"long_str_list": long_str_list}
+    flattened2 = flatten_dict(d2)
+    val2 = flattened2["long_str_list"]
+    assert len(val2) == 10000
+    assert val2.startswith("A" * 6000)
+    assert val2.endswith("B" * (10000 - 6000 - 2)) # -2 for ", "
+
+def test_api_json_type_validation_unit():
+    """Verify that crawler and auto_discover handle non-dict JSON responses."""
+    from src.crawler import fetch_trial_data
+    from src.auto_discover_trials import search_trials
+    from unittest.mock import patch, MagicMock
+
+    # Mock response returning a JSON list instead of a dict
+    with patch("src.crawler.get_session") as mock_get_session,          patch("src.auto_discover_trials.get_session") as mock_get_session_auto:
+
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.headers = {"Content-Type": "application/json"}
+        mock_response.iter_content.return_value = [b'[{"id": "NCT12345678"}]']
+        mock_session.get.return_value = mock_response
+        mock_response.__enter__.return_value = mock_response
+
+        # Should return None because it's a list, not a dict
+        assert fetch_trial_data("NCT12345678") is None
+
+        mock_session_auto = MagicMock()
+        mock_get_session_auto.return_value = mock_session_auto
+        mock_response_auto = MagicMock()
+        mock_response_auto.status_code = 200
+        mock_response_auto.headers = {"Content-Type": "application/json"}
+        mock_response_auto.iter_content.return_value = [b'[{"id": "NCT12345678"}]']
+        mock_session_auto.get.return_value = mock_response_auto
+        mock_response_auto.__enter__.return_value = mock_response_auto
+
+        # Should return [] because it's a list, not a dict
+        assert search_trials("Target") == []
