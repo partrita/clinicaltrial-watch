@@ -97,6 +97,9 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                         content.append(chunk)
 
                     data = json.loads(b"".join(content))
+                    if not isinstance(data, dict):
+                        print(f"Error: Malformed search response for {query_term} (not a dictionary)")
+                        return []
                     return data.get("studies", [])
                 else:
                     print(
@@ -145,6 +148,9 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                         content.append(chunk)
 
                     data = json.loads(b"".join(content))
+                    if not isinstance(data, dict):
+                        print(f"Error: Malformed search response for {query_term} (urllib, not a dictionary)")
+                        return []
                     return data.get("studies", [])
                 else:
                     print(

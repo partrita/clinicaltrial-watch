@@ -112,7 +112,11 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                             return None
                         content.append(chunk)
 
-                    return json.loads(b"".join(content))
+                    data = json.loads(b"".join(content))
+                    if not isinstance(data, dict):
+                        print(f"Error: Malformed JSON response for {safe_trial_id} (not a dictionary)")
+                        return None
+                    return data
                 elif response.status_code == 404:
                     print(f"Trial {safe_trial_id} not found (404).")
                     return None
@@ -159,7 +163,11 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                             return None
                         content.append(chunk)
 
-                    return json.loads(b"".join(content))
+                    data = json.loads(b"".join(content))
+                    if not isinstance(data, dict):
+                        print(f"Error: Malformed JSON response for {safe_trial_id} (urllib, not a dictionary)")
+                        return None
+                    return data
                 else:
                     print(
                         f"Error fetching data for {safe_trial_id} (urllib): {response.status}"

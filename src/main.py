@@ -385,15 +385,26 @@ def flatten_dict(
                 if not v:
                     result[new_key] = ""
                 else:
+                    # Security enhancement: Limit number of items from lists to prevent DoS (CWE-400)
+                    MAX_LIST_ITEMS = 1000
+                    truncated_list = v[:MAX_LIST_ITEMS]
+
                     # Optimized: Check only the first element (ClinicalTrials.gov lists are homogeneous)
-                    first = v[0]
+                    first = truncated_list[0]
                     first_type = type(first)
+
+                    # Truncate resulting strings to prevent DoS
+                    MAX_VAL_LEN = 10000
+
                     if first_type is str:
-                        result[new_key] = ", ".join(v)
+                        res_str = ", ".join(truncated_list)
+                        result[new_key] = res_str[:MAX_VAL_LEN]
                     elif first_type in (int, float, bool):
-                        result[new_key] = ", ".join(map(str, v))
+                        res_str = ", ".join(map(str, truncated_list))
+                        result[new_key] = res_str[:MAX_VAL_LEN]
                     else:
-                        result[new_key] = json.dumps(v, ensure_ascii=False)
+                        res_str = json.dumps(truncated_list, ensure_ascii=False)
+                        result[new_key] = res_str[:MAX_VAL_LEN]
             else:
                 result[new_key] = v
 
