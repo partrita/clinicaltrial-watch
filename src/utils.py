@@ -107,12 +107,13 @@ def sanitize_csv_value(value: Any) -> Any:
 
     # Check the original first character (safe because value is non-empty string here)
     if value[0] in DANGEROUS_CSV_CHARS:
-        return f"'{value}"
+        # Truncate to 32,766 so that prepending a quote doesn't exceed 32,767
+        return f"'{value[:32766]}"
 
     # Check the first non-whitespace character to prevent bypasses like " =SUM(1+1)"
     stripped_value = value.lstrip()
     if stripped_value and stripped_value[0] in DANGEROUS_CSV_CHARS:
-        return f"'{value}"
+        return f"'{value[:32766]}"
 
     return value
 
