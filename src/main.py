@@ -103,6 +103,8 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
         any_truncation = True
 
     seen_globally = {}  # trial_id -> target_name
+    seen_target_ids = {}  # sanitized_id -> target_name
+    total_invalid = 0
     valid_targets = []
 
     for target in targets:
@@ -126,6 +128,15 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
                 any_truncation = True
 
         target_name = target["name"]
+
+        # Security enhancement: Prevent target ID collisions which cause data directory overwrites
+        target_id = sanitize_id(target_name).lower()
+        if target_id in seen_target_ids:
+            print(f"  Warning: Target ID collision detected: '{target_name}' and '{seen_target_ids[target_id]}' both resolve to '{target_id}'. Skipping '{target_name}'.")
+            total_invalid += 1
+            continue
+        seen_target_ids[target_id] = target_name
+
         trials = target.get("trials", [])
         if not isinstance(trials, list):
             trials = []
