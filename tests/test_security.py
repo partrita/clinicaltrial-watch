@@ -1339,3 +1339,27 @@ def test_api_json_type_validation_unit():
 
         # Should return [] because it's a list, not a dict
         assert search_trials("Target") == []
+
+def test_target_id_collision_protection():
+    """Verify that deduplicate_config prevents target ID collisions."""
+    from src.main import deduplicate_config
+    import src.main
+    from unittest.mock import patch
+
+    config = {
+        "targets": [
+            {"name": "Target One", "trials": [{"id": "NCT11111111"}]},
+            {"name": "Target!One", "trials": [{"id": "NCT22222222"}]},
+            {"name": "Unique Target", "trials": [{"id": "NCT33333333"}]}
+        ]
+    }
+
+    # Mock save_config to avoid writing to disk
+    with patch("src.main.save_config"):
+        cleaned = deduplicate_config(config)
+
+    assert len(cleaned["targets"]) == 2
+    target_names = [t["name"] for t in cleaned["targets"]]
+    assert "Target One" in target_names
+    assert "Unique Target" in target_names
+    assert "Target!One" not in target_names
