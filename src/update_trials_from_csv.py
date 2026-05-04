@@ -61,7 +61,11 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
     if "topics" in data and "targets" not in data:
         data["targets"] = data.pop("topics")
 
-    if "targets" not in data or not isinstance(data["targets"], list):
+    if "targets" in data and not isinstance(data["targets"], list):
+        print(f"Error: 'targets' in {yaml_path} must be a list.")
+        raise ValueError(f"'targets' in {yaml_path} must be a list")
+
+    if "targets" not in data:
         data["targets"] = []
 
     return data

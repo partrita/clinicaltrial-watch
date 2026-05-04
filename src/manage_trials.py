@@ -44,6 +44,10 @@ def load_yaml(yaml_path: str = "trials.yaml") -> Dict[str, Any]:
             print(f"Error: {yaml_path} is not a valid YAML dictionary.")
             raise ValueError(f"{yaml_path} must be a dictionary")
 
+        if "targets" in data and not isinstance(data["targets"], list):
+            print(f"Error: 'targets' in {yaml_path} must be a list.")
+            raise ValueError(f"'targets' in {yaml_path} must be a list")
+
         if "targets" not in data:
             data["targets"] = []
         return data
@@ -90,7 +94,11 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
         print(f"Error: {yaml_path} is not a valid YAML dictionary.")
         raise ValueError(f"{yaml_path} must be a dictionary")
 
-    if "excluded_ids" not in data or not isinstance(data["excluded_ids"], list):
+    if "excluded_ids" in data and not isinstance(data["excluded_ids"], list):
+        print(f"Error: 'excluded_ids' in {yaml_path} must be a list.")
+        raise ValueError(f"'excluded_ids' in {yaml_path} must be a list")
+
+    if "excluded_ids" not in data:
         data["excluded_ids"] = []
 
     if trial_id not in data["excluded_ids"]:
