@@ -104,6 +104,7 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
 
     seen_globally = {}  # trial_id -> target_name
     seen_target_ids = {}  # sanitized_id -> target_name
+    total_invalid = 0
     valid_targets = []
 
     for target in targets:
