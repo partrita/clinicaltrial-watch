@@ -65,6 +65,7 @@ class TestFetchTrialData:
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_response.headers = {"Content-Type": "application/json"}
+        mock_response.url = "https://clinicaltrials.gov/api/v2/studies/NCT00000001"
         mock_response.iter_content.return_value = [json.dumps(data).encode("utf-8")]
 
         mock_session = MagicMock()

@@ -1074,6 +1074,7 @@ def test_urllib_fallback_security():
             mock_response_malformed = MagicMock()
             mock_response_malformed.status = 200
             mock_response_malformed.headers = {"Content-Type": "application/json", "Content-Length": "not-a-number"}
+            mock_response_malformed.geturl.return_value = "https://clinicaltrials.gov/studies/NCT12345678"
             mock_response_malformed.read.side_effect = [b'{"foo": "bar"}', b""]
             mock_urlopen.return_value.__enter__.return_value = mock_response_malformed
 
@@ -1087,6 +1088,7 @@ def test_urllib_fallback_security():
             mock_response_large = MagicMock()
             mock_response_large.status = 200
             mock_response_large.headers = {"Content-Type": "application/json", "Content-Length": " 11000000 "}
+            mock_response_large.geturl.return_value = "https://clinicaltrials.gov/studies/NCT12345678"
             mock_urlopen.return_value.__enter__.return_value = mock_response_large
 
             assert fetch_trial_data("NCT12345678") is None
@@ -1095,14 +1097,17 @@ def test_urllib_fallback_security():
             mock_response_search = MagicMock()
             mock_response_search.status = 200
             mock_response_search.headers = {"Content-Type": "application/json", "Content-Length": "invalid"}
+            mock_response_search.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
             mock_response_search.read.side_effect = [b'{"studies": []}', b""]
             mock_urlopen.return_value.__enter__.return_value = mock_response_search
 
+            assert search_trials("Target") == []
 
             # 4. Test Search with large Content-Length
             mock_response_search_large = MagicMock()
             mock_response_search_large.status = 200
             mock_response_search_large.headers = {"Content-Type": "application/json", "Content-Length": "11000000"}
+            mock_response_search_large.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
             mock_urlopen.return_value.__enter__.return_value = mock_response_search_large
 
             assert search_trials("Target") == []
@@ -1170,6 +1175,133 @@ def test_truncation_security():
         # Combined details = RECENT CHANGES FOUND (25) + \n (1) + format_diff (15000) + \n\n***\n (6) + detailed_desc (10000) = ~25032
         # Should be truncated to 20000
         assert len(report["details"]) == 20000
+
+
+def test_http_redirect_security():
+    """Verify that fetch_trial_data and search_trials reject insecure or unexpected redirects."""
+    from src.crawler import fetch_trial_data
+    from src.auto_discover_trials import search_trials
+    from unittest.mock import patch, MagicMock
+    import json
+
+    with patch("src.crawler.get_session") as mock_get_session, \
+         patch("src.auto_discover_trials.get_session") as mock_get_session_auto:
+
+        # 1. Test fetch_trial_data with insecure (HTTP) redirect
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+        mock_response_insecure = MagicMock()
+        mock_response_insecure.url = "http://clinicaltrials.gov/studies/NCT12345678"
+        mock_session.get.return_value = mock_response_insecure
+        mock_response_insecure.__enter__.return_value = mock_response_insecure
+
+        assert fetch_trial_data("NCT12345678") is None
+
+        # 2. Test fetch_trial_data with external domain redirect
+        mock_response_external = MagicMock()
+        mock_response_external.url = "https://evil.com/malware.json"
+        mock_session.get.return_value = mock_response_external
+        mock_response_external.__enter__.return_value = mock_response_external
+
+        assert fetch_trial_data("NCT12345678") is None
+
+        # 3. Test search_trials with insecure redirect
+        mock_session_auto = MagicMock()
+        mock_get_session_auto.return_value = mock_session_auto
+        mock_response_search_insecure = MagicMock()
+        mock_response_search_insecure.url = "http://clinicaltrials.gov/api/v2/studies"
+        mock_session_auto.get.return_value = mock_response_search_insecure
+        mock_response_search_insecure.__enter__.return_value = mock_response_search_insecure
+
+        assert search_trials("Target") == []
+
+        # 4. Test search_trials with external domain redirect
+        mock_response_search_external = MagicMock()
+        mock_response_search_external.url = "https://evil.com/api/v2/studies"
+        mock_session_auto.get.return_value = mock_response_search_external
+        mock_response_search_external.__enter__.return_value = mock_response_search_external
+
+        assert search_trials("Target") == []
+
+        # 5. Test fetch_trial_data with clever domain bypass attempt
+        mock_response_bypass = MagicMock()
+        mock_response_bypass.url = "https://clinicaltrials.gov.attacker.com/studies/NCT12345678"
+        mock_session.get.return_value = mock_response_bypass
+        mock_response_bypass.__enter__.return_value = mock_response_bypass
+
+        assert fetch_trial_data("NCT12345678") is None
+
+        # 6. Test fetch_trial_data with subdomain (should be ALLOWED)
+        data = {"protocolSection": {"statusModule": {}}}
+        mock_response_subdomain = MagicMock()
+        mock_response_subdomain.status_code = 200
+        mock_response_subdomain.headers = {"Content-Type": "application/json"}
+        mock_response_subdomain.url = "https://www.clinicaltrials.gov/api/v2/studies/NCT12345678"
+        mock_response_subdomain.iter_content.return_value = [json.dumps(data).encode("utf-8")]
+        mock_session.get.return_value = mock_response_subdomain
+        mock_response_subdomain.__enter__.return_value = mock_response_subdomain
+
+        assert fetch_trial_data("NCT12345678") == data
+
+
+def test_session_security_config():
+    """Verify that the requests Session is configured securely."""
+    from src.crawler import get_session as get_crawler_session, reset_session as reset_crawler_session
+    from src.auto_discover_trials import get_session as get_auto_session
+    import src.auto_discover_trials
+    from unittest.mock import patch, MagicMock
+
+    # Crawler session
+    reset_crawler_session()
+    with patch("requests.Session") as mock_session_class:
+        mock_session = MagicMock()
+        mock_session_class.return_value = mock_session
+        get_crawler_session()
+        assert mock_session.max_redirects == 3
+        assert mock_session.trust_env is False
+
+    # Auto-discover session
+    # We need to manually reset the internal _session in auto_discover_trials
+    # as it doesn't have a reset_session function.
+    src.auto_discover_trials._session = None
+    with patch("requests.Session") as mock_session_class:
+        mock_session = MagicMock()
+        mock_session_class.return_value = mock_session
+        get_auto_session()
+        assert mock_session.max_redirects == 3
+        assert mock_session.trust_env is False
+
+
+def test_urllib_redirect_security():
+    """Verify that the urllib fallback path rejects insecure or unexpected redirects."""
+    from src.crawler import fetch_trial_data
+    from src.auto_discover_trials import search_trials
+    from unittest.mock import patch, MagicMock
+    import src.crawler
+    import src.auto_discover_trials
+
+    with patch("urllib.request.urlopen") as mock_urlopen:
+        # Force urllib path
+        with patch.object(src.crawler, "HAS_REQUESTS", False), \
+             patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
+
+            # 1. Insecure redirect
+            mock_response_insecure = MagicMock()
+            mock_response_insecure.geturl.return_value = "http://clinicaltrials.gov/studies/NCT12345678"
+            mock_urlopen.return_value.__enter__.return_value = mock_response_insecure
+            assert fetch_trial_data("NCT12345678") is None
+
+            # 2. External domain redirect
+            mock_response_external = MagicMock()
+            mock_response_external.geturl.return_value = "https://evil.com/data.json"
+            mock_urlopen.return_value.__enter__.return_value = mock_response_external
+            assert fetch_trial_data("NCT12345678") is None
+
+            # 3. Search insecure redirect
+            mock_response_search_insecure = MagicMock()
+            mock_response_search_insecure.geturl.return_value = "http://clinicaltrials.gov/api/v2/studies"
+            mock_urlopen.return_value.__enter__.return_value = mock_response_search_insecure
+            assert search_trials("Target") == []
 
 
 def test_safe_json_load_robustness():
