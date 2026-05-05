@@ -4,6 +4,7 @@ import time
 import random
 import threading
 from typing import Any, Dict, Optional
+from urllib.parse import urlparse
 from utils import sanitize_id, is_valid_nct_id
 
 import urllib.request
@@ -53,6 +54,10 @@ def get_session() -> Optional[Any]:
                 session.mount("https://", adapter)
                 session.mount("http://", adapter)
 
+                # Security enhancement: Limit redirects and ignore environment proxies
+                session.max_redirects = 3
+                session.trust_env = False
+
                 # User-Agent is good practice to avoid being flagged as a generic bot
                 session.headers.update(
                     {
@@ -89,6 +94,15 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
 
             # Use stream=True to check Content-Length before downloading full body
             with session.get(url, timeout=(3, 15), stream=True) as response:
+                # Security enhancement: Verify final URL after redirects
+                parsed_url = urlparse(response.url)
+                if parsed_url.scheme != "https" or not (
+                    parsed_url.netloc == "clinicaltrials.gov" or
+                    parsed_url.netloc.endswith(".clinicaltrials.gov")
+                ):
+                    print(f"Error: Insecure or unexpected redirect for {safe_trial_id}: {response.url}")
+                    return None
+
                 if response.status_code == 200:
                     # Security enhancement: Validate Content-Type
                     content_type = response.headers.get("Content-Type", "")
@@ -138,6 +152,16 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
             # Security enhancement: Add Accept header
             req.add_header("Accept", "application/json")
             with urllib.request.urlopen(req, timeout=15) as response:
+                # Security enhancement: Verify final URL after redirects for urllib
+                final_url = response.geturl()
+                parsed_url = urlparse(final_url)
+                if parsed_url.scheme != "https" or not (
+                    parsed_url.netloc == "clinicaltrials.gov" or
+                    parsed_url.netloc.endswith(".clinicaltrials.gov")
+                ):
+                    print(f"Error: Insecure or unexpected redirect for {safe_trial_id} (urllib): {final_url}")
+                    return None
+
                 if response.status == 200:
                     # Security enhancement: Validate Content-Type
                     content_type = response.headers.get("Content-Type", "")
