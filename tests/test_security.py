@@ -1065,18 +1065,21 @@ def test_urllib_fallback_security():
     import src.crawler
     import src.auto_discover_trials
 
-    with patch("urllib.request.urlopen") as mock_urlopen:
+    with patch("urllib.request.build_opener") as mock_build_opener:
         # Force urllib path
         with patch.object(src.crawler, "HAS_REQUESTS", False), \
              patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
 
+            mock_opener = MagicMock()
+            mock_build_opener.return_value = mock_opener
+            mock_response = MagicMock()
+            mock_opener.open.return_value.__enter__.return_value = mock_response
+
             # 1. Test malformed Content-Length (non-numeric)
-            mock_response_malformed = MagicMock()
-            mock_response_malformed.status = 200
-            mock_response_malformed.headers = {"Content-Type": "application/json", "Content-Length": "not-a-number"}
-            mock_response_malformed.geturl.return_value = "https://clinicaltrials.gov/studies/NCT12345678"
-            mock_response_malformed.read.side_effect = [b'{"foo": "bar"}', b""]
-            mock_urlopen.return_value.__enter__.return_value = mock_response_malformed
+            mock_response.status = 200
+            mock_response.headers = {"Content-Type": "application/json", "Content-Length": "not-a-number"}
+            mock_response.geturl.return_value = "https://clinicaltrials.gov/studies/NCT12345678"
+            mock_response.read.side_effect = [b'{"foo": "bar"}', b""]
 
             # Should NOT return None if Content-Length is malformed (it skips the check and proceeds to read)
             # unless the read also fails. But wait, if it's malformed, .isdigit() is False,
@@ -1085,30 +1088,27 @@ def test_urllib_fallback_security():
             assert res == {"foo": "bar"}
 
             # 2. Test large Content-Length header (e.g. " 11000000 ")
-            mock_response_large = MagicMock()
-            mock_response_large.status = 200
-            mock_response_large.headers = {"Content-Type": "application/json", "Content-Length": " 11000000 "}
-            mock_response_large.geturl.return_value = "https://clinicaltrials.gov/studies/NCT12345678"
-            mock_urlopen.return_value.__enter__.return_value = mock_response_large
+            mock_response.status = 200
+            mock_response.headers = {"Content-Type": "application/json", "Content-Length": " 11000000 "}
+            mock_response.geturl.return_value = "https://clinicaltrials.gov/studies/NCT12345678"
+            mock_opener.open.return_value.__enter__.return_value = mock_response
 
             assert fetch_trial_data("NCT12345678") is None
 
             # 3. Test Search with malformed Content-Length
-            mock_response_search = MagicMock()
-            mock_response_search.status = 200
-            mock_response_search.headers = {"Content-Type": "application/json", "Content-Length": "invalid"}
-            mock_response_search.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
-            mock_response_search.read.side_effect = [b'{"studies": []}', b""]
-            mock_urlopen.return_value.__enter__.return_value = mock_response_search
+            mock_response.status = 200
+            mock_response.headers = {"Content-Type": "application/json", "Content-Length": "invalid"}
+            mock_response.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
+            mock_response.read.side_effect = [b'{"studies": []}', b""]
+            mock_opener.open.return_value.__enter__.return_value = mock_response
 
             assert search_trials("Target") == []
 
             # 4. Test Search with large Content-Length
-            mock_response_search_large = MagicMock()
-            mock_response_search_large.status = 200
-            mock_response_search_large.headers = {"Content-Type": "application/json", "Content-Length": "11000000"}
-            mock_response_search_large.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
-            mock_urlopen.return_value.__enter__.return_value = mock_response_search_large
+            mock_response.status = 200
+            mock_response.headers = {"Content-Type": "application/json", "Content-Length": "11000000"}
+            mock_response.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
+            mock_opener.open.return_value.__enter__.return_value = mock_response
 
             assert search_trials("Target") == []
 
@@ -1280,28 +1280,68 @@ def test_urllib_redirect_security():
     import src.crawler
     import src.auto_discover_trials
 
-    with patch("urllib.request.urlopen") as mock_urlopen:
+    with patch("urllib.request.build_opener") as mock_build_opener:
         # Force urllib path
         with patch.object(src.crawler, "HAS_REQUESTS", False), \
              patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
 
+            mock_opener = MagicMock()
+            mock_build_opener.return_value = mock_opener
+            mock_response = MagicMock()
+            mock_opener.open.return_value.__enter__.return_value = mock_response
+
             # 1. Insecure redirect
-            mock_response_insecure = MagicMock()
-            mock_response_insecure.geturl.return_value = "http://clinicaltrials.gov/studies/NCT12345678"
-            mock_urlopen.return_value.__enter__.return_value = mock_response_insecure
+            mock_response.geturl.return_value = "http://clinicaltrials.gov/studies/NCT12345678"
             assert fetch_trial_data("NCT12345678") is None
 
             # 2. External domain redirect
-            mock_response_external = MagicMock()
-            mock_response_external.geturl.return_value = "https://evil.com/data.json"
-            mock_urlopen.return_value.__enter__.return_value = mock_response_external
+            mock_response.geturl.return_value = "https://evil.com/data.json"
             assert fetch_trial_data("NCT12345678") is None
 
             # 3. Search insecure redirect
-            mock_response_search_insecure = MagicMock()
-            mock_response_search_insecure.geturl.return_value = "http://clinicaltrials.gov/api/v2/studies"
-            mock_urlopen.return_value.__enter__.return_value = mock_response_search_insecure
+            mock_response.geturl.return_value = "http://clinicaltrials.gov/api/v2/studies"
             assert search_trials("Target") == []
+
+
+def test_urllib_hardening_config():
+    """Verify that the urllib fallback path is configured with secure defaults."""
+    from src.crawler import fetch_trial_data
+    from src.auto_discover_trials import search_trials
+    from unittest.mock import patch, MagicMock
+    import src.crawler
+    import src.auto_discover_trials
+    import urllib.request
+    import ssl
+
+    with patch("urllib.request.build_opener") as mock_build_opener:
+        # Force urllib path
+        with patch.object(src.crawler, "HAS_REQUESTS", False), \
+             patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
+
+            mock_opener = MagicMock()
+            mock_build_opener.return_value = mock_opener
+
+            # 1. Check crawler fetch_trial_data
+            fetch_trial_data("NCT12345678")
+            assert mock_build_opener.called
+            args, _ = mock_build_opener.call_args
+            # Check for ProxyHandler({}) and HTTPSHandler(context=...)
+            proxy_handler = next(arg for arg in args if isinstance(arg, urllib.request.ProxyHandler))
+            https_handler = next(arg for arg in args if isinstance(arg, urllib.request.HTTPSHandler))
+            assert proxy_handler.proxies == {}
+            # HTTPSHandler uses _context internally
+            assert getattr(https_handler, "_context", None) is not None
+
+            mock_build_opener.reset_mock()
+
+            # 2. Check auto_discover_trials search_trials
+            search_trials("Target")
+            assert mock_build_opener.called
+            args, _ = mock_build_opener.call_args
+            proxy_handler = next(arg for arg in args if isinstance(arg, urllib.request.ProxyHandler))
+            https_handler = next(arg for arg in args if isinstance(arg, urllib.request.HTTPSHandler))
+            assert proxy_handler.proxies == {}
+            assert getattr(https_handler, "_context", None) is not None
 
 
 def test_safe_json_load_robustness():
