@@ -80,9 +80,10 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             with session.get(base_url, params=params, timeout=(5, 20), stream=True) as response:
                 # Security enhancement: Verify final URL after redirects
                 parsed_url = urlparse(response.url)
+                hostname = parsed_url.hostname or ""
                 if parsed_url.scheme != "https" or not (
-                    parsed_url.netloc == "clinicaltrials.gov" or
-                    parsed_url.netloc.endswith(".clinicaltrials.gov")
+                    hostname == "clinicaltrials.gov" or
+                    hostname.endswith(".clinicaltrials.gov")
                 ):
                     print(f"Error: Insecure or unexpected redirect for {query_term}: {response.url}")
                     return []
