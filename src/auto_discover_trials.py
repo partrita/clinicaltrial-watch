@@ -8,6 +8,7 @@ import time
 import random
 import threading
 from typing import Any, Dict, List, Optional
+from urllib.parse import urlparse
 from utils import is_valid_nct_id
 
 import urllib.request
@@ -48,6 +49,10 @@ def get_session() -> Optional[Any]:
                 session.mount("https://", adapter)
                 session.mount("http://", adapter)
 
+                # Security enhancement: Limit redirects and ignore environment proxies
+                session.max_redirects = 3
+                session.trust_env = False
+
                 session.headers.update(
                     {
                         "User-Agent": "ClinicalTrialWatch/AutoDiscover/1.0",
@@ -73,6 +78,16 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             time.sleep(random.uniform(0.5, 1.0))  # Be polite to API
             # Use stream=True to check Content-Length before downloading full body
             with session.get(base_url, params=params, timeout=(5, 20), stream=True) as response:
+                # Security enhancement: Verify final URL after redirects
+                parsed_url = urlparse(response.url)
+                hostname = parsed_url.hostname or ""
+                if parsed_url.scheme != "https" or not (
+                    hostname == "clinicaltrials.gov" or
+                    hostname.endswith(".clinicaltrials.gov")
+                ):
+                    print(f"Error: Insecure or unexpected redirect for {query_term}: {response.url}")
+                    return []
+
                 if response.status_code == 200:
                     # Security enhancement: Validate Content-Type
                     content_type = response.headers.get("Content-Type", "")
@@ -122,6 +137,17 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             req.add_header("Accept", "application/json")
             time.sleep(random.uniform(0.5, 1.0))
             with urllib.request.urlopen(req, timeout=20) as response:
+                # Security enhancement: Verify final URL after redirects for urllib
+                final_url = response.geturl()
+                parsed_url = urlparse(final_url)
+                hostname = parsed_url.hostname or ""
+                if parsed_url.scheme != "https" or not (
+                    hostname == "clinicaltrials.gov" or
+                    hostname.endswith(".clinicaltrials.gov")
+                ):
+                    print(f"Error: Insecure or unexpected redirect for {query_term} (urllib): {final_url}")
+                    return []
+
                 if response.status == 200:
                     # Security enhancement: Validate Content-Type
                     content_type = response.headers.get("Content-Type", "")
