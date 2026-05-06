@@ -96,9 +96,10 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
             with session.get(url, timeout=(3, 15), stream=True) as response:
                 # Security enhancement: Verify final URL after redirects
                 parsed_url = urlparse(response.url)
+                hostname = parsed_url.hostname or ""
                 if parsed_url.scheme != "https" or not (
-                    parsed_url.netloc == "clinicaltrials.gov" or
-                    parsed_url.netloc.endswith(".clinicaltrials.gov")
+                    hostname == "clinicaltrials.gov" or
+                    hostname.endswith(".clinicaltrials.gov")
                 ):
                     print(f"Error: Insecure or unexpected redirect for {safe_trial_id}: {response.url}")
                     return None
