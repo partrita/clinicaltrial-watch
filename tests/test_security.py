@@ -432,6 +432,24 @@ def test_sanitize_csv_value_extended():
     assert sanitize_csv_value("Value") == "Value"
 
 
+def test_sanitize_csv_value_unicode_bypass():
+    """Verify that CSV formula injection is prevented even with invisible Unicode characters."""
+    from src.utils import sanitize_csv_value
+
+    # Zero Width Space (U+200B)
+    assert sanitize_csv_value("\u200B=SUM(1+1)") == "'\u200B=SUM(1+1)"
+    # Zero Width Non-Joiner (U+200C)
+    assert sanitize_csv_value("\u200C+42") == "'\u200C+42"
+    # Zero Width Joiner (U+200D)
+    assert sanitize_csv_value("\u200D-5") == "'\u200D-5"
+    # Left-To-Right Mark (U+200E)
+    assert sanitize_csv_value("\u200E@something") == "'\u200E@something"
+    # Byte Order Mark (U+FEFF)
+    assert sanitize_csv_value("\uFEFF;something") == "'\uFEFF;something"
+    # Interleaved whitespace and invisible characters
+    assert sanitize_csv_value(" \u200B =SUM(1+1)") == "' \u200B =SUM(1+1)"
+
+
 def test_update_from_csv_security_limits():
     """Verify that update_trials_from_csv.py enforces DoS limits."""
     from src.update_trials_from_csv import read_csv_trials, update_target
