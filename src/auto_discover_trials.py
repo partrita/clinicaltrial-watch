@@ -11,6 +11,7 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 from utils import is_valid_nct_id
 
+import ssl
 import urllib.request
 import urllib.parse
 import json
@@ -129,6 +130,12 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             return []
     else:
         try:
+            # Security enhancement: Disable environment proxies and ensure certificate verification
+            context = ssl.create_default_context()
+            opener = urllib.request.build_opener(
+                urllib.request.ProxyHandler({}),
+                urllib.request.HTTPSHandler(context=context)
+            )
             query_string = urllib.parse.urlencode(params)
             full_url = f"{base_url}?{query_string}"
             req = urllib.request.Request(full_url)
@@ -136,7 +143,7 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             # Security enhancement: Add Accept header
             req.add_header("Accept", "application/json")
             time.sleep(random.uniform(0.5, 1.0))
-            with urllib.request.urlopen(req, timeout=20) as response:
+            with opener.open(req, timeout=20) as response:
                 # Security enhancement: Verify final URL after redirects for urllib
                 final_url = response.geturl()
                 parsed_url = urlparse(final_url)

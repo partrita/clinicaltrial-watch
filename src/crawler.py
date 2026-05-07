@@ -7,6 +7,7 @@ from typing import Any, Dict, Optional
 from urllib.parse import urlparse
 from utils import sanitize_id, is_valid_nct_id
 
+import ssl
 import urllib.request
 
 try:
@@ -148,17 +149,24 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
     else:
         # Fallback to urllib if requests is not available
         try:
+            # Security enhancement: Disable environment proxies and ensure certificate verification
+            context = ssl.create_default_context()
+            opener = urllib.request.build_opener(
+                urllib.request.ProxyHandler({}),
+                urllib.request.HTTPSHandler(context=context)
+            )
             req = urllib.request.Request(url)
             req.add_header("User-Agent", "ClinicalTrialWatch/1.0")
             # Security enhancement: Add Accept header
             req.add_header("Accept", "application/json")
-            with urllib.request.urlopen(req, timeout=15) as response:
+            with opener.open(req, timeout=15) as response:
                 # Security enhancement: Verify final URL after redirects for urllib
                 final_url = response.geturl()
                 parsed_url = urlparse(final_url)
+                hostname = parsed_url.hostname or ""
                 if parsed_url.scheme != "https" or not (
-                    parsed_url.netloc == "clinicaltrials.gov" or
-                    parsed_url.netloc.endswith(".clinicaltrials.gov")
+                    hostname == "clinicaltrials.gov" or
+                    hostname.endswith(".clinicaltrials.gov")
                 ):
                     print(f"Error: Insecure or unexpected redirect for {safe_trial_id} (urllib): {final_url}")
                     return None
