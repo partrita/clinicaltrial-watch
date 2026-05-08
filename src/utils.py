@@ -115,7 +115,7 @@ def sanitize_csv_value(value: Any) -> Any:
     # Zero Width Space or BOM) that could be used to hide a formula.
     # This prevents bypasses like "\u200B=SUM(1+1)" or " \u200B =SUM(1+1)".
     stripped_value = re.sub(
-        r"^[\s\u200b-\u200f\uFEFF\u202a-\u202e\u2060-\u206f]+", "", value
+        r"^[\s\x00-\x1f\u200b-\u200f\uFEFF\u202a-\u202e\u2060-\u206f]+", "", value
     )
     if stripped_value and stripped_value[0] in DANGEROUS_CSV_CHARS:
         return f"'{value[:32766]}"
