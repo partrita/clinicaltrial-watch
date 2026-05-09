@@ -303,8 +303,8 @@ def update_target_history(
 
     history = safe_json_load(history_file, default=[])
 
-    if not isinstance(history, list):
-        print(f"  Warning: Target history for {target_name} is not a list. Resetting.")
+    if not isinstance(history, list) or not all(isinstance(x, dict) for x in history):
+        print(f"  Warning: Target history for {target_name} is not a valid list. Resetting.")
         history = []
 
     # Check for changes today specifically for the daily log
