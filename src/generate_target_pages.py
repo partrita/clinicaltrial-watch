@@ -358,7 +358,7 @@ if os.path.exists(targets_dir):
             try:
                 with open(t_summary_path, "r", encoding="utf-8") as f:
                     trials = json.load(f)
-                    if isinstance(trials, list) and trials:
+                    if isinstance(trials, list) and trials and all(isinstance(t, dict) for t in trials):
                         name = trials[0].get('target', d)
                         trial_count = len(trials)
                         changed_count = sum(1 for t in trials if t.get('monitor_status') == 'Changed')
