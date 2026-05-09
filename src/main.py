@@ -271,6 +271,10 @@ def update_history(
     if history is None:
         history = safe_json_load(history_file, default=[])
 
+    if not isinstance(history, list):
+        print(f"  Warning: History for {trial_id} is not a list. Resetting.")
+        history = []
+
     history.append({"timestamp": timestamp, "diff": diff_text[:10000]})
 
     # Keep history size bounded to prevent DoS via disk exhaustion
@@ -298,6 +302,10 @@ def update_target_history(
     history_file = os.path.join(history_dir, f"target_{safe_target_name.lower()}.json")
 
     history = safe_json_load(history_file, default=[])
+
+    if not isinstance(history, list):
+        print(f"  Warning: Target history for {target_name} is not a list. Resetting.")
+        history = []
 
     # Check for changes today specifically for the daily log
     changed_today = [r["id"] for r in current_reports if r.get("changed_today")]
