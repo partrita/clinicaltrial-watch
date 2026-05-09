@@ -39,6 +39,10 @@ def compare_snapshots(
         print(f"  Warning: Failed to load previous snapshot for {trial_id}: {e}")
         return None
 
+    if not isinstance(old_data, dict):
+        print(f"  Warning: Previous snapshot for {trial_id} is not a dictionary.")
+        return None
+
     # Focus on protocolSection for substantive changes
     old_protocol = old_data.get("protocolSection", {})
     new_protocol = new_data.get("protocolSection", {})

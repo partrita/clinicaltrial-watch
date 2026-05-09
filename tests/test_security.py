@@ -1619,3 +1619,88 @@ def test_target_id_collision_protection():
     assert "Target One" in target_names
     assert "Unique Target" in target_names
     assert "Target!One" not in target_names
+
+def test_compare_snapshots_malformed_type():
+    """Verify that compare_snapshots handles malformed JSON types gracefully."""
+    from src.diff_engine import compare_snapshots
+    import os
+    import json
+
+    trial_id = "NCT12345678"
+    snapshot_dir = "tests/tmp_snapshots"
+    if not os.path.exists(snapshot_dir):
+        os.makedirs(snapshot_dir)
+
+    # 1. Test with list instead of dict
+    snapshot_file = os.path.join(snapshot_dir, f"{trial_id}_latest.json")
+    with open(snapshot_file, "w", encoding="utf-8") as f:
+        json.dump([{"some": "data"}], f)
+
+    try:
+        # Should return None instead of crashing with AttributeError
+        res = compare_snapshots(trial_id, {"protocolSection": {}}, snapshot_dir=snapshot_dir)
+        assert res is None
+
+        # 2. Test with null (None)
+        with open(snapshot_file, "w", encoding="utf-8") as f:
+            f.write("null")
+        res = compare_snapshots(trial_id, {"protocolSection": {}}, snapshot_dir=snapshot_dir)
+        assert res is None
+
+        # 3. Test with string
+        with open(snapshot_file, "w", encoding="utf-8") as f:
+            f.write('"just a string"')
+        res = compare_snapshots(trial_id, {"protocolSection": {}}, snapshot_dir=snapshot_dir)
+        assert res is None
+
+    finally:
+        if os.path.exists(snapshot_file):
+            os.remove(snapshot_file)
+        if os.path.exists(snapshot_dir):
+            os.rmdir(snapshot_dir)
+
+def test_history_hardening():
+    """Verify that update_history and update_target_history handle corrupted (non-list) JSON."""
+    from src.main import update_history, update_target_history
+    import os
+    import json
+    import shutil
+
+    test_history_dir = "tests/tmp_history_hardening"
+    if os.path.exists(test_history_dir):
+        shutil.rmtree(test_history_dir)
+    os.makedirs(test_history_dir)
+
+    try:
+        # 1. update_history with corrupted file (dict instead of list)
+        trial_id = "NCT00000001"
+        history_file = os.path.join(test_history_dir, f"{trial_id}_history.json")
+        with open(history_file, "w", encoding="utf-8") as f:
+            json.dump({"not": "a list"}, f)
+
+        # Should not crash and should reset to empty list then append
+        updated = update_history(trial_id, "new diff", history_dir=test_history_dir)
+        assert isinstance(updated, list)
+        assert len(updated) == 1
+        assert updated[0]["diff"] == "new diff"
+
+        # 2. update_target_history with corrupted file (string instead of list)
+        target_name = "CorruptedTarget"
+        target_history_file = os.path.join(test_history_dir, "target_corruptedtarget.json")
+        with open(target_history_file, "w", encoding="utf-8") as f:
+            f.write('"I am a string"')
+
+        # Should not crash and should reset to empty list then append
+        current_reports = [{"id": "NCT11111111", "changed_today": True}]
+        update_target_history(target_name, current_reports, history_dir=test_history_dir)
+
+        with open(target_history_file, "r", encoding="utf-8") as f:
+            saved_history = json.load(f)
+            assert isinstance(saved_history, list)
+            assert len(saved_history) == 1
+            # When history is reset, it records "Initial data collection"
+            assert "Initial data collection: 1 trials found." in saved_history[0]["event"]
+
+    finally:
+        if os.path.exists(test_history_dir):
+            shutil.rmtree(test_history_dir)
