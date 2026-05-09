@@ -114,8 +114,9 @@ def sanitize_csv_value(value: Any) -> Any:
     # We use a regex to strip leading whitespace and invisible characters (like
     # Zero Width Space or BOM) that could be used to hide a formula.
     # This prevents bypasses like "\u200B=SUM(1+1)" or " \u200B =SUM(1+1)".
+    # Added \u00A0 (NBSP), \u2028, \u2029 (separators), and \u180E (MVS) for completeness.
     stripped_value = re.sub(
-        r"^[\s\x00-\x1f\u200b-\u200f\uFEFF\u202a-\u202e\u2060-\u206f]+", "", value
+        r"^[\s\x00-\x1f\u00a0\u200b-\u200f\uFEFF\u2028-\u202e\u2060-\u206f\u180e]+", "", value
     )
     if stripped_value and stripped_value[0] in DANGEROUS_CSV_CHARS:
         return f"'{value[:32766]}"

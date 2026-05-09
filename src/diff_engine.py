@@ -14,6 +14,10 @@ try:
 except ImportError:
     from src.utils import sanitize_id
 
+# Security limits for diff formatting to prevent DoS (CWE-400)
+MAX_CHANGES = 100
+MAX_PATH_LEN = 255
+
 
 def compare_snapshots(
     trial_id: str, new_data: Dict[str, Any], snapshot_dir: str = "data/snapshots"
@@ -74,24 +78,40 @@ def format_diff(diff: Any) -> str:
     if not diff:
         return ""
 
+    truncated_msg = "... (additional changes truncated for brevity)"
+
     if not HAS_DEEPDIFF:
         # Format the simple fallback diff
         lines = []
         for label, change in diff.items():
+            # Security enhancement: Limit number of changes to prevent DoS
+            if len(lines) >= MAX_CHANGES:
+                lines.append(truncated_msg)
+                break
             # Security enhancement: Truncate large values to prevent DoS
             old_val = str(change['old'])[:1000]
             new_val = str(change['new'])[:1000]
-            lines.append(f"{label}: `{old_val}` -> `{new_val}`")
+            # Security enhancement: Truncate label/path
+            safe_label = str(label)[:MAX_PATH_LEN]
+            lines.append(f"{safe_label}: `{old_val}` -> `{new_val}`")
         return "\n".join(lines)
 
     summary = []
+
+    def check_limit():
+        return len(summary) >= MAX_CHANGES
+
     # Values changed
     if "values_changed" in diff:
         for path, change in diff["values_changed"].items():
+            if check_limit():
+                break
             # Clean up path for readability (e.g. root['statusModule']['overallStatus'])
             clean_path = (
                 path.replace("root", "").replace("['", "").replace("']", ".").strip(".")
             )
+            # Security enhancement: Truncate path
+            clean_path = clean_path[:MAX_PATH_LEN]
             # Security enhancement: Truncate large values to prevent DoS
             old_val = str(change['old_value'])[:1000]
             new_val = str(change['new_value'])[:1000]
@@ -100,12 +120,23 @@ def format_diff(diff: Any) -> str:
             )
 
     # Dictionary items added/removed
-    if "dictionary_item_added" in diff:
+    if "dictionary_item_added" in diff and not check_limit():
         for path in diff["dictionary_item_added"]:
-            summary.append(f"New field added: `{path}`")
+            if check_limit():
+                break
+            # Security enhancement: Truncate path
+            safe_path = str(path)[:MAX_PATH_LEN]
+            summary.append(f"New field added: `{safe_path}`")
 
-    if "dictionary_item_removed" in diff:
+    if "dictionary_item_removed" in diff and not check_limit():
         for path in diff["dictionary_item_removed"]:
-            summary.append(f"Field removed: `{path}`")
+            if check_limit():
+                break
+            # Security enhancement: Truncate path
+            safe_path = str(path)[:MAX_PATH_LEN]
+            summary.append(f"Field removed: `{safe_path}`")
+
+    if check_limit():
+        summary.append(truncated_msg)
 
     return "\n".join(summary) if summary else "Minor formatting updates."
