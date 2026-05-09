@@ -450,6 +450,72 @@ def test_sanitize_csv_value_unicode_bypass():
     assert sanitize_csv_value(" \u200B =SUM(1+1)") == "' \u200B =SUM(1+1)"
 
 
+def test_sanitize_csv_value_additional_invisible_chars():
+    """Verify that additional invisible characters are handled by sanitize_csv_value."""
+    from src.utils import sanitize_csv_value
+
+    # Non-breaking space (U+00A0)
+    assert sanitize_csv_value("\u00A0=SUM(1+1)") == "'\u00A0=SUM(1+1)"
+    # Line Separator (U+2028)
+    assert sanitize_csv_value("\u2028+42") == "'\u2028+42"
+    # Paragraph Separator (U+2029)
+    assert sanitize_csv_value("\u2029-5") == "'\u2029-5"
+    # Mongolian Vowel Separator (U+180E)
+    assert sanitize_csv_value("\u180E@something") == "'\u180E@something"
+
+
+def test_format_diff_max_changes():
+    """Verify that format_diff enforces the MAX_CHANGES limit."""
+    from src.diff_engine import format_diff
+    import src.diff_engine
+    from unittest.mock import patch
+
+    # 1. Test fallback path (no DeepDiff)
+    with patch.object(src.diff_engine, "HAS_DEEPDIFF", False):
+        diff = {f"Label{i:03d}": {"old": "a", "new": "b"} for i in range(110)}
+        res = format_diff(diff)
+        assert res.count("\n") == 100 # 100 lines + 1 truncated msg
+        assert "... (additional changes truncated for brevity)" in res
+
+    # 2. Test DeepDiff path
+    with patch.object(src.diff_engine, "HAS_DEEPDIFF", True):
+        # 50 values changed, 30 added, 30 removed = 110 total
+        diff = {
+            "values_changed": {f"root['p{i:03d}']": {"old_value": "a", "new_value": "b"} for i in range(50)},
+            "dictionary_item_added": [f"root['a{i:03d}']" for i in range(30)],
+            "dictionary_item_removed": [f"root['r{i:03d}']" for i in range(30)]
+        }
+        res = format_diff(diff)
+        # Should have 100 lines of changes + 1 truncation message
+        assert res.count("\n") == 100
+        assert "... (additional changes truncated for brevity)" in res
+
+
+def test_format_diff_path_truncation():
+    """Verify that format_diff truncates long paths/labels."""
+    from src.diff_engine import format_diff
+    import src.diff_engine
+    from unittest.mock import patch
+
+    long_path = "P" * 500
+    # 1. Test fallback path
+    with patch.object(src.diff_engine, "HAS_DEEPDIFF", False):
+        diff = {long_path: {"old": "a", "new": "b"}}
+        res = format_diff(diff)
+        assert "P" * 255 in res
+        assert "P" * 256 not in res
+
+    # 2. Test DeepDiff path
+    with patch.object(src.diff_engine, "HAS_DEEPDIFF", True):
+        diff = {
+            "values_changed": {f"root['{long_path}']": {"old_value": "a", "new_value": "b"}},
+            "dictionary_item_added": [long_path]
+        }
+        res = format_diff(diff)
+        assert "P" * 255 in res
+        assert "P" * 256 not in res
+
+
 def test_update_from_csv_security_limits():
     """Verify that update_trials_from_csv.py enforces DoS limits."""
     from src.update_trials_from_csv import read_csv_trials, update_target
