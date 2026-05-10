@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
 from crawler import fetch_trial_data, save_snapshot, reset_session
-from utils import sanitize_id, is_valid_nct_id, sanitize_csv_value
+from utils import sanitize_id, is_valid_nct_id, sanitize_csv_value, check_file_size
 from diff_engine import compare_snapshots, format_diff
 from generate_target_pages import main as generate_pages
 
@@ -28,6 +28,9 @@ def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     """Load trials configuration from YAML file."""
     if not os.path.exists(config_path):
         return {"targets": []}
+
+    # Security enhancement: Check file size before loading to prevent DoS (CWE-400)
+    check_file_size(config_path)
 
     try:
         with open(config_path, "r", encoding="utf-8") as f:
@@ -243,6 +246,9 @@ def safe_json_load(file_path: str, default: Any = _SENTINEL) -> Any:
     """
     if default is _SENTINEL:
         default = []
+
+    # Security enhancement: Check file size before loading to prevent DoS (CWE-400)
+    check_file_size(file_path)
 
     try:
         with open(file_path, "r", encoding="utf-8") as f:

@@ -8,7 +8,7 @@ import argparse
 import os
 import json
 from typing import Any, Dict, Optional
-from utils import sanitize_id, is_valid_nct_id
+from utils import sanitize_id, is_valid_nct_id, check_file_size
 from generate_target_pages import main as generate_pages
 
 try:
@@ -26,6 +26,9 @@ def load_yaml(yaml_path: str = "trials.yaml") -> Dict[str, Any]:
     """Load trials configuration from YAML file."""
     if not os.path.exists(yaml_path):
         return {"targets": []}
+
+    # Security enhancement: Check file size before loading to prevent DoS (CWE-400)
+    check_file_size(yaml_path)
 
     if HAS_YAML:
         try:
@@ -77,6 +80,9 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
     if not is_valid_nct_id(trial_id):
         print(f"Warning: Invalid NCT ID format, not adding to exclusion: {trial_id}")
         return
+
+    # Security enhancement: Check file size before loading to prevent DoS (CWE-400)
+    check_file_size(yaml_path)
 
     try:
         with open(yaml_path, "r", encoding="utf-8") as f:
@@ -187,6 +193,9 @@ def perform_cleanup(trial_id: str):
             summary_path = os.path.join(targets_base, target_dir, "status_summary.json")
             if os.path.exists(summary_path):
                 try:
+                    # Security enhancement: Check file size before loading to prevent DoS (CWE-400)
+                    check_file_size(summary_path)
+
                     with open(summary_path, "r", encoding="utf-8") as f:
                         summary = json.load(f)
 
