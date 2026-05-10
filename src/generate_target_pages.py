@@ -3,15 +3,18 @@ import json
 import yaml
 from typing import Any, Dict, List
 try:
-    from utils import sanitize_id, escape_html
+    from utils import sanitize_id, escape_html, check_file_size
 except ImportError:
-    from src.utils import sanitize_id, escape_html
+    from src.utils import sanitize_id, escape_html, check_file_size
 
 
 def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
     """Load trials configuration from YAML file."""
     if not os.path.exists(path):
         return []
+
+    # Security enhancement: Check file size before loading to prevent DoS (CWE-400)
+    check_file_size(path)
 
     try:
         with open(path, "r", encoding="utf-8") as f:
@@ -57,6 +60,9 @@ def discover_all_targets() -> List[Dict[str, Any]]:
             summary_path = os.path.join(targets_data_dir, d, "status_summary.json")
             if os.path.exists(summary_path):
                 try:
+                    # Security enhancement: Check file size before loading to prevent DoS (CWE-400)
+                    check_file_size(summary_path)
+
                     with open(summary_path, "r", encoding="utf-8") as f:
                         data = json.load(f)
                         if data and isinstance(data, list):

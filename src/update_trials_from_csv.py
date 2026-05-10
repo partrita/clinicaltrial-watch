@@ -10,9 +10,9 @@ import os
 from typing import Any, Dict, List, Optional
 
 try:
-    from utils import is_valid_nct_id
+    from utils import is_valid_nct_id, check_file_size
 except ImportError:
-    from src.utils import is_valid_nct_id
+    from src.utils import is_valid_nct_id, check_file_size
 
 import yaml
 
@@ -27,6 +27,9 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
     """Load existing YAML file or return empty structure."""
     if not os.path.exists(yaml_path):
         return {"targets": []}
+
+    # Security enhancement: Check file size before loading to prevent DoS (CWE-400)
+    check_file_size(yaml_path)
 
     try:
         with open(yaml_path, "r", encoding="utf-8") as f:
