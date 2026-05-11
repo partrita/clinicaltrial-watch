@@ -14,7 +14,7 @@ def check_file_size(filepath: str, max_size: int = MAX_CONFIG_SIZE) -> None:
     Check if a file exists and its size is within the limit.
     Raises ValueError if the file is too large.
     """
-    if os.path.exists(filepath):
+    if os.path.isfile(filepath):
         try:
             size = os.path.getsize(filepath)
             if size > max_size:
