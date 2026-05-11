@@ -28,6 +28,11 @@ def reset_session() -> None:
     """Reset the cached session (e.g. to apply new settings)."""
     global _session
     with _session_lock:
+        if _session is not None and HAS_REQUESTS:
+            try:
+                _session.close()
+            except Exception:
+                pass
         _session = None
 
 
@@ -149,6 +154,9 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
     else:
         # Fallback to urllib if requests is not available
         try:
+            # Adding a tiny random jitter to avoid perfectly synchronized requests
+            time.sleep(random.uniform(0.05, 0.1))
+
             # Security enhancement: Disable environment proxies and ensure certificate verification
             context = ssl.create_default_context()
             opener = urllib.request.build_opener(
@@ -156,7 +164,10 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                 urllib.request.HTTPSHandler(context=context)
             )
             req = urllib.request.Request(url)
-            req.add_header("User-Agent", "ClinicalTrialWatch/1.0")
+            req.add_header(
+                "User-Agent",
+                "ClinicalTrialWatch/1.0 (https://github.com/partrita/clinicaltrial-watch)",
+            )
             # Security enhancement: Add Accept header
             req.add_header("Accept", "application/json")
             with opener.open(req, timeout=15) as response:
