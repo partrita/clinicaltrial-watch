@@ -31,6 +31,18 @@ _session = None
 _session_lock = threading.Lock()
 
 
+def reset_session() -> None:
+    """Reset the cached session (e.g. to apply new settings)."""
+    global _session
+    with _session_lock:
+        if _session is not None and HAS_REQUESTS:
+            try:
+                _session.close()
+            except Exception:
+                pass
+        _session = None
+
+
 def get_session() -> Optional[Any]:
     global _session
     if not HAS_REQUESTS:
@@ -56,7 +68,7 @@ def get_session() -> Optional[Any]:
 
                 session.headers.update(
                     {
-                        "User-Agent": "ClinicalTrialWatch/AutoDiscover/1.0",
+                        "User-Agent": "ClinicalTrialWatch/AutoDiscover/1.0 (https://github.com/partrita/clinicaltrial-watch)",
                         "Accept": "application/json",
                     }
                 )
@@ -124,9 +136,7 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                     return []
         except Exception as e:
             print(f"Exception fetching data for term {query_term}: {e}")
-            global _session
-            with _session_lock:
-                _session = None
+            reset_session()
             return []
     else:
         try:
@@ -139,7 +149,10 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             query_string = urllib.parse.urlencode(params)
             full_url = f"{base_url}?{query_string}"
             req = urllib.request.Request(full_url)
-            req.add_header("User-Agent", "ClinicalTrialWatch/AutoDiscover/1.0")
+            req.add_header(
+                "User-Agent",
+                "ClinicalTrialWatch/AutoDiscover/1.0 (https://github.com/partrita/clinicaltrial-watch)",
+            )
             # Security enhancement: Add Accept header
             req.add_header("Accept", "application/json")
             time.sleep(random.uniform(0.5, 1.0))
