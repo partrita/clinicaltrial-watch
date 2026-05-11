@@ -1,7 +1,29 @@
 import re
+import os
 import html
 from typing import Any
 from functools import lru_cache
+
+
+# Configuration limits for DoS protection (CWE-400)
+MAX_CONFIG_SIZE = 10 * 1024 * 1024  # 10MB limit for local YAML/JSON config and data files
+
+
+def check_file_size(filepath: str, max_size: int = MAX_CONFIG_SIZE) -> None:
+    """
+    Check if a file exists and its size is within the limit.
+    Raises ValueError if the file is too large.
+    """
+    if os.path.isfile(filepath):
+        try:
+            size = os.path.getsize(filepath)
+            if size > max_size:
+                raise ValueError(
+                    f"File too large: {filepath} ({size} bytes, limit: {max_size} bytes)"
+                )
+        except OSError as e:
+            # Re-raise as OSError to be handled by the caller's specific error handling
+            raise OSError(f"Error checking file size for {filepath}: {e}") from e
 
 
 # List of dangerous characters that can trigger formula execution in Excel/Google Sheets
