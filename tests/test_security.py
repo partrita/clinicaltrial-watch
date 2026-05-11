@@ -1761,3 +1761,43 @@ def test_history_hardening():
     finally:
         if os.path.exists(test_history_dir):
             shutil.rmtree(test_history_dir)
+
+def test_reset_session_closure():
+    """Verify that reset_session correctly closes the requests session if it exists."""
+    from src.crawler import reset_session as reset_crawler, _session_lock as lock_crawler
+    import src.crawler
+    from src.auto_discover_trials import reset_session as reset_auto, _session_lock as lock_auto
+    import src.auto_discover_trials
+    from unittest.mock import MagicMock
+
+    # 1. Test crawler reset_session
+    mock_session_crawler = MagicMock()
+    # Ensure HAS_REQUESTS is True for this test part
+    original_has_requests_crawler = src.crawler.HAS_REQUESTS
+    src.crawler.HAS_REQUESTS = True
+    try:
+        with lock_crawler:
+            src.crawler._session = mock_session_crawler
+
+        reset_crawler()
+
+        mock_session_crawler.close.assert_called_once()
+        assert src.crawler._session is None
+    finally:
+        src.crawler.HAS_REQUESTS = original_has_requests_crawler
+
+    # 2. Test auto_discover reset_session
+    mock_session_auto = MagicMock()
+    # Ensure HAS_REQUESTS is True for this test part
+    original_has_requests_auto = src.auto_discover_trials.HAS_REQUESTS
+    src.auto_discover_trials.HAS_REQUESTS = True
+    try:
+        with lock_auto:
+            src.auto_discover_trials._session = mock_session_auto
+
+        reset_auto()
+
+        mock_session_auto.close.assert_called_once()
+        assert src.auto_discover_trials._session is None
+    finally:
+        src.auto_discover_trials.HAS_REQUESTS = original_has_requests_auto
