@@ -199,6 +199,9 @@ if os.path.exists(target_h_file):
         print(f"Error loading history: {e}")
         history = []
     
+    if not isinstance(history, list):
+        history = []
+
     print("")
     for record in reversed(history[-10:]):
         print(f'- **{escape_html(record["timestamp"])}**: {escape_html(record["event"])}')
@@ -239,6 +242,9 @@ for trial_id in target_trials:
         except Exception:
             continue
         
+        if not isinstance(history, list):
+            continue
+
         # Filter out "Initial data collection" to only show real changes
         real_changes = [r for r in history if r['diff'] != "Initial data collection"]
         
@@ -300,6 +306,9 @@ if os.path.exists(summary_path):
         print(f"Error loading data: {e}")
         summary = []
     
+    if not isinstance(summary, list):
+        summary = []
+
     print("")
     print('<div style="font-size: 0.8em">')
     print("")
@@ -387,6 +396,9 @@ if not targets and os.path.exists(summary_path):
             targets = json.load(f)
     except Exception:
         targets = []
+
+if not isinstance(targets, list):
+    targets = []
 
 if targets:
     # Sort targets by name
