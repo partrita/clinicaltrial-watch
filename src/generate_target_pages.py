@@ -65,7 +65,7 @@ def discover_all_targets() -> List[Dict[str, Any]]:
 
                     with open(summary_path, "r", encoding="utf-8") as f:
                         data = json.load(f)
-                        if data and isinstance(data, list):
+                        if data and isinstance(data, list) and isinstance(data[0], dict):
                             name = data[0].get("target", d)
                             targets_dict[name.lower()] = {
                                 "name": name,
