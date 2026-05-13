@@ -311,6 +311,9 @@ if os.path.exists(summary_path):
     
     if not isinstance(summary, list):
         summary = []
+    else:
+        # Ensure all items are dictionaries with an 'id' key
+        summary = [item for item in summary if isinstance(item, dict) and 'id' in item]
 
     print("")
     print('<div style="font-size: 0.8em">')
