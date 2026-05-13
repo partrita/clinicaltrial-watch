@@ -201,10 +201,13 @@ if os.path.exists(target_h_file):
     
     if not isinstance(history, list):
         history = []
+    else:
+        # Ensure all records are dictionaries to prevent crashes during iteration
+        history = [r for r in history if isinstance(r, dict)]
 
     print("")
     for record in reversed(history[-10:]):
-        print(f'- **{escape_html(record["timestamp"])}**: {escape_html(record["event"])}')
+        print(f'- **{escape_html(record.get("timestamp", "N/A"))}**: {escape_html(record.get("event", "N/A"))}')
 else:
     print(f"No target-level milestones recorded yet for {target_id}.")
 ```
