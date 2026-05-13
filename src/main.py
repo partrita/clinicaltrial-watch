@@ -280,6 +280,9 @@ def update_history(
     if not isinstance(history, list):
         print(f"  Warning: History for {trial_id} is not a list. Resetting.")
         history = []
+    else:
+        # Security enhancement: Filter out non-dictionary items to prevent crashes (CWE-400)
+        history = [r for r in history if isinstance(r, dict)]
 
     history.append({"timestamp": timestamp, "diff": diff_text[:10000]})
 
@@ -426,7 +429,7 @@ def flatten_dict(
                     MAX_VAL_LEN = 10000
 
                     if first_type is str:
-                        res_str = ", ".join(truncated_list)
+                        res_str = ", ".join(map(str, truncated_list))
                         result[new_key] = res_str[:MAX_VAL_LEN]
                     elif first_type in (int, float, bool):
                         res_str = ", ".join(map(str, truncated_list))
@@ -552,15 +555,18 @@ def process_trial(
     # Check for any changes in the last 30 days to set monitor_status using history in memory
     if history:
         # Update last_monitored_change from history
-        report_item["last_monitored_change"] = history[-1]["timestamp"].split(" ")[0]
+        # Security enhancement: Validate record type and key existence (CWE-400)
+        last_record = history[-1]
+        if isinstance(last_record, dict) and "timestamp" in last_record:
+            report_item["last_monitored_change"] = str(last_record["timestamp"]).split(" ")[0]
 
         # Check 30 day window using efficient string comparison (~80x faster than strptime)
         for record in reversed(history):  # Search from newest
-            if record["diff"] == "Initial data collection":
+            if not isinstance(record, dict) or record.get("diff") == "Initial data collection":
                 continue
 
-            # String comparison works for YYYY-MM-DD format
-            if record["timestamp"][:10] > thirty_days_ago_str:
+            timestamp = record.get("timestamp")
+            if timestamp and str(timestamp)[:10] > thirty_days_ago_str:
                 report_item["monitor_status"] = "Changed"
                 break
 
