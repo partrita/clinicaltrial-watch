@@ -405,6 +405,9 @@ if not targets and os.path.exists(summary_path):
 
 if not isinstance(targets, list):
     targets = []
+else:
+    # Ensure all targets are dictionaries with a 'name' key
+    targets = [t for t in targets if isinstance(t, dict) and 'name' in t]
 
 if targets:
     # Sort targets by name
