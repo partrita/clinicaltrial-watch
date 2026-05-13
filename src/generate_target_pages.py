@@ -248,8 +248,8 @@ for trial_id in target_trials:
         if not isinstance(history, list):
             continue
 
-        # Filter out "Initial data collection" to only show real changes
-        real_changes = [r for r in history if r['diff'] != "Initial data collection"]
+        # Filter out "Initial data collection" and ensure records are dictionaries with the required key
+        real_changes = [r for r in history if isinstance(r, dict) and r.get('diff') != "Initial data collection"]
         
         if real_changes:
             if not history_found:
