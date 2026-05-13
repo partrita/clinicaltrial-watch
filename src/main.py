@@ -470,6 +470,10 @@ def process_trial(
             print(f"  Skipping {trial_id} - no data available.")
             return None, None
 
+    if not isinstance(new_data, dict):
+        print(f"  Error: Data for {trial_id} is not a dictionary. Skipping.")
+        return None, None
+
     raw_data = flatten_dict(new_data)
     raw_data["_target"] = target_name
 
