@@ -105,9 +105,15 @@ if os.path.exists(target_h_file):
         print(f"Error loading history: {e}")
         history = []
     
+    if not isinstance(history, list):
+        history = []
+    else:
+        # Ensure all records are dictionaries to prevent crashes during iteration
+        history = [r for r in history if isinstance(r, dict)]
+
     print("")
     for record in reversed(history[-10:]):
-        print(f'- **{escape_html(record["timestamp"])}**: {escape_html(record["event"])}')
+        print(f'- **{escape_html(record.get("timestamp", "N/A"))}**: {escape_html(record.get("event", "N/A"))}')
 else:
     print(f"No target-level milestones recorded yet for {target_id}.")
 ```
@@ -143,8 +149,11 @@ for trial_id in target_trials:
         except Exception:
             continue
         
-        # Filter out "Initial data collection" to only show real changes
-        real_changes = [r for r in history if r['diff'] != "Initial data collection"]
+        if not isinstance(history, list):
+            continue
+
+        # Filter out "Initial data collection" and ensure records are dictionaries with the required key
+        real_changes = [r for r in history if isinstance(r, dict) and r.get('diff') != "Initial data collection"]
         
         if real_changes:
             if not history_found:
@@ -194,6 +203,12 @@ if os.path.exists(summary_path):
         print(f"Error loading data: {e}")
         summary = []
     
+    if not isinstance(summary, list):
+        summary = []
+    else:
+        # Ensure all items are dictionaries with an 'id' key
+        summary = [item for item in summary if isinstance(item, dict) and 'id' in item]
+
     print("")
     print('<div style="font-size: 0.8em">')
     print("")
