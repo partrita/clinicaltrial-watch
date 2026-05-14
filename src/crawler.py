@@ -159,9 +159,13 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
 
             # Security enhancement: Disable environment proxies and ensure certificate verification
             context = ssl.create_default_context()
+            # Security enhancement: Limit redirects to 3
+            redirect_handler = urllib.request.HTTPRedirectHandler()
+            redirect_handler.max_redirections = 3
             opener = urllib.request.build_opener(
                 urllib.request.ProxyHandler({}),
-                urllib.request.HTTPSHandler(context=context)
+                urllib.request.HTTPSHandler(context=context),
+                redirect_handler
             )
             req = urllib.request.Request(url)
             req.add_header(
