@@ -142,9 +142,13 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
         try:
             # Security enhancement: Disable environment proxies and ensure certificate verification
             context = ssl.create_default_context()
+            # Security enhancement: Limit redirects to 3
+            redirect_handler = urllib.request.HTTPRedirectHandler()
+            redirect_handler.max_redirections = 3
             opener = urllib.request.build_opener(
                 urllib.request.ProxyHandler({}),
-                urllib.request.HTTPSHandler(context=context)
+                urllib.request.HTTPSHandler(context=context),
+                redirect_handler
             )
             query_string = urllib.parse.urlencode(params)
             full_url = f"{base_url}?{query_string}"
