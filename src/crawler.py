@@ -162,11 +162,18 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
             # Security enhancement: Limit redirects to 3
             redirect_handler = urllib.request.HTTPRedirectHandler()
             redirect_handler.max_redirections = 3
-            opener = urllib.request.build_opener(
+
+            # Security enhancement: Use restricted OpenerDirector to disable dangerous protocols (file://, ftp://, etc.)
+            opener = urllib.request.OpenerDirector()
+            for handler in [
                 urllib.request.ProxyHandler({}),
                 urllib.request.HTTPSHandler(context=context),
-                redirect_handler
-            )
+                redirect_handler,
+                urllib.request.HTTPDefaultErrorHandler(),
+                urllib.request.HTTPErrorProcessor(),
+                urllib.request.UnknownHandler(),
+            ]:
+                opener.add_handler(handler)
             req = urllib.request.Request(url)
             req.add_header(
                 "User-Agent",

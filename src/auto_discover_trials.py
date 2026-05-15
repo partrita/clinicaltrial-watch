@@ -145,11 +145,18 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
             # Security enhancement: Limit redirects to 3
             redirect_handler = urllib.request.HTTPRedirectHandler()
             redirect_handler.max_redirections = 3
-            opener = urllib.request.build_opener(
+
+            # Security enhancement: Use restricted OpenerDirector to disable dangerous protocols (file://, ftp://, etc.)
+            opener = urllib.request.OpenerDirector()
+            for handler in [
                 urllib.request.ProxyHandler({}),
                 urllib.request.HTTPSHandler(context=context),
-                redirect_handler
-            )
+                redirect_handler,
+                urllib.request.HTTPDefaultErrorHandler(),
+                urllib.request.HTTPErrorProcessor(),
+                urllib.request.UnknownHandler(),
+            ]:
+                opener.add_handler(handler)
             query_string = urllib.parse.urlencode(params)
             full_url = f"{base_url}?{query_string}"
             req = urllib.request.Request(full_url)

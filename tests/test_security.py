@@ -1206,13 +1206,13 @@ def test_urllib_fallback_security():
     import src.crawler
     import src.auto_discover_trials
 
-    with patch("urllib.request.build_opener") as mock_build_opener:
+    with patch("urllib.request.OpenerDirector") as mock_opener_class:
         # Force urllib path
         with patch.object(src.crawler, "HAS_REQUESTS", False), \
              patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
 
             mock_opener = MagicMock()
-            mock_build_opener.return_value = mock_opener
+            mock_opener_class.return_value = mock_opener
             mock_response = MagicMock()
             mock_opener.open.return_value.__enter__.return_value = mock_response
 
@@ -1421,13 +1421,13 @@ def test_urllib_redirect_security():
     import src.crawler
     import src.auto_discover_trials
 
-    with patch("urllib.request.build_opener") as mock_build_opener:
+    with patch("urllib.request.OpenerDirector") as mock_opener_class:
         # Force urllib path
         with patch.object(src.crawler, "HAS_REQUESTS", False), \
              patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
 
             mock_opener = MagicMock()
-            mock_build_opener.return_value = mock_opener
+            mock_opener_class.return_value = mock_opener
             mock_response = MagicMock()
             mock_opener.open.return_value.__enter__.return_value = mock_response
 
@@ -1454,33 +1454,33 @@ def test_urllib_hardening_config():
     import urllib.request
     import ssl
 
-    with patch("urllib.request.build_opener") as mock_build_opener:
+    with patch("urllib.request.OpenerDirector") as mock_opener_class:
         # Force urllib path
         with patch.object(src.crawler, "HAS_REQUESTS", False), \
              patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
 
             mock_opener = MagicMock()
-            mock_build_opener.return_value = mock_opener
+            mock_opener_class.return_value = mock_opener
 
             # 1. Check crawler fetch_trial_data
             fetch_trial_data("NCT12345678")
-            assert mock_build_opener.called
-            args, _ = mock_build_opener.call_args
-            # Check for ProxyHandler({}) and HTTPSHandler(context=...)
-            proxy_handler = next(arg for arg in args if isinstance(arg, urllib.request.ProxyHandler))
-            https_handler = next(arg for arg in args if isinstance(arg, urllib.request.HTTPSHandler))
+            assert mock_opener_class.called
+            # Verify handlers added
+            handler_calls = [call.args[0] for call in mock_opener.add_handler.call_args_list]
+            proxy_handler = next(h for h in handler_calls if isinstance(h, urllib.request.ProxyHandler))
+            https_handler = next(h for h in handler_calls if isinstance(h, urllib.request.HTTPSHandler))
             assert proxy_handler.proxies == {}
-            # HTTPSHandler uses _context internally
             assert getattr(https_handler, "_context", None) is not None
 
-            mock_build_opener.reset_mock()
+            mock_opener.reset_mock()
+            mock_opener_class.reset_mock()
 
             # 2. Check auto_discover_trials search_trials
             search_trials("Target")
-            assert mock_build_opener.called
-            args, _ = mock_build_opener.call_args
-            proxy_handler = next(arg for arg in args if isinstance(arg, urllib.request.ProxyHandler))
-            https_handler = next(arg for arg in args if isinstance(arg, urllib.request.HTTPSHandler))
+            assert mock_opener_class.called
+            handler_calls = [call.args[0] for call in mock_opener.add_handler.call_args_list]
+            proxy_handler = next(h for h in handler_calls if isinstance(h, urllib.request.ProxyHandler))
+            https_handler = next(h for h in handler_calls if isinstance(h, urllib.request.HTTPSHandler))
             assert proxy_handler.proxies == {}
             assert getattr(https_handler, "_context", None) is not None
 
@@ -1801,3 +1801,69 @@ def test_reset_session_closure():
         assert src.auto_discover_trials._session is None
     finally:
         src.auto_discover_trials.HAS_REQUESTS = original_has_requests_auto
+
+
+def test_urllib_protocol_restriction():
+    """Verify that the restricted OpenerDirector does not support dangerous protocols."""
+    import urllib.request
+    from src.crawler import fetch_trial_data
+    from unittest.mock import patch
+
+    # We want to test that the OpenerDirector we created doesn't have FileHandler or FTPHandler
+    # Since fetch_trial_data creates the opener internally, we can't easily inspect it without mocking.
+
+    with patch("urllib.request.OpenerDirector") as mock_opener_class, \
+         patch("src.crawler.HAS_REQUESTS", False):
+
+        # We'll capture the OpenerDirector that is created
+        mock_opener = mock_opener_class.return_value
+
+        # Call fetch_trial_data to trigger opener creation
+        try:
+            fetch_trial_data("NCT12345678")
+        except Exception:
+            pass
+
+        # Get all handlers added to the opener
+        added_handlers = [call.args[0] for call in mock_opener.add_handler.call_args_list]
+
+        # Ensure no FileHandler, FTPHandler, or DataHandler was added
+        for handler in added_handlers:
+            assert not isinstance(handler, urllib.request.FileHandler)
+            assert not isinstance(handler, urllib.request.FTPHandler)
+            assert not isinstance(handler, urllib.request.DataHandler)
+
+        # Ensure necessary handlers ARE added
+        assert any(isinstance(h, urllib.request.HTTPSHandler) for h in added_handlers)
+        assert any(isinstance(h, urllib.request.HTTPRedirectHandler) for h in added_handlers)
+
+
+def test_urllib_restricted_opener_live_behavior():
+    """Live test of the restricted OpenerDirector behavior using a real instance."""
+    import urllib.request
+    import ssl
+
+    context = ssl.create_default_context()
+    redirect_handler = urllib.request.HTTPRedirectHandler()
+
+    opener = urllib.request.OpenerDirector()
+    for handler in [
+        urllib.request.ProxyHandler({}),
+        urllib.request.HTTPSHandler(context=context),
+        redirect_handler,
+        urllib.request.HTTPDefaultErrorHandler(),
+        urllib.request.HTTPErrorProcessor(),
+        urllib.request.UnknownHandler(),
+    ]:
+        opener.add_handler(handler)
+
+    # Test that it DOES NOT have a handler for 'file'
+    # handle_open returns None if no handler is found
+    # Actually it might raise URLError or just return None depending on how it's called.
+    # OpenerDirector.open() will try to find a handler.
+
+    with pytest.raises(urllib.error.URLError, match="unknown url type: file"):
+        opener.open("file:///etc/passwd")
+
+    with pytest.raises(urllib.error.URLError, match="unknown url type: ftp"):
+        opener.open("ftp://localhost/test")
