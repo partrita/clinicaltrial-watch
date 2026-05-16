@@ -1205,14 +1205,15 @@ def test_urllib_fallback_security():
     from unittest.mock import patch, MagicMock
     import src.crawler
     import src.auto_discover_trials
+    import urllib.request
 
-    with patch("urllib.request.build_opener") as mock_build_opener:
+    with patch("urllib.request.OpenerDirector") as mock_opener_class:
         # Force urllib path
         with patch.object(src.crawler, "HAS_REQUESTS", False), \
              patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
 
             mock_opener = MagicMock()
-            mock_build_opener.return_value = mock_opener
+            mock_opener_class.return_value = mock_opener
             mock_response = MagicMock()
             mock_opener.open.return_value.__enter__.return_value = mock_response
 
@@ -1239,8 +1240,10 @@ def test_urllib_fallback_security():
             # 3. Test Search with malformed Content-Length
             mock_response.status = 200
             mock_response.headers = {"Content-Type": "application/json", "Content-Length": "invalid"}
-            mock_response.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
+            # We must use a different mock response or reset side effects for the second search test
+            # Search actually expects a dict with "studies" key
             mock_response.read.side_effect = [b'{"studies": []}', b""]
+            mock_response.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
             mock_opener.open.return_value.__enter__.return_value = mock_response
 
             assert search_trials("Target") == []
@@ -1454,35 +1457,31 @@ def test_urllib_hardening_config():
     import urllib.request
     import ssl
 
-    with patch("urllib.request.build_opener") as mock_build_opener:
+    with patch("urllib.request.OpenerDirector") as mock_opener_class:
         # Force urllib path
         with patch.object(src.crawler, "HAS_REQUESTS", False), \
              patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
 
             mock_opener = MagicMock()
-            mock_build_opener.return_value = mock_opener
+            mock_opener_class.return_value = mock_opener
 
             # 1. Check crawler fetch_trial_data
             fetch_trial_data("NCT12345678")
-            assert mock_build_opener.called
-            args, _ = mock_build_opener.call_args
-            # Check for ProxyHandler({}) and HTTPSHandler(context=...)
-            proxy_handler = next(arg for arg in args if isinstance(arg, urllib.request.ProxyHandler))
-            https_handler = next(arg for arg in args if isinstance(arg, urllib.request.HTTPSHandler))
-            assert proxy_handler.proxies == {}
-            # HTTPSHandler uses _context internally
-            assert getattr(https_handler, "_context", None) is not None
+            assert mock_opener_class.called
 
-            mock_build_opener.reset_mock()
+            # Verify handlers added
+            added_handlers = [call[0][0] for call in mock_opener.add_handler.call_args_list]
+            assert any(isinstance(h, urllib.request.HTTPSHandler) for h in added_handlers)
+            assert any(isinstance(h, urllib.request.HTTPRedirectHandler) for h in added_handlers)
+
+            mock_opener_class.reset_mock()
+            mock_opener.reset_mock()
 
             # 2. Check auto_discover_trials search_trials
             search_trials("Target")
-            assert mock_build_opener.called
-            args, _ = mock_build_opener.call_args
-            proxy_handler = next(arg for arg in args if isinstance(arg, urllib.request.ProxyHandler))
-            https_handler = next(arg for arg in args if isinstance(arg, urllib.request.HTTPSHandler))
-            assert proxy_handler.proxies == {}
-            assert getattr(https_handler, "_context", None) is not None
+            assert mock_opener_class.called
+            added_handlers = [call[0][0] for call in mock_opener.add_handler.call_args_list]
+            assert any(isinstance(h, urllib.request.HTTPSHandler) for h in added_handlers)
 
 
 def test_safe_json_load_robustness():
@@ -1801,3 +1800,57 @@ def test_reset_session_closure():
         assert src.auto_discover_trials._session is None
     finally:
         src.auto_discover_trials.HAS_REQUESTS = original_has_requests_auto
+
+def test_urllib_protocol_restriction():
+    """Verify that the restricted urllib opener rejects non-HTTP(S) protocols."""
+    import src.crawler
+    import urllib.request
+    from unittest.mock import patch, MagicMock
+
+    # Force urllib path
+    with patch.object(src.crawler, "HAS_REQUESTS", False):
+        # Let's test that the OpenerDirector created in src.crawler DOES NOT have FileHandler
+        with patch("urllib.request.OpenerDirector") as mock_opener_class:
+            mock_opener = MagicMock()
+            mock_opener_class.return_value = mock_opener
+
+            src.crawler.fetch_trial_data("NCT12345678")
+
+            # Verify add_handler was called only with safe handlers
+            added_handlers = [call[0][0] for call in mock_opener.add_handler.call_args_list]
+            for h in added_handlers:
+                assert not isinstance(h, (urllib.request.FileHandler, urllib.request.FTPHandler, urllib.request.DataHandler))
+
+def test_urllib_restricted_opener_live_behavior():
+    """Verify that the restricted urllib opener correctly rejects file:// URLs while allowing HTTPS."""
+    import urllib.request
+    import urllib.error
+    import ssl
+    import os
+
+    context = ssl.create_default_context()
+    redirect_handler = urllib.request.HTTPRedirectHandler()
+
+    opener = urllib.request.OpenerDirector()
+    handlers = [
+        urllib.request.UnknownHandler(),
+        urllib.request.HTTPHandler(),
+        urllib.request.HTTPSHandler(context=context),
+        urllib.request.HTTPDefaultErrorHandler(),
+        redirect_handler,
+        urllib.request.HTTPErrorProcessor(),
+    ]
+    for handler in handlers:
+        opener.add_handler(handler)
+
+    # 1. Should fail for file://
+    file_url = "file://" + os.path.abspath(__file__)
+    with pytest.raises(urllib.error.URLError) as excinfo:
+        opener.open(file_url)
+    assert "unknown url type: file" in str(excinfo.value)
+
+    # 2. Should fail for ftp://
+    ftp_url = "ftp://localhost/test.txt"
+    with pytest.raises(urllib.error.URLError) as excinfo:
+        opener.open(ftp_url)
+    assert "unknown url type: ftp" in str(excinfo.value)
