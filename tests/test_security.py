@@ -1865,5 +1865,5 @@ def test_urllib_restricted_opener_live_behavior():
     with pytest.raises(urllib.request.URLError, match="unknown url type: file"):
         opener.open("file:///etc/passwd")
 
-    with pytest.raises(urllib.error.URLError, match="unknown url type: ftp"):
+    with pytest.raises(urllib.request.URLError, match="unknown url type: ftp"):
         opener.open("ftp://localhost/test")
