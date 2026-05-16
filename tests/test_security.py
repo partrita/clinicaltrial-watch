@@ -1862,7 +1862,7 @@ def test_urllib_restricted_opener_live_behavior():
     # Actually it might raise URLError or just return None depending on how it's called.
     # OpenerDirector.open() will try to find a handler.
 
-    with pytest.raises(urllib.error.URLError, match="unknown url type: file"):
+    with pytest.raises(urllib.request.URLError, match="unknown url type: file"):
         opener.open("file:///etc/passwd")
 
     with pytest.raises(urllib.error.URLError, match="unknown url type: ftp"):
