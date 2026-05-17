@@ -169,6 +169,9 @@ def update_target(
     excluded_ids = set()
     exclusion_yaml = "excluded_trials.yaml"
     if os.path.exists(exclusion_yaml):
+        # Security enhancement: Check file size before loading to prevent DoS (CWE-400)
+        check_file_size(exclusion_yaml)
+
         try:
             with open(exclusion_yaml, "r", encoding="utf-8") as f:
                 ex_data = yaml.safe_load(f)
