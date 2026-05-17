@@ -108,7 +108,7 @@ def generate_target_qmd(
 import pandas as pd
 import plotly.express as px
 import os
-from src.utils import sanitize_id, get_status_badge, get_phase_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment
+from src.utils import sanitize_id, get_status_badge, get_phase_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment, check_file_size
 
 target_id = "'''
         + target_id
@@ -117,6 +117,7 @@ csv_path = f"data/targets/{target_id}/all_trials_raw.csv"
 
 if os.path.exists(csv_path):
     try:
+        check_file_size(csv_path)
         df = pd.read_csv(csv_path, on_bad_lines='skip')
     except Exception as e:
         print(f"Error reading CSV: {e}")
@@ -184,7 +185,7 @@ if os.path.exists(csv_path):
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, escape_html
+from src.utils import sanitize_id, escape_html, check_file_size
 
 target_id = "'''
         + target_id
@@ -193,6 +194,7 @@ target_h_file = f"data/history/target_{target_id}.json"
 
 if os.path.exists(target_h_file):
     try:
+        check_file_size(target_h_file)
         with open(target_h_file, "r", encoding="utf-8") as f:
             history = json.load(f)
     except Exception as e:
@@ -219,7 +221,7 @@ else:
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, escape_html, format_diff_line_markdown
+from src.utils import sanitize_id, escape_html, format_diff_line_markdown, check_file_size
 
 target_id = "'''
         + target_id
@@ -230,6 +232,7 @@ summary_path = f"data/targets/{target_id}/status_summary.json"
 target_trials = []
 if os.path.exists(summary_path):
     try:
+        check_file_size(summary_path)
         with open(summary_path, "r", encoding="utf-8") as f:
             target_trials = [item['id'] for item in json.load(f)]
     except Exception:
@@ -240,6 +243,7 @@ for trial_id in target_trials:
     h_file = f"data/history/{trial_id}_history.json"
     if os.path.exists(h_file):
         try:
+            check_file_size(h_file)
             with open(h_file, "r", encoding="utf-8") as f:
                 history = json.load(f)
         except Exception:
@@ -294,7 +298,7 @@ if not history_found:
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, get_status_badge, get_phase_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment
+from src.utils import sanitize_id, get_status_badge, get_phase_badge, get_update_badge, escape_html, format_truncated_with_tooltip, format_enrollment, check_file_size
 
 target_id = "'''
         + target_id
@@ -303,6 +307,7 @@ summary_path = f"data/targets/{target_id}/status_summary.json"
 
 if os.path.exists(summary_path):
     try:
+        check_file_size(summary_path)
         with open(summary_path, "r", encoding="utf-8") as f:
             summary = json.load(f)
     except Exception as e:
@@ -365,7 +370,7 @@ title: "Clinical Trial Watch"
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, get_changed_count_badge, escape_html
+from src.utils import sanitize_id, get_changed_count_badge, escape_html, check_file_size
 
 summary_path = "data/targets_summary.json"
 targets_dir = "data/targets"
@@ -377,6 +382,7 @@ if os.path.exists(targets_dir):
         t_summary_path = os.path.join(targets_dir, d, "status_summary.json")
         if os.path.exists(t_summary_path):
             try:
+                check_file_size(t_summary_path)
                 with open(t_summary_path, "r", encoding="utf-8") as f:
                     trials = json.load(f)
                     if isinstance(trials, list) and trials and all(isinstance(t, dict) for t in trials):
@@ -398,6 +404,7 @@ if os.path.exists(targets_dir):
 # If no data found in directories, fallback to global summary or config
 if not targets and os.path.exists(summary_path):
     try:
+        check_file_size(summary_path)
         with open(summary_path, "r", encoding="utf-8") as f:
             targets = json.load(f)
     except Exception:

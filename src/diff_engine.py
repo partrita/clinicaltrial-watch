@@ -10,9 +10,9 @@ except ImportError:
     HAS_DEEPDIFF = False
 
 try:
-    from utils import sanitize_id
+    from utils import sanitize_id, check_file_size
 except ImportError:
-    from src.utils import sanitize_id
+    from src.utils import sanitize_id, check_file_size
 
 # Security limits for diff formatting to prevent DoS (CWE-400)
 MAX_CHANGES = 100
@@ -31,6 +31,9 @@ def compare_snapshots(
 
     if not os.path.exists(previous_path):
         return None  # No previous data to compare with
+
+    # Security enhancement: Check file size before loading to prevent DoS (CWE-400)
+    check_file_size(previous_path)
 
     try:
         with open(previous_path, "r", encoding="utf-8") as f:
