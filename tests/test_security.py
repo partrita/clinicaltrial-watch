@@ -446,6 +446,8 @@ def test_sanitize_csv_value_unicode_bypass():
     assert sanitize_csv_value("\u200E@something") == "'\u200E@something"
     # Byte Order Mark (U+FEFF)
     assert sanitize_csv_value("\uFEFF;something") == "'\uFEFF;something"
+    # Variation Selector (U+FE00)
+    assert sanitize_csv_value("\uFE00=SUM(1+1)") == "'\uFE00=SUM(1+1)"
     # Interleaved whitespace and invisible characters
     assert sanitize_csv_value(" \u200B =SUM(1+1)") == "' \u200B =SUM(1+1)"
 
