@@ -159,6 +159,9 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
 
             # Security enhancement: Disable environment proxies and ensure certificate verification
             context = ssl.create_default_context()
+            # Security enhancement: Enforce TLS 1.2 or higher
+            context.minimum_version = ssl.TLSVersion.TLSv1_2
+
             # Security enhancement: Limit redirects to 3
             redirect_handler = urllib.request.HTTPRedirectHandler()
             redirect_handler.max_redirections = 3
