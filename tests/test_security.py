@@ -448,6 +448,12 @@ def test_sanitize_csv_value_unicode_bypass():
     assert sanitize_csv_value("\uFEFF;something") == "'\uFEFF;something"
     # Variation Selector (U+FE00)
     assert sanitize_csv_value("\uFE00=SUM(1+1)") == "'\uFE00=SUM(1+1)"
+    # Unicode fillers
+    assert sanitize_csv_value("\u115f=SUM(1+1)") == "'\u115f=SUM(1+1)"
+    assert sanitize_csv_value("\u1160=SUM(1+1)") == "'\u1160=SUM(1+1)"
+    assert sanitize_csv_value("\u3164=SUM(1+1)") == "'\u3164=SUM(1+1)"
+    assert sanitize_csv_value("\uffa0=SUM(1+1)") == "'\uffa0=SUM(1+1)"
+    assert sanitize_csv_value("\u2800=SUM(1+1)") == "'\u2800=SUM(1+1)"
     # Interleaved whitespace and invisible characters
     assert sanitize_csv_value(" \u200B =SUM(1+1)") == "' \u200B =SUM(1+1)"
 
