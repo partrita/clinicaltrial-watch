@@ -11,7 +11,7 @@ title: "Clinical Trial Watch"
 #| output: asis
 import json
 import os
-from src.utils import sanitize_id, get_changed_count_badge, escape_html
+from src.utils import sanitize_id, get_changed_count_badge, escape_html, check_file_size
 
 summary_path = "data/targets_summary.json"
 targets_dir = "data/targets"
@@ -23,6 +23,7 @@ if os.path.exists(targets_dir):
         t_summary_path = os.path.join(targets_dir, d, "status_summary.json")
         if os.path.exists(t_summary_path):
             try:
+                check_file_size(t_summary_path)
                 with open(t_summary_path, "r", encoding="utf-8") as f:
                     trials = json.load(f)
                     if isinstance(trials, list) and trials and all(isinstance(t, dict) for t in trials):
@@ -44,6 +45,7 @@ if os.path.exists(targets_dir):
 # If no data found in directories, fallback to global summary or config
 if not targets and os.path.exists(summary_path):
     try:
+        check_file_size(summary_path)
         with open(summary_path, "r", encoding="utf-8") as f:
             targets = json.load(f)
     except Exception:
