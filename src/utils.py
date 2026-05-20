@@ -52,8 +52,10 @@ def _sanitize_id_cached(identifier: str) -> str:
     """Internal cached helper for sanitize_id."""
     # Replace any non-alphanumeric, non-dash, non-underscore characters with an underscore
     sanitized = re.sub(r"[^a-zA-Z0-9_-]", "_", identifier)
-    # Remove leading/trailing underscores and prevent empty string
-    sanitized = sanitized.strip("_")
+    # Security enhancement: Remove leading/trailing underscores AND dashes
+    # This prevents identifiers from being interpreted as command-line flags (CWE-88)
+    # when used as filenames in downstream tools or scripts.
+    sanitized = sanitized.strip("_-")
     return sanitized if sanitized else "unknown"
 
 
@@ -76,6 +78,10 @@ def sanitize_id(identifier: str) -> str:
 # Performance: ~15-20% faster than multiple .replace() calls
 # Also escapes '$' to prevent MathJax injection, '\' for general Markdown safety,
 # and curly braces '{}' to prevent Quarto/Pandoc attribute injection.
+# Security enhancement: Added ':' to prevent breaking out of
+# Quarto/Pandoc attribute blocks.
+# Note: '#' is intentionally omitted because it conflicts with HTML entities
+# produced by html.escape (e.g., ' escaped as &#x27;).
 MARKDOWN_ESCAPE_TABLE = str.maketrans(
     {
         "|": "&#124;",
@@ -86,6 +92,7 @@ MARKDOWN_ESCAPE_TABLE = str.maketrans(
         "\\": "&#92;",
         "{": "&#123;",
         "}": "&#125;",
+        ":": "&#58;",
     }
 )
 
