@@ -18,6 +18,10 @@ def test_sanitize_id_special_chars():
     )
     assert sanitize_id("") == "unknown"
     assert sanitize_id(None) == "unknown"
+    # Verify stripping of leading/trailing dashes and underscores (CWE-88)
+    assert sanitize_id("-NCT12345678") == "NCT12345678"
+    assert sanitize_id("_NCT12345678-") == "NCT12345678"
+    assert sanitize_id("---target---") == "target"
 
 
 def test_sanitize_id_length_limit():
@@ -47,6 +51,10 @@ def test_escape_html_markdown():
     assert escape_html("Math $x+y$ and Backslash \\") == "Math &#36;x+y&#36; and Backslash &#92;"
     # Curly braces should be escaped to prevent Quarto/Pandoc attribute injection
     assert escape_html("Text { .class }") == "Text &#123; .class &#125;"
+    # Verify escaping of ':' to prevent structural injection
+    assert escape_html("key: value") == "key&#58; value"
+    # Verify escaping of '=' to prevent attribute injection
+    assert escape_html("attr=val") == "attr&#61;val"
 
 
 def test_escape_html_none():
