@@ -54,7 +54,7 @@ def _sanitize_id_cached(identifier: str) -> str:
     sanitized = re.sub(r"[^a-zA-Z0-9_-]", "_", identifier)
     # Remove leading/trailing underscores and dashes and prevent empty string
     # This prevents identifiers from being misinterpreted as command-line flags (CWE-88 mitigation).
-    sanitized = sanitized.strip("-_ ")
+    sanitized = sanitized.strip("-_")
     return sanitized if sanitized else "unknown"
 
 
