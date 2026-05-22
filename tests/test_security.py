@@ -53,6 +53,8 @@ def test_escape_html_markdown():
     assert escape_html("Text { .class }") == "Text &#123; .class &#125;"
     # Verify escaping of ':' to prevent structural injection
     assert escape_html("key: value") == "key&#58; value"
+    # Verify escaping of '=' to prevent attribute injection
+    assert escape_html("attr=val") == "attr&#61;val"
 
 
 def test_escape_html_none():
