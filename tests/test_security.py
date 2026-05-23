@@ -472,6 +472,10 @@ def test_sanitize_csv_value_additional_invisible_chars():
 
     # Non-breaking space (U+00A0)
     assert sanitize_csv_value("\u00A0=SUM(1+1)") == "'\u00A0=SUM(1+1)"
+    # Soft Hyphen (U+00AD)
+    assert sanitize_csv_value("\u00AD=SUM(1+1)") == "'\u00AD=SUM(1+1)"
+    # Combining Grapheme Joiner (U+034F)
+    assert sanitize_csv_value("\u034F=SUM(1+1)") == "'\u034F=SUM(1+1)"
     # Line Separator (U+2028)
     assert sanitize_csv_value("\u2028+42") == "'\u2028+42"
     # Paragraph Separator (U+2029)
