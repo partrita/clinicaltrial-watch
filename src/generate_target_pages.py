@@ -44,7 +44,11 @@ def discover_all_targets() -> List[Dict[str, Any]]:
 
     # 1. Load from trials.yaml
     for t in load_trials_yaml():
-        name = t["name"]
+        if not isinstance(t, dict):
+            continue
+        name = t.get("name")
+        if not name:
+            continue
         targets_dict[name.lower()] = {
             "name": name,
             "description": t.get("description", f"{name} 타겟 임상시험 모니터링"),
@@ -234,7 +238,11 @@ if os.path.exists(summary_path):
     try:
         check_file_size(summary_path)
         with open(summary_path, "r", encoding="utf-8") as f:
-            target_trials = [item['id'] for item in json.load(f)]
+            data = json.load(f)
+            if not isinstance(data, list):
+                target_trials = []
+            else:
+                target_trials = [item['id'] for item in data if isinstance(item, dict) and 'id' in item]
     except Exception:
         target_trials = []
 
@@ -439,11 +447,17 @@ else:
         import yaml
         with open("trials.yaml", "r", encoding="utf-8") as f:
             config = yaml.safe_load(f) or {}
-            for target in config.get('targets', []):
-                name = target['name']
-                desc = target.get('description', f"{name} 타겟 임상시험 모니터링")
-                target_id = sanitize_id(name).lower()
-                print(f"| [{escape_html(name)}](targets/{target_id}.qmd) | {escape_html(desc)} |")
+            targets_list = config.get('targets', [])
+            if isinstance(targets_list, list):
+                for target in targets_list:
+                    if not isinstance(target, dict):
+                        continue
+                    name = target.get('name')
+                    if not name:
+                        continue
+                    desc = target.get('description', f"{name} 타겟 임상시험 모니터링")
+                    target_id = sanitize_id(name).lower()
+                    print(f"| [{escape_html(name)}](targets/{target_id}.qmd) | {escape_html(desc)} |")
     except Exception as e:
         print(f"Error loading targets: {e}")
 ```
@@ -462,7 +476,11 @@ def update_quarto_yml(
     # Build navbar menu items safely
     menu = []
     for target in targets:
-        target_name = target["name"]
+        if not isinstance(target, dict):
+            continue
+        target_name = target.get("name")
+        if not target_name:
+            continue
         target_id = sanitize_id(target_name).lower()
         menu.append(
             {"href": f"targets/{target_id}.qmd", "text": escape_html(target_name)}
