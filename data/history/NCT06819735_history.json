@@ -1,10 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-12 14:01:36",
-    "diff": "Initial data collection"
-  },
-  {
-    "timestamp": "2026-03-11 02:05:41",
-    "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-11` to `2026-03`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-11-14` to `2026-03-06`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-11-18` to `2026-03-10`"
-  }
-]
+[{"timestamp": "2026-02-12 14:01:36", "diff": "Initial data collection"}, {"timestamp": "2026-03-11 02:05:41", "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-11` to `2026-03`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-11-14` to `2026-03-06`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-11-18` to `2026-03-10`"}, {"timestamp": "2026-05-26 02:38:39", "diff": "Field `statusModule.statusVerifiedDate` changed from `2026-03` to `2026-05`\nField `statusModule.lastUpdateSubmitDate` changed from `2026-03-06` to `2026-05-04`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2026-03-10` to `2026-05-06`\nField `oversightModule.isFdaRegulatedDrug` changed from `False` to `True`\nField `contactsLocationsModule.locations.[5]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`"}]

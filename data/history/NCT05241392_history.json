@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 17:02:46",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 17:02:46", "diff": "Initial data collection"}, {"timestamp": "2026-05-26 02:38:42", "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-02` to `2026-04`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-02-09` to `2026-04-28`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-02-11` to `2026-05-04`\nField removed: `root['oversightModule']['oversightHasDmc']`\nField removed: `root['oversightModule']['isUsExport']`"}]

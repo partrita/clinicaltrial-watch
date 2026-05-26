@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:32",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:32", "diff": "Initial data collection"}, {"timestamp": "2026-05-26 02:38:40", "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-05` to `2026-05`\nField `statusModule.overallStatus` changed from `ACTIVE_NOT_RECRUITING` to `COMPLETED`\nField `statusModule.primaryCompletionDateStruct.date` changed from `2025-12-30` to `2026-04-01`\nField `statusModule.primaryCompletionDateStruct.type` changed from `ESTIMATED` to `ACTUAL`\nField `statusModule.completionDateStruct.date` changed from `2025-12-30` to `2026-04-01`\nField `statusModule.completionDateStruct.type` changed from `ESTIMATED` to `ACTUAL`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-05-18` to `2026-05-11`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-05-22` to `2026-05-12`\nField `designModule.enrollmentInfo.count` changed from `110` to `94`\nField `designModule.enrollmentInfo.type` changed from `ESTIMATED` to `ACTUAL`"}]

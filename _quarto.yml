@@ -10,14 +10,14 @@ website:
       text: Home
     - text: Targets
       menu:
-      - href: targets/test_target.qmd
-        text: Test Target
-      - href: targets/tigit.qmd
-        text: TIGIT
       - href: targets/ccr8.qmd
         text: CCR8
+      - href: targets/tigit.qmd
+        text: TIGIT
       - href: targets/b7-h3.qmd
         text: B7-H3
+      - href: targets/test_target.qmd
+        text: Test Target
     - about.qmd
 format:
   html:

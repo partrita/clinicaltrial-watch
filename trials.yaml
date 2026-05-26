@@ -102,6 +102,10 @@ targets:
       Modulation of the Endocrine Neuroimmune Axis
   - id: NCT02836067
     name: Impact of Smoking and Its Cessation on Systemic and Airway Immune Activation
+  - id: NCT07591597
+    name: A Multicenter, Phase Ib/II Clinical Trial to Evaluate the Efficacy and Safety
+      of Concurrent Combination Therapy of S-531011 Plus Fruquintinib or S-531011
+      Plus Fruquintinib Plus Pembrolizumab in Patients With MSS/pMMR Colorectal Cancer
 - description: TIGIT 타겟 임상시험 모니터링
   name: TIGIT
   trials:
@@ -495,6 +499,11 @@ targets:
     name: A Clinical Proof-of-principle Trial in Adult Subjects With Newly Diagnosed
       Type 1 Diabetes Mellitus Investigating the Effect of NNC0114-0006 and Liraglutide
       on Preservation of Beta-cell Function
+  - id: NCT06097962
+    name: Safety and Efficacy of NK510 to Treat NSCLC
+  - id: NCT07561437
+    name: NK521 in the Treatment of Malignant Ascites Associated With Advanced Solid
+      Tumors
 - description: B7-H3 타겟 임상시험 모니터링
   name: B7-H3
   trials:
@@ -820,3 +829,35 @@ targets:
     name: B7-H3.CD28Z.CART in CNS Neoplasms
   - id: NCT07424547
     name: Phase I Study of SYS6043 in Patients With Advanced/Metastatic Solid Tumors
+  - id: NCT07597369
+    name: Clinically Actionable Tumor-Associated Antigens in Prostate Cancer
+  - id: NCT07541534
+    name: A Phase I Clinical Study of HLX316 in Participants With Advanced/Metastatic
+      Solid Tumors
+  - id: NCT07502287
+    name: Dual-Target GD2/B7-H3 CAR-NK Cells for Pediatric Relapsed or Refractory
+      Neuroblastoma
+  - id: NCT07523529
+    name: Biomarker-Guided Dual-Target CAR-T Cells for Advanced Solid Tumors
+  - id: NCT07503808
+    name: A Study of IDE034 in Adult Participants With Locally Advanced/Metastatic
+      Solid Tumors Types
+  - id: NCT07541573
+    name: GTB-5550 in Advanced Solid Tumors
+  - id: NCT07551336
+    name: Dual-Targeting CAR-NK Cells for Recurrent/Progressive Glioblastoma and High-Grade
+      Glioma
+  - id: NCT07581184
+    name: A Study of [225Ac]Ac-AKY-2519 in Patients With Metastatic Castration-Resistant
+      Prostate Cancer
+  - id: NCT07515313
+    name: 'Expression of CD274 (PD-L1) and CD276 in B-cell Malignancies: A Study by
+      Flowcytometry'
+  - id: NCT07480941
+    name: Dual-Targeting CAR-NK Cells for Recurrent/Progressive Glioblastoma and High-Grade
+      Glioma
+  - id: NCT07509034
+    name: Autologous B7-H3 Chimeric Antigen Receptor T Cells in Previously Treated
+      Extensive-Stage Small Cell Lung Cancer With Recurrent or Refractory Disease
+  - id: NCT07500220
+    name: Dual-Target GPC3/B7-H3 CAR-NK Cells for Advanced HCC

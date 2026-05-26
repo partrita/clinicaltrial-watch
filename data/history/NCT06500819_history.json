@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 17:02:40",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 17:02:40", "diff": "Initial data collection"}, {"timestamp": "2026-05-26 02:38:41", "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-04` to `2026-05`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-04-18` to `2026-05-01`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-04-24` to `2026-05-07`\nField `sponsorCollaboratorsModule.responsibleParty` changed from `{'type': 'SPONSOR_INVESTIGATOR', 'investigatorFullName': 'Crystal Mackall, MD', 'investigatorTitle': 'Professor of Pediatrics and Medicine at Stanford University', 'investigatorAffiliation': 'Stanford University'}` to `{'type': 'SPONSOR'}`\nField `sponsorCollaboratorsModule.leadSponsor.name` changed from `Crystal Mackall, MD` to `Stanford University`"}]

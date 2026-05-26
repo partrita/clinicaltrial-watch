@@ -1,10 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:20",
-    "diff": "Initial data collection"
-  },
-  {
-    "timestamp": "2026-03-20 02:10:44",
-    "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-07` to `2026-03`\nField `statusModule.primaryCompletionDateStruct.date` changed from `2026-02` to `2026-09-30`\nField `statusModule.completionDateStruct.date` changed from `2026-02` to `2027-01-01`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-07-30` to `2026-03-17`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-08-01` to `2026-03-19`"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:20", "diff": "Initial data collection"}, {"timestamp": "2026-03-20 02:10:44", "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-07` to `2026-03`\nField `statusModule.primaryCompletionDateStruct.date` changed from `2026-02` to `2026-09-30`\nField `statusModule.completionDateStruct.date` changed from `2026-02` to `2027-01-01`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-07-30` to `2026-03-17`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-08-01` to `2026-03-19`"}, {"timestamp": "2026-05-26 02:38:39", "diff": "Field `referencesModule.references.[0]citation` changed from `Wang X, Kapoor VN, Chin DJ, Klakamp SL, Baruffaldi F, Mohan JF, Haines R, Dulak A, Panduro M, Ren Y, Masia R, Hill JA, LaVallee TM, Rajasekaran N. CHS-114: an afucosylated anti-CCR8 monoclonal antibody that selectively depletes intratumoral Treg cells and induces antitumor immune responses. Mol Cancer Ther. 2025 Dec 22. doi: 10.1158/1535-7163.MCT-25-0367. Online ahead of print.` to `Wang X, Kapoor VN, Chin DJ, Klakamp SL, Baruffaldi F, Mohan JF, Haines R, Dulak A, Panduro M, Ren Y, Masia R, Hill JA, LaVallee TM, Rajasekaran N. CHS-114: An Afucosylated Anti-CCR8 Monoclonal Antibody that Selectively Depletes Intratumoral Treg Cells and Induces Antitumor Immune Responses. Mol Cancer Ther. 2026 May 4;25(5):685-700. doi: 10.1158/1535-7163.MCT-25-0367.`"}]
