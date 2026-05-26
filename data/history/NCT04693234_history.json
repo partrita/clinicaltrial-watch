@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:45",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:45", "diff": "Initial data collection"}, {"timestamp": "2026-05-26 02:38:40", "diff": "Field `contactsLocationsModule.locations.[30]geoPoint.lat` changed from `26.82656` to `40.28464`\nField `contactsLocationsModule.locations.[30]geoPoint.lon` changed from `114.95747` to `120.48412`\nField `referencesModule.references.[0]` changed from `{'pmid': '40411966', 'type': 'BACKGROUND', 'citation': 'Lee JY, Boonyapipat S, Yuan G, Kim HS, Lee JW, Wang L, Wang T, Wang D, Yao D, Liu H, Chang CL, Andabekov TT, Zhang X, Wang W, Kim YM, Sinielnikov IV, Wang K, Gao Y, Mu X, Wu L. AdvanTIG-202: Phase 2 open-label, two-cohort multicenter study of ociperlimab plus tislelizumab and tislelizumab alone in patients with previously treated recurrent or metastatic cervical cancer. Gynecol Oncol. 2025 Jul;198:25-32. doi: 10.1016/j.ygyno.2025.04.579. Epub 2025 May 23.'}` to `{'type': 'BACKGROUND', 'citation': 'Wu L, Wang PH, Hsiao SY, et al. AdvanTIG-202: A phase 2 study investigating anti-T cell immunoglobulin and ITIM domain monoclonal antibody ociperlimab plus tislelizumab in patients with previously treated recurrent or metastatic cervical cancer (333). Gynecol Oncol. 2022;166:S172. doi:10.1016/S0090-8258(22)01555-4'}`"}]

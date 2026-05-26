@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:18",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:18", "diff": "Initial data collection"}, {"timestamp": "2026-05-26 02:38:39", "diff": "Field `statusModule.overallStatus` changed from `NOT_YET_RECRUITING` to `RECRUITING`\nField `statusModule.startDateStruct.date` changed from `2026-04-03` to `2026-04-30`\nField `statusModule.startDateStruct.type` changed from `ESTIMATED` to `ACTUAL`\nField `statusModule.lastUpdateSubmitDate` changed from `2026-01-15` to `2026-05-06`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2026-01-23` to `2026-05-11`\nNew field added: `root['contactsLocationsModule']['locations'][0]['status']`"}]

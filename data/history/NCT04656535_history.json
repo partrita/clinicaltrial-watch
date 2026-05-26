@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:27",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:27", "diff": "Initial data collection"}, {"timestamp": "2026-05-26 02:38:39", "diff": "Field `statusModule.statusVerifiedDate` changed from `2026-01` to `2026-04`\nField `statusModule.primaryCompletionDateStruct.date` changed from `2026-07-30` to `2026-03-17`\nField `statusModule.primaryCompletionDateStruct.type` changed from `ESTIMATED` to `ACTUAL`\nField `statusModule.lastUpdateSubmitDate` changed from `2026-01-06` to `2026-04-15`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2026-01-07` to `2026-04-17`"}]

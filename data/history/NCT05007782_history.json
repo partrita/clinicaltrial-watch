@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:20",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:20", "diff": "Initial data collection"}, {"timestamp": "2026-05-26 02:38:39", "diff": "Field `contactsLocationsModule.locations.[25]city` changed from `Taoyuan` to `Taoyuan City`"}]

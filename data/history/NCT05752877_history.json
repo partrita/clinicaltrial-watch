@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 17:02:47",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 17:02:47", "diff": "Initial data collection"}, {"timestamp": "2026-05-26 02:38:42", "diff": "Field `statusModule.overallStatus` changed from `RECRUITING` to `UNKNOWN`\nNew field added: `root['statusModule']['lastKnownStatus']`"}]
