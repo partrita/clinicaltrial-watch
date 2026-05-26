@@ -461,6 +461,13 @@ def process_trial(
     history_file = f"data/history/{safe_trial_id}_history.json"
     history = safe_json_load(history_file, default=[])
 
+    if not isinstance(history, list):
+        print(f"  Warning: History for {trial_id} is not a list. Resetting.")
+        history = []
+    else:
+        # Security enhancement: Filter out non-dictionary items to prevent crashes (CWE-400)
+        history = [r for r in history if isinstance(r, dict)]
+
     # Ensure thirty_days_ago_str is set for efficient comparison
     if not thirty_days_ago_str:
         thirty_days_ago_str = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
