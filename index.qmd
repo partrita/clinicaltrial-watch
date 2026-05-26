@@ -80,11 +80,17 @@ else:
         import yaml
         with open("trials.yaml", "r", encoding="utf-8") as f:
             config = yaml.safe_load(f) or {}
-            for target in config.get('targets', []):
-                name = target['name']
-                desc = target.get('description', f"{name} 타겟 임상시험 모니터링")
-                target_id = sanitize_id(name).lower()
-                print(f"| [{escape_html(name)}](targets/{target_id}.qmd) | {escape_html(desc)} |")
+            targets_list = config.get('targets', [])
+            if isinstance(targets_list, list):
+                for target in targets_list:
+                    if not isinstance(target, dict):
+                        continue
+                    name = target.get('name')
+                    if not name:
+                        continue
+                    desc = target.get('description', f"{name} 타겟 임상시험 모니터링")
+                    target_id = sanitize_id(name).lower()
+                    print(f"| [{escape_html(name)}](targets/{target_id}.qmd) | {escape_html(desc)} |")
     except Exception as e:
         print(f"Error loading targets: {e}")
 ```

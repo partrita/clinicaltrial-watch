@@ -4,6 +4,7 @@ Auto-discover new clinical trials from ClinicalTrials.gov based on targets in tr
 Queries the API for each target and appends new trials to trials.yaml.
 """
 
+import sys
 import time
 import random
 import threading
@@ -316,4 +317,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    exit(main())
+    sys.exit(main())
