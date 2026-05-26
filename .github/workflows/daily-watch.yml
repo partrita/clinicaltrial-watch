@@ -26,9 +26,13 @@ jobs:
         run: |
           pixi run test
 
-      - name: Run Monitoring Script
+      - name: Run Auto Discovery
         run: |
           pixi run python src/auto_discover_trials.py
+        continue-on-error: true
+
+      - name: Run Monitoring and Update
+        run: |
           pixi run python src/main.py
 
       - name: Commit and Push changes

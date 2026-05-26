@@ -138,7 +138,11 @@ if os.path.exists(summary_path):
     try:
         check_file_size(summary_path)
         with open(summary_path, "r", encoding="utf-8") as f:
-            target_trials = [item['id'] for item in json.load(f)]
+            data = json.load(f)
+            if not isinstance(data, list):
+                target_trials = []
+            else:
+                target_trials = [item['id'] for item in data if isinstance(item, dict) and 'id' in item]
     except Exception:
         target_trials = []
 

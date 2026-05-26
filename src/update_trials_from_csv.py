@@ -7,6 +7,7 @@ Usage: python update_trials_from_csv.py --target CCR8 --csv data/ctg-studies.csv
 import argparse
 import csv
 import os
+import sys
 from typing import Any, Dict, List, Optional
 
 try:
@@ -261,4 +262,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    exit(main())
+    sys.exit(main())

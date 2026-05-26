@@ -210,6 +210,4 @@ __marimo__/
 /.quarto/
 **/*.quarto_ipynb
 _freeze/
-.jules/
-.Jules/
 .vscode/
