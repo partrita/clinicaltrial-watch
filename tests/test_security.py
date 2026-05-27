@@ -482,6 +482,17 @@ def test_sanitize_csv_value_additional_invisible_chars():
     assert sanitize_csv_value("\u2029-5") == "'\u2029-5"
     # Mongolian Vowel Separator (U+180E)
     assert sanitize_csv_value("\u180E@something") == "'\u180E@something"
+    # Ogham space mark (U+1680)
+    assert sanitize_csv_value("\u1680=SUM(1+1)") == "'\u1680=SUM(1+1)"
+    # Narrow no-break space (U+202F)
+    assert sanitize_csv_value("\u202F+42") == "'\u202F+42"
+    # Medium mathematical space (U+205F)
+    assert sanitize_csv_value("\u205F-5") == "'\u205F-5"
+    # Ideographic space (U+3000)
+    assert sanitize_csv_value("\u3000@something") == "'\u3000@something"
+    # Pipe character (U+007C)
+    assert sanitize_csv_value("|something") == "'|something"
+    assert sanitize_csv_value(" \u202F |something") == "' \u202F |something"
 
 
 def test_format_diff_max_changes():
