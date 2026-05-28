@@ -6,3 +6,8 @@
 ## 2026-05-26 - Restricting trials.yaml Modification
 **Instruction / Rule:** Jules (the AI coding assistant) is strictly prohibited from modifying `trials.yaml` directly.
 **Rationale:** `trials.yaml` stores the configuration and tracked list of clinical trials. Direct manual modification of trial data by the AI assistant can lead to inconsistencies, data corruption, or bypass of automation pipelines. All updates must go through automated discovery scripts (`src/auto_discover_trials.py`) or import tools.
+
+## 2026-05-27 - Resource Exhaustion in Iterative Data Processing
+**Vulnerability:** The `flatten_dict` function, although iterative, lacked a depth limit, making it susceptible to resource exhaustion (DoS) when processing maliciously crafted, deeply nested JSON data.
+**Learning:** Iterative implementations prevent stack overflow crashes but don't automatically protect against memory or CPU exhaustion from extreme data structures.
+**Prevention:** Enforce explicit depth limits (e.g., `MAX_DEPTH = 20`) in all data processing functions that traverse nested structures, even when using iterative patterns.
