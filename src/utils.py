@@ -27,7 +27,8 @@ def check_file_size(filepath: str, max_size: int = MAX_CONFIG_SIZE) -> None:
 
 
 # List of dangerous characters that can trigger formula execution in Excel/Google Sheets
-DANGEROUS_CSV_CHARS = {"=", "+", "-", "@", ";", "%", "\t", "\r", "\n", "\v", "\f", "\x1b"}
+# Also includes '|' (pipe) as a defensive measure against downstream parser confusion.
+DANGEROUS_CSV_CHARS = {"=", "+", "-", "@", ";", "%", "|", "\t", "\r", "\n", "\v", "\f", "\x1b"}
 
 
 # Pre-compiled regex for NCT ID validation (faster than string pattern)
@@ -144,12 +145,13 @@ def sanitize_csv_value(value: Any) -> Any:
     # We use a regex to strip leading whitespace and invisible characters (like
     # Zero Width Space or BOM) that could be used to hide a formula.
     # This prevents bypasses like "\u200B=SUM(1+1)" or " \u200B =SUM(1+1)".
-    # Added \u00A0 (NBSP), \u00AD (SHY), \u034F (CGJ), \u2028, \u2029 (separators),
+    # Added \u00A0 (NBSP), \u00AD (SHY), \u034F (CGJ), \u1680 (Ogham space mark),
+    # \u2028, \u2029 (separators), \u202F (Nnbs), \u205F (Mmsp), \u3000 (Ideographic space),
     # and \u180E (MVS) for completeness.
     # Also includes Variation Selectors (U+FE00-U+FE0F) and Unicode fillers
     # (U+115F, U+1160, U+3164, U+FFA0, U+2800) for enhanced defense.
     stripped_value = re.sub(
-        r"^[\s\x00-\x1f\u00a0\u00ad\u034f\u200b-\u200f\uFEFF\u2028-\u202e\u2060-\u206f\u180e\ufe00-\ufe0f\u115f\u1160\u3164\uffa0\u2800]+", "", value
+        r"^[\s\x00-\x1f\u00a0\u00ad\u034f\u1680\u200b-\u200f\u2028-\u202f\u205f\u2060-\u206f\u3000\uFEFF\u180e\ufe00-\ufe0f\u115f\u1160\u3164\uffa0\u2800]+", "", value
     )
     if stripped_value and stripped_value[0] in DANGEROUS_CSV_CHARS:
         return f"'{value[:32766]}"
