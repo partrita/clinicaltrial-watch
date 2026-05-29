@@ -861,3 +861,6 @@ targets:
       Extensive-Stage Small Cell Lung Cancer With Recurrent or Refractory Disease
   - id: NCT07500220
     name: Dual-Target GPC3/B7-H3 CAR-NK Cells for Advanced HCC
+  - id: NCT07612176
+    name: A Phase 1 Study of NEOK001, a B7-H3 and ROR1 Targeting Bispecific ADC in
+      Participants With Select Solid Tumors
