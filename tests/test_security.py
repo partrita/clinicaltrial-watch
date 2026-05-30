@@ -728,13 +728,13 @@ def test_yaml_load_security_against_data_loss():
         os.makedirs(test_dir)
 
     try:
-        with pytest.raises(OSError):
+        with pytest.raises((OSError, ValueError)):
             load_config(test_dir)
-        with pytest.raises(OSError):
+        with pytest.raises((OSError, ValueError)):
             load_yaml(test_dir)
-        with pytest.raises(OSError):
+        with pytest.raises((OSError, ValueError)):
             load_yaml_csv(test_dir)
-        with pytest.raises(OSError):
+        with pytest.raises((OSError, ValueError)):
             load_trials_yaml(test_dir)
     finally:
         if os.path.exists(test_dir):
@@ -1542,7 +1542,7 @@ def test_safe_json_load_robustness():
         os.makedirs(test_dir)
 
     try:
-        with pytest.raises(OSError):
+        with pytest.raises((OSError, ValueError)):
             safe_json_load(test_dir)
     finally:
         if os.path.exists(test_dir):
@@ -1898,3 +1898,18 @@ def test_urllib_restricted_opener_live_behavior():
 
     with pytest.raises(urllib.request.URLError, match="unknown url type: ftp"):
         opener.open("ftp://localhost/test")
+
+def test_check_file_size_non_regular():
+    """Verify that check_file_size rejects non-regular files (directories)."""
+    from src.utils import check_file_size
+    import pytest
+    import os
+
+    # Test with current directory
+    with pytest.raises(ValueError, match="Not a regular file"):
+        check_file_size(".")
+
+    # Test with a known non-regular file if it exists (for Unix-like environments)
+    if os.path.exists("/dev/zero"):
+        with pytest.raises(ValueError, match="Not a regular file"):
+            check_file_size("/dev/zero")
