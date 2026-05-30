@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:36",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:36", "diff": "Initial data collection"}, {"timestamp": "2026-05-30 03:31:20", "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-10` to `2026-05`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-10-02` to `2026-05-27`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-10-08` to `2026-05-29`\nField `outcomesModule.primaryOutcomes.[3]measure` changed from `Feasibility of combination nivolumab and ipilimumab as assessed by number of participants who achieve a response` to `Feasibility of combination nivolumab and ipilimumab as assessed by number of participants who start standard of care within standard treatment window`\nField `outcomesModule.primaryOutcomes.[3]description` changed from `Number of participants who achieve a response (improved progression free survival).` to `Number of participants who start standard of care treatment within 8 week`\nField `outcomesModule.primaryOutcomes.[3]timeFrame` changed from `Up to 2 years` to `Up to 8 weeks`"}]
