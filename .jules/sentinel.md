@@ -1,3 +1,8 @@
+## 2026-05-29 - Recursive Data Exhaustion DoS (CWE-400)
+**Vulnerability:** The `flatten_dict` function, while using an iterative approach to avoid stack overflows, did not have a limit on the depth of the nesting it would process. A maliciously crafted or extremely large nested dictionary could cause excessive CPU and memory consumption.
+**Learning:** Iterative solutions protect against stack overflows but do not inherently prevent resource exhaustion. Explicit depth limits are necessary when processing untrusted nested structures.
+**Prevention:** Always enforce a maximum depth (`MAX_DEPTH`) when traversing or flattening nested data structures, even when using iterative patterns.
+
 ## 2025-05-14 - Python Code Injection in Quarto Templates
 **Vulnerability:** The `generate_target_pages.py` script was directly embedding the `target_name` from `trials.yaml` into Python code blocks within generated `.qmd` files. This allowed for arbitrary Python code execution when Quarto rendered the website.
 **Learning:** Even static site generators can be vulnerable to code injection if they support dynamic execution (like Quarto's Python blocks) and identifiers are not sanitized before being embedded in code.

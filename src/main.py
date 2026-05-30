@@ -22,6 +22,7 @@ import yaml
 MAX_TARGETS = 100
 MAX_TRIALS_PER_TARGET = 1000
 MAX_HISTORY_ENTRIES = 100
+MAX_DEPTH = 20
 
 
 def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
@@ -402,17 +403,22 @@ def flatten_dict(
     if result is None:
         result = {}
 
-    stack = [(d, parent_key)]
+    stack = [(d, parent_key, 0)]
 
     while stack:
-        current_dict, p_key = stack.pop()
+        current_dict, p_key, depth = stack.pop()
+
+        # Security enhancement: Limit recursion depth to prevent DoS (CWE-400)
+        if depth >= MAX_DEPTH:
+            continue
+
         for k, v in current_dict.items():
             new_key = _get_flatten_key(p_key, k, sep)
 
             # Use type() for slightly faster check than isinstance() in tight loops
             val_type = type(v)
             if val_type is dict:
-                stack.append((v, new_key))
+                stack.append((v, new_key, depth + 1))
             elif val_type is list:
                 if not v:
                     result[new_key] = ""
