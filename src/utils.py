@@ -12,7 +12,8 @@ MAX_CONFIG_SIZE = 10 * 1024 * 1024  # 10MB limit for local YAML/JSON config and 
 def check_file_size(filepath: str, max_size: int = MAX_CONFIG_SIZE) -> None:
     """
     Check if a file exists and its size is within the limit.
-    Raises ValueError if the file is too large.
+    Also ensures the path is a regular file (CWE-400).
+    Raises ValueError if the file is too large or not a regular file.
     """
     if os.path.isfile(filepath):
         try:
@@ -24,6 +25,9 @@ def check_file_size(filepath: str, max_size: int = MAX_CONFIG_SIZE) -> None:
         except OSError as e:
             # Re-raise as OSError to be handled by the caller's specific error handling
             raise OSError(f"Error checking file size for {filepath}: {e}") from e
+    elif os.path.exists(filepath):
+        # Path exists but is not a regular file (e.g., directory, character device)
+        raise ValueError(f"Path exists but is not a regular file: {filepath}")
 
 
 # List of dangerous characters that can trigger formula execution in Excel/Google Sheets

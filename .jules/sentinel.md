@@ -11,3 +11,8 @@
 ## 2026-05-26 - Restricting trials.yaml Modification
 **Instruction / Rule:** Jules (the AI coding assistant) is strictly prohibited from modifying `trials.yaml` directly.
 **Rationale:** `trials.yaml` stores the configuration and tracked list of clinical trials. Direct manual modification of trial data by the AI assistant can lead to inconsistencies, data corruption, or bypass of automation pipelines. All updates must go through automated discovery scripts (`src/auto_discover_trials.py`) or import tools.
+
+## 2026-05-31 - Regular File Enforcement for DoS Protection (CWE-400)
+**Vulnerability:** The `check_file_size` utility verified the size of regular files but did not explicitly reject non-regular files (such as character devices or directories). This could allow an attacker to point the application to a special device like `/dev/zero`, potentially causing hangs or infinite resource consumption during subsequent read operations.
+**Learning:** Checking the size of a file is insufficient if the file type itself is not validated. Special files in Unix-like systems can behave unexpectedly when opened as regular files.
+**Prevention:** Always verify that a path refers to a regular file (`os.path.isfile`) before performing I/O operations in a security-sensitive context. Raise explicit exceptions if the path exists but is not the expected type.

@@ -89,13 +89,11 @@ def read_csv_trials(csv_path: str) -> List[Dict[str, str]]:
     if not os.path.exists(csv_path):
         return []
 
-    # Security enhancement: Check file size before reading to prevent memory exhaustion DoS
+    # Security enhancement: Check file size and type before reading to prevent DoS (CWE-400)
     try:
-        if os.path.getsize(csv_path) > MAX_CSV_SIZE:
-            print(f"Error: CSV file too large: {csv_path}")
-            return []
-    except OSError as e:
-        print(f"Error checking CSV file size: {e}")
+        check_file_size(csv_path, max_size=MAX_CSV_SIZE)
+    except (ValueError, OSError) as e:
+        print(f"Error checking CSV file: {e}")
         return []
 
     trials = []

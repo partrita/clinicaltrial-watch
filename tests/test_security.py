@@ -708,6 +708,7 @@ def test_yaml_load_security_against_data_loss():
         f.write("- item1\n- item2")
 
     try:
+        # Now raises ValueError because it's not a dictionary (it's a list)
         with pytest.raises(ValueError):
             load_config(test_yaml)
         with pytest.raises(ValueError):
@@ -728,13 +729,14 @@ def test_yaml_load_security_against_data_loss():
         os.makedirs(test_dir)
 
     try:
-        with pytest.raises(OSError):
+        # After hardening, check_file_size raises ValueError for directories
+        with pytest.raises((OSError, ValueError)):
             load_config(test_dir)
-        with pytest.raises(OSError):
+        with pytest.raises((OSError, ValueError)):
             load_yaml(test_dir)
-        with pytest.raises(OSError):
+        with pytest.raises((OSError, ValueError)):
             load_yaml_csv(test_dir)
-        with pytest.raises(OSError):
+        with pytest.raises((OSError, ValueError)):
             load_trials_yaml(test_dir)
     finally:
         if os.path.exists(test_dir):
@@ -1536,17 +1538,40 @@ def test_safe_json_load_robustness():
         if os.path.exists(test_json):
             os.remove(test_json)
 
-    # 2. Test unreadable file (OSError)
+    # 2. Test unreadable file (OSError or ValueError for directories)
     test_dir = "tests/test_json_dir"
     if not os.path.exists(test_dir):
         os.makedirs(test_dir)
 
     try:
-        with pytest.raises(OSError):
+        # After hardening, check_file_size raises ValueError for directories
+        with pytest.raises((OSError, ValueError)):
             safe_json_load(test_dir)
     finally:
         if os.path.exists(test_dir):
             os.rmdir(test_dir)
+
+
+def test_check_file_size_non_regular():
+    """Verify that check_file_size rejects non-regular files."""
+    from src.utils import check_file_size
+    import os
+    import pytest
+
+    # 1. Test directory
+    test_dir = "tests/test_check_dir"
+    if not os.path.exists(test_dir):
+        os.makedirs(test_dir)
+    try:
+        with pytest.raises(ValueError, match="not a regular file"):
+            check_file_size(test_dir)
+    finally:
+        os.rmdir(test_dir)
+
+    # 2. Test character device (if /dev/zero exists)
+    if os.path.exists("/dev/zero"):
+        with pytest.raises(ValueError, match="not a regular file"):
+            check_file_size("/dev/zero")
 
 
 def test_add_to_exclusion_list_robustness():
