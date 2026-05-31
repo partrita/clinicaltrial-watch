@@ -12,9 +12,12 @@ MAX_CONFIG_SIZE = 10 * 1024 * 1024  # 10MB limit for local YAML/JSON config and 
 def check_file_size(filepath: str, max_size: int = MAX_CONFIG_SIZE) -> None:
     """
     Check if a file exists and its size is within the limit.
-    Raises ValueError if the file is too large.
+    Also ensures it is a regular file (not a directory or special device).
+    Raises ValueError if the file is too large or is not a regular file.
     """
-    if os.path.isfile(filepath):
+    if os.path.exists(filepath):
+        if not os.path.isfile(filepath):
+            raise ValueError(f"Not a regular file: {filepath}")
         try:
             size = os.path.getsize(filepath)
             if size > max_size:
