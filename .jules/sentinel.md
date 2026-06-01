@@ -16,3 +16,8 @@
 **Vulnerability:** The `check_file_size` utility previously only checked `os.path.isfile(filepath)` before getting the size. This allowed non-regular files like directories or character devices (e.g., `/dev/zero`) to bypass the size check in certain contexts or cause the application to hang when attempting to read from them.
 **Learning:** Checking for file existence or just `isfile` is not always sufficient if the logic later expects a regular data file. Character devices or directories can cause `open()` or `read()` to hang or behave unexpectedly.
 **Prevention:** Use `os.path.isfile()` strictly or explicitly check for regular files before performing I/O operations on untrusted paths. Hardened `check_file_size` to raise `ValueError` for non-regular files.
+
+## 2026-06-04 - Inconsistent String Truncation DoS (CWE-400)
+**Vulnerability:** The `flatten_dict` function truncated strings aggregated from lists but failed to truncate individual scalar string values. This allowed excessively large strings from the API to consume significant memory and CPU during flattening and CSV generation.
+**Learning:** Partial application of resource limits leaves gaps that can still lead to exhaustion. Security controls must be applied consistently across all data types in a transformation pipeline.
+**Prevention:** Enforce a global maximum value length (`MAX_VALUE_LENGTH`) for all string outputs in data transformation functions, ensuring both scalar and list-derived values are capped.
