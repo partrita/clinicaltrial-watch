@@ -23,6 +23,7 @@ MAX_TARGETS = 100
 MAX_TRIALS_PER_TARGET = 1000
 MAX_HISTORY_ENTRIES = 100
 MAX_DEPTH = 20
+MAX_VALUE_LENGTH = 10000
 
 
 def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
@@ -431,20 +432,21 @@ def flatten_dict(
                     first = truncated_list[0]
                     first_type = type(first)
 
-                    # Truncate resulting strings to prevent DoS
-                    MAX_VAL_LEN = 10000
-
                     if first_type is str:
                         res_str = ", ".join(map(str, truncated_list))
-                        result[new_key] = res_str[:MAX_VAL_LEN]
+                        result[new_key] = res_str[:MAX_VALUE_LENGTH]
                     elif first_type in (int, float, bool):
                         res_str = ", ".join(map(str, truncated_list))
-                        result[new_key] = res_str[:MAX_VAL_LEN]
+                        result[new_key] = res_str[:MAX_VALUE_LENGTH]
                     else:
                         res_str = json.dumps(truncated_list, ensure_ascii=False)
-                        result[new_key] = res_str[:MAX_VAL_LEN]
+                        result[new_key] = res_str[:MAX_VALUE_LENGTH]
             else:
-                result[new_key] = v
+                # Security enhancement: Truncate scalar strings to prevent DoS (CWE-400)
+                if isinstance(v, str):
+                    result[new_key] = v[:MAX_VALUE_LENGTH]
+                else:
+                    result[new_key] = v
 
     return result
 

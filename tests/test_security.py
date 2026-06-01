@@ -1651,6 +1651,17 @@ def test_flatten_dict_dos_protection():
     assert val2.startswith("A" * 6000)
     assert val2.endswith("B" * (10000 - 6000 - 2)) # -2 for ", "
 
+def test_flatten_dict_scalar_truncation():
+    """Verify that flatten_dict truncates long scalar strings."""
+    from src.main import flatten_dict
+
+    long_str = "S" * 15000
+    d = {"long_field": long_str}
+    flattened = flatten_dict(d)
+
+    assert len(flattened["long_field"]) == 10000
+    assert flattened["long_field"] == "S" * 10000
+
 def test_api_json_type_validation_unit():
     """Verify that crawler and auto_discover handle non-dict JSON responses."""
     from src.crawler import fetch_trial_data
