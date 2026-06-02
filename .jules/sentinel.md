@@ -21,3 +21,8 @@
 **Vulnerability:** The `flatten_dict` function truncated strings aggregated from lists but failed to truncate individual scalar string values. This allowed excessively large strings from the API to consume significant memory and CPU during flattening and CSV generation.
 **Learning:** Partial application of resource limits leaves gaps that can still lead to exhaustion. Security controls must be applied consistently across all data types in a transformation pipeline.
 **Prevention:** Enforce a global maximum value length (`MAX_VALUE_LENGTH`) for all string outputs in data transformation functions, ensuring both scalar and list-derived values are capped.
+
+## 2026-06-12 - Recursive Comparison DoS in DeepDiff (CWE-400)
+**Vulnerability:** The `compare_snapshots` function used `DeepDiff` without a recursion depth limit. A maliciously crafted or extremely deep JSON structure could cause excessive CPU consumption or a `RecursionError` during the comparison process.
+**Learning:** While `DeepDiff` is a robust tool, it still relies on recursion. Without a specified `max_depth` (or equivalent callback-based pruning), it is vulnerable to resource exhaustion from deeply nested structures.
+**Prevention:** Always enforce a maximum depth (`MAX_DEPTH`) when using recursive comparison or hashing tools on untrusted data. Since some versions of `DeepDiff` may not support a native `max_depth` parameter, use `exclude_obj_callback` to prune traversal at a safe depth.
