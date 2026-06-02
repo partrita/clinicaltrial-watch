@@ -1924,3 +1924,47 @@ def test_check_file_size_non_regular():
     if os.path.exists("/dev/zero"):
         with pytest.raises(ValueError, match="Not a regular file"):
             check_file_size("/dev/zero")
+
+
+def test_compare_snapshots_depth_limit():
+    """Verify that compare_snapshots respects the MAX_DEPTH limit in DeepDiff."""
+    from src.diff_engine import compare_snapshots, HAS_DEEPDIFF, MAX_DEPTH
+    import os
+    import json
+    import shutil
+
+    if not HAS_DEEPDIFF:
+        pytest.skip("DeepDiff not installed")
+
+    trial_id = "NCT99999999"
+    snapshot_dir = "tests/tmp_snapshots_depth"
+    os.makedirs(snapshot_dir, exist_ok=True)
+
+    try:
+        # Create a deeply nested "old" snapshot (depth 30 > MAX_DEPTH 20)
+        deep_data_old = {"value": "old"}
+        for i in range(30):
+            deep_data_old = {"level": deep_data_old}
+
+        old_snapshot = {"protocolSection": deep_data_old}
+
+        snapshot_file = os.path.join(snapshot_dir, f"{trial_id}_latest.json")
+        with open(snapshot_file, "w", encoding="utf-8") as f:
+            json.dump(old_snapshot, f)
+
+        # Create a deeply nested "new" snapshot with a change at the deepest level
+        deep_data_new = {"value": "new"}
+        for i in range(30):
+            deep_data_new = {"level": deep_data_new}
+
+        new_snapshot = {"protocolSection": deep_data_new}
+
+        # compare_snapshots should not find the change because it's beyond MAX_DEPTH
+        diff = compare_snapshots(trial_id, new_snapshot, snapshot_dir=snapshot_dir)
+
+        # DeepDiff with max_depth=20 will not recurse into the 30th level
+        assert diff is None or "values_changed" not in diff
+
+    finally:
+        if os.path.exists(snapshot_dir):
+            shutil.rmtree(snapshot_dir)
