@@ -17,6 +17,7 @@ except ImportError:
 # Security limits for diff formatting to prevent DoS (CWE-400)
 MAX_CHANGES = 100
 MAX_PATH_LEN = 255
+MAX_DEPTH = 20
 
 
 def compare_snapshots(
@@ -55,8 +56,30 @@ def compare_snapshots(
         return None
 
     if HAS_DEEPDIFF:
-        diff = DeepDiff(old_protocol, new_protocol, ignore_order=True)
-        return diff
+        import sys
+        old_limit = sys.getrecursionlimit()
+        # Ensure recursion limit is at least enough for our MAX_DEPTH
+        # + some margin for DeepDiff's own internal calls
+        if old_limit < MAX_DEPTH + 100:
+            sys.setrecursionlimit(MAX_DEPTH + 100)
+
+        try:
+            # We use exclude_obj_callback to simulate a depth limit since DeepDiff
+            # doesn't have a native max_depth parameter.
+            def depth_limit_callback(obj, path):
+                # path looks like "root['level1']['level2']..."
+                # Count occurrences of '[' to estimate depth
+                return path.count("[") > MAX_DEPTH
+
+            diff = DeepDiff(
+                old_protocol,
+                new_protocol,
+                ignore_order=True,
+                exclude_obj_callback=depth_limit_callback
+            )
+            return diff
+        finally:
+            sys.setrecursionlimit(old_limit)
     else:
         # Simple fallback diff
         fields_to_watch = {
