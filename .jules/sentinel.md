@@ -26,3 +26,8 @@
 **Vulnerability:** The `compare_snapshots` function used `DeepDiff` without a recursion depth limit. A maliciously crafted or extremely deep JSON structure could cause excessive CPU consumption or a `RecursionError` during the comparison process.
 **Learning:** While `DeepDiff` is a robust tool, it still relies on recursion. Without a specified `max_depth` (or equivalent callback-based pruning), it is vulnerable to resource exhaustion from deeply nested structures.
 **Prevention:** Always enforce a maximum depth (`MAX_DEPTH`) when using recursive comparison or hashing tools on untrusted data. Since some versions of `DeepDiff` may not support a native `max_depth` parameter, use `exclude_obj_callback` to prune traversal at a safe depth.
+
+## 2026-06-15 - CSV Formula Injection Bypass via Invisible Unicode Characters
+**Vulnerability:** The `sanitize_csv_value` function used a whitelist of whitespace and invisible characters to strip before checking for dangerous formula prefixes. However, it lacked coverage for Mongolian Free Variation Selectors, Unicode Tag Characters, and C1 control characters, which can be used to obfuscate formula triggers (e.g., `=`) in spreadsheet applications.
+**Learning:** Spreadsheet parsers are often overly permissive and ignore a wide range of non-printing Unicode characters at the start of a cell. Security controls must account for these "invisible" bypasses by using a comprehensive stripping regex.
+**Prevention:** When sanitizing for CSV injection, explicitly strip all known control characters, variation selectors, and non-rendering Unicode symbols from the beginning of the string before evaluating it for dangerous prefixes.
