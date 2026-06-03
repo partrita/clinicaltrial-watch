@@ -495,6 +495,27 @@ def test_sanitize_csv_value_additional_invisible_chars():
     assert sanitize_csv_value(" \u202F |something") == "' \u202F |something"
 
 
+def test_sanitize_csv_value_invisible_chars_extended():
+    """Verify that extended invisible characters are handled by sanitize_csv_value."""
+    from src.utils import sanitize_csv_value
+
+    # Mongolian Free Variation Selectors (U+180B-U+180D)
+    assert sanitize_csv_value("\u180B=SUM(1+1)") == "'\u180B=SUM(1+1)"
+    assert sanitize_csv_value("\u180C+42") == "'\u180C+42"
+    assert sanitize_csv_value("\u180D-5") == "'\u180D-5"
+
+    # Unicode Tag Characters (U+E0020-U+E007F)
+    assert sanitize_csv_value("\U000E0020@something") == "'\U000E0020@something"
+    assert sanitize_csv_value("\U000E007F;something") == "'\U000E007F;something"
+
+    # C1 Control Characters (U+0080-U+009F)
+    assert sanitize_csv_value("\u0080=SUM(1+1)") == "'\u0080=SUM(1+1)"
+    assert sanitize_csv_value("\u009F+42") == "'\u009F+42"
+
+    # Interleaved new characters
+    assert sanitize_csv_value("\u180B \u0080 \U000E0020 =SUM(1+1)") == "'\u180B \u0080 \U000E0020 =SUM(1+1)"
+
+
 def test_format_diff_max_changes():
     """Verify that format_diff enforces the MAX_CHANGES limit."""
     from src.diff_engine import format_diff
