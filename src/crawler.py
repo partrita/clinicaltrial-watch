@@ -5,7 +5,7 @@ import random
 import threading
 from typing import Any, Dict, Optional
 from urllib.parse import urlparse
-from utils import sanitize_id, is_valid_nct_id
+from utils import sanitize_id, is_valid_nct_id, atomic_write
 
 import ssl
 import urllib.request
@@ -249,7 +249,8 @@ def save_snapshot(
     safe_trial_id = sanitize_id(trial_id)
     filepath = os.path.join(snapshot_dir, f"{safe_trial_id}_latest.json")
 
-    with open(filepath, "w", encoding="utf-8") as f:
+    # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+    with atomic_write(filepath, encoding="utf-8") as f:
         # Optimized: Removed indent to reduce serialization time and file size
         json.dump(data, f, ensure_ascii=False)
     return filepath

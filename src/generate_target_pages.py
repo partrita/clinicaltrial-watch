@@ -3,9 +3,9 @@ import json
 import yaml
 from typing import Any, Dict, List
 try:
-    from utils import sanitize_id, escape_html, check_file_size
+    from utils import sanitize_id, escape_html, check_file_size, atomic_write
 except ImportError:
-    from src.utils import sanitize_id, escape_html, check_file_size
+    from src.utils import sanitize_id, escape_html, check_file_size, atomic_write
 
 
 def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
@@ -355,7 +355,8 @@ else:
 '''
     )
 
-    with open(qmd_path, "w", encoding="utf-8") as f:
+    # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+    with atomic_write(qmd_path, encoding="utf-8") as f:
         f.write(header + body)
 
     print(f"Generated: {qmd_path}")
@@ -462,7 +463,8 @@ else:
         print(f"Error loading targets: {e}")
 ```
 """
-    with open(output_path, "w", encoding="utf-8") as f:
+    # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+    with atomic_write(output_path, encoding="utf-8") as f:
         f.write(content)
 
     print(f"Generated: {output_path}")
@@ -510,7 +512,8 @@ def update_quarto_yml(
         "execute": {"freeze": "auto"},
     }
 
-    with open(quarto_path, "w", encoding="utf-8") as f:
+    # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+    with atomic_write(quarto_path, encoding="utf-8") as f:
         yaml.safe_dump(
             config, f, default_flow_style=False, sort_keys=False, allow_unicode=True
         )

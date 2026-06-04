@@ -11,9 +11,9 @@ import sys
 from typing import Any, Dict, List, Optional
 
 try:
-    from utils import is_valid_nct_id, check_file_size
+    from utils import is_valid_nct_id, check_file_size, atomic_write
 except ImportError:
-    from src.utils import is_valid_nct_id, check_file_size
+    from src.utils import is_valid_nct_id, check_file_size, atomic_write
 
 import yaml
 
@@ -77,7 +77,8 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
 
 def save_yaml(data: Dict[str, Any], yaml_path: str) -> None:
     """Save YAML data to file."""
-    with open(yaml_path, "w", encoding="utf-8") as f:
+    # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+    with atomic_write(yaml_path, encoding="utf-8") as f:
         yaml.safe_dump(
             data, f, default_flow_style=False, allow_unicode=True, sort_keys=False
         )
