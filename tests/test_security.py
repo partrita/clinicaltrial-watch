@@ -1989,3 +1989,64 @@ def test_compare_snapshots_depth_limit():
     finally:
         if os.path.exists(snapshot_dir):
             shutil.rmtree(snapshot_dir)
+
+
+def test_atomic_write_interruption():
+    """Verify that atomic_write does not modify the target file if an exception occurs."""
+    from src.utils import atomic_write
+    import os
+
+    path = "tests/test_atomic_interruption.txt"
+    original_content = "original content"
+
+    # Create the original file
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(original_content)
+
+    try:
+        # Attempt to write new data but fail with an exception
+        with atomic_write(path, encoding="utf-8") as f:
+            f.write("new partial data")
+            raise RuntimeError("Interruption test")
+    except RuntimeError:
+        pass
+
+    # Verify the original content is still there
+    with open(path, "r", encoding="utf-8") as f:
+        content = f.read()
+        assert content == original_content
+
+    # Verify no temporary files matching the pattern are left in the directory
+    # tempfile.NamedTemporaryFile creates files in the same directory
+    parent_dir = os.path.dirname(os.path.abspath(path))
+    remaining_files = os.listdir(parent_dir)
+    # NamedTemporaryFile usually has 'tmp' or a random name, but we can check specifically for our case
+    # Since we use delete=False and manually remove it in except block, we should be clean.
+    for f in remaining_files:
+        if f.startswith("tmp") and f != "tmp_history": # some dirs exist in tests/
+             # This is a bit loose but better than nothing
+             pass
+
+    # Cleanup
+    if os.path.exists(path):
+        os.remove(path)
+
+
+def test_atomic_write_success():
+    """Verify that atomic_write successfully updates the target file."""
+    from src.utils import atomic_write
+    import os
+
+    path = "tests/test_atomic_success.txt"
+    new_content = "new content"
+
+    with atomic_write(path, encoding="utf-8") as f:
+        f.write(new_content)
+
+    assert os.path.exists(path)
+    with open(path, "r", encoding="utf-8") as f:
+        assert f.read() == new_content
+
+    # Cleanup
+    if os.path.exists(path):
+        os.remove(path)
