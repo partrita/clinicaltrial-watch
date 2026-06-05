@@ -1,7 +1,9 @@
 import re
 import os
 import html
-from typing import Any
+import tempfile
+import contextlib
+from typing import Any, Optional
 from functools import lru_cache
 
 
@@ -409,3 +411,48 @@ def format_diff_line_markdown(line: str) -> str:
     # Limit line length before caching
     safe_line = str(line)[:10000]
     return _format_diff_line_markdown_cached(safe_line)
+
+
+@contextlib.contextmanager
+def atomic_write(
+    filepath: str, mode: str = "w", encoding: str = "utf-8", newline: Optional[str] = None
+):
+    """
+    Context manager for atomic file writes.
+    Writes to a temporary file and replaces the target file only on success (CWE-459).
+    This prevents data corruption or partial writes if the process is interrupted.
+    """
+    parent_dir = os.path.dirname(os.path.abspath(filepath))
+    if parent_dir and not os.path.exists(parent_dir):
+        os.makedirs(parent_dir, exist_ok=True)
+
+    # Create temp file in the same directory to ensure os.replace works (same filesystem)
+    # We use delete=False because we handle the replacement/cleanup ourselves.
+    tmppath = ""
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode=mode,
+            dir=parent_dir,
+            encoding=encoding,
+            newline=newline,
+            delete=False,
+        ) as tf:
+            tmppath = tf.name
+            yield tf
+            tf.flush()
+            try:
+                os.fsync(tf.fileno())
+            except OSError:
+                # Some systems/filesystems don't support fsync on all file types
+                pass
+
+        # After successfully closing the context, replace the original file
+        os.replace(tmppath, filepath)
+    except Exception:
+        # If any error occurred, try to remove the temporary file
+        if tmppath and os.path.exists(tmppath):
+            try:
+                os.remove(tmppath)
+            except OSError:
+                pass
+        raise

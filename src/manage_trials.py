@@ -8,7 +8,7 @@ import argparse
 import os
 import json
 from typing import Any, Dict, Optional
-from utils import sanitize_id, is_valid_nct_id, check_file_size
+from utils import sanitize_id, is_valid_nct_id, check_file_size, atomic_write
 from generate_target_pages import main as generate_pages
 
 try:
@@ -63,7 +63,8 @@ def load_yaml(yaml_path: str = "trials.yaml") -> Dict[str, Any]:
 
 def save_yaml(data: Dict[str, Any], yaml_path: str = "trials.yaml") -> None:
     """Save YAML data to file."""
-    with open(yaml_path, "w", encoding="utf-8") as f:
+    # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+    with atomic_write(yaml_path, encoding="utf-8") as f:
         yaml.safe_dump(
             data, f, default_flow_style=False, allow_unicode=True, sort_keys=False
         )
@@ -114,7 +115,8 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
             return
 
         data["excluded_ids"].append(trial_id)
-        with open(yaml_path, "w", encoding="utf-8") as f:
+        # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+        with atomic_write(yaml_path, encoding="utf-8") as f:
             yaml.safe_dump(
                 data, f, default_flow_style=False, allow_unicode=True, sort_keys=False
             )
@@ -207,7 +209,8 @@ def perform_cleanup(trial_id: str):
                     ]
 
                     if len(new_summary) < len(summary):
-                        with open(summary_path, "w", encoding="utf-8") as f:
+                        # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+                        with atomic_write(summary_path, encoding="utf-8") as f:
                             # Optimized: Removed indent for performance and smaller file sizes
                             json.dump(new_summary, f, ensure_ascii=False)
                         print(f"Updated {summary_path}")
