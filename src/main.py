@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
 from crawler import fetch_trial_data, save_snapshot, reset_session
-from utils import sanitize_id, is_valid_nct_id, sanitize_csv_value, check_file_size
+from utils import sanitize_id, is_valid_nct_id, sanitize_csv_value, check_file_size, atomic_write
 from diff_engine import compare_snapshots, format_diff
 from generate_target_pages import main as generate_pages
 
@@ -230,7 +230,8 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
 def save_config(config: Dict[str, Any], config_path: str = "trials.yaml") -> None:
     """Save cleaned trials configuration back to YAML file."""
     try:
-        with open(config_path, "w", encoding="utf-8") as f:
+        # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+        with atomic_write(config_path, encoding="utf-8") as f:
             yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
         print(f"  ✓ Cleaned configuration saved to {config_path}")
     except Exception as e:
@@ -292,7 +293,8 @@ def update_history(
     if len(history) > MAX_HISTORY_ENTRIES:
         history = history[-MAX_HISTORY_ENTRIES:]
 
-    with open(history_file, "w", encoding="utf-8") as f:
+    # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+    with atomic_write(history_file, encoding="utf-8") as f:
         # Optimized: Removed indent to reduce serialization time and file size
         json.dump(history, f, ensure_ascii=False)
 
@@ -339,7 +341,8 @@ def update_target_history(
         if len(history) > MAX_HISTORY_ENTRIES:
             history = history[-MAX_HISTORY_ENTRIES:]
 
-        with open(history_file, "w", encoding="utf-8") as f:
+        # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+        with atomic_write(history_file, encoding="utf-8") as f:
             # Optimized: Removed indent to reduce serialization time and file size
             json.dump(history, f, ensure_ascii=False)
         print(f"  Updated target history for {target_name}")
@@ -601,7 +604,8 @@ def save_target_data(
         os.makedirs(target_dir)
 
     # Save JSON summary
-    with open(f"{target_dir}/status_summary.json", "w", encoding="utf-8") as f:
+    # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+    with atomic_write(f"{target_dir}/status_summary.json", encoding="utf-8") as f:
         # Optimized: Removed indent to reduce serialization time and file size
         json.dump(summary_report, f, ensure_ascii=False)
 
@@ -631,8 +635,9 @@ def save_target_data(
         # Security enhancement: Sanitize headers to prevent CSV formula injection
         safe_headers = [sanitize_csv_value(h) for h in headers]
 
-        with open(
-            f"{target_dir}/status_summary.csv", "w", encoding="utf-8-sig", newline=""
+        # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+        with atomic_write(
+            f"{target_dir}/status_summary.csv", encoding="utf-8-sig", newline=""
         ) as f:
             dict_writer = csv.DictWriter(
                 f, fieldnames=safe_headers, extrasaction="ignore"
@@ -658,8 +663,9 @@ def save_target_data(
         # Security enhancement: Sanitize headers to prevent CSV formula injection
         headers = [sanitize_csv_value(str(k)) for k in sorted_keys]
 
-        with open(
-            f"{target_dir}/all_trials_raw.csv", "w", newline="", encoding="utf-8-sig"
+        # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+        with atomic_write(
+            f"{target_dir}/all_trials_raw.csv", newline="", encoding="utf-8-sig"
         ) as f:
             writer = csv.DictWriter(f, fieldnames=headers)
             writer.writeheader()
@@ -792,7 +798,8 @@ def main() -> None:
         )
 
     # Save global target summary
-    with open("data/targets_summary.json", "w", encoding="utf-8") as f:
+    # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+    with atomic_write("data/targets_summary.json", encoding="utf-8") as f:
         # Optimized: Removed indent to reduce serialization time and file size
         json.dump(target_summaries, f, ensure_ascii=False)
 
