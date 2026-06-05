@@ -1439,8 +1439,8 @@ def test_http_redirect_security():
 
 def test_session_security_config():
     """Verify that the requests Session is configured securely."""
-    from src.crawler import get_session as get_crawler_session, reset_session as reset_crawler_session
-    from src.auto_discover_trials import get_session as get_auto_session
+    from src.crawler import get_session as get_crawler_session, reset_session as reset_crawler_session, TLSAdapter as CrawlerTLSAdapter
+    from src.auto_discover_trials import get_session as get_auto_session, TLSAdapter as AutoTLSAdapter
     import src.auto_discover_trials
     from unittest.mock import patch, MagicMock
 
@@ -1453,6 +1453,12 @@ def test_session_security_config():
         assert mock_session.max_redirects == 3
         assert mock_session.trust_env is False
 
+        # Verify TLSAdapter is mounted to https://
+        # We check that at least one of the calls was with a CrawlerTLSAdapter
+        https_calls = [c for c in mock_session.mount.call_args_list if c.args[0] == "https://"]
+        assert len(https_calls) > 0
+        assert isinstance(https_calls[0].args[1], CrawlerTLSAdapter)
+
     # Auto-discover session
     # We need to manually reset the internal _session in auto_discover_trials
     # as it doesn't have a reset_session function.
@@ -1463,6 +1469,11 @@ def test_session_security_config():
         get_auto_session()
         assert mock_session.max_redirects == 3
         assert mock_session.trust_env is False
+
+        # Verify TLSAdapter is mounted to https://
+        https_calls = [c for c in mock_session.mount.call_args_list if c.args[0] == "https://"]
+        assert len(https_calls) > 0
+        assert isinstance(https_calls[0].args[1], AutoTLSAdapter)
 
 
 def test_urllib_redirect_security():

@@ -23,6 +23,30 @@ try:
     from urllib3.util.retry import Retry
 
     HAS_REQUESTS = True
+
+    class TLSAdapter(HTTPAdapter):
+        """
+        Custom HTTPAdapter that enforces TLS 1.2 or higher for requests.
+        """
+
+        def init_poolmanager(self, connections, maxsize, block=False, **pool_kwargs):
+            import ssl
+
+            ctx = ssl.create_default_context()
+            ctx.minimum_version = ssl.TLSVersion.TLSv1_2
+            pool_kwargs["ssl_context"] = ctx
+            return super(TLSAdapter, self).init_poolmanager(
+                connections, maxsize, block, **pool_kwargs
+            )
+
+        def proxy_manager_for(self, *args, **kwargs):
+            import ssl
+
+            ctx = ssl.create_default_context()
+            ctx.minimum_version = ssl.TLSVersion.TLSv1_2
+            kwargs["ssl_context"] = ctx
+            return super(TLSAdapter, self).proxy_manager_for(*args, **kwargs)
+
 except ImportError:
     HAS_REQUESTS = False
 
@@ -59,9 +83,11 @@ def get_session() -> Optional[Any]:
                     backoff_factor=0.5,
                     status_forcelist=[429, 500, 502, 503, 504],
                 )
-                adapter = HTTPAdapter(max_retries=retry_strategy)
-                session.mount("https://", adapter)
-                session.mount("http://", adapter)
+                # Security enhancement: Use TLSAdapter to enforce TLS 1.2+ for HTTPS
+                https_adapter = TLSAdapter(max_retries=retry_strategy)
+                http_adapter = HTTPAdapter(max_retries=retry_strategy)
+                session.mount("https://", https_adapter)
+                session.mount("http://", http_adapter)
 
                 # Security enhancement: Limit redirects and ignore environment proxies
                 session.max_redirects = 3
