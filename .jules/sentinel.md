@@ -36,3 +36,8 @@
 **Vulnerability:** The application extensively updated critical JSON and YAML data files (configuration, trial history, snapshots) using standard `open(..., "w")` calls. An interruption during the write process (e.g., power failure, crash, or disk full) could leave these files in a truncated or corrupted state, leading to data loss or application failure.
 **Learning:** Standard file write operations are not atomic. In applications that rely heavily on local file-based persistence for state and configuration, partial writes pose a significant risk to data integrity and system availability.
 **Prevention:** Always use an atomic write pattern—writing to a temporary file in the same filesystem and then performing an atomic rename (`os.replace`)—for all critical data persistence. Implement this as a reusable context manager (`atomic_write`) to ensure consistency across the codebase.
+
+## 2026-06-25 - Insecure Default TLS Versions in Requests
+**Vulnerability:** The `requests` library, by default, relies on the underlying system's OpenSSL configuration, which may allow the negotiation of deprecated and insecure TLS versions (like 1.0 or 1.1) if not explicitly restricted.
+**Learning:** Hardening HTTP clients requires more than just setting timeouts and redirect limits; it must also include explicit enforcement of modern cryptographic protocols. This is achieved in `requests` by overriding the `PoolManager` and `ProxyManager` in a custom `HTTPAdapter`.
+**Prevention:** Always implement a custom `TLSAdapter` that configures a secure `SSLContext` (e.g., `minimum_version = ssl.TLSVersion.TLSv1_2`) and mount it to the `https://` prefix of all `requests.Session` objects.
