@@ -5,7 +5,7 @@ import random
 import threading
 from typing import Any, Dict, Optional
 from urllib.parse import urlparse
-from utils import sanitize_id, is_valid_nct_id, atomic_write
+from utils import sanitize_id, is_valid_nct_id, atomic_write, TLSAdapter
 
 import ssl
 import urllib.request
@@ -54,10 +54,14 @@ def get_session() -> Optional[Any]:
                     status_forcelist=[429, 500, 502, 503, 504],
                 )
                 # Increase pool size to match MAX_WORKERS in main.py for better concurrency
+                # Security enhancement: Use TLSAdapter for https:// to enforce TLS 1.2+
                 adapter = HTTPAdapter(
                     max_retries=retry_strategy, pool_connections=20, pool_maxsize=20
                 )
-                session.mount("https://", adapter)
+                tls_adapter = TLSAdapter(
+                    max_retries=retry_strategy, pool_connections=20, pool_maxsize=20
+                )
+                session.mount("https://", tls_adapter)
                 session.mount("http://", adapter)
 
                 # Security enhancement: Limit redirects and ignore environment proxies

@@ -1,6 +1,7 @@
 import re
 import os
 import html
+import ssl
 import tempfile
 import contextlib
 from typing import Any, Optional
@@ -411,6 +412,31 @@ def format_diff_line_markdown(line: str) -> str:
     # Limit line length before caching
     safe_line = str(line)[:10000]
     return _format_diff_line_markdown_cached(safe_line)
+
+
+try:
+    from requests.adapters import HTTPAdapter
+
+    class TLSAdapter(HTTPAdapter):
+        """
+        Custom Transport Adapter that enforces TLS 1.2 or higher (CWE-327).
+        """
+
+        def init_poolmanager(self, *args, **kwargs):
+            context = ssl.create_default_context()
+            context.minimum_version = ssl.TLSVersion.TLSv1_2
+            kwargs["ssl_context"] = context
+            return super().init_poolmanager(*args, **kwargs)
+
+        def proxy_manager_for(self, *args, **kwargs):
+            context = ssl.create_default_context()
+            context.minimum_version = ssl.TLSVersion.TLSv1_2
+            kwargs["ssl_context"] = context
+            return super().proxy_manager_for(*args, **kwargs)
+
+except ImportError:
+    # If requests is not installed, the adapter is not needed
+    TLSAdapter = None
 
 
 @contextlib.contextmanager

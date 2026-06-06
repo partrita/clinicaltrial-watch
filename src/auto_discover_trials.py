@@ -10,7 +10,7 @@ import random
 import threading
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
-from utils import is_valid_nct_id
+from utils import is_valid_nct_id, TLSAdapter
 
 import ssl
 import urllib.request
@@ -59,8 +59,10 @@ def get_session() -> Optional[Any]:
                     backoff_factor=0.5,
                     status_forcelist=[429, 500, 502, 503, 504],
                 )
+                # Security enhancement: Use TLSAdapter for https:// to enforce TLS 1.2+
                 adapter = HTTPAdapter(max_retries=retry_strategy)
-                session.mount("https://", adapter)
+                tls_adapter = TLSAdapter(max_retries=retry_strategy)
+                session.mount("https://", tls_adapter)
                 session.mount("http://", adapter)
 
                 # Security enhancement: Limit redirects and ignore environment proxies

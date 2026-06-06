@@ -1441,6 +1441,7 @@ def test_session_security_config():
     """Verify that the requests Session is configured securely."""
     from src.crawler import get_session as get_crawler_session, reset_session as reset_crawler_session
     from src.auto_discover_trials import get_session as get_auto_session
+    from src.utils import TLSAdapter
     import src.auto_discover_trials
     from unittest.mock import patch, MagicMock
 
@@ -1453,6 +1454,15 @@ def test_session_security_config():
         assert mock_session.max_redirects == 3
         assert mock_session.trust_env is False
 
+        # Verify TLSAdapter is mounted to https://
+        found_https = False
+        for call in mock_session.mount.call_args_list:
+            prefix, adapter = call.args
+            if prefix == "https://" and (isinstance(adapter, TLSAdapter) or type(adapter).__name__ == "TLSAdapter"):
+                found_https = True
+                break
+        assert found_https, "TLSAdapter not mounted to https:// in crawler"
+
     # Auto-discover session
     # We need to manually reset the internal _session in auto_discover_trials
     # as it doesn't have a reset_session function.
@@ -1463,6 +1473,40 @@ def test_session_security_config():
         get_auto_session()
         assert mock_session.max_redirects == 3
         assert mock_session.trust_env is False
+
+        # Verify TLSAdapter is mounted to https://
+        found_https = False
+        for call in mock_session.mount.call_args_list:
+            prefix, adapter = call.args
+            if prefix == "https://" and (isinstance(adapter, TLSAdapter) or type(adapter).__name__ == "TLSAdapter"):
+                found_https = True
+                break
+        assert found_https, "TLSAdapter not mounted to https:// in auto-discover"
+
+
+def test_tls_adapter_enforcement():
+    """Verify that TLSAdapter correctly enforces TLS 1.2+."""
+    import ssl
+    from src.utils import TLSAdapter
+    from unittest.mock import MagicMock, patch
+
+    adapter = TLSAdapter()
+
+    # Test init_poolmanager
+    with patch("requests.adapters.HTTPAdapter.init_poolmanager") as mock_super_init:
+        adapter.init_poolmanager(10, 10)
+        args, kwargs = mock_super_init.call_args
+        context = kwargs.get("ssl_context")
+        assert context is not None
+        assert context.minimum_version == ssl.TLSVersion.TLSv1_2
+
+    # Test proxy_manager_for
+    with patch("requests.adapters.HTTPAdapter.proxy_manager_for") as mock_super_proxy:
+        adapter.proxy_manager_for("http://proxy")
+        args, kwargs = mock_super_proxy.call_args
+        context = kwargs.get("ssl_context")
+        assert context is not None
+        assert context.minimum_version == ssl.TLSVersion.TLSv1_2
 
 
 def test_urllib_redirect_security():
