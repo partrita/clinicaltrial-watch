@@ -5,39 +5,10 @@ import random
 import threading
 from typing import Any, Dict, Optional
 from urllib.parse import urlparse
-from utils import sanitize_id, is_valid_nct_id, atomic_write
+from utils import sanitize_id, is_valid_nct_id, atomic_write, create_safe_session, HAS_REQUESTS
 
 import ssl
 import urllib.request
-
-try:
-    import requests
-    from requests.adapters import HTTPAdapter
-    from urllib3.util.retry import Retry
-
-    HAS_REQUESTS = True
-
-    class TLSAdapter(HTTPAdapter):
-        """
-        Custom HTTPAdapter that enforces TLS 1.2 or higher for requests.
-        """
-
-        def init_poolmanager(self, connections, maxsize, block=False, **pool_kwargs):
-            ctx = ssl.create_default_context()
-            ctx.minimum_version = ssl.TLSVersion.TLSv1_2
-            pool_kwargs["ssl_context"] = ctx
-            return super(TLSAdapter, self).init_poolmanager(
-                connections, maxsize, block, **pool_kwargs
-            )
-
-        def proxy_manager_for(self, *args, **kwargs):
-            ctx = ssl.create_default_context()
-            ctx.minimum_version = ssl.TLSVersion.TLSv1_2
-            kwargs["ssl_context"] = ctx
-            return super(TLSAdapter, self).proxy_manager_for(*args, **kwargs)
-
-except ImportError:
-    HAS_REQUESTS = False
 
 # Global session to reuse connections (much faster)
 _session = None
@@ -66,36 +37,13 @@ def get_session() -> Optional[Any]:
     if _session is None:
         with _session_lock:
             if _session is None:
-                session = requests.Session()
-                # ClinicalTrials.gov API v2 is generally fast, but retries help with transient issues
-                retry_strategy = Retry(
-                    total=2,
-                    backoff_factor=0.5,
-                    status_forcelist=[429, 500, 502, 503, 504],
-                )
+                # Use centralized security-hardened session factory
                 # Increase pool size to match MAX_WORKERS in main.py for better concurrency
-                # Security enhancement: Use TLSAdapter to enforce TLS 1.2+ for HTTPS
-                https_adapter = TLSAdapter(
-                    max_retries=retry_strategy, pool_connections=20, pool_maxsize=20
+                _session = create_safe_session(
+                    user_agent="ClinicalTrialWatch/1.0 (https://github.com/partrita/clinicaltrial-watch)",
+                    max_retries=2,
+                    pool_size=20,
                 )
-                http_adapter = HTTPAdapter(
-                    max_retries=retry_strategy, pool_connections=20, pool_maxsize=20
-                )
-                session.mount("https://", https_adapter)
-                session.mount("http://", http_adapter)
-
-                # Security enhancement: Limit redirects and ignore environment proxies
-                session.max_redirects = 3
-                session.trust_env = False
-
-                # User-Agent is good practice to avoid being flagged as a generic bot
-                session.headers.update(
-                    {
-                        "User-Agent": "ClinicalTrialWatch/1.0 (https://github.com/partrita/clinicaltrial-watch)",
-                        "Accept": "application/json",
-                    }
-                )
-                _session = session
     return _session
 
 
