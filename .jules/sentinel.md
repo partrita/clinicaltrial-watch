@@ -41,3 +41,8 @@
 **Vulnerability:** The `requests` library, by default, relies on the underlying system's OpenSSL configuration, which may allow the negotiation of deprecated and insecure TLS versions (like 1.0 or 1.1) if not explicitly restricted.
 **Learning:** Hardening HTTP clients requires more than just setting timeouts and redirect limits; it must also include explicit enforcement of modern cryptographic protocols. This is achieved in `requests` by overriding the `PoolManager` and `ProxyManager` in a custom `HTTPAdapter`.
 **Prevention:** Always implement a custom `TLSAdapter` that configures a secure `SSLContext` (e.g., `minimum_version = ssl.TLSVersion.TLSv1_2`) and mount it to the `https://` prefix of all `requests.Session` objects.
+
+## 2025-05-24 - Centralized Security-Hardened HTTP Sessions
+**Vulnerability:** Security configurations for HTTP sessions (TLS enforcement, redirect limits, proxy avoidance) were duplicated across multiple modules (`crawler.py`, `auto_discover_trials.py`). This led to maintenance overhead and increased the risk of inconsistent security policies if one module was updated while others were forgotten.
+**Learning:** Duplicating security-critical code across a project creates "security debt" and potential gaps. Centralizing these controls into a reusable factory ensures a consistent security posture and simplifies global policy updates.
+**Prevention:** Use a centralized factory function (`create_safe_session` in `src/utils.py`) to instantiate and configure all network clients. This function should encapsulate TLS hardening, redirect limits (CWE-606), and environment isolation (CWE-918) as a single, auditable unit.
