@@ -1473,7 +1473,7 @@ def test_session_security_config():
         https_calls = [c for c in mock_session.mount.call_args_list if c.args[0] == "https://"]
         assert len(https_calls) > 0
         # Now both use the centralized TLSAdapter from utils
-        assert https_calls[0].args[1].__class__.__name__ == "TLSAdapter"
+        assert isinstance(https_calls[0].args[1], TLSAdapter)
 
 
 def test_urllib_redirect_security():
