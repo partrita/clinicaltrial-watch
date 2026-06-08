@@ -3,8 +3,38 @@ import os
 import html
 import tempfile
 import contextlib
+import ssl
 from typing import Any, Optional
 from functools import lru_cache
+
+try:
+    import requests
+    from requests.adapters import HTTPAdapter
+    from urllib3.util.retry import Retry
+
+    HAS_REQUESTS = True
+
+    class TLSAdapter(HTTPAdapter):
+        """
+        Custom HTTPAdapter that enforces TLS 1.2 or higher for requests.
+        """
+
+        def init_poolmanager(self, connections, maxsize, block=False, **pool_kwargs):
+            ctx = ssl.create_default_context()
+            ctx.minimum_version = ssl.TLSVersion.TLSv1_2
+            pool_kwargs["ssl_context"] = ctx
+            return super(TLSAdapter, self).init_poolmanager(
+                connections, maxsize, block, **pool_kwargs
+            )
+
+        def proxy_manager_for(self, *args, **kwargs):
+            ctx = ssl.create_default_context()
+            ctx.minimum_version = ssl.TLSVersion.TLSv1_2
+            kwargs["ssl_context"] = ctx
+            return super(TLSAdapter, self).proxy_manager_for(*args, **kwargs)
+
+except ImportError:
+    HAS_REQUESTS = False
 
 
 # Configuration limits for DoS protection (CWE-400)
@@ -411,6 +441,53 @@ def format_diff_line_markdown(line: str) -> str:
     # Limit line length before caching
     safe_line = str(line)[:10000]
     return _format_diff_line_markdown_cached(safe_line)
+
+
+def create_safe_session(
+    user_agent: str, max_retries: int = 2, pool_size: int = 10
+) -> Optional[Any]:
+    """
+    Creates and returns a security-hardened requests.Session object.
+    Enforces TLS 1.2+, limited redirects, and safe environment defaults.
+    """
+    if not HAS_REQUESTS:
+        return None
+
+    session = requests.Session()
+
+    # Configure retry strategy
+    retry_strategy = Retry(
+        total=max_retries,
+        backoff_factor=0.5,
+        status_forcelist=[429, 500, 502, 503, 504],
+    )
+
+    # Mount TLSAdapter to enforce TLS 1.2+ for HTTPS
+    https_adapter = TLSAdapter(
+        max_retries=retry_strategy, pool_connections=pool_size, pool_maxsize=pool_size
+    )
+    http_adapter = HTTPAdapter(
+        max_retries=retry_strategy, pool_connections=pool_size, pool_maxsize=pool_size
+    )
+
+    session.mount("https://", https_adapter)
+    session.mount("http://", http_adapter)
+
+    # Security hardening: Limit redirects to prevent DoS via redirect loops (CWE-606)
+    session.max_redirects = 3
+
+    # Security hardening: Ignore proxy environment variables to prevent hijacking (CWE-918)
+    session.trust_env = False
+
+    # Set default headers
+    session.headers.update(
+        {
+            "User-Agent": user_agent,
+            "Accept": "application/json",
+        }
+    )
+
+    return session
 
 
 @contextlib.contextmanager
