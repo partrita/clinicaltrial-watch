@@ -37,6 +37,11 @@
 **Learning:** Standard file write operations are not atomic. In applications that rely heavily on local file-based persistence for state and configuration, partial writes pose a significant risk to data integrity and system availability.
 **Prevention:** Always use an atomic write pattern—writing to a temporary file in the same filesystem and then performing an atomic rename (`os.replace`)—for all critical data persistence. Implement this as a reusable context manager (`atomic_write`) to ensure consistency across the codebase.
 
+## 2026-07-02 - Memory Exhaustion during List Joining (CWE-400)
+**Vulnerability:** The `flatten_dict` function previously joined lists into a single string using `", ".join()` before truncating the result to `MAX_VALUE_LENGTH`. Since individual list items from the API could be up to 10MB each, joining a large list could create a massive intermediate string in memory, leading to an Out-of-Memory (OOM) Denial of Service.
+**Learning:** Truncating the *result* of an operation is insufficient if the operation itself consumes excessive resources. Resource limits must be applied *during* the generation of large data structures.
+**Prevention:** Build large strings or JSON representations from collections incrementally. Check the aggregate length at each step and terminate the process as soon as the defined safety limit is reached, avoiding the creation of large intermediate objects.
+
 ## 2026-06-25 - Insecure Default TLS Versions in Requests
 **Vulnerability:** The `requests` library, by default, relies on the underlying system's OpenSSL configuration, which may allow the negotiation of deprecated and insecure TLS versions (like 1.0 or 1.1) if not explicitly restricted.
 **Learning:** Hardening HTTP clients requires more than just setting timeouts and redirect limits; it must also include explicit enforcement of modern cryptographic protocols. This is achieved in `requests` by overriding the `PoolManager` and `ProxyManager` in a custom `HTTPAdapter`.
