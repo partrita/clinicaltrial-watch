@@ -435,15 +435,44 @@ def flatten_dict(
                     first = truncated_list[0]
                     first_type = type(first)
 
-                    if first_type is str:
-                        res_str = ", ".join(map(str, truncated_list))
-                        result[new_key] = res_str[:MAX_VALUE_LENGTH]
-                    elif first_type in (int, float, bool):
-                        res_str = ", ".join(map(str, truncated_list))
-                        result[new_key] = res_str[:MAX_VALUE_LENGTH]
+                    if first_type in (str, int, float, bool):
+                        # Security enhancement: Build string incrementally to avoid
+                        # massive intermediate join result (CWE-400)
+                        parts = []
+                        current_len = 0
+                        for item in truncated_list:
+                            item_str = str(item)
+                            needed = len(item_str)
+                            if parts:
+                                needed += 2  # ", " separator
+
+                            if current_len + needed > MAX_VALUE_LENGTH:
+                                # If even the first item is too long, truncate it
+                                if not parts:
+                                    result[new_key] = item_str[:MAX_VALUE_LENGTH]
+                                break
+
+                            parts.append(item_str)
+                            current_len += needed
+
+                        if parts:
+                            result[new_key] = ", ".join(parts)
                     else:
-                        res_str = json.dumps(truncated_list, ensure_ascii=False)
-                        result[new_key] = res_str[:MAX_VALUE_LENGTH]
+                        # For complex types, build JSON array incrementally to avoid DoS
+                        res_parts = []
+                        current_len = 2  # Start with length of "[]"
+                        for item in truncated_list:
+                            item_json = json.dumps(item, ensure_ascii=False)
+                            needed = len(item_json)
+                            if res_parts:
+                                needed += 2  # ", " separator
+
+                            if current_len + needed > MAX_VALUE_LENGTH:
+                                break
+
+                            res_parts.append(item_json)
+                            current_len += needed
+                        result[new_key] = "[" + ", ".join(res_parts) + "]"
             else:
                 # Security enhancement: Truncate scalar strings to prevent DoS (CWE-400)
                 if isinstance(v, str):

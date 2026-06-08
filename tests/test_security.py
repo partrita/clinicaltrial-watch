@@ -1679,9 +1679,10 @@ def test_flatten_dict_dos_protection():
     d2 = {"long_str_list": long_str_list}
     flattened2 = flatten_dict(d2)
     val2 = flattened2["long_str_list"]
-    assert len(val2) == 10000
-    assert val2.startswith("A" * 6000)
-    assert val2.endswith("B" * (10000 - 6000 - 2)) # -2 for ", "
+    # Only the first item fits, so it should be exactly that item
+    assert len(val2) == 6000
+    assert val2 == "A" * 6000
+    assert "B" * 6000 not in val2
 
 def test_flatten_dict_scalar_truncation():
     """Verify that flatten_dict truncates long scalar strings."""
