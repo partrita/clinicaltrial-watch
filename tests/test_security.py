@@ -1442,7 +1442,7 @@ def test_session_security_config():
     from src.crawler import get_session as get_crawler_session, reset_session as reset_crawler_session
     from src.auto_discover_trials import get_session as get_auto_session
     import src.auto_discover_trials
-    from src.utils import TLSAdapter
+    from utils import TLSAdapter
     from unittest.mock import patch, MagicMock
 
     # Crawler session
