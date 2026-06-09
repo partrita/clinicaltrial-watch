@@ -5,7 +5,7 @@ import random
 import threading
 from typing import Any, Dict, Optional
 from urllib.parse import urlparse
-from utils import sanitize_id, is_valid_nct_id, atomic_write, create_safe_session, HAS_REQUESTS
+from utils import sanitize_id, is_valid_nct_id, atomic_write, create_safe_session, HAS_REQUESTS, MAX_CONFIG_SIZE
 
 import ssl
 import urllib.request
@@ -61,8 +61,8 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
     safe_trial_id = sanitize_id(trial_id)
     url = f"https://clinicaltrials.gov/api/v2/studies/{safe_trial_id}"
 
-    # Max response size: 10MB (to prevent memory exhaustion DoS)
-    MAX_RESPONSE_SIZE = 10 * 1024 * 1024
+    # Max response size (to prevent memory exhaustion DoS)
+    MAX_RESPONSE_SIZE = MAX_CONFIG_SIZE
 
     if HAS_REQUESTS:
         session = get_session()

@@ -10,7 +10,7 @@ import random
 import threading
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
-from utils import is_valid_nct_id, create_safe_session, HAS_REQUESTS
+from utils import is_valid_nct_id, create_safe_session, HAS_REQUESTS, MAX_CONFIG_SIZE
 
 import ssl
 import urllib.request
@@ -58,8 +58,8 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
     base_url = "https://clinicaltrials.gov/api/v2/studies"
     params = {"query.term": query_term, "pageSize": "1000"}
 
-    # Max response size: 10MB (to prevent memory exhaustion DoS)
-    MAX_RESPONSE_SIZE = 10 * 1024 * 1024
+    # Max response size (to prevent memory exhaustion DoS)
+    MAX_RESPONSE_SIZE = MAX_CONFIG_SIZE
 
     if HAS_REQUESTS:
         session = get_session()
@@ -104,7 +104,11 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                     if not isinstance(data, dict):
                         print(f"Error: Malformed search response for {query_term} (not a dictionary)")
                         return []
-                    return data.get("studies", [])
+                    studies = data.get("studies")
+                    if not isinstance(studies, list):
+                        print(f"Error: 'studies' in search response for {query_term} is not a list")
+                        return []
+                    return studies
                 else:
                     print(
                         f"Error fetching data for term {query_term}: {response.status_code}"
@@ -187,7 +191,11 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                     if not isinstance(data, dict):
                         print(f"Error: Malformed search response for {query_term} (urllib, not a dictionary)")
                         return []
-                    return data.get("studies", [])
+                    studies = data.get("studies")
+                    if not isinstance(studies, list):
+                        print(f"Error: 'studies' in search response for {query_term} (urllib) is not a list")
+                        return []
+                    return studies
                 else:
                     print(
                         f"Error fetching data for term {query_term} (urllib): {response.status}"
@@ -200,6 +208,16 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
 
 def extract_trials(api_studies: List[Dict[str, Any]]) -> List[Dict[str, str]]:
     """Extract required trial info from API response."""
+    if not isinstance(api_studies, list):
+        print("Error: api_studies must be a list")
+        return []
+
+    # Security enhancement: Limit number of studies to process to prevent DoS (CWE-400)
+    MAX_API_STUDIES = 2000
+    if len(api_studies) > MAX_API_STUDIES:
+        print(f"Warning: api_studies exceeds limit of {MAX_API_STUDIES}. Truncating.")
+        api_studies = api_studies[:MAX_API_STUDIES]
+
     trials = []
     for study in api_studies:
         try:

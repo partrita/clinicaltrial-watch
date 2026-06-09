@@ -2044,6 +2044,63 @@ def test_atomic_write_interruption():
         os.remove(path)
 
 
+def test_extract_trials_robustness():
+    """Verify that extract_trials handles non-list input and respects the MAX_API_STUDIES limit."""
+    from src.auto_discover_trials import extract_trials
+
+    # 1. Test non-list input
+    assert extract_trials("not a list") == []
+    assert extract_trials(None) == []
+
+    # 2. Test MAX_API_STUDIES limit (2000)
+    large_input = [
+        {
+            "protocolSection": {
+                "identificationModule": {
+                    "nctId": f"NCT{i:08d}",
+                    "briefTitle": "Trial Title"
+                }
+            }
+        } for i in range(2500)
+    ]
+    res = extract_trials(large_input)
+    assert len(res) == 2000
+    assert res[-1]["id"] == "NCT00001999"
+
+
+def test_search_trials_malformed_response():
+    """Verify that search_trials handles missing or non-list 'studies' key in the API response."""
+    from src.auto_discover_trials import search_trials
+    from unittest.mock import patch, MagicMock
+    import json
+
+    with patch("src.auto_discover_trials.get_session") as mock_get_session:
+        mock_session = MagicMock()
+        mock_get_session.return_value = mock_session
+
+        # 1. Test missing 'studies' key
+        mock_response_missing = MagicMock()
+        mock_response_missing.status_code = 200
+        mock_response_missing.headers = {"Content-Type": "application/json"}
+        mock_response_missing.url = "https://clinicaltrials.gov/api/v2/studies"
+        mock_response_missing.iter_content.return_value = [b'{"other": "data"}']
+        mock_session.get.return_value = mock_response_missing
+        mock_response_missing.__enter__.return_value = mock_response_missing
+
+        assert search_trials("Target") == []
+
+        # 2. Test 'studies' is not a list
+        mock_response_not_list = MagicMock()
+        mock_response_not_list.status_code = 200
+        mock_response_not_list.headers = {"Content-Type": "application/json"}
+        mock_response_not_list.url = "https://clinicaltrials.gov/api/v2/studies"
+        mock_response_not_list.iter_content.return_value = [b'{"studies": "not a list"}']
+        mock_session.get.return_value = mock_response_not_list
+        mock_response_not_list.__enter__.return_value = mock_response_not_list
+
+        assert search_trials("Target") == []
+
+
 def test_atomic_write_success():
     """Verify that atomic_write successfully updates the target file."""
     from src.utils import atomic_write
