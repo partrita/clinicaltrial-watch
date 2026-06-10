@@ -549,9 +549,19 @@ def process_trial(
     study_status = status_mod.get("overallStatus", "N/A")
     last_submit_date = status_mod.get("lastUpdateSubmitDate", "N/A")
     conditions_list = protocol.get("conditionsModule", {}).get("conditions", [])
-    conditions = ", ".join(conditions_list) if conditions_list else "N/A"
+    # Security enhancement: Limit list size and string length to prevent DoS (CWE-400)
+    if isinstance(conditions_list, list) and conditions_list:
+        conditions = ", ".join(str(c)[:255] for c in conditions_list[:100])
+    else:
+        conditions = "N/A"
+
     phases_list = protocol.get("designModule", {}).get("phases", [])
-    phases = ", ".join(phases_list) if phases_list else "N/A"
+    # Security enhancement: Limit list size and string length to prevent DoS (CWE-400)
+    if isinstance(phases_list, list) and phases_list:
+        phases = ", ".join(str(p)[:255] for p in phases_list[:10])
+    else:
+        phases = "N/A"
+
     detailed_desc = protocol.get("descriptionModule", {}).get(
         "detailedDescription",
         protocol.get("descriptionModule", {}).get("briefSummary", "N/A"),

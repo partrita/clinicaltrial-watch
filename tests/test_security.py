@@ -2044,6 +2044,97 @@ def test_atomic_write_interruption():
         os.remove(path)
 
 
+def test_process_trial_list_hardening():
+    """Verify that process_trial hardens list joining for conditions and phases."""
+    from src.main import process_trial
+    from unittest.mock import patch
+
+    trial = {"id": "NCT12345678", "name": "Test Trial"}
+    # Mock API response with huge lists and non-string items
+    mock_data = {
+        "protocolSection": {
+            "identificationModule": {"nctId": "NCT12345678", "briefTitle": "Title"},
+            "conditionsModule": {"conditions": ["C" * 300] * 150 + [123, None]},
+            "designModule": {"phases": ["PHASE1"] * 20},
+            "statusModule": {"overallStatus": "RECRUITING"}
+        }
+    }
+
+    with patch("src.main.fetch_trial_data", return_value=mock_data), \
+         patch("src.main.safe_json_load", return_value=[]), \
+         patch("src.main.update_history", return_value=[]), \
+         patch("src.main.save_snapshot"), \
+         patch("src.main.compare_snapshots", return_value=None):
+
+        report, _ = process_trial(trial, "Target")
+
+        # Conditions: capped at 100 items, each item truncated to 255
+        # The first 100 are "C"*300, so each should be "C"*255
+        expected_item = "C" * 255
+        assert report["conditions"].count(expected_item) == 100
+        assert "123" not in report["conditions"]  # Was at index 150
+        assert "None" not in report["conditions"] # Was at index 151
+
+        # Phases: capped at 10 items
+        assert report["phases"].count("PHASE1") == 10
+        assert report["phases"].count(",") == 9
+
+
+def test_discover_all_targets_hardening():
+    """Verify that discover_all_targets enforces target limits and truncation."""
+    from src.generate_target_pages import discover_all_targets
+    import os
+    import json
+    import shutil
+    from unittest.mock import patch
+
+    test_targets_dir = "tests/tmp_targets_discovery"
+    if os.path.exists(test_targets_dir):
+        shutil.rmtree(test_targets_dir)
+    os.makedirs(test_targets_dir)
+
+    # Real os functions to avoid recursion in mocks
+    real_listdir = os.listdir
+    real_path_join = os.path.join
+    real_path_exists = os.path.exists
+
+    try:
+        # Create 150 target directories with summary files
+        for i in range(150):
+            target_id = f"target_{i:03d}"
+            target_dir = real_path_join(test_targets_dir, target_id)
+            os.makedirs(target_dir)
+            summary_path = real_path_join(target_dir, "status_summary.json")
+
+            # Use "Long" prefix for the oversized one to easily find it
+            if i == 0:
+                target_name = "Long" + "T" * 300
+            else:
+                target_name = f"Target {i:03d}"
+
+            with open(summary_path, "w", encoding="utf-8") as f:
+                json.dump([{"target": target_name, "id": "NCT12345678"}], f)
+
+        with patch("src.generate_target_pages.load_trials_yaml", return_value=[]), \
+             patch("src.generate_target_pages.check_file_size"), \
+             patch("os.path.exists", side_effect=lambda p: True if p == "data/targets" else real_path_exists(p)), \
+             patch("os.listdir", side_effect=lambda d: sorted(real_listdir(test_targets_dir)) if d == "data/targets" else real_listdir(d)), \
+             patch("os.path.join", side_effect=lambda *args: real_path_join(test_targets_dir, *args[1:]) if args[0] == "data/targets" else real_path_join(*args)):
+
+            targets = discover_all_targets()
+
+            # Total targets should be capped at 100
+            assert len(targets) == 100
+
+            # Target names should be truncated
+            long_target = next((t for t in targets if t["name"].startswith("Long")), None)
+            assert long_target is not None
+            assert len(long_target["name"]) == 255
+    finally:
+        if os.path.exists(test_targets_dir):
+            shutil.rmtree(test_targets_dir)
+
+
 def test_extract_trials_robustness():
     """Verify that extract_trials handles non-list input and respects the MAX_API_STUDIES limit."""
     from src.auto_discover_trials import extract_trials

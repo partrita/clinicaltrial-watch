@@ -57,7 +57,13 @@ def discover_all_targets() -> List[Dict[str, Any]]:
     # 2. Discover from data/targets directory
     targets_data_dir = "data/targets"
     if os.path.exists(targets_data_dir):
-        for d in os.listdir(targets_data_dir):
+        # Security enhancement: Limit number of items to process from directory to prevent DoS (CWE-400)
+        dir_items = os.listdir(targets_data_dir)[:200]
+        for d in dir_items:
+            # Security enhancement: Limit total number of targets to prevent DoS (CWE-400)
+            if len(targets_dict) >= 100:
+                break
+
             if d.lower() in targets_dict:
                 continue
 
@@ -71,9 +77,11 @@ def discover_all_targets() -> List[Dict[str, Any]]:
                         data = json.load(f)
                         if data and isinstance(data, list) and isinstance(data[0], dict):
                             name = data[0].get("target", d)
-                            targets_dict[name.lower()] = {
-                                "name": name,
-                                "description": f"{name} 타겟 임상시험 모니터링",
+                            # Security enhancement: Truncate target name to prevent DoS (CWE-400)
+                            safe_name = str(name)[:255]
+                            targets_dict[safe_name.lower()] = {
+                                "name": safe_name,
+                                "description": f"{safe_name} 타겟 임상시험 모니터링",
                             }
                 except Exception:
                     continue
