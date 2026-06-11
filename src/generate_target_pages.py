@@ -57,9 +57,7 @@ def discover_all_targets() -> List[Dict[str, Any]]:
     # 2. Discover from data/targets directory
     targets_data_dir = "data/targets"
     if os.path.exists(targets_data_dir):
-        # Security enhancement: Limit number of items to process from directory to prevent DoS (CWE-400)
-        dir_items = os.listdir(targets_data_dir)[:200]
-        for d in dir_items:
+        for d in os.listdir(targets_data_dir):
             # Security enhancement: Limit total number of targets to prevent DoS (CWE-400)
             if len(targets_dict) >= 100:
                 break
