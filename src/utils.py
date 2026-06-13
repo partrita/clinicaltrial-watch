@@ -33,6 +33,16 @@ try:
             kwargs["ssl_context"] = ctx
             return super(TLSAdapter, self).proxy_manager_for(*args, **kwargs)
 
+    class BlockedAdapter(HTTPAdapter):
+        """
+        Custom HTTPAdapter that explicitly blocks insecure HTTP requests.
+        """
+
+        def send(self, request, **kwargs):
+            raise requests.exceptions.InvalidSchema(
+                f"Insecure HTTP requests are blocked by policy: {request.url}"
+            )
+
 except ImportError:
     HAS_REQUESTS = False
 
@@ -466,12 +476,11 @@ def create_safe_session(
     https_adapter = TLSAdapter(
         max_retries=retry_strategy, pool_connections=pool_size, pool_maxsize=pool_size
     )
-    http_adapter = HTTPAdapter(
-        max_retries=retry_strategy, pool_connections=pool_size, pool_maxsize=pool_size
-    )
+    # Security hardening: Explicitly block insecure HTTP requests (CWE-311/CWE-319)
+    blocked_adapter = BlockedAdapter()
 
     session.mount("https://", https_adapter)
-    session.mount("http://", http_adapter)
+    session.mount("http://", blocked_adapter)
 
     # Security hardening: Limit redirects to prevent DoS via redirect loops (CWE-606)
     session.max_redirects = 3

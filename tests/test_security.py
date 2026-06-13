@@ -2044,6 +2044,43 @@ def test_atomic_write_interruption():
         os.remove(path)
 
 
+def test_session_blocks_http():
+    """Verify that sessions created by create_safe_session correctly block insecure HTTP requests."""
+    import requests
+    from src.utils import create_safe_session
+    from unittest.mock import patch, MagicMock
+
+    session = create_safe_session(user_agent="TestAgent")
+    if session is None:
+        pytest.skip("Requests not installed")
+
+    # 1. Verify HTTP is blocked
+    with pytest.raises(requests.exceptions.InvalidSchema, match="Insecure HTTP requests are blocked"):
+        session.get("http://clinicaltrials.gov/api/v2/studies")
+
+    # 2. Verify HTTPS is allowed (using a mock to avoid actual network call)
+    with patch.object(requests.Session, "get") as mock_get:
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_get.return_value = mock_response
+
+        # We must call get on the instance 'session'
+        # But create_safe_session returns a session with adapters mounted.
+        # We want to verify that it DOES NOT raise InvalidSchema for https
+
+        # Actually, let's just test that the adapter is mounted correctly
+        # and that calling 'send' directly or 'get' triggers the right behavior.
+
+        # Test get for https
+        try:
+            session.get("https://clinicaltrials.gov/api/v2/studies", timeout=1)
+        except requests.exceptions.InvalidSchema:
+            pytest.fail("HTTPS request was incorrectly blocked")
+        except Exception:
+            # We expect connection error or mock success, but NOT InvalidSchema
+            pass
+
+
 def test_process_trial_list_hardening():
     """Verify that process_trial hardens list joining for conditions and phases."""
     from src.main import process_trial

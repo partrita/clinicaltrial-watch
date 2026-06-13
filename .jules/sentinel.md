@@ -51,3 +51,8 @@
 **Vulnerability:** Security configurations for HTTP sessions (TLS enforcement, redirect limits, proxy avoidance) were duplicated across multiple modules (`crawler.py`, `auto_discover_trials.py`). This led to maintenance overhead and increased the risk of inconsistent security policies if one module was updated while others were forgotten.
 **Learning:** Duplicating security-critical code across a project creates "security debt" and potential gaps. Centralizing these controls into a reusable factory ensures a consistent security posture and simplifies global policy updates.
 **Prevention:** Use a centralized factory function (`create_safe_session` in `src/utils.py`) to instantiate and configure all network clients. This function should encapsulate TLS hardening, redirect limits (CWE-606), and environment isolation (CWE-918) as a single, auditable unit.
+
+## 2026-07-25 - Enforcing HTTPS-Only Sessions at the Adapter Level
+**Vulnerability:** Insecure communication (CWE-319) could occur if a session accidentally followed a redirect to HTTP or if code explicitly used an insecure URL, potentially exposing sensitive API data or allowing MITM attacks.
+**Learning:** Even with TLS hardening, `requests.Session` will still attempt to handle `http://` URLs by default using the standard `HTTPAdapter`. Total protocol enforcement requires blocking the `http://` prefix at the adapter layer within the session configuration.
+**Prevention:** Implement a `BlockedAdapter` that raises `requests.exceptions.InvalidSchema` and mount it to the `http://` prefix of all security-hardened `requests.Session` objects to ensure fail-secure behavior for insecure protocols.
