@@ -2044,6 +2044,38 @@ def test_atomic_write_interruption():
         os.remove(path)
 
 
+def test_session_blocks_http():
+    """Verify that create_safe_session correctly blocks insecure HTTP requests."""
+    from src.utils import create_safe_session, HAS_REQUESTS
+    import pytest
+
+    if not HAS_REQUESTS:
+        pytest.skip("requests not installed")
+
+    from requests.exceptions import InvalidSchema
+    from unittest.mock import patch, MagicMock
+
+    session = create_safe_session("TestAgent")
+
+    # 1. Test that HTTP requests are blocked
+    with pytest.raises(InvalidSchema, match="Insecure protocol blocked"):
+        session.get("http://clinicaltrials.gov/api/v2/studies")
+
+    # 2. Test that HTTPS requests are still allowed (mocked)
+    with patch("requests.adapters.HTTPAdapter.send") as mock_send:
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.url = "https://clinicaltrials.gov/api/v2/studies"
+        # Ensure it doesn't look like a redirect
+        mock_response.is_redirect = False
+        mock_response.headers = {}
+        mock_send.return_value = mock_response
+
+        res = session.get("https://clinicaltrials.gov/api/v2/studies")
+        assert res.status_code == 200
+        assert mock_send.called
+
+
 def test_process_trial_list_hardening():
     """Verify that process_trial hardens list joining for conditions and phases."""
     from src.main import process_trial
