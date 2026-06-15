@@ -571,19 +571,20 @@ def process_trial(
 
     diff = compare_snapshots(trial_id, new_data)
 
+    # Security enhancement: Truncate metadata to prevent DoS (CWE-400)
     report_item = {
         "id": trial_id,
-        "name": trial["name"],
-        "target": target_name,
-        "sponsor": sponsor,
-        "status": study_status,
+        "name": str(trial.get("name", "N/A"))[:1000],
+        "target": str(target_name)[:255],
+        "sponsor": str(sponsor)[:255],
+        "status": str(study_status)[:255],
         "conditions": conditions,
         "phases": phases,
-        "last_updated": last_submit_date,
-        "study_start": start_date,
-        "study_end": end_date,
-        "enrollment": enrollment,
-        "primary_outcome": primary_outcome,
+        "last_updated": str(last_submit_date)[:255],
+        "study_start": str(start_date)[:255],
+        "study_end": str(end_date)[:255],
+        "enrollment": str(enrollment)[:255],
+        "primary_outcome": str(primary_outcome)[:1000],
         "monitor_status": "No Change",
         "last_monitored_change": "No changes yet",
         "details": detailed_desc,

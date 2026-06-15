@@ -66,7 +66,7 @@ class TestProcessTrial:
         assert report["status"] == "RECRUITING"
         assert report["conditions"] == "Cancer, Melanoma"
         assert report["phases"] == "PHASE2"
-        assert report["enrollment"] == 100
+        assert report["enrollment"] == "100"
         assert report["primary_outcome"] == "Overall Survival"
         assert report["monitor_status"] == "No Change"
 
