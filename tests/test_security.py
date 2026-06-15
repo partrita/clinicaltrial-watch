@@ -1370,6 +1370,57 @@ def test_truncation_security():
         assert len(report["details"]) == 20000
 
 
+def test_process_trial_metadata_truncation():
+    """Verify that process_trial truncates all metadata fields in report_item."""
+    from src.main import process_trial
+    from unittest.mock import patch
+
+    trial = {"id": "NCT12345678", "name": "N" * 2000}
+    target_name = "T" * 300
+
+    # Mock API response with huge values for all fields
+    mock_data = {
+        "protocolSection": {
+            "identificationModule": {"nctId": "NCT12345678", "briefTitle": "Title"},
+            "sponsorCollaboratorsModule": {"leadSponsor": {"name": "S" * 300}},
+            "statusModule": {
+                "overallStatus": "STATUS_" + "X" * 300,
+                "lastUpdateSubmitDate": "2023-01-01 " + "Y" * 300,
+                "startDateStruct": {"date": "2023-01-01 " + "Z" * 300},
+                "completionDateStruct": {"date": "2023-12-31 " + "W" * 300},
+            },
+            "designModule": {
+                "enrollmentInfo": {"count": "1000" + "E" * 300},
+                "phases": ["PHASE1"]
+            },
+            "outcomesModule": {
+                "primaryOutcomes": [{"measure": "M" * 1500}]
+            }
+        }
+    }
+
+    with patch("src.main.fetch_trial_data", return_value=mock_data), \
+         patch("src.main.safe_json_load", return_value=[]), \
+         patch("src.main.update_history", return_value=[]), \
+         patch("src.main.save_snapshot"), \
+         patch("src.main.compare_snapshots", return_value=None):
+
+        report, _ = process_trial(trial, target_name)
+
+        assert len(report["name"]) == 1000
+        assert len(report["target"]) == 255
+        assert len(report["sponsor"]) == 255
+        assert len(report["status"]) == 255
+        assert len(report["last_updated"]) == 255
+        assert len(report["study_start"]) == 255
+        assert len(report["study_end"]) == 255
+        assert len(report["enrollment"]) == 255
+        assert len(report["primary_outcome"]) == 1000
+
+        assert report["name"] == "N" * 1000
+        assert report["target"] == "T" * 255
+
+
 def test_http_redirect_security():
     """Verify that fetch_trial_data and search_trials reject insecure or unexpected redirects."""
     from src.crawler import fetch_trial_data
