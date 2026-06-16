@@ -504,6 +504,12 @@ targets:
   - id: NCT07561437
     name: NK521 in the Treatment of Malignant Ascites Associated With Advanced Solid
       Tumors
+  - id: NCT07647055
+    name: Single-Center CyTOF and Viral Imprinting Study in Postoperative Multiple
+      Pulmonary Nodules
+  - id: NCT07647484
+    name: Peripheral Blood CyTOF and Viral Imprinting in Postoperative Multiple Pulmonary
+      Nodules
 - description: B7-H3 타겟 임상시험 모니터링
   name: B7-H3
   trials:
