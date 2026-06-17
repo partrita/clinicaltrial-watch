@@ -93,7 +93,7 @@ def discover_all_targets() -> List[Dict[str, Any]]:
                     with open(summary_path, "r", encoding="utf-8") as f:
                         data = json.load(f)
                         if data and isinstance(data, list) and isinstance(data[0], dict):
-                            name = data[0].get("target", d)
+                            name = data[0].get("target") or d
                             # Security enhancement: Truncate target name to prevent DoS (CWE-400)
                             safe_name = str(name)[:255]
                             # Security enhancement: Use sanitized ID as key to prevent path collisions
