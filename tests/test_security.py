@@ -421,6 +421,7 @@ def test_sanitize_csv_value_extended():
     assert sanitize_csv_value("\x1b=SUM(1+1)") == "'\x1b=SUM(1+1)"
     assert sanitize_csv_value("\v=SUM(1+1)") == "'\v=SUM(1+1)"
     assert sanitize_csv_value("\f=SUM(1+1)") == "'\f=SUM(1+1)"
+    assert sanitize_csv_value("`=SUM(1+1)") == "'`=SUM(1+1)"
 
     # Leading whitespace bypasses (including non-ASCII)
     assert sanitize_csv_value(" \t\n\r=1+1") == "' \t\n\r=1+1"
