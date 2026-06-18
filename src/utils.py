@@ -77,7 +77,7 @@ def check_file_size(filepath: str, max_size: int = MAX_CONFIG_SIZE) -> None:
 
 # List of dangerous characters that can trigger formula execution in Excel/Google Sheets
 # Also includes '|' (pipe) as a defensive measure against downstream parser confusion.
-DANGEROUS_CSV_CHARS = {"=", "+", "-", "@", ";", "%", "|", "\t", "\r", "\n", "\v", "\f", "\x1b"}
+DANGEROUS_CSV_CHARS = {"=", "+", "-", "@", ";", "%", "|", "\t", "\r", "\n", "\v", "\f", "\x1b", "`"}
 
 
 # Pre-compiled regex for NCT ID validation (faster than string pattern)
