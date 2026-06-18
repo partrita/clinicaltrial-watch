@@ -441,7 +441,11 @@ def flatten_dict(
                         parts = []
                         current_len = 0
                         for item in truncated_list:
-                            item_str = str(item)
+                            try:
+                                item_str = str(item)
+                            except RecursionError:
+                                # Security enhancement: Prevent crash on deeply nested objects (CWE-400)
+                                item_str = "[Complex Object: Too Deep]"
                             needed = len(item_str)
                             if parts:
                                 needed += 2  # ", " separator
@@ -462,7 +466,11 @@ def flatten_dict(
                         res_parts = []
                         current_len = 2  # Start with length of "[]"
                         for item in truncated_list:
-                            item_json = json.dumps(item, ensure_ascii=False)
+                            try:
+                                item_json = json.dumps(item, ensure_ascii=False)
+                            except RecursionError:
+                                # Security enhancement: Prevent crash on deeply nested objects (CWE-400)
+                                item_json = '"[Complex Object: Too Deep]"'
                             needed = len(item_json)
                             if res_parts:
                                 needed += 2  # ", " separator
