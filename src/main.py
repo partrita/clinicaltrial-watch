@@ -469,7 +469,7 @@ def flatten_dict(
                             try:
                                 item_json = json.dumps(item, ensure_ascii=False)
                             except RecursionError:
-                                # Security enhancement: Prevent crash on deeply nested objects (CWE-400)
+                                print("Warning: RecursionError encountered during complex list item serialization. Using placeholder.")
                                 item_json = '"[Complex Object: Too Deep]"'
                             needed = len(item_json)
                             if res_parts:
