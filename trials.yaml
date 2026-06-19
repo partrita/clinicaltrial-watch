@@ -510,6 +510,14 @@ targets:
   - id: NCT07647484
     name: Peripheral Blood CyTOF and Viral Imprinting in Postoperative Multiple Pulmonary
       Nodules
+  - id: NCT07656077
+    name: Intestinal Tissue-Resident Memory T Cells and HIV-1 Persistence During Antiretroviral
+      Therapy
+  - id: NCT07657585
+    name: CIB In Vivo CAR-T Lentiviral Injection in Patients With Advanced Malignant
+      Tumors
+  - id: NCT07657416
+    name: NK521 in the Treatment of Advanced Solid Tumors
 - description: B7-H3 타겟 임상시험 모니터링
   name: B7-H3
   trials:

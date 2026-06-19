@@ -562,18 +562,7 @@ There are observational and laboratory data supporting the notion that the omega
 The mechanism(s) by which EPA might influence post-operative survival are not well understood. Recent data support the idea that the anti-CRC benefit of EPA may be mediated by modulating the intestinal microbiota and ameliorating tumour-permissive immunosuppressive mechanisms, including inhibition of the activity of regulatory T cells (Tregs) and myeloid-derived suppressor cells (MDSCs), as well as reduced synthesis of inflammatory mediators such as prostaglandin (PG) E2 and chemokine (C-C motif) ligand 2 (CCL2). Mice fed with a high-EPA-containing diet demonstrate 1) increased abundance of gut bacteria, such as Bifidobacterium and Lactobacillus genera that support the host anti-tumour immune response and improve the efficacy of cancer immunotherapy, and 2) decreased abundance of lipopolysaccharide (LPS)-producing bacteria that trigger chronic inflammation and can promote CRC. These data support a hypothesis that a prebiotic effect of EPA abrogates intra-tumoural immunosuppression and ameliorates systemic inflammation to improve survival of CRCLM patients.
 
 EMT2 trial participants are ideally placed to provide biospecimens that can be analysed in order to understand the mechanism(s) of action of EPA given that the laboratory data can eventually be linked to the clinical outcomes from the trial. Biospecimens can be obtained without interference with the EMT2 trial protocol. Stool, urine, and blood samples will be obtained 1) after EMT2 trial randomization, before starting EPA or placebo, 2) just before surgery, and 3) at 6-monthly intervals thereafter, plus liver metastases tumour tissue during surgery. Using these biospecimens, the microbiome and immune pathways altered by EPA will be investigated in relation to participant survival. Mechanistic insights about the anti-CRC activity of EPA from the biospecimen collection project will maximize the knowledge and insights gained from the EMT2 trial and its participants, thereby leading to personalized use of EPA, which will be targeted at those most likely to benefit.",
-NCT05123482,"A Phase I/IIa Study of AZD8205 Given Alone or Combined, in Participants With Advanced/Metastatic Solid Malignancies",TIGIT,AstraZeneca,RECRUITING,"Breast Cancer, Biliary Tract Carcinoma, Ovarian Cancer, Endometrial Cancer, Squamous Non-Small Cell Lung Cancer","PHASE1, PHASE2",2026-06-16,2021-10-18,2027-09-29,460,The number of patients with adverse events,Changed,2026-06-18,"**[RECENT CHANGES FOUND]**
-Field `statusModule.statusVerifiedDate` changed from `2026-05` to `2026-06`
-Field `statusModule.lastUpdateSubmitDate` changed from `2026-05-15` to `2026-06-16`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-05-18` to `2026-06-17`
-Field `contactsLocationsModule.locations.[38]city` changed from `Rozzano` to `Milan`
-Field `contactsLocationsModule.locations.[38]zip` changed from `20089` to `20159`
-Field `contactsLocationsModule.locations.[38]geoPoint.lat` changed from `45.38193` to `42.78235`
-Field `contactsLocationsModule.locations.[38]geoPoint.lon` changed from `9.1559` to `12.59836`
-Field `contactsLocationsModule.locations.[65]status` changed from `RECRUITING` to `COMPLETED`
-
-***
-This study is a Phase I/IIa Multi-center, Open-label Master Protocol Dose Escalation and Expansion Study of AZD8205 as Monotherapy and in Combination with Anticancer Agents in Participants with Advanced Solid Tumors",True
+NCT05123482,"A Phase I/IIa Study of AZD8205 Given Alone or Combined, in Participants With Advanced/Metastatic Solid Malignancies",TIGIT,AstraZeneca,RECRUITING,"Breast Cancer, Biliary Tract Carcinoma, Ovarian Cancer, Endometrial Cancer, Squamous Non-Small Cell Lung Cancer","PHASE1, PHASE2",2026-06-16,2021-10-18,2027-09-29,460,The number of patients with adverse events,Changed,2026-06-18,"This study is a Phase I/IIa Multi-center, Open-label Master Protocol Dose Escalation and Expansion Study of AZD8205 as Monotherapy and in Combination with Anticancer Agents in Participants with Advanced Solid Tumors",
 NCT07161414,A Study to Investigate the Pharmacokinetics and Safety of Subcutaneous Rilvegostomig in Adult Participants With Advanced Solid Tumors Previously Treated With Standard of Care Therapy,TIGIT,AstraZeneca,RECRUITING,Advanced Solid Tumors,PHASE1,2026-06-09,2025-11-25,2029-07-24,40,Area under the Concentration-time Curve During One Dosing Interval (AUCtau),Changed,2026-06-11,"This is a Phase I, open-label, multicenter, multi-part, dose finding and dose confirmation study to evaluate the PK and safety of SC rilvegostomig.
 
 The study includes 2 parts: Part 1 (Dose Finding) and Part 2 (Dose Confirmation).
@@ -788,7 +777,76 @@ The primary objective of this study is to evaluate pathologic response to pre-op
 Secondary objectives of this study include assessing safety of the intervention, and assessing phenotyping immune infiltrates in non-pathology complete responders (pCRs), as well as assessment of changes to the systemic immune system (e.g. peripheral blood lymphocytes (PBLs)) in pCRs vs partial responders (pPR) vs non responders.
 
 The exploratory objective will include assessing one-year recurrence rates after completion of NeoAdjuvant-Adjuvant therapy.",
-NCT07221253,A Study of Rilvegostomig or Durvalumab Plus Chemotherapy for First-Line Treatment of Biliary Tract Cancer (ARTEMIDE-Biliary02),TIGIT,AstraZeneca,RECRUITING,Biliary Tract Cancer,PHASE3,2026-03-16,2025-12-04,2029-07-04,1100,Overall Survival (OS) in the PDL1 ≥ 1% population,Changed,2026-05-26,The purpose of this study is to measure the efficacy and safety of rilvegostomig with gemcitabine plus cisplatin vs. durvalumab with gemcitabine plus cisplatin as first line treatment for patients with advanced BTC.,
+NCT07221253,A Study of Rilvegostomig or Durvalumab Plus Chemotherapy for First-Line Treatment of Biliary Tract Cancer (ARTEMIDE-Biliary02),TIGIT,AstraZeneca,RECRUITING,Biliary Tract Cancer,PHASE3,2026-06-17,2025-12-04,2029-07-31,1100,Overall Survival (OS) in the PDL1 ≥ 1% population,Changed,2026-06-19,"**[RECENT CHANGES FOUND]**
+Field `statusModule.statusVerifiedDate` changed from `2026-03` to `2026-06`
+Field `statusModule.primaryCompletionDateStruct.date` changed from `2029-07-04` to `2029-07-31`
+Field `statusModule.completionDateStruct.date` changed from `2029-07-04` to `2029-07-31`
+Field `statusModule.lastUpdateSubmitDate` changed from `2026-03-16` to `2026-06-17`
+Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-03-17` to `2026-06-18`
+Field `contactsLocationsModule.locations.[2]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[4]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[7]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[17]zip` changed from `40207` to `40217`
+Field `contactsLocationsModule.locations.[18]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[18]zip` changed from `21205` to `21231`
+Field `contactsLocationsModule.locations.[31]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[6]city` changed from `Stanford` to `Houston`
+Field `contactsLocationsModule.locations.[6]state` changed from `California` to `Texas`
+Field `contactsLocationsModule.locations.[6]zip` changed from `94305-5847` to `77030`
+Field `contactsLocationsModule.locations.[6]geoPoint.lat` changed from `37.42411` to `29.76328`
+Field `contactsLocationsModule.locations.[6]geoPoint.lon` changed from `-122.16608` to `-95.36327`
+Field `contactsLocationsModule.locations.[35]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[37]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[38]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[40]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[44]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[50]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[54]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[55]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[56]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[57]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[59]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[60]status` changed from `SUSPENDED` to `WITHDRAWN`
+Field `contactsLocationsModule.locations.[61]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[63]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[64]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[67]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[68]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[69]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[70]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[71]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[72]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[73]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[74]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[75]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[76]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[77]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[78]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[79]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[104]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[105]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[106]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[107]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[109]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[110]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[113]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[115]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[120]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[121]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[122]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[126]status` changed from `NOT_YET_RECRUITING` to `WITHDRAWN`
+Field `contactsLocationsModule.locations.[131]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[134]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[138]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[140]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[142]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[151]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[153]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[155]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+Field `contactsLocationsModule.locations.[164]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
+
+***
+The purpose of this study is to measure the efficacy and safety of rilvegostomig with gemcitabine plus cisplatin vs. durvalumab with gemcitabine plus cisplatin as first line treatment for patients with advanced BTC.",True
 NCT05676931,Study With Various Immunotherapy Treatments in Participants With Lung Cancer,TIGIT,Gilead Sciences,ACTIVE_NOT_RECRUITING,Advanced Non-Small Cell Lung Cancer,PHASE2,2026-05-28,2023-02-21,2027-12,400,Objective response rate (ORR) as measured by Response Evaluation Criteria in Solid Tumors (RECIST v1.1),Changed,2026-06-02,"The study includes multiple substudy arms (Substudy A, B, C), which will evaluate immunotherapy-based combinations.",
 NCT06790706,IMMUNORARE5: A National Platform of 5 Academic Phase II Trials Coordinated by Lyon University Hospital to Assess the Safety and the Efficacy of the IMMUNOtherapy With Domvanalimab + Zimberelimab Combination in Patients With Advanced RARE Cancers,TIGIT,Hospices Civils de Lyon,RECRUITING,"Peritoneal Mesothelioma, Gestational Trophoblastic Tumor, Thymoma and Thymic Carcinoma, Anaplastic Thyroid Carcinomas, Gastroenteropancreatic Neuroendocrine Tumor, Carcinoid Tumor",PHASE2,2025-10-01,2025-10-01,2031-06,154,"Progression-free survival rate (cohort 1, 3 and 5)",No Change,2026-02-05,"Immune checkpoint inhibitors (ICI) have revolutionized the management of advanced cancers. However, most rare cancers have been excluded from this progress due to the lack of clinical trials involving these diseases. After the standard first-line treatment, there are no other validated treatments for most of them. The management of these patients in ≥ 2nd line treatment relies on historic poorly effective regimens.
 
@@ -821,17 +879,7 @@ NCT04305041,Substudy 02A: Safety and Efficacy of Pembrolizumab in Combination Wi
 The goal of substudy 02A is to evaluate the safety and efficacy of investigational treatment arms in participants with PD-1 refractory melanoma to identify the investigational agent(s) that, when used in combination, are superior to the current treatment options/historical control available.
 
 As of Amendment 4 (effective date: 05JAN2022), a third arm has been opened to participant enrollment, treatment with pembrolizumab and all-trans retinoic acid (ATRA). Enrollment into the first two arms, treatment with pembrolizumab + quavonlimab+ vibostolimab and treatment with pembrolizumab + quavonlimab + lenvatinib has been completed per protocol as of September 2021.",
-NCT06996782,A Platform Study in Non-Small Cell Lung Cancer (NSCLC),TIGIT,AstraZeneca,RECRUITING,Advanced or Metastatic Non-small Cell Lung Cancer,"PHASE1, PHASE2",2026-06-16,2025-11-24,2029-02-23,152,Part A and Part B: Number of participants with adverse events (AEs) and serious adverse events (SAEs),Changed,2026-06-18,"**[RECENT CHANGES FOUND]**
-Field `statusModule.statusVerifiedDate` changed from `2026-04` to `2026-06`
-Field `statusModule.lastUpdateSubmitDate` changed from `2026-04-30` to `2026-06-16`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-05-01` to `2026-06-17`
-Field `contactsLocationsModule.locations.[3]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[39]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[42]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[43]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-
-***
-This is a multicentre, open-label study to evaluate the safety and efficacy of various combinations of study interventions in participants with advanced or metastatic NSCLC (mNSCLC).
+NCT06996782,A Platform Study in Non-Small Cell Lung Cancer (NSCLC),TIGIT,AstraZeneca,RECRUITING,Advanced or Metastatic Non-small Cell Lung Cancer,"PHASE1, PHASE2",2026-06-16,2025-11-24,2029-02-23,152,Part A and Part B: Number of participants with adverse events (AEs) and serious adverse events (SAEs),Changed,2026-06-18,"This is a multicentre, open-label study to evaluate the safety and efficacy of various combinations of study interventions in participants with advanced or metastatic NSCLC (mNSCLC).
 
 The study will include a sub-study (sub-study 2) focused on a specific treatment that may include 2 parts -
 
@@ -840,7 +888,7 @@ The study will include a sub-study (sub-study 2) focused on a specific treatment
 
 The originally planned Sub-study 1 was withdrawn (cancelled) and will not be conducted.
 
-Sub-study 2 will evaluate the safety, tolerability, and anti-tumour activity of rilvegostomig plus standard of care (SoC) platinum-based chemotherapy, with or without ramucirumab.",True
+Sub-study 2 will evaluate the safety, tolerability, and anti-tumour activity of rilvegostomig plus standard of care (SoC) platinum-based chemotherapy, with or without ramucirumab.",
 NCT05665595,A Study of Adjuvant Pembrolizumab/Vibostolimab (MK-7684A) Versus Pembrolizumab for Resected High-Risk Melanoma in Participants With High-Risk Stage II-IV Melanoma (MK-7684A-010/KEYVIBE-010),TIGIT,Merck Sharp & Dohme LLC,COMPLETED,Melanoma,PHASE3,2025-10-03,2023-01-19,2025-09-26,1594,Recurrence-Free Survival (RFS),Changed,2026-05-26,"With Amendment 4, participants will discontinue treatment with pembrolizumab/vibostolimab.
 
 The protocol-specified futility analysis of the primary outcome measure was completed with a data cut-off of 06-Mar-2024 (Primary Completion Date) and served as the final analysis of the primary outcome measure. Per protocol, 192 participants enrolled after the primary completion date and will be analyzed in the End of Trial analysis.",
@@ -902,3 +950,14 @@ Primary Objectives: To evaluate the safety and tolerability, and to determine th
 Secondary Objectives: To assess the preliminary anti-tumor efficacy including objective response rate (ORR), disease control rate (DCR), progression-free survival (PFS), overall survival (OS), duration of response (DOR), puncture-free survival (PuFS), and changes in tumor markers, as well as health-related quality of life (HRQoL).",
 NCT07647055,Single-Center CyTOF and Viral Imprinting Study in Postoperative Multiple Pulmonary Nodules,TIGIT,The First Affiliated Hospital of Guangzhou Medical University,NOT_YET_RECRUITING,Multiple Pulmonary Nodules,N/A,2026-06-09,2026-07,2028-12,200,Change from baseline in percentage of peripheral blood CD8+ CD57+ T cells measured by CyTOF,No Change,2026-06-16,"This multicenter prospective cohort study will enroll adults who have undergone resection of a primary pulmonary nodule and have residual multiple pulmonary nodules or require routine postoperative pulmonary nodule follow-up. During clinically indicated follow-up visits, a small amount of peripheral venous blood will be collected at the same time as routine blood draws for research CyTOF immune phenotyping and viral imprinting-related serology. The study will not assign participants to treatment, change follow-up schedules, imaging, medication, surgery, or other clinical care. Research laboratory results will not be returned to participants or entered into medical records. The study will describe longitudinal peripheral immune-cell profiles and explore associations among T/B/NK cell phenotypes, T-cell differentiation and senescence/exhaustion markers, viral imprinting markers, and postoperative residual or new pulmonary nodule evolution.",
 NCT07647484,Peripheral Blood CyTOF and Viral Imprinting in Postoperative Multiple Pulmonary Nodules,TIGIT,The First Affiliated Hospital of Guangzhou Medical University,NOT_YET_RECRUITING,Multiple Pulmonary Nodules,N/A,2026-06-12,2026-07,2028-12,200,Change in percentage from baseline in peripheral blood CyTOF-defined immune phenotype parameters,No Change,2026-06-16,"The study is designed as a multicenter, prospective, non-randomized observational cohort. Eligible participants will be identified in thoracic surgery clinics, inpatient services, or routine postoperative follow-up programs at participating centers. After written informed consent, research blood samples of no more than 10 mL per time point will be collected together with routine clinical blood draws when available. No additional clinic visit, imaging examination, treatment, surgery, drug, device, vaccination, or other clinical intervention will be scheduled for research purposes. Peripheral blood will be analyzed using CyTOF mass cytometry to characterize major T-cell, B-cell, and NK-cell lineages, T-cell Naive/TCM/TEM/TEMRA differentiation, CD57-related senescence, activation markers, and immune checkpoint/exhaustion-related markers. Viral imprinting-related serology may include CMV IgG, EBV VCA-IgG, EBV EBNA-IgG, HPV L1-related antibodies, or other tests available within the approved institutional laboratory scope. Clinical and exposure data will be abstracted from routine records and study CRFs, including demographics, smoking and exposure history, relevant comorbidities, pulmonary nodule characteristics, pathology, imaging follow-up, and subsequent biopsy or surgery. Analyses will describe longitudinal immune phenotypes and evaluate exploratory associations between immune reserve, immune senescence, viral imprinting markers, and pulmonary nodule stability, enlargement, new nodule development, imaging risk upgrade, repeat biopsy, or repeat surgery. All research assay results are for group-level research only and will not be used to guide individual diagnosis, treatment, imaging interval, medication, or surgical decisions.",
+NCT07656077,Intestinal Tissue-Resident Memory T Cells and HIV-1 Persistence During Antiretroviral Therapy,TIGIT,"ANRS, Emerging Infectious Diseases",NOT_YET_RECRUITING,"HIV-1 Infection, HIV Reservoir, Antiretroviral Therapy",NA,2026-06-14,2026-08-01,2030-07-31,30,Frequency and Immunophenotypic Profile of Intestinal CD4+ and CD8+ Tissue-Resident Memory T Cells Measured by Multiparameter Flow Cytometry,No Change,2026-06-19,"Tissue-resident memory T lymphocytes (TRM) are a specialized population of memory T cells that reside permanently within tissues and play a central role in local immune defense. In HIV-1 infection, the intestinal mucosa represents a major site of viral replication, immune dysfunction, and long-term viral persistence despite effective antiretroviral therapy (ART). Intestinal CD4+ T cells are highly susceptible to HIV-1 infection and undergo profound depletion early during infection, while incomplete immune restoration persists under ART.
+
+Emerging evidence suggests that intestinal TRM CD4+ cells may be particularly susceptible to HIV-1 infection and may contribute to the maintenance of viral reservoirs because of their long lifespan and tissue retention properties. In parallel, TRM CD8+ cells may participate in local antiviral immune responses, although their functions may be impaired in the chronic inflammatory environment associated with HIV infection.
+
+The objectives of this physiopathological study are to improve understanding of the mechanisms involved in defective restoration of intestinal TRM populations during suppressive ART and to evaluate the contribution of TRM CD4+ cells to HIV-1 persistence. Exploratory objectives include the phenotypic, transcriptomic, and functional characterization of intestinal TRM CD4+ and CD8+ cells; assessment of the susceptibility of intestinal TRM CD4+ cells to HIV-1 infection; evaluation of their role as viral reservoirs, including intact proviruses; and investigation of mechanisms regulating tissue retention and recirculation of ex-TRM cells in the intestinal mucosa.
+
+This is a monocentric interventional physiopathological study with minimal risks and constraints (RIPH2). The study will enroll 20 people living with HIV-1 receiving suppressive ART and 10 HIV-seronegative controls matched for age and sex. Participants will be recruited among individuals undergoing routine colonoscopy, particularly for colorectal cancer screening indications. Study procedures consist of additional colonic mucosal biopsies collected during the clinically indicated colonoscopy and blood sampling performed on the day of the procedure.",
+NCT07657585,CIB In Vivo CAR-T Lentiviral Injection in Patients With Advanced Malignant Tumors,TIGIT,"Cancer Institute and Hospital, Chinese Academy of Medical Sciences",NOT_YET_RECRUITING,Advanced Malignant Solid Tumors,PHASE1,2026-06-14,2026-07-01,2028-05-31,91,Incidence of Dose-Limiting Toxicities (DLTs) and Determination of Maximum Tolerated Dose (MTD),No Change,2026-06-19,"This is a single-center, open-label, phase 1 dose-escalation study. Eligible patients will receive CIB in vivo CAR-T lentiviral injection at escalating dose levels. Safety assessments include adverse events, laboratory tests, vital signs, and physical examinations. Efficacy assessments include tumor response evaluation according to RECIST v1.1. Pharmacokinetic and immunogenicity assessments will also be performed.",
+NCT07657416,NK521 in the Treatment of Advanced Solid Tumors,TIGIT,"Base Therapeutics (Shanghai) Co., Ltd.",NOT_YET_RECRUITING,"Hepatocellular Carcinoma (HCC), Ovarian Cancer, Malignant Ascites",EARLY_PHASE1,2026-06-15,2026-06,2028-07,18,Incidence of Treatment-Emergent Adverse Events and dose-limiting toxicities [Safety and Tolerability],No Change,2026-06-19,"Eligible subjects with advanced hepatocellular carcinoma and ovarian cancer will be divided into two treatment groups based on the volume of ascites. Group A consists of patients with mild ascites, who will receive NK521 via intravenous infusion. Group B includes patients with moderate to severe ascites, who will be treated with investigator-selected systemic regimens combined with intraperitoneal perfusion of NK521.
+
+Systemic and local medications will be administered in accordance with the treatment regimens of respective groups, and the safety of the study drug will be monitored. Preliminary anti-tumor efficacy will be assessed using the RECIST 1.1 criteria at Week 6 after the first infusion of NK521. Catheter placement and ascites drainage will be performed 3 days prior to the first intraperitoneal perfusion of NK521. After the initial intraperitoneal perfusion treatment, the therapeutic effect on ascites will be evaluated per the WHO criteria for ascites assessment.",
