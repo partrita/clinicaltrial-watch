@@ -536,7 +536,16 @@ def atomic_write(
                 # Some systems/filesystems don't support fsync on all file types
                 pass
 
-        # After successfully closing the context, replace the original file
+        # After successfully closing the context, preserve original permissions (CWE-732)
+        if os.path.exists(filepath):
+            try:
+                mode = os.stat(filepath).st_mode & 0o777
+                os.chmod(tmppath, mode)
+            except OSError:
+                # Fallback for systems that might not support chmod on temp files
+                pass
+
+        # Replace the original file with the new one
         os.replace(tmppath, filepath)
     except Exception:
         # If any error occurred, try to remove the temporary file
