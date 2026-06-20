@@ -2294,3 +2294,32 @@ def test_atomic_write_success():
     # Cleanup
     if os.path.exists(path):
         os.remove(path)
+
+def test_atomic_write_preserves_permissions():
+    """Verify that atomic_write preserves the file mode (permissions) of the target file."""
+    from src.utils import atomic_write
+    import os
+
+    path = "tests/test_permissions_persistence.txt"
+    # Create original file with specific permissions (0644)
+    # Note: 0o644 is a common permission set.
+    # NamedTemporaryFile usually creates files with 0o600.
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("initial")
+    os.chmod(path, 0o644)
+
+    initial_mode = os.stat(path).st_mode & 0o777
+
+    # Update file using atomic_write
+    with atomic_write(path, encoding="utf-8") as f:
+        f.write("updated")
+
+    final_mode = os.stat(path).st_mode & 0o777
+
+    try:
+        # Check that it didn't revert to 0o600
+        assert final_mode == initial_mode
+        assert final_mode == 0o644
+    finally:
+        if os.path.exists(path):
+            os.remove(path)
