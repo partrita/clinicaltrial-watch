@@ -535,44 +535,78 @@ def process_trial(
     raw_data = flatten_dict(new_data)
     raw_data["_target"] = target_name
 
-    protocol = new_data.get("protocolSection", {})
-    status_mod = protocol.get("statusModule", {})
+    # Security enhancement: Safely extract nested modules with type validation (CWE-400)
+    protocol = new_data.get("protocolSection")
+    if not isinstance(protocol, dict):
+        protocol = {}
 
-    sponsor = (
-        protocol.get("sponsorCollaboratorsModule", {})
-        .get("leadSponsor", {})
-        .get("name", "N/A")
-    )
-    start_date = status_mod.get("startDateStruct", {}).get("date", "N/A")
-    end_date = status_mod.get("completionDateStruct", {}).get("date", "N/A")
-    enrollment = (
-        protocol.get("designModule", {}).get("enrollmentInfo", {}).get("count", "N/A")
-    )
+    status_mod = protocol.get("statusModule")
+    if not isinstance(status_mod, dict):
+        status_mod = {}
 
-    primary_outcomes = protocol.get("outcomesModule", {}).get("primaryOutcomes", [])
-    primary_outcome = (
-        primary_outcomes[0].get("measure", "N/A") if primary_outcomes else "N/A"
-    )
+    sponsor_mod = protocol.get("sponsorCollaboratorsModule")
+    if not isinstance(sponsor_mod, dict):
+        sponsor_mod = {}
+
+    lead_sponsor = sponsor_mod.get("leadSponsor")
+    sponsor = lead_sponsor.get("name", "N/A") if isinstance(lead_sponsor, dict) else "N/A"
+
+    start_date_struct = status_mod.get("startDateStruct")
+    start_date = start_date_struct.get("date", "N/A") if isinstance(start_date_struct, dict) else "N/A"
+
+    end_date_struct = status_mod.get("completionDateStruct")
+    end_date = end_date_struct.get("date", "N/A") if isinstance(end_date_struct, dict) else "N/A"
+
+    design_mod = protocol.get("designModule")
+    if not isinstance(design_mod, dict):
+        design_mod = {}
+
+    enrollment_info = design_mod.get("enrollmentInfo")
+    enrollment = enrollment_info.get("count", "N/A") if isinstance(enrollment_info, dict) else "N/A"
+
+    outcomes_mod = protocol.get("outcomesModule")
+    if not isinstance(outcomes_mod, dict):
+        outcomes_mod = {}
+
+    primary_outcomes_list = outcomes_mod.get("primaryOutcomes")
+    if isinstance(primary_outcomes_list, list) and primary_outcomes_list:
+        first_outcome = primary_outcomes_list[0]
+        primary_outcome = (
+            first_outcome.get("measure", "N/A")
+            if isinstance(first_outcome, dict)
+            else "N/A"
+        )
+    else:
+        primary_outcome = "N/A"
 
     study_status = status_mod.get("overallStatus", "N/A")
     last_submit_date = status_mod.get("lastUpdateSubmitDate", "N/A")
-    conditions_list = protocol.get("conditionsModule", {}).get("conditions", [])
+
+    conditions_mod = protocol.get("conditionsModule")
+    if not isinstance(conditions_mod, dict):
+        conditions_mod = {}
+    conditions_list = conditions_mod.get("conditions")
+
     # Security enhancement: Limit list size and string length to prevent DoS (CWE-400)
     if isinstance(conditions_list, list) and conditions_list:
         conditions = ", ".join(str(c)[:255] for c in conditions_list[:100])
     else:
         conditions = "N/A"
 
-    phases_list = protocol.get("designModule", {}).get("phases", [])
+    phases_list = design_mod.get("phases")
     # Security enhancement: Limit list size and string length to prevent DoS (CWE-400)
     if isinstance(phases_list, list) and phases_list:
         phases = ", ".join(str(p)[:255] for p in phases_list[:10])
     else:
         phases = "N/A"
 
-    detailed_desc = protocol.get("descriptionModule", {}).get(
+    description_mod = protocol.get("descriptionModule")
+    if not isinstance(description_mod, dict):
+        description_mod = {}
+
+    detailed_desc = description_mod.get(
         "detailedDescription",
-        protocol.get("descriptionModule", {}).get("briefSummary", "N/A"),
+        description_mod.get("briefSummary", "N/A"),
     )
     # Security enhancement: Truncate excessively long descriptions to prevent DoS
     detailed_desc = str(detailed_desc)[:10000]
