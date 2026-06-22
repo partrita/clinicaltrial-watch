@@ -53,6 +53,33 @@ except ImportError:
 
 # Configuration limits for DoS protection (CWE-400)
 MAX_CONFIG_SIZE = 10 * 1024 * 1024  # 10MB limit for local YAML/JSON config and data files
+MAX_VALUE_LENGTH = 10000
+
+
+def safe_str(obj: Any, max_length: int = MAX_VALUE_LENGTH) -> str:
+    """
+    Safely convert an object to a string, handling potential recursion errors
+    and enforcing a maximum length (CWE-400).
+    """
+    try:
+        s = str(obj)
+    except RecursionError:
+        return "[Complex Object: Too Deep]"
+    return s[:max_length]
+
+
+def safe_json_dumps(obj: Any, max_length: int = MAX_VALUE_LENGTH, **kwargs) -> str:
+    """
+    Safely convert an object to a JSON string, handling potential recursion errors
+    and enforcing a maximum length (CWE-400).
+    Note: Truncated JSON string may be invalid.
+    """
+    import json
+    try:
+        s = json.dumps(obj, **kwargs)
+    except RecursionError:
+        return '"[Complex Object: Too Deep]"'
+    return s[:max_length]
 
 
 def check_file_size(filepath: str, max_size: int = MAX_CONFIG_SIZE) -> None:
@@ -119,8 +146,8 @@ def sanitize_id(identifier: str) -> str:
     if not identifier:
         return "unknown"
 
-    # Limit identifier length before caching
-    safe_identifier = str(identifier)[:255]
+    # Limit identifier length before caching and handle recursion
+    safe_identifier = safe_str(identifier, 255)
     return _sanitize_id_cached(safe_identifier)
 
 
@@ -166,7 +193,7 @@ def escape_html(text: str) -> str:
         return ""
 
     # Limit length before caching to prevent memory exhaustion from large keys
-    text_str = str(text)[:65536]
+    text_str = safe_str(text, 65536)
     return _escape_html_cached(text_str)
 
 
@@ -277,8 +304,8 @@ def get_status_badge(status: str) -> str:
     """
     if not status:
         return ""
-    # Limit status string length before caching
-    safe_status = str(status)[:255]
+    # Limit status string length before caching and handle recursion
+    safe_status = safe_str(status, 255)
     return _get_status_badge_cached(safe_status)
 
 
@@ -308,8 +335,8 @@ def get_phase_badge(phase: str) -> str:
     if not phase:
         return escape_html("N/A")
 
-    # Limit phase string length before caching
-    safe_phase = str(phase)[:255]
+    # Limit phase string length before caching and handle recursion
+    safe_phase = safe_str(phase, 255)
     return _get_phase_badge_cached(safe_phase)
 
 
@@ -335,9 +362,9 @@ def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
     if not monitor_status:
         return ""
 
-    # Limit string lengths before caching
-    safe_status = str(monitor_status)[:255]
-    safe_date = str(last_change_date)[:255] if last_change_date else None
+    # Limit string lengths before caching and handle recursion
+    safe_status = safe_str(monitor_status, 255)
+    safe_date = safe_str(last_change_date, 255) if last_change_date else None
     return _get_update_badge_cached(safe_status, safe_date)
 
 
@@ -362,15 +389,15 @@ def format_truncated_with_tooltip(text: str, max_length: int = 30) -> str:
     if not text:
         return ""
 
-    # Limit total text length before caching
-    safe_text = str(text)[:10000]
+    # Limit total text length before caching and handle recursion
+    safe_text = safe_str(text, 10000)
     return _format_truncated_with_tooltip_cached(safe_text, max_length)
 
 
 @lru_cache(maxsize=1024)
 def get_changed_count_badge(count: int) -> str:
     """Return a badge for changed trial count."""
-    safe_count = escape_html(str(count))
+    safe_count = escape_html(safe_str(count))
     if count > 0:
         return f'<span class="badge bg-danger" aria-label="{safe_count} trials changed">{safe_count}</span>'
     return f'<span class="badge bg-success" aria-label="0 trials changed">0</span>'
@@ -398,8 +425,8 @@ def format_enrollment(value: Any) -> str:
     if value is None or value == "" or value == "N/A":
         return "N/A"
 
-    # Limit string length before caching
-    safe_value = str(value)[:255]
+    # Limit string length before caching and handle recursion
+    safe_value = safe_str(value, 255)
     return _format_enrollment_cached(safe_value)
 
 
@@ -425,8 +452,8 @@ def format_diff_line(line: str) -> str:
     if not line:
         return ""
 
-    # Limit line length before caching
-    safe_line = str(line)[:10000]
+    # Limit line length before caching and handle recursion
+    safe_line = safe_str(line, 10000)
     return _format_diff_line_cached(safe_line)
 
 
@@ -452,8 +479,8 @@ def format_diff_line_markdown(line: str) -> str:
     if not line:
         return ""
 
-    # Limit line length before caching
-    safe_line = str(line)[:10000]
+    # Limit line length before caching and handle recursion
+    safe_line = safe_str(line, 10000)
     return _format_diff_line_markdown_cached(safe_line)
 
 

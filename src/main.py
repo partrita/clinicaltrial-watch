@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
 from crawler import fetch_trial_data, save_snapshot, reset_session
-from utils import sanitize_id, is_valid_nct_id, sanitize_csv_value, check_file_size, atomic_write
+from utils import sanitize_id, is_valid_nct_id, sanitize_csv_value, check_file_size, atomic_write, safe_str, safe_json_dumps, MAX_VALUE_LENGTH
 from diff_engine import compare_snapshots, format_diff
 from generate_target_pages import main as generate_pages
 
@@ -23,7 +23,6 @@ MAX_TARGETS = 100
 MAX_TRIALS_PER_TARGET = 1000
 MAX_HISTORY_ENTRIES = 100
 MAX_DEPTH = 20
-MAX_VALUE_LENGTH = 10000
 
 
 def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
@@ -120,16 +119,18 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
         # Security enhancement: Truncate metadata
         orig_name = target.get("name")
         if orig_name is not None:
-            target["name"] = str(orig_name)[:255]
-            if len(str(orig_name)) > 255:
+            target["name"] = safe_str(orig_name, 255)
+            if len(target["name"]) == 255:
+                # If length matches the limit, assume truncation occurred
+                # (or at least it's at the limit)
                 any_truncation = True
         else:
             target["name"] = "Unknown"
 
         orig_desc = target.get("description")
         if orig_desc is not None:
-            target["description"] = str(orig_desc)[:2000]
-            if len(str(orig_desc)) > 2000:
+            target["description"] = safe_str(orig_desc, 2000)
+            if len(target["description"]) == 2000:
                 any_truncation = True
 
         target_name = target["name"]
@@ -177,8 +178,8 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
             # Security enhancement: Truncate trial name
             orig_trial_name = trial.get("name")
             if orig_trial_name is not None:
-                trial["name"] = str(orig_trial_name)[:1000]
-                if len(str(orig_trial_name)) > 1000:
+                trial["name"] = safe_str(orig_trial_name, 1000)
+                if len(trial["name"]) == 1000:
                     any_truncation = True
 
             if trial_id in seen_in_target:
@@ -386,9 +387,9 @@ def _get_flatten_key(parent_key: str, k: str, sep: str = "_") -> str:
     Truncates input BEFORE caching to prevent memory exhaustion DoS.
     """
     # Limit string lengths before caching
-    safe_parent = str(parent_key)[:255]
-    safe_k = str(k)[:255]
-    safe_sep = str(sep)[:10]
+    safe_parent = safe_str(parent_key, 255)
+    safe_k = safe_str(k, 255)
+    safe_sep = safe_str(sep, 10)
 
     return _get_flatten_key_cached(safe_parent, safe_k, safe_sep)
 
@@ -441,11 +442,7 @@ def flatten_dict(
                         parts = []
                         current_len = 0
                         for item in truncated_list:
-                            try:
-                                item_str = str(item)
-                            except RecursionError:
-                                print("Warning: RecursionError encountered during list item serialization. Using placeholder.")
-                                item_str = "[Complex Object: Too Deep]"
+                            item_str = safe_str(item)
                             needed = len(item_str)
                             if parts:
                                 needed += 2  # ", " separator
@@ -466,11 +463,7 @@ def flatten_dict(
                         res_parts = []
                         current_len = 2  # Start with length of "[]"
                         for item in truncated_list:
-                            try:
-                                item_json = json.dumps(item, ensure_ascii=False)
-                            except RecursionError:
-                                print("Warning: RecursionError encountered during complex list item serialization. Using placeholder.")
-                                item_json = '"[Complex Object: Too Deep]"'
+                            item_json = safe_json_dumps(item, ensure_ascii=False)
                             needed = len(item_json)
                             if res_parts:
                                 needed += 2  # ", " separator
@@ -482,11 +475,11 @@ def flatten_dict(
                             current_len += needed
                         result[new_key] = "[" + ", ".join(res_parts) + "]"
             else:
-                # Security enhancement: Truncate scalar strings to prevent DoS (CWE-400)
-                if isinstance(v, str):
-                    result[new_key] = v[:MAX_VALUE_LENGTH]
-                else:
+                # Security enhancement: Truncate scalar strings and handle recursion (CWE-400)
+                if isinstance(v, (int, float, bool)) or v is None:
                     result[new_key] = v
+                else:
+                    result[new_key] = safe_str(v)
 
     return result
 
@@ -559,14 +552,14 @@ def process_trial(
     conditions_list = protocol.get("conditionsModule", {}).get("conditions", [])
     # Security enhancement: Limit list size and string length to prevent DoS (CWE-400)
     if isinstance(conditions_list, list) and conditions_list:
-        conditions = ", ".join(str(c)[:255] for c in conditions_list[:100])
+        conditions = ", ".join(safe_str(c, 255) for c in conditions_list[:100])
     else:
         conditions = "N/A"
 
     phases_list = protocol.get("designModule", {}).get("phases", [])
     # Security enhancement: Limit list size and string length to prevent DoS (CWE-400)
     if isinstance(phases_list, list) and phases_list:
-        phases = ", ".join(str(p)[:255] for p in phases_list[:10])
+        phases = ", ".join(safe_str(p, 255) for p in phases_list[:10])
     else:
         phases = "N/A"
 
@@ -574,25 +567,25 @@ def process_trial(
         "detailedDescription",
         protocol.get("descriptionModule", {}).get("briefSummary", "N/A"),
     )
-    # Security enhancement: Truncate excessively long descriptions to prevent DoS
-    detailed_desc = str(detailed_desc)[:10000]
+    # Security enhancement: Truncate excessively long descriptions and handle recursion to prevent DoS
+    detailed_desc = safe_str(detailed_desc, 10000)
 
     diff = compare_snapshots(trial_id, new_data)
 
     # Security enhancement: Truncate metadata to prevent DoS (CWE-400)
     report_item = {
         "id": trial_id,
-        "name": str(trial.get("name", "N/A"))[:1000],
-        "target": str(target_name)[:255],
-        "sponsor": str(sponsor)[:255],
-        "status": str(study_status)[:255],
+        "name": safe_str(trial.get("name", "N/A"), 1000),
+        "target": safe_str(target_name, 255),
+        "sponsor": safe_str(sponsor, 255),
+        "status": safe_str(study_status, 255),
         "conditions": conditions,
         "phases": phases,
-        "last_updated": str(last_submit_date)[:255],
-        "study_start": str(start_date)[:255],
-        "study_end": str(end_date)[:255],
-        "enrollment": str(enrollment)[:255],
-        "primary_outcome": str(primary_outcome)[:1000],
+        "last_updated": safe_str(last_submit_date, 255),
+        "study_start": safe_str(start_date, 255),
+        "study_end": safe_str(end_date, 255),
+        "enrollment": safe_str(enrollment, 255),
+        "primary_outcome": safe_str(primary_outcome, 1000),
         "monitor_status": "No Change",
         "last_monitored_change": "No changes yet",
         "details": detailed_desc,
@@ -624,7 +617,7 @@ def process_trial(
         # Security enhancement: Validate record type and key existence (CWE-400)
         last_record = history[-1]
         if isinstance(last_record, dict) and "timestamp" in last_record:
-            report_item["last_monitored_change"] = str(last_record["timestamp"]).split(" ")[0]
+            report_item["last_monitored_change"] = safe_str(last_record["timestamp"], 10).split(" ")[0]
 
         # Check 30 day window using efficient string comparison (~80x faster than strptime)
         for record in reversed(history):  # Search from newest
@@ -632,7 +625,7 @@ def process_trial(
                 continue
 
             timestamp = record.get("timestamp")
-            if timestamp and str(timestamp)[:10] > thirty_days_ago_str:
+            if timestamp and safe_str(timestamp, 10) > thirty_days_ago_str:
                 report_item["monitor_status"] = "Changed"
                 break
 
@@ -709,7 +702,7 @@ def save_target_data(
         sorted_keys = sorted(list(all_keys))
 
         # Security enhancement: Sanitize headers to prevent CSV formula injection
-        headers = [sanitize_csv_value(str(k)) for k in sorted_keys]
+        headers = [sanitize_csv_value(safe_str(k)) for k in sorted_keys]
 
         # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
         with atomic_write(
@@ -722,7 +715,7 @@ def save_target_data(
             for row in all_raw_data:
                 sanitized_row = {}
                 for k, v in row.items():
-                    safe_k = sanitize_csv_value(str(k))
+                    safe_k = sanitize_csv_value(safe_str(k))
                     safe_v = sanitize_csv_value(v)
                     sanitized_row[safe_k] = safe_v
                 sanitized_raw.append(sanitized_row)
