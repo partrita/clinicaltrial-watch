@@ -535,44 +535,78 @@ def process_trial(
     raw_data = flatten_dict(new_data)
     raw_data["_target"] = target_name
 
-    protocol = new_data.get("protocolSection", {})
-    status_mod = protocol.get("statusModule", {})
+    protocol = new_data.get("protocolSection")
+    if not isinstance(protocol, dict):
+        protocol = {}
+    status_mod = protocol.get("statusModule")
+    if not isinstance(status_mod, dict):
+        status_mod = {}
 
-    sponsor = (
-        protocol.get("sponsorCollaboratorsModule", {})
-        .get("leadSponsor", {})
-        .get("name", "N/A")
-    )
-    start_date = status_mod.get("startDateStruct", {}).get("date", "N/A")
-    end_date = status_mod.get("completionDateStruct", {}).get("date", "N/A")
-    enrollment = (
-        protocol.get("designModule", {}).get("enrollmentInfo", {}).get("count", "N/A")
-    )
+    sponsor_module = protocol.get("sponsorCollaboratorsModule")
+    if not isinstance(sponsor_module, dict):
+        sponsor_module = {}
+    lead_sponsor = sponsor_module.get("leadSponsor")
+    if not isinstance(lead_sponsor, dict):
+        lead_sponsor = {}
+    sponsor = lead_sponsor.get("name", "N/A")
 
-    primary_outcomes = protocol.get("outcomesModule", {}).get("primaryOutcomes", [])
-    primary_outcome = (
-        primary_outcomes[0].get("measure", "N/A") if primary_outcomes else "N/A"
-    )
+    start_date_struct = status_mod.get("startDateStruct")
+    if not isinstance(start_date_struct, dict):
+        start_date_struct = {}
+    start_date = start_date_struct.get("date", "N/A")
+
+    end_date_struct = status_mod.get("completionDateStruct")
+    if not isinstance(end_date_struct, dict):
+        end_date_struct = {}
+    end_date = end_date_struct.get("date", "N/A")
+
+    design_module = protocol.get("designModule")
+    if not isinstance(design_module, dict):
+        design_module = {}
+    enrollment_info = design_module.get("enrollmentInfo")
+    if not isinstance(enrollment_info, dict):
+        enrollment_info = {}
+    enrollment = enrollment_info.get("count", "N/A")
+
+    outcomes_module = protocol.get("outcomesModule")
+    if not isinstance(outcomes_module, dict):
+        outcomes_module = {}
+    primary_outcomes = outcomes_module.get("primaryOutcomes", [])
+    if not isinstance(primary_outcomes, list):
+        primary_outcomes = []
+
+    primary_outcome = "N/A"
+    if primary_outcomes:
+        first_outcome = primary_outcomes[0]
+        if isinstance(first_outcome, dict):
+            primary_outcome = first_outcome.get("measure", "N/A")
 
     study_status = status_mod.get("overallStatus", "N/A")
     last_submit_date = status_mod.get("lastUpdateSubmitDate", "N/A")
-    conditions_list = protocol.get("conditionsModule", {}).get("conditions", [])
+
+    conditions_module = protocol.get("conditionsModule")
+    if not isinstance(conditions_module, dict):
+        conditions_module = {}
+    conditions_list = conditions_module.get("conditions", [])
     # Security enhancement: Limit list size and string length to prevent DoS (CWE-400)
     if isinstance(conditions_list, list) and conditions_list:
         conditions = ", ".join(str(c)[:255] for c in conditions_list[:100])
     else:
         conditions = "N/A"
 
-    phases_list = protocol.get("designModule", {}).get("phases", [])
+    phases_list = design_module.get("phases", [])
     # Security enhancement: Limit list size and string length to prevent DoS (CWE-400)
     if isinstance(phases_list, list) and phases_list:
         phases = ", ".join(str(p)[:255] for p in phases_list[:10])
     else:
         phases = "N/A"
 
-    detailed_desc = protocol.get("descriptionModule", {}).get(
+    description_module = protocol.get("descriptionModule")
+    if not isinstance(description_module, dict):
+        description_module = {}
+    detailed_desc = description_module.get(
         "detailedDescription",
-        protocol.get("descriptionModule", {}).get("briefSummary", "N/A"),
+        description_module.get("briefSummary", "N/A"),
     )
     # Security enhancement: Truncate excessively long descriptions to prevent DoS
     detailed_desc = str(detailed_desc)[:10000]

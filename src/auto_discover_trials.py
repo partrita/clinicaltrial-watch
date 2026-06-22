@@ -221,8 +221,12 @@ def extract_trials(api_studies: List[Dict[str, Any]]) -> List[Dict[str, str]]:
     trials = []
     for study in api_studies:
         try:
-            protocol = study.get("protocolSection", {})
-            identity = protocol.get("identificationModule", {})
+            protocol = study.get("protocolSection")
+            if not isinstance(protocol, dict):
+                protocol = {}
+            identity = protocol.get("identificationModule")
+            if not isinstance(identity, dict):
+                identity = {}
             nct_id = identity.get("nctId")
             title = identity.get("briefTitle")
             if nct_id and title:
