@@ -10,9 +10,9 @@ except ImportError:
     HAS_DEEPDIFF = False
 
 try:
-    from utils import sanitize_id, check_file_size
+    from utils import sanitize_id, check_file_size, safe_str
 except ImportError:
-    from src.utils import sanitize_id, check_file_size
+    from src.utils import sanitize_id, check_file_size, safe_str
 
 # Security limits for diff formatting to prevent DoS (CWE-400)
 MAX_CHANGES = 100
@@ -119,10 +119,10 @@ def format_diff(diff: Any) -> str:
                 lines.append(truncated_msg)
                 break
             # Security enhancement: Truncate large values to prevent DoS
-            old_val = str(change['old'])[:1000]
-            new_val = str(change['new'])[:1000]
+            old_val = safe_str(change['old'], 1000)
+            new_val = safe_str(change['new'], 1000)
             # Security enhancement: Truncate label/path
-            safe_label = str(label)[:MAX_PATH_LEN]
+            safe_label = safe_str(label, MAX_PATH_LEN)
             lines.append(f"{safe_label}: `{old_val}` -> `{new_val}`")
         return "\n".join(lines)
 
@@ -141,10 +141,10 @@ def format_diff(diff: Any) -> str:
                 path.replace("root", "").replace("['", "").replace("']", ".").strip(".")
             )
             # Security enhancement: Truncate path
-            clean_path = clean_path[:MAX_PATH_LEN]
+            clean_path = safe_str(clean_path, MAX_PATH_LEN)
             # Security enhancement: Truncate large values to prevent DoS
-            old_val = str(change['old_value'])[:1000]
-            new_val = str(change['new_value'])[:1000]
+            old_val = safe_str(change['old_value'], 1000)
+            new_val = safe_str(change['new_value'], 1000)
             summary.append(
                 f"Field `{clean_path}` changed from `{old_val}` to `{new_val}`"
             )
@@ -155,7 +155,7 @@ def format_diff(diff: Any) -> str:
             if check_limit():
                 break
             # Security enhancement: Truncate path
-            safe_path = str(path)[:MAX_PATH_LEN]
+            safe_path = safe_str(path, MAX_PATH_LEN)
             summary.append(f"New field added: `{safe_path}`")
 
     if "dictionary_item_removed" in diff and not check_limit():
@@ -163,7 +163,7 @@ def format_diff(diff: Any) -> str:
             if check_limit():
                 break
             # Security enhancement: Truncate path
-            safe_path = str(path)[:MAX_PATH_LEN]
+            safe_path = safe_str(path, MAX_PATH_LEN)
             summary.append(f"Field removed: `{safe_path}`")
 
     if check_limit():
