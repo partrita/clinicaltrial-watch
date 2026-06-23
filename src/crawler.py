@@ -105,7 +105,12 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                             return None
                         content.append(chunk)
 
-                    data = json.loads(b"".join(content))
+                    try:
+                        data = json.loads(b"".join(content))
+                    except RecursionError:
+                        print(f"Error: JSON response for {safe_trial_id} is too deeply nested (RecursionError)")
+                        return None
+
                     if not isinstance(data, dict):
                         print(f"Error: Malformed JSON response for {safe_trial_id} (not a dictionary)")
                         return None
@@ -193,7 +198,12 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                             return None
                         content.append(chunk)
 
-                    data = json.loads(b"".join(content))
+                    try:
+                        data = json.loads(b"".join(content))
+                    except RecursionError:
+                        print(f"Error: JSON response for {safe_trial_id} is too deeply nested (urllib, RecursionError)")
+                        return None
+
                     if not isinstance(data, dict):
                         print(f"Error: Malformed JSON response for {safe_trial_id} (urllib, not a dictionary)")
                         return None

@@ -259,6 +259,9 @@ def safe_json_load(file_path: str, default: Any = _SENTINEL) -> Any:
             return json.load(f)
     except FileNotFoundError:
         return default
+    except RecursionError:
+        print(f"Error: JSON file {file_path} is too deeply nested (RecursionError)")
+        raise
     except (json.JSONDecodeError, OSError, UnicodeDecodeError) as e:
         print(f"Error: Failed to load {file_path}: {e}")
         raise
