@@ -100,7 +100,12 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                             return []
                         content.append(chunk)
 
-                    data = json.loads(b"".join(content))
+                    try:
+                        data = json.loads(b"".join(content))
+                    except RecursionError:
+                        print(f"Error: Search response for {query_term} is too deeply nested (RecursionError)")
+                        return []
+
                     if not isinstance(data, dict):
                         print(f"Error: Malformed search response for {query_term} (not a dictionary)")
                         return []
@@ -187,7 +192,12 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                             return []
                         content.append(chunk)
 
-                    data = json.loads(b"".join(content))
+                    try:
+                        data = json.loads(b"".join(content))
+                    except RecursionError:
+                        print(f"Error: Search response for {query_term} is too deeply nested (urllib, RecursionError)")
+                        return []
+
                     if not isinstance(data, dict):
                         print(f"Error: Malformed search response for {query_term} (urllib, not a dictionary)")
                         return []
