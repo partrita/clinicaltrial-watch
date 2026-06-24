@@ -67,6 +67,7 @@ class TestSafeJsonLoad:
         )
         file_path.write_text(corrupted_content, encoding="utf-8")
         import pytest
+
         with pytest.raises(json.JSONDecodeError):
             safe_json_load(str(file_path), default=[])
 
@@ -75,6 +76,7 @@ class TestSafeJsonLoad:
         file_path = tmp_path / "empty.json"
         file_path.write_text("", encoding="utf-8")
         import pytest
+
         with pytest.raises(json.JSONDecodeError):
             safe_json_load(str(file_path), default=[])
 
@@ -83,6 +85,7 @@ class TestSafeJsonLoad:
         file_path = tmp_path / "bad.json"
         file_path.write_text("this is not json at all {{{", encoding="utf-8")
         import pytest
+
         with pytest.raises(json.JSONDecodeError):
             safe_json_load(str(file_path), default=[])
 
@@ -91,6 +94,7 @@ class TestSafeJsonLoad:
         file_path = tmp_path / "truncated.json"
         file_path.write_text('[{"timestamp": "2026-01-01"', encoding="utf-8")
         import pytest
+
         with pytest.raises(json.JSONDecodeError):
             safe_json_load(str(file_path), default=[])
 
@@ -99,6 +103,7 @@ class TestSafeJsonLoad:
         file_path = tmp_path / "single_quotes.json"
         file_path.write_text("{'key': 'value'}", encoding="utf-8")
         import pytest
+
         with pytest.raises(json.JSONDecodeError):
             safe_json_load(str(file_path), default={})
 
@@ -146,6 +151,7 @@ class TestUpdateHistory:
             f.write('[{"timestamp": "2026-01-01",')
 
         import pytest
+
         with pytest.raises(json.JSONDecodeError):
             update_history(
                 "NCT00000003", "New entry after corruption", history_dir=history_dir
@@ -221,6 +227,7 @@ class TestUpdateTargetHistory:
 
         reports = [{"id": "NCT001", "name": "Trial 1"}]
         import pytest
+
         with pytest.raises(json.JSONDecodeError):
             update_target_history("TestTarget", reports, history_dir=history_dir)
 

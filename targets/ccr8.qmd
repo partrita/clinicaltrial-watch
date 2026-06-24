@@ -86,13 +86,14 @@ if os.path.exists(csv_path):
 
 ::: {.panel-tabset}
 
-### Target Milestones
+### Daily change
 
 ```{python}
 #| echo: false
 #| output: asis
 import json
 import os
+import re
 from src.utils import sanitize_id, escape_html, check_file_size
 
 target_id = "ccr8"
@@ -115,9 +116,13 @@ if os.path.exists(target_h_file):
 
     print("")
     for record in reversed(history[-10:]):
-        print(f'- **{escape_html(record.get("timestamp", "N/A"))}**: {escape_html(record.get("event", "N/A"))}')
+        timestamp = escape_html(record.get("timestamp", "N/A"))
+        event_str = escape_html(record.get("event", "N/A"))
+        # Replace NCT IDs with markdown links
+        event_str = re.sub(r'(NCT\d+)', r'[\1](../trials/\1.qmd)', event_str)
+        print(f'- **{timestamp}**: {event_str}')
 else:
-    print(f"No target-level milestones recorded yet for {target_id}.")
+    print(f"No daily changes recorded yet for {target_id}.")
 ```
 
 ### Trial Changes

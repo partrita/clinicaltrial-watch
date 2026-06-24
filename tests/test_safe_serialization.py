@@ -1,9 +1,10 @@
 import pytest
-import json
 from src.utils import safe_str, safe_json_dumps, MAX_VALUE_LENGTH
+
 
 def test_safe_str_recursion():
     """Verify that safe_str handles RecursionError gracefully."""
+
     class RecursiveObj:
         def __str__(self):
             return str(self)
@@ -18,6 +19,7 @@ def test_safe_str_recursion():
 
     assert safe_str(obj) == "[Complex Object: Too Deep]"
 
+
 def test_safe_str_truncation():
     """Verify that safe_str enforces the length limit."""
     long_str = "A" * (MAX_VALUE_LENGTH + 100)
@@ -25,17 +27,18 @@ def test_safe_str_truncation():
     assert len(res) == MAX_VALUE_LENGTH
     assert res == "A" * MAX_VALUE_LENGTH
 
+
 def test_safe_json_dumps_recursion():
     """Verify that safe_json_dumps handles RecursionError gracefully."""
     # Create a circular reference (json.dumps handles this with ValueError usually,
     # but some custom objects or very deep nesting might raise RecursionError)
 
     # Let's mock json.dumps to raise RecursionError
-    import json as real_json
     from unittest.mock import patch
 
     with patch("json.dumps", side_effect=RecursionError):
         assert safe_json_dumps({"a": 1}) == '"[Complex Object: Too Deep]"'
+
 
 def test_safe_json_dumps_truncation():
     """Verify that safe_json_dumps enforces the length limit."""
@@ -44,6 +47,7 @@ def test_safe_json_dumps_truncation():
     # The JSON string will be slightly longer than MAX_VALUE_LENGTH due to quotes and braces
     # but the result should be truncated exactly at MAX_VALUE_LENGTH.
     assert len(res) == MAX_VALUE_LENGTH
+
 
 def test_safe_str_types():
     """Verify that safe_str handles various types correctly."""

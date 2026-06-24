@@ -52,7 +52,9 @@ except ImportError:
 
 
 # Configuration limits for DoS protection (CWE-400)
-MAX_CONFIG_SIZE = 10 * 1024 * 1024  # 10MB limit for local YAML/JSON config and data files
+MAX_CONFIG_SIZE = (
+    10 * 1024 * 1024
+)  # 10MB limit for local YAML/JSON config and data files
 MAX_VALUE_LENGTH = 10000
 
 
@@ -75,6 +77,7 @@ def safe_json_dumps(obj: Any, max_length: int = MAX_VALUE_LENGTH, **kwargs) -> s
     Note: Truncated JSON string may be invalid.
     """
     import json
+
     try:
         s = json.dumps(obj, **kwargs)
     except RecursionError:
@@ -104,7 +107,22 @@ def check_file_size(filepath: str, max_size: int = MAX_CONFIG_SIZE) -> None:
 
 # List of dangerous characters that can trigger formula execution in Excel/Google Sheets
 # Also includes '|' (pipe) as a defensive measure against downstream parser confusion.
-DANGEROUS_CSV_CHARS = {"=", "+", "-", "@", ";", "%", "|", "\t", "\r", "\n", "\v", "\f", "\x1b", "`"}
+DANGEROUS_CSV_CHARS = {
+    "=",
+    "+",
+    "-",
+    "@",
+    ";",
+    "%",
+    "|",
+    "\t",
+    "\r",
+    "\n",
+    "\v",
+    "\f",
+    "\x1b",
+    "`",
+}
 
 
 # Pre-compiled regex for NCT ID validation (faster than string pattern)
@@ -229,7 +247,9 @@ def sanitize_csv_value(value: Any) -> Any:
     # (U+180B-U+180D), Unicode Tag Characters (U+E0020-U+E007F), and
     # C1 control characters (U+0080-U+009F) for enhanced defense.
     stripped_value = re.sub(
-        r"^[\s\x00-\x1f\u0080-\u009f\u00a0\u00ad\u034f\u1680\u200b-\u200f\u2028-\u202f\u205f\u2060-\u206f\u3000\uFEFF\u180b-\u180e\ufe00-\ufe0f\u115f\u1160\u3164\uffa0\u2800\U000E0020-\U000E007F]+", "", value
+        r"^[\s\x00-\x1f\u0080-\u009f\u00a0\u00ad\u034f\u1680\u200b-\u200f\u2028-\u202f\u205f\u2060-\u206f\u3000\uFEFF\u180b-\u180e\ufe00-\ufe0f\u115f\u1160\u3164\uffa0\u2800\U000E0020-\U000E007F]+",
+        "",
+        value,
     )
     if stripped_value and stripped_value[0] in DANGEROUS_CSV_CHARS:
         return f"'{value[:32766]}"
@@ -400,7 +420,7 @@ def get_changed_count_badge(count: int) -> str:
     safe_count = escape_html(safe_str(count))
     if count > 0:
         return f'<span class="badge bg-danger" aria-label="{safe_count} trials changed">{safe_count}</span>'
-    return f'<span class="badge bg-success" aria-label="0 trials changed">0</span>'
+    return '<span class="badge bg-success" aria-label="0 trials changed">0</span>'
 
 
 @lru_cache(maxsize=1024)
@@ -532,7 +552,10 @@ def create_safe_session(
 
 @contextlib.contextmanager
 def atomic_write(
-    filepath: str, mode: str = "w", encoding: str = "utf-8", newline: Optional[str] = None
+    filepath: str,
+    mode: str = "w",
+    encoding: str = "utf-8",
+    newline: Optional[str] = None,
 ):
     """
     Context manager for atomic file writes.

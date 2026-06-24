@@ -1,9 +1,8 @@
-import pytest
 import os
 import json
-import shutil
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from src.main import process_trial
+
 
 def test_process_trial_malformed_snapshot():
     """Verify that process_trial handles a malformed JSON snapshot (list instead of dict) gracefully."""
@@ -20,11 +19,12 @@ def test_process_trial_malformed_snapshot():
 
     try:
         # Mock fetch_trial_data to return None so it falls back to the local snapshot
-        with patch("src.main.fetch_trial_data", return_value=None), \
-             patch("src.main.update_history"), \
-             patch("src.main.save_snapshot"), \
-             patch("src.main.compare_snapshots", return_value=None):
-
+        with (
+            patch("src.main.fetch_trial_data", return_value=None),
+            patch("src.main.update_history"),
+            patch("src.main.save_snapshot"),
+            patch("src.main.compare_snapshots", return_value=None),
+        ):
             # This should not crash with AttributeError: 'list' object has no attribute 'get'
             report, raw = process_trial(trial_config, "TestTarget")
 
@@ -34,6 +34,7 @@ def test_process_trial_malformed_snapshot():
     finally:
         if os.path.exists(snapshot_file):
             os.remove(snapshot_file)
+
 
 def test_quarto_template_logic_robustness():
     """Verify that the type checks added to Quarto templates handle malformed JSON data correctly."""
@@ -53,7 +54,7 @@ def test_quarto_template_logic_robustness():
     if not isinstance(history_2, list):
         history_2 = []
     # Should be able to filter/iterate
-    real_changes = [r for r in history_2 if r.get('diff') != "Initial data collection"]
+    real_changes = [r for r in history_2 if r.get("diff") != "Initial data collection"]
     assert real_changes == []
 
     # 3. Monitoring Status section
@@ -70,5 +71,5 @@ def test_quarto_template_logic_robustness():
     if not isinstance(targets, list):
         targets = []
     if targets:
-        targets.sort(key=lambda x: x['name'])
+        targets.sort(key=lambda x: x["name"])
     assert targets == []

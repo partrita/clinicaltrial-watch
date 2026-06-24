@@ -57,6 +57,7 @@ def compare_snapshots(
 
     if HAS_DEEPDIFF:
         import sys
+
         old_limit = sys.getrecursionlimit()
         # Ensure recursion limit is at least enough for our MAX_DEPTH
         # + some margin for DeepDiff's own internal calls
@@ -74,8 +75,7 @@ def compare_snapshots(
             diff = DeepDiff(
                 old_protocol,
                 new_protocol,
-                ignore_order=True,
-                exclude_obj_callback=depth_limit_callback
+                exclude_obj_callback=depth_limit_callback,
             )
             return diff
         finally:
@@ -119,8 +119,8 @@ def format_diff(diff: Any) -> str:
                 lines.append(truncated_msg)
                 break
             # Security enhancement: Truncate large values to prevent DoS
-            old_val = safe_str(change['old'], 1000)
-            new_val = safe_str(change['new'], 1000)
+            old_val = safe_str(change["old"], 1000)
+            new_val = safe_str(change["new"], 1000)
             # Security enhancement: Truncate label/path
             safe_label = safe_str(label, MAX_PATH_LEN)
             lines.append(f"{safe_label}: `{old_val}` -> `{new_val}`")
@@ -143,8 +143,8 @@ def format_diff(diff: Any) -> str:
             # Security enhancement: Truncate path
             clean_path = safe_str(clean_path, MAX_PATH_LEN)
             # Security enhancement: Truncate large values to prevent DoS
-            old_val = safe_str(change['old_value'], 1000)
-            new_val = safe_str(change['new_value'], 1000)
+            old_val = safe_str(change["old_value"], 1000)
+            new_val = safe_str(change["new_value"], 1000)
             summary.append(
                 f"Field `{clean_path}` changed from `{old_val}` to `{new_val}`"
             )

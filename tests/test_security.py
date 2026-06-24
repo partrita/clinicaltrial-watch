@@ -48,7 +48,10 @@ def test_escape_html_markdown():
     # Brackets should be escaped to prevent Markdown link injection
     assert escape_html("Link [text](url)") == "Link &#91;text&#93;(url)"
     # Backslash and MathJax characters should be escaped
-    assert escape_html("Math $x+y$ and Backslash \\") == "Math &#36;x+y&#36; and Backslash &#92;"
+    assert (
+        escape_html("Math $x+y$ and Backslash \\")
+        == "Math &#36;x+y&#36; and Backslash &#92;"
+    )
     # Curly braces should be escaped to prevent Quarto/Pandoc attribute injection
     assert escape_html("Text { .class }") == "Text &#123; .class &#125;"
     # Verify escaping of ':' to prevent structural injection
@@ -68,9 +71,13 @@ def test_is_valid_nct_id():
     assert is_valid_nct_id("NCT123456789") is False  # Too long
     assert is_valid_nct_id("NCT" + "1" * 40) is False  # Max length check
     assert is_valid_nct_id("nct12345678") is False  # Case sensitive
-    assert is_valid_nct_id("NCT12345678\n") is False  # Should not accept trailing newline
+    assert (
+        is_valid_nct_id("NCT12345678\n") is False
+    )  # Should not accept trailing newline
     # Persian digits should be rejected (must be ASCII [0-9])
-    assert is_valid_nct_id("NCT\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667") is False
+    assert (
+        is_valid_nct_id("NCT\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667") is False
+    )
     assert is_valid_nct_id("NCTabcdefgh") is False  # Not digits
     assert is_valid_nct_id("") is False
     assert is_valid_nct_id(None) is False
@@ -211,7 +218,11 @@ def test_get_phase_badge():
 
 def test_ui_helpers_accessibility():
     """Verify the presence of ARIA and accessibility attributes in UI helpers."""
-    from src.utils import get_update_badge, get_changed_count_badge, format_truncated_with_tooltip
+    from src.utils import (
+        get_update_badge,
+        get_changed_count_badge,
+        format_truncated_with_tooltip,
+    )
 
     # get_update_badge with date
     res = get_update_badge("Changed", "2023-10-27")
@@ -250,7 +261,7 @@ def test_format_enrollment_robustness():
     # So it will now return a formatted string instead of N/A.
     res = format_enrollment(huge_val)
     assert res != "N/A"
-    assert len(res) > 255 # due to commas
+    assert len(res) > 255  # due to commas
 
 
 def test_security_length_limits():
@@ -292,7 +303,12 @@ def test_security_length_limits():
 
 def test_ui_helpers_length_limits_new():
     """Verify newly hardened UI helpers length limits."""
-    from src.utils import get_status_badge, get_phase_badge, get_update_badge, format_enrollment
+    from src.utils import (
+        get_status_badge,
+        get_phase_badge,
+        get_update_badge,
+        format_enrollment,
+    )
 
     # get_status_badge limit (255)
     long_status = "S" * 300
@@ -320,7 +336,7 @@ def test_ui_helpers_length_limits_new():
     res_enroll = format_enrollment(long_enroll)
     # After truncation to 255, it still fits in a float and is a valid int
     assert res_enroll != "N/A"
-    assert len(res_enroll) > 255 # due to commas
+    assert len(res_enroll) > 255  # due to commas
 
 
 def test_flatten_key_length_limit():
@@ -362,7 +378,6 @@ def test_load_config_robustness():
 def test_csv_header_injection_prevention():
     """Verify that CSV headers and keys are sanitized against formula injection."""
     from src.main import save_target_data
-    from src.utils import sanitize_csv_value
     import os
     import csv
     import shutil
@@ -372,19 +387,8 @@ def test_csv_header_injection_prevention():
     if os.path.exists(test_dir):
         shutil.rmtree(test_dir)
 
-    summary_report = [
-        {
-            "id": "=NCT12345678",
-            "name": "Trial 1",
-            "status": "RECRUITING"
-        }
-    ]
-    all_raw_data = [
-        {
-            "+Key": "Value 1",
-            "Normal": "@Formula"
-        }
-    ]
+    summary_report = [{"id": "=NCT12345678", "name": "Trial 1", "status": "RECRUITING"}]
+    all_raw_data = [{"+Key": "Value 1", "Normal": "@Formula"}]
 
     try:
         save_target_data(test_target, summary_report, all_raw_data)
@@ -425,7 +429,7 @@ def test_sanitize_csv_value_extended():
 
     # Leading whitespace bypasses (including non-ASCII)
     assert sanitize_csv_value(" \t\n\r=1+1") == "' \t\n\r=1+1"
-    assert sanitize_csv_value("\u00A0=SUM(1+1)") == "'\u00A0=SUM(1+1)"
+    assert sanitize_csv_value("\u00a0=SUM(1+1)") == "'\u00a0=SUM(1+1)"
 
     # Single character dangerous inputs
     assert sanitize_csv_value("=") == "'="
@@ -446,17 +450,17 @@ def test_sanitize_csv_value_unicode_bypass():
     from src.utils import sanitize_csv_value
 
     # Zero Width Space (U+200B)
-    assert sanitize_csv_value("\u200B=SUM(1+1)") == "'\u200B=SUM(1+1)"
+    assert sanitize_csv_value("\u200b=SUM(1+1)") == "'\u200b=SUM(1+1)"
     # Zero Width Non-Joiner (U+200C)
-    assert sanitize_csv_value("\u200C+42") == "'\u200C+42"
+    assert sanitize_csv_value("\u200c+42") == "'\u200c+42"
     # Zero Width Joiner (U+200D)
-    assert sanitize_csv_value("\u200D-5") == "'\u200D-5"
+    assert sanitize_csv_value("\u200d-5") == "'\u200d-5"
     # Left-To-Right Mark (U+200E)
-    assert sanitize_csv_value("\u200E@something") == "'\u200E@something"
+    assert sanitize_csv_value("\u200e@something") == "'\u200e@something"
     # Byte Order Mark (U+FEFF)
-    assert sanitize_csv_value("\uFEFF;something") == "'\uFEFF;something"
+    assert sanitize_csv_value("\ufeff;something") == "'\ufeff;something"
     # Variation Selector (U+FE00)
-    assert sanitize_csv_value("\uFE00=SUM(1+1)") == "'\uFE00=SUM(1+1)"
+    assert sanitize_csv_value("\ufe00=SUM(1+1)") == "'\ufe00=SUM(1+1)"
     # Unicode fillers
     assert sanitize_csv_value("\u115f=SUM(1+1)") == "'\u115f=SUM(1+1)"
     assert sanitize_csv_value("\u1160=SUM(1+1)") == "'\u1160=SUM(1+1)"
@@ -464,7 +468,7 @@ def test_sanitize_csv_value_unicode_bypass():
     assert sanitize_csv_value("\uffa0=SUM(1+1)") == "'\uffa0=SUM(1+1)"
     assert sanitize_csv_value("\u2800=SUM(1+1)") == "'\u2800=SUM(1+1)"
     # Interleaved whitespace and invisible characters
-    assert sanitize_csv_value(" \u200B =SUM(1+1)") == "' \u200B =SUM(1+1)"
+    assert sanitize_csv_value(" \u200b =SUM(1+1)") == "' \u200b =SUM(1+1)"
 
 
 def test_sanitize_csv_value_additional_invisible_chars():
@@ -472,28 +476,28 @@ def test_sanitize_csv_value_additional_invisible_chars():
     from src.utils import sanitize_csv_value
 
     # Non-breaking space (U+00A0)
-    assert sanitize_csv_value("\u00A0=SUM(1+1)") == "'\u00A0=SUM(1+1)"
+    assert sanitize_csv_value("\u00a0=SUM(1+1)") == "'\u00a0=SUM(1+1)"
     # Soft Hyphen (U+00AD)
-    assert sanitize_csv_value("\u00AD=SUM(1+1)") == "'\u00AD=SUM(1+1)"
+    assert sanitize_csv_value("\u00ad=SUM(1+1)") == "'\u00ad=SUM(1+1)"
     # Combining Grapheme Joiner (U+034F)
-    assert sanitize_csv_value("\u034F=SUM(1+1)") == "'\u034F=SUM(1+1)"
+    assert sanitize_csv_value("\u034f=SUM(1+1)") == "'\u034f=SUM(1+1)"
     # Line Separator (U+2028)
     assert sanitize_csv_value("\u2028+42") == "'\u2028+42"
     # Paragraph Separator (U+2029)
     assert sanitize_csv_value("\u2029-5") == "'\u2029-5"
     # Mongolian Vowel Separator (U+180E)
-    assert sanitize_csv_value("\u180E@something") == "'\u180E@something"
+    assert sanitize_csv_value("\u180e@something") == "'\u180e@something"
     # Ogham space mark (U+1680)
     assert sanitize_csv_value("\u1680=SUM(1+1)") == "'\u1680=SUM(1+1)"
     # Narrow no-break space (U+202F)
-    assert sanitize_csv_value("\u202F+42") == "'\u202F+42"
+    assert sanitize_csv_value("\u202f+42") == "'\u202f+42"
     # Medium mathematical space (U+205F)
-    assert sanitize_csv_value("\u205F-5") == "'\u205F-5"
+    assert sanitize_csv_value("\u205f-5") == "'\u205f-5"
     # Ideographic space (U+3000)
     assert sanitize_csv_value("\u3000@something") == "'\u3000@something"
     # Pipe character (U+007C)
     assert sanitize_csv_value("|something") == "'|something"
-    assert sanitize_csv_value(" \u202F |something") == "' \u202F |something"
+    assert sanitize_csv_value(" \u202f |something") == "' \u202f |something"
 
 
 def test_sanitize_csv_value_invisible_chars_extended():
@@ -501,20 +505,23 @@ def test_sanitize_csv_value_invisible_chars_extended():
     from src.utils import sanitize_csv_value
 
     # Mongolian Free Variation Selectors (U+180B-U+180D)
-    assert sanitize_csv_value("\u180B=SUM(1+1)") == "'\u180B=SUM(1+1)"
-    assert sanitize_csv_value("\u180C+42") == "'\u180C+42"
-    assert sanitize_csv_value("\u180D-5") == "'\u180D-5"
+    assert sanitize_csv_value("\u180b=SUM(1+1)") == "'\u180b=SUM(1+1)"
+    assert sanitize_csv_value("\u180c+42") == "'\u180c+42"
+    assert sanitize_csv_value("\u180d-5") == "'\u180d-5"
 
     # Unicode Tag Characters (U+E0020-U+E007F)
-    assert sanitize_csv_value("\U000E0020@something") == "'\U000E0020@something"
-    assert sanitize_csv_value("\U000E007F;something") == "'\U000E007F;something"
+    assert sanitize_csv_value("\U000e0020@something") == "'\U000e0020@something"
+    assert sanitize_csv_value("\U000e007f;something") == "'\U000e007f;something"
 
     # C1 Control Characters (U+0080-U+009F)
     assert sanitize_csv_value("\u0080=SUM(1+1)") == "'\u0080=SUM(1+1)"
-    assert sanitize_csv_value("\u009F+42") == "'\u009F+42"
+    assert sanitize_csv_value("\u009f+42") == "'\u009f+42"
 
     # Interleaved new characters
-    assert sanitize_csv_value("\u180B \u0080 \U000E0020 =SUM(1+1)") == "'\u180B \u0080 \U000E0020 =SUM(1+1)"
+    assert (
+        sanitize_csv_value("\u180b \u0080 \U000e0020 =SUM(1+1)")
+        == "'\u180b \u0080 \U000e0020 =SUM(1+1)"
+    )
 
 
 def test_format_diff_max_changes():
@@ -527,16 +534,19 @@ def test_format_diff_max_changes():
     with patch.object(src.diff_engine, "HAS_DEEPDIFF", False):
         diff = {f"Label{i:03d}": {"old": "a", "new": "b"} for i in range(110)}
         res = format_diff(diff)
-        assert res.count("\n") == 100 # 100 lines + 1 truncated msg
+        assert res.count("\n") == 100  # 100 lines + 1 truncated msg
         assert "... (additional changes truncated for brevity)" in res
 
     # 2. Test DeepDiff path
     with patch.object(src.diff_engine, "HAS_DEEPDIFF", True):
         # 50 values changed, 30 added, 30 removed = 110 total
         diff = {
-            "values_changed": {f"root['p{i:03d}']": {"old_value": "a", "new_value": "b"} for i in range(50)},
+            "values_changed": {
+                f"root['p{i:03d}']": {"old_value": "a", "new_value": "b"}
+                for i in range(50)
+            },
             "dictionary_item_added": [f"root['a{i:03d}']" for i in range(30)],
-            "dictionary_item_removed": [f"root['r{i:03d}']" for i in range(30)]
+            "dictionary_item_removed": [f"root['r{i:03d}']" for i in range(30)],
         }
         res = format_diff(diff)
         # Should have 100 lines of changes + 1 truncation message
@@ -561,8 +571,10 @@ def test_format_diff_path_truncation():
     # 2. Test DeepDiff path
     with patch.object(src.diff_engine, "HAS_DEEPDIFF", True):
         diff = {
-            "values_changed": {f"root['{long_path}']": {"old_value": "a", "new_value": "b"}},
-            "dictionary_item_added": [long_path]
+            "values_changed": {
+                f"root['{long_path}']": {"old_value": "a", "new_value": "b"}
+            },
+            "dictionary_item_added": [long_path],
         }
         res = format_diff(diff)
         assert "P" * 255 in res
@@ -616,7 +628,7 @@ def test_update_from_csv_security_limits():
         "targets": [
             {
                 "name": "Target",
-                "trials": [{"id": f"NCT{i:08d}", "name": "Trial"} for i in range(1000)]
+                "trials": [{"id": f"NCT{i:08d}", "name": "Trial"} for i in range(1000)],
             }
         ]
     }
@@ -624,7 +636,9 @@ def test_update_from_csv_security_limits():
 
     updated_trials = update_target(target_data, "Target", new_csv_trials)
     assert len(updated_trials["targets"][0]["trials"]) == 1000
-    assert not any(t["id"] == "NCT99999999" for t in updated_trials["targets"][0]["trials"])
+    assert not any(
+        t["id"] == "NCT99999999" for t in updated_trials["targets"][0]["trials"]
+    )
 
 
 def test_api_response_size_limit():
@@ -634,16 +648,17 @@ def test_api_response_size_limit():
     from unittest.mock import patch, MagicMock
 
     # Mock responses for requests (HAS_REQUESTS=True)
-    with patch("src.crawler.get_session") as mock_get_session, \
-         patch("src.auto_discover_trials.get_session") as mock_get_session_auto:
-
+    with (
+        patch("src.crawler.get_session") as mock_get_session,
+        patch("src.auto_discover_trials.get_session") as mock_get_session_auto,
+    ):
         # 1. Test fetch_trial_data with large Content-Length header
         mock_session = MagicMock()
         mock_get_session.return_value = mock_session
 
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.headers = {"Content-Length": str(11 * 1024 * 1024)} # 11MB
+        mock_response.headers = {"Content-Length": str(11 * 1024 * 1024)}  # 11MB
         mock_session.get.return_value = mock_response
         mock_response.__enter__.return_value = mock_response
 
@@ -653,7 +668,7 @@ def test_api_response_size_limit():
         # 2. Test fetch_trial_data with actual large body (chunked)
         mock_response_chunked = MagicMock()
         mock_response_chunked.status_code = 200
-        mock_response_chunked.headers = {} # No content length
+        mock_response_chunked.headers = {}  # No content length
         # Generate 11MB worth of chunks (88 chunks of 128KB)
         mock_response_chunked.iter_content.return_value = [b"A" * (128 * 1024)] * 88
         mock_session.get.return_value = mock_response_chunked
@@ -683,9 +698,10 @@ def test_api_content_type_validation():
     from unittest.mock import patch, MagicMock
 
     # Mock responses for requests (HAS_REQUESTS=True)
-    with patch("src.crawler.get_session") as mock_get_session, \
-         patch("src.auto_discover_trials.get_session") as mock_get_session_auto:
-
+    with (
+        patch("src.crawler.get_session") as mock_get_session,
+        patch("src.auto_discover_trials.get_session") as mock_get_session_auto,
+    ):
         # 1. Test fetch_trial_data with unexpected Content-Type (e.g. text/html)
         mock_session = MagicMock()
         mock_get_session.return_value = mock_session
@@ -719,7 +735,6 @@ def test_yaml_load_security_against_data_loss():
     from src.manage_trials import load_yaml
     from src.update_trials_from_csv import load_yaml as load_yaml_csv
     from src.generate_target_pages import load_trials_yaml
-    import yaml
     import os
     import pytest
 
@@ -768,7 +783,7 @@ def test_max_config_size_limit():
     from src.utils import MAX_CONFIG_SIZE
     from src.main import load_config, safe_json_load
     from src.update_trials_from_csv import load_yaml as load_yaml_csv
-    from src.manage_trials import load_yaml as load_yaml_manage, add_to_exclusion_list, perform_cleanup
+    from src.manage_trials import load_yaml as load_yaml_manage, add_to_exclusion_list
     from src.generate_target_pages import load_trials_yaml
     import os
     import pytest
@@ -819,6 +834,7 @@ def test_max_config_size_limit():
         if os.path.exists("data/targets/oversized_test"):
             shutil.rmtree("data/targets/oversized_test")
 
+
 def test_malformed_config_robustness():
     """Verify that load_config and deduplicate_config handle malformed structures gracefully."""
     from src.main import load_config, deduplicate_config
@@ -851,10 +867,7 @@ def test_malformed_config_robustness():
 
         # 4. Test deduplicate_config with one target being a string instead of a dict
         malformed_config_3 = {
-            "targets": [
-                "not a target dict",
-                {"name": "Valid Target", "trials": []}
-            ]
+            "targets": ["not a target dict", {"name": "Valid Target", "trials": []}]
         }
         res_dedup_3 = deduplicate_config(malformed_config_3)
         assert len(res_dedup_3["targets"]) == 1
@@ -975,9 +988,9 @@ def test_yaml_injection_prevention():
     os.remove(yml_path)
     os.rmdir(output_dir)
 
+
 def test_yaml_injection_prevention_regression():
     """Verify that YAML delimiters in trial data are correctly escaped in the YAML configuration."""
-    import yaml
     import os
     from src.update_trials_from_csv import save_yaml, load_yaml
 
@@ -986,18 +999,15 @@ def test_yaml_injection_prevention_regression():
         os.remove(test_yaml)
 
     # Malicious data that could break a naive manual YAML writer
-    malicious_trial_name = "Normal' \n      - id: 'NCT00000000'\n        name: 'Injected Trial"
+    malicious_trial_name = (
+        "Normal' \n      - id: 'NCT00000000'\n        name: 'Injected Trial"
+    )
     data = {
         "targets": [
             {
                 "name": "TargetName",
                 "description": "Desc",
-                "trials": [
-                    {
-                        "id": "NCT12345678",
-                        "name": malicious_trial_name
-                    }
-                ]
+                "trials": [{"id": "NCT12345678", "name": malicious_trial_name}],
             }
         ]
     }
@@ -1016,7 +1026,9 @@ def test_yaml_injection_prevention_regression():
         assert loaded_trials[0]["name"] == malicious_trial_name
 
         # Verify that the injected ID is NOT in the loaded data
-        all_ids = [t["id"] for target in loaded_data["targets"] for t in target["trials"]]
+        all_ids = [
+            t["id"] for target in loaded_data["targets"] for t in target["trials"]
+        ]
         assert "NCT00000000" not in all_ids
 
     finally:
@@ -1057,6 +1069,7 @@ def test_deduplicate_config_security():
 
         # Let's monkeypatch save_config to use our test path
         import src.main
+
         original_save = src.main.save_config
         src.main.save_config = lambda cfg: original_save(cfg, test_yaml)
 
@@ -1074,7 +1087,13 @@ def test_deduplicate_config_security():
 
             # Test truncation of targets and trials
             large_config = {
-                "targets": [{"name": f"Target{i}", "trials": [{"id": f"NCT{j:08d}"} for j in range(1100)]} for i in range(110)]
+                "targets": [
+                    {
+                        "name": f"Target{i}",
+                        "trials": [{"id": f"NCT{j:08d}"} for j in range(1100)],
+                    }
+                    for i in range(110)
+                ]
             }
             cleaned_large = deduplicate_config(large_config)
             assert len(cleaned_large["targets"]) == 100
@@ -1134,10 +1153,15 @@ def test_history_size_limit():
         # 1. Test update_history limit
         trial_id = "NCT00000001"
         # Create a history with 105 entries
-        history = [{"timestamp": f"2023-01-01 00:00:{i:02d}", "diff": "initial"} for i in range(105)]
+        history = [
+            {"timestamp": f"2023-01-01 00:00:{i:02d}", "diff": "initial"}
+            for i in range(105)
+        ]
 
         # This should truncate to 100
-        updated = update_history(trial_id, "latest change", history_dir=test_history_dir, history=history)
+        updated = update_history(
+            trial_id, "latest change", history_dir=test_history_dir, history=history
+        )
 
         assert len(updated) == 100
         assert updated[-1]["diff"] == "latest change"
@@ -1151,7 +1175,9 @@ def test_history_size_limit():
         # 2. Test update_target_history limit and message truncation
         target_name = "LargeTarget"
         # Create many changed trials
-        current_reports = [{"id": f"NCT{i:08d}", "changed_today": True} for i in range(50)]
+        current_reports = [
+            {"id": f"NCT{i:08d}", "changed_today": True} for i in range(50)
+        ]
 
         # Pre-fill history with 105 entries
         target_history_file = os.path.join(test_history_dir, "target_largetarget.json")
@@ -1159,7 +1185,9 @@ def test_history_size_limit():
         with open(target_history_file, "w", encoding="utf-8") as f:
             json.dump(initial_target_history, f)
 
-        update_target_history(target_name, current_reports, history_dir=test_history_dir)
+        update_target_history(
+            target_name, current_reports, history_dir=test_history_dir
+        )
 
         with open(target_history_file, "r", encoding="utf-8") as f:
             saved_target_history = json.load(f)
@@ -1186,7 +1214,9 @@ def test_update_target_truncation():
     long_description = "D" * 3000
     new_trials = [{"id": "NCT12345678", "name": "Trial"}]
 
-    updated_data = update_target(data, long_target_name, new_trials, description=long_description)
+    updated_data = update_target(
+        data, long_target_name, new_trials, description=long_description
+    )
 
     target = updated_data["targets"][0]
     assert len(target["name"]) == 255
@@ -1251,6 +1281,7 @@ def test_http_response_closure():
         assert mock_response_200_auto.__enter__.called
         assert mock_response_200_auto.__exit__.called
 
+
 def test_urllib_fallback_security():
     """Verify that the urllib fallback path correctly handles malformed Content-Length and size limits."""
     from src.crawler import fetch_trial_data
@@ -1261,9 +1292,10 @@ def test_urllib_fallback_security():
 
     with patch("urllib.request.OpenerDirector") as mock_opener_class:
         # Force urllib path
-        with patch.object(src.crawler, "HAS_REQUESTS", False), \
-             patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
-
+        with (
+            patch.object(src.crawler, "HAS_REQUESTS", False),
+            patch.object(src.auto_discover_trials, "HAS_REQUESTS", False),
+        ):
             mock_opener = MagicMock()
             mock_opener_class.return_value = mock_opener
             mock_response = MagicMock()
@@ -1271,8 +1303,13 @@ def test_urllib_fallback_security():
 
             # 1. Test malformed Content-Length (non-numeric)
             mock_response.status = 200
-            mock_response.headers = {"Content-Type": "application/json", "Content-Length": "not-a-number"}
-            mock_response.geturl.return_value = "https://clinicaltrials.gov/studies/NCT12345678"
+            mock_response.headers = {
+                "Content-Type": "application/json",
+                "Content-Length": "not-a-number",
+            }
+            mock_response.geturl.return_value = (
+                "https://clinicaltrials.gov/studies/NCT12345678"
+            )
             mock_response.read.side_effect = [b'{"foo": "bar"}', b""]
 
             # Should NOT return None if Content-Length is malformed (it skips the check and proceeds to read)
@@ -1283,16 +1320,26 @@ def test_urllib_fallback_security():
 
             # 2. Test large Content-Length header (e.g. " 11000000 ")
             mock_response.status = 200
-            mock_response.headers = {"Content-Type": "application/json", "Content-Length": " 11000000 "}
-            mock_response.geturl.return_value = "https://clinicaltrials.gov/studies/NCT12345678"
+            mock_response.headers = {
+                "Content-Type": "application/json",
+                "Content-Length": " 11000000 ",
+            }
+            mock_response.geturl.return_value = (
+                "https://clinicaltrials.gov/studies/NCT12345678"
+            )
             mock_opener.open.return_value.__enter__.return_value = mock_response
 
             assert fetch_trial_data("NCT12345678") is None
 
             # 3. Test Search with malformed Content-Length
             mock_response.status = 200
-            mock_response.headers = {"Content-Type": "application/json", "Content-Length": "invalid"}
-            mock_response.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
+            mock_response.headers = {
+                "Content-Type": "application/json",
+                "Content-Length": "invalid",
+            }
+            mock_response.geturl.return_value = (
+                "https://clinicaltrials.gov/api/v2/studies"
+            )
             mock_response.read.side_effect = [b'{"studies": []}', b""]
             mock_opener.open.return_value.__enter__.return_value = mock_response
 
@@ -1300,8 +1347,13 @@ def test_urllib_fallback_security():
 
             # 4. Test Search with large Content-Length
             mock_response.status = 200
-            mock_response.headers = {"Content-Type": "application/json", "Content-Length": "11000000"}
-            mock_response.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
+            mock_response.headers = {
+                "Content-Type": "application/json",
+                "Content-Length": "11000000",
+            }
+            mock_response.geturl.return_value = (
+                "https://clinicaltrials.gov/api/v2/studies"
+            )
             mock_opener.open.return_value.__enter__.return_value = mock_response
 
             assert search_trials("Target") == []
@@ -1317,10 +1369,7 @@ def test_truncation_security():
     # Mocking a DeepDiff structure
     diff = {
         "values_changed": {
-            "root['some_path']": {
-                "old_value": "A" * 2000,
-                "new_value": "B" * 2000
-            }
+            "root['some_path']": {"old_value": "A" * 2000, "new_value": "B" * 2000}
         }
     }
 
@@ -1339,31 +1388,41 @@ def test_truncation_security():
         "protocolSection": {
             "identificationModule": {"nctId": "NCT12345678", "briefTitle": "Title"},
             "descriptionModule": {"detailedDescription": huge_desc},
-            "statusModule": {"overallStatus": "RECRUITING"}
+            "statusModule": {"overallStatus": "RECRUITING"},
         }
     }
 
     # Also mock no history to avoid file IO
-    with patch("src.main.fetch_trial_data", return_value=mock_data), \
-         patch("src.main.safe_json_load", return_value=[]), \
-         patch("src.main.update_history", return_value=[{"timestamp": "2023-01-01", "diff": "initial"}]), \
-         patch("src.main.save_snapshot"), \
-         patch("src.main.compare_snapshots", return_value=None):
-
+    with (
+        patch("src.main.fetch_trial_data", return_value=mock_data),
+        patch("src.main.safe_json_load", return_value=[]),
+        patch(
+            "src.main.update_history",
+            return_value=[{"timestamp": "2023-01-01", "diff": "initial"}],
+        ),
+        patch("src.main.save_snapshot"),
+        patch("src.main.compare_snapshots", return_value=None),
+    ):
         report, _ = process_trial(trial, "Target")
 
         assert len(report["details"]) == 10000
         assert report["details"] == "D" * 10000
 
     # 3. Test combined details truncation when there's a diff
-    mock_diff = {"values_changed": {"root['status']": {"old_value": "A", "new_value": "B"}}}
-    with patch("src.main.fetch_trial_data", return_value=mock_data), \
-         patch("src.main.safe_json_load", return_value=[]), \
-         patch("src.main.update_history", return_value=[{"timestamp": "2023-01-01", "diff": "initial"}]), \
-         patch("src.main.save_snapshot"), \
-         patch("src.main.compare_snapshots", return_value=mock_diff), \
-         patch("src.main.format_diff", return_value="C" * 15000):
-
+    mock_diff = {
+        "values_changed": {"root['status']": {"old_value": "A", "new_value": "B"}}
+    }
+    with (
+        patch("src.main.fetch_trial_data", return_value=mock_data),
+        patch("src.main.safe_json_load", return_value=[]),
+        patch(
+            "src.main.update_history",
+            return_value=[{"timestamp": "2023-01-01", "diff": "initial"}],
+        ),
+        patch("src.main.save_snapshot"),
+        patch("src.main.compare_snapshots", return_value=mock_diff),
+        patch("src.main.format_diff", return_value="C" * 15000),
+    ):
         report, _ = process_trial(trial, "Target")
 
         # Combined details = RECENT CHANGES FOUND (25) + \n (1) + format_diff (15000) + \n\n***\n (6) + detailed_desc (10000) = ~25032
@@ -1392,20 +1451,19 @@ def test_process_trial_metadata_truncation():
             },
             "designModule": {
                 "enrollmentInfo": {"count": "1000" + "E" * 300},
-                "phases": ["PHASE1"]
+                "phases": ["PHASE1"],
             },
-            "outcomesModule": {
-                "primaryOutcomes": [{"measure": "M" * 1500}]
-            }
+            "outcomesModule": {"primaryOutcomes": [{"measure": "M" * 1500}]},
         }
     }
 
-    with patch("src.main.fetch_trial_data", return_value=mock_data), \
-         patch("src.main.safe_json_load", return_value=[]), \
-         patch("src.main.update_history", return_value=[]), \
-         patch("src.main.save_snapshot"), \
-         patch("src.main.compare_snapshots", return_value=None):
-
+    with (
+        patch("src.main.fetch_trial_data", return_value=mock_data),
+        patch("src.main.safe_json_load", return_value=[]),
+        patch("src.main.update_history", return_value=[]),
+        patch("src.main.save_snapshot"),
+        patch("src.main.compare_snapshots", return_value=None),
+    ):
         report, _ = process_trial(trial, target_name)
 
         assert len(report["name"]) == 1000
@@ -1429,9 +1487,10 @@ def test_http_redirect_security():
     from unittest.mock import patch, MagicMock
     import json
 
-    with patch("src.crawler.get_session") as mock_get_session, \
-         patch("src.auto_discover_trials.get_session") as mock_get_session_auto:
-
+    with (
+        patch("src.crawler.get_session") as mock_get_session,
+        patch("src.auto_discover_trials.get_session") as mock_get_session_auto,
+    ):
         # 1. Test fetch_trial_data with insecure (HTTP) redirect
         mock_session = MagicMock()
         mock_get_session.return_value = mock_session
@@ -1456,7 +1515,9 @@ def test_http_redirect_security():
         mock_response_search_insecure = MagicMock()
         mock_response_search_insecure.url = "http://clinicaltrials.gov/api/v2/studies"
         mock_session_auto.get.return_value = mock_response_search_insecure
-        mock_response_search_insecure.__enter__.return_value = mock_response_search_insecure
+        mock_response_search_insecure.__enter__.return_value = (
+            mock_response_search_insecure
+        )
 
         assert search_trials("Target") == []
 
@@ -1464,13 +1525,17 @@ def test_http_redirect_security():
         mock_response_search_external = MagicMock()
         mock_response_search_external.url = "https://evil.com/api/v2/studies"
         mock_session_auto.get.return_value = mock_response_search_external
-        mock_response_search_external.__enter__.return_value = mock_response_search_external
+        mock_response_search_external.__enter__.return_value = (
+            mock_response_search_external
+        )
 
         assert search_trials("Target") == []
 
         # 5. Test fetch_trial_data with clever domain bypass attempt
         mock_response_bypass = MagicMock()
-        mock_response_bypass.url = "https://clinicaltrials.gov.attacker.com/studies/NCT12345678"
+        mock_response_bypass.url = (
+            "https://clinicaltrials.gov.attacker.com/studies/NCT12345678"
+        )
         mock_session.get.return_value = mock_response_bypass
         mock_response_bypass.__enter__.return_value = mock_response_bypass
 
@@ -1481,8 +1546,12 @@ def test_http_redirect_security():
         mock_response_subdomain = MagicMock()
         mock_response_subdomain.status_code = 200
         mock_response_subdomain.headers = {"Content-Type": "application/json"}
-        mock_response_subdomain.url = "https://www.clinicaltrials.gov/api/v2/studies/NCT12345678"
-        mock_response_subdomain.iter_content.return_value = [json.dumps(data).encode("utf-8")]
+        mock_response_subdomain.url = (
+            "https://www.clinicaltrials.gov/api/v2/studies/NCT12345678"
+        )
+        mock_response_subdomain.iter_content.return_value = [
+            json.dumps(data).encode("utf-8")
+        ]
         mock_session.get.return_value = mock_response_subdomain
         mock_response_subdomain.__enter__.return_value = mock_response_subdomain
 
@@ -1491,10 +1560,12 @@ def test_http_redirect_security():
 
 def test_session_security_config():
     """Verify that the requests Session is configured securely."""
-    from src.crawler import get_session as get_crawler_session, reset_session as reset_crawler_session
+    from src.crawler import (
+        get_session as get_crawler_session,
+        reset_session as reset_crawler_session,
+    )
     from src.auto_discover_trials import get_session as get_auto_session
     import src.auto_discover_trials
-    from utils import TLSAdapter
     from unittest.mock import patch, MagicMock
 
     # Crawler session
@@ -1507,10 +1578,12 @@ def test_session_security_config():
         assert mock_session.trust_env is False
 
         # Verify TLSAdapter is mounted to https://
-        https_calls = [c for c in mock_session.mount.call_args_list if c.args[0] == "https://"]
+        https_calls = [
+            c for c in mock_session.mount.call_args_list if c.args[0] == "https://"
+        ]
         assert len(https_calls) > 0
         # Check by name to be robust against module path mismatches (utils vs src.utils)
-        assert isinstance(https_calls[0].args[1], TLSAdapter)
+        assert type(https_calls[0].args[1]).__name__ == "TLSAdapter"
 
     # Auto-discover session
     src.auto_discover_trials._session = None
@@ -1522,10 +1595,12 @@ def test_session_security_config():
         assert mock_session.trust_env is False
 
         # Verify TLSAdapter is mounted to https://
-        https_calls = [c for c in mock_session.mount.call_args_list if c.args[0] == "https://"]
+        https_calls = [
+            c for c in mock_session.mount.call_args_list if c.args[0] == "https://"
+        ]
         assert len(https_calls) > 0
         # Now both use the centralized TLSAdapter from utils
-        assert isinstance(https_calls[0].args[1], TLSAdapter)
+        assert type(https_calls[0].args[1]).__name__ == "TLSAdapter"
 
 
 def test_urllib_redirect_security():
@@ -1538,16 +1613,19 @@ def test_urllib_redirect_security():
 
     with patch("urllib.request.OpenerDirector") as mock_opener_class:
         # Force urllib path
-        with patch.object(src.crawler, "HAS_REQUESTS", False), \
-             patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
-
+        with (
+            patch.object(src.crawler, "HAS_REQUESTS", False),
+            patch.object(src.auto_discover_trials, "HAS_REQUESTS", False),
+        ):
             mock_opener = MagicMock()
             mock_opener_class.return_value = mock_opener
             mock_response = MagicMock()
             mock_opener.open.return_value.__enter__.return_value = mock_response
 
             # 1. Insecure redirect
-            mock_response.geturl.return_value = "http://clinicaltrials.gov/studies/NCT12345678"
+            mock_response.geturl.return_value = (
+                "http://clinicaltrials.gov/studies/NCT12345678"
+            )
             assert fetch_trial_data("NCT12345678") is None
 
             # 2. External domain redirect
@@ -1555,7 +1633,9 @@ def test_urllib_redirect_security():
             assert fetch_trial_data("NCT12345678") is None
 
             # 3. Search insecure redirect
-            mock_response.geturl.return_value = "http://clinicaltrials.gov/api/v2/studies"
+            mock_response.geturl.return_value = (
+                "http://clinicaltrials.gov/api/v2/studies"
+            )
             assert search_trials("Target") == []
 
 
@@ -1567,13 +1647,13 @@ def test_urllib_hardening_config():
     import src.crawler
     import src.auto_discover_trials
     import urllib.request
-    import ssl
 
     with patch("urllib.request.OpenerDirector") as mock_opener_class:
         # Force urllib path
-        with patch.object(src.crawler, "HAS_REQUESTS", False), \
-             patch.object(src.auto_discover_trials, "HAS_REQUESTS", False):
-
+        with (
+            patch.object(src.crawler, "HAS_REQUESTS", False),
+            patch.object(src.auto_discover_trials, "HAS_REQUESTS", False),
+        ):
             mock_opener = MagicMock()
             mock_opener_class.return_value = mock_opener
 
@@ -1581,9 +1661,15 @@ def test_urllib_hardening_config():
             fetch_trial_data("NCT12345678")
             assert mock_opener_class.called
             # Verify handlers added
-            handler_calls = [call.args[0] for call in mock_opener.add_handler.call_args_list]
-            proxy_handler = next(h for h in handler_calls if isinstance(h, urllib.request.ProxyHandler))
-            https_handler = next(h for h in handler_calls if isinstance(h, urllib.request.HTTPSHandler))
+            handler_calls = [
+                call.args[0] for call in mock_opener.add_handler.call_args_list
+            ]
+            proxy_handler = next(
+                h for h in handler_calls if isinstance(h, urllib.request.ProxyHandler)
+            )
+            https_handler = next(
+                h for h in handler_calls if isinstance(h, urllib.request.HTTPSHandler)
+            )
             assert proxy_handler.proxies == {}
             assert getattr(https_handler, "_context", None) is not None
 
@@ -1593,9 +1679,15 @@ def test_urllib_hardening_config():
             # 2. Check auto_discover_trials search_trials
             search_trials("Target")
             assert mock_opener_class.called
-            handler_calls = [call.args[0] for call in mock_opener.add_handler.call_args_list]
-            proxy_handler = next(h for h in handler_calls if isinstance(h, urllib.request.ProxyHandler))
-            https_handler = next(h for h in handler_calls if isinstance(h, urllib.request.HTTPSHandler))
+            handler_calls = [
+                call.args[0] for call in mock_opener.add_handler.call_args_list
+            ]
+            proxy_handler = next(
+                h for h in handler_calls if isinstance(h, urllib.request.ProxyHandler)
+            )
+            https_handler = next(
+                h for h in handler_calls if isinstance(h, urllib.request.HTTPSHandler)
+            )
             assert proxy_handler.proxies == {}
             assert getattr(https_handler, "_context", None) is not None
 
@@ -1664,7 +1756,8 @@ def test_add_to_exclusion_list_robustness():
         if os.path.exists(test_yaml):
             os.remove(test_yaml)
 
-def test_csv_header_injection_prevention():
+
+def test_csv_header_injection_prevention_extended():
     """Verify that CSV headers (keys) starting with dangerous characters are sanitized."""
     from src.main import save_target_data
     import os
@@ -1711,6 +1804,7 @@ def test_csv_header_injection_prevention():
         if os.path.exists(target_path):
             shutil.rmtree(target_path)
 
+
 def test_flatten_dict_dos_protection():
     """Verify that flatten_dict limits list items and truncates strings."""
     from src.main import flatten_dict
@@ -1736,6 +1830,7 @@ def test_flatten_dict_dos_protection():
     assert val2 == "A" * 6000
     assert "B" * 6000 not in val2
 
+
 def test_flatten_dict_scalar_truncation():
     """Verify that flatten_dict truncates long scalar strings."""
     from src.main import flatten_dict
@@ -1747,6 +1842,7 @@ def test_flatten_dict_scalar_truncation():
     assert len(flattened["long_field"]) == 10000
     assert flattened["long_field"] == "S" * 10000
 
+
 def test_api_json_type_validation_unit():
     """Verify that crawler and auto_discover handle non-dict JSON responses."""
     from src.crawler import fetch_trial_data
@@ -1754,8 +1850,10 @@ def test_api_json_type_validation_unit():
     from unittest.mock import patch, MagicMock
 
     # Mock response returning a JSON list instead of a dict
-    with patch("src.crawler.get_session") as mock_get_session,          patch("src.auto_discover_trials.get_session") as mock_get_session_auto:
-
+    with (
+        patch("src.crawler.get_session") as mock_get_session,
+        patch("src.auto_discover_trials.get_session") as mock_get_session_auto,
+    ):
         mock_session = MagicMock()
         mock_get_session.return_value = mock_session
         mock_response = MagicMock()
@@ -1780,17 +1878,17 @@ def test_api_json_type_validation_unit():
         # Should return [] because it's a list, not a dict
         assert search_trials("Target") == []
 
+
 def test_target_id_collision_protection():
     """Verify that deduplicate_config prevents target ID collisions."""
     from src.main import deduplicate_config
-    import src.main
     from unittest.mock import patch
 
     config = {
         "targets": [
             {"name": "Target One", "trials": [{"id": "NCT11111111"}]},
             {"name": "Target!One", "trials": [{"id": "NCT22222222"}]},
-            {"name": "Unique Target", "trials": [{"id": "NCT33333333"}]}
+            {"name": "Unique Target", "trials": [{"id": "NCT33333333"}]},
         ]
     }
 
@@ -1803,6 +1901,7 @@ def test_target_id_collision_protection():
     assert "Target One" in target_names
     assert "Unique Target" in target_names
     assert "Target!One" not in target_names
+
 
 def test_compare_snapshots_malformed_type():
     """Verify that compare_snapshots handles malformed JSON types gracefully."""
@@ -1822,19 +1921,25 @@ def test_compare_snapshots_malformed_type():
 
     try:
         # Should return None instead of crashing with AttributeError
-        res = compare_snapshots(trial_id, {"protocolSection": {}}, snapshot_dir=snapshot_dir)
+        res = compare_snapshots(
+            trial_id, {"protocolSection": {}}, snapshot_dir=snapshot_dir
+        )
         assert res is None
 
         # 2. Test with null (None)
         with open(snapshot_file, "w", encoding="utf-8") as f:
             f.write("null")
-        res = compare_snapshots(trial_id, {"protocolSection": {}}, snapshot_dir=snapshot_dir)
+        res = compare_snapshots(
+            trial_id, {"protocolSection": {}}, snapshot_dir=snapshot_dir
+        )
         assert res is None
 
         # 3. Test with string
         with open(snapshot_file, "w", encoding="utf-8") as f:
             f.write('"just a string"')
-        res = compare_snapshots(trial_id, {"protocolSection": {}}, snapshot_dir=snapshot_dir)
+        res = compare_snapshots(
+            trial_id, {"protocolSection": {}}, snapshot_dir=snapshot_dir
+        )
         assert res is None
 
     finally:
@@ -1842,6 +1947,7 @@ def test_compare_snapshots_malformed_type():
             os.remove(snapshot_file)
         if os.path.exists(snapshot_dir):
             os.rmdir(snapshot_dir)
+
 
 def test_history_hardening():
     """Verify that update_history and update_target_history handle corrupted (non-list) JSON."""
@@ -1870,30 +1976,43 @@ def test_history_hardening():
 
         # 2. update_target_history with corrupted file (string instead of list)
         target_name = "CorruptedTarget"
-        target_history_file = os.path.join(test_history_dir, "target_corruptedtarget.json")
+        target_history_file = os.path.join(
+            test_history_dir, "target_corruptedtarget.json"
+        )
         with open(target_history_file, "w", encoding="utf-8") as f:
             f.write('"I am a string"')
 
         # Should not crash and should reset to empty list then append
         current_reports = [{"id": "NCT11111111", "changed_today": True}]
-        update_target_history(target_name, current_reports, history_dir=test_history_dir)
+        update_target_history(
+            target_name, current_reports, history_dir=test_history_dir
+        )
 
         with open(target_history_file, "r", encoding="utf-8") as f:
             saved_history = json.load(f)
             assert isinstance(saved_history, list)
             assert len(saved_history) == 1
             # When history is reset, it records "Initial data collection"
-            assert "Initial data collection: 1 trials found." in saved_history[0]["event"]
+            assert (
+                "Initial data collection: 1 trials found." in saved_history[0]["event"]
+            )
 
     finally:
         if os.path.exists(test_history_dir):
             shutil.rmtree(test_history_dir)
 
+
 def test_reset_session_closure():
     """Verify that reset_session correctly closes the requests session if it exists."""
-    from src.crawler import reset_session as reset_crawler, _session_lock as lock_crawler
+    from src.crawler import (
+        reset_session as reset_crawler,
+        _session_lock as lock_crawler,
+    )
     import src.crawler
-    from src.auto_discover_trials import reset_session as reset_auto, _session_lock as lock_auto
+    from src.auto_discover_trials import (
+        reset_session as reset_auto,
+        _session_lock as lock_auto,
+    )
     import src.auto_discover_trials
     from unittest.mock import MagicMock
 
@@ -1939,9 +2058,10 @@ def test_urllib_protocol_restriction():
     # We want to test that the OpenerDirector we created doesn't have FileHandler or FTPHandler
     # Since fetch_trial_data creates the opener internally, we can't easily inspect it without mocking.
 
-    with patch("urllib.request.OpenerDirector") as mock_opener_class, \
-         patch("src.crawler.HAS_REQUESTS", False):
-
+    with (
+        patch("urllib.request.OpenerDirector") as mock_opener_class,
+        patch("src.crawler.HAS_REQUESTS", False),
+    ):
         # We'll capture the OpenerDirector that is created
         mock_opener = mock_opener_class.return_value
 
@@ -1952,7 +2072,9 @@ def test_urllib_protocol_restriction():
             pass
 
         # Get all handlers added to the opener
-        added_handlers = [call.args[0] for call in mock_opener.add_handler.call_args_list]
+        added_handlers = [
+            call.args[0] for call in mock_opener.add_handler.call_args_list
+        ]
 
         # Ensure no FileHandler, FTPHandler, or DataHandler was added
         for handler in added_handlers:
@@ -1962,7 +2084,9 @@ def test_urllib_protocol_restriction():
 
         # Ensure necessary handlers ARE added
         assert any(isinstance(h, urllib.request.HTTPSHandler) for h in added_handlers)
-        assert any(isinstance(h, urllib.request.HTTPRedirectHandler) for h in added_handlers)
+        assert any(
+            isinstance(h, urllib.request.HTTPRedirectHandler) for h in added_handlers
+        )
 
 
 def test_urllib_restricted_opener_live_behavior():
@@ -1995,6 +2119,7 @@ def test_urllib_restricted_opener_live_behavior():
     with pytest.raises(urllib.request.URLError, match="unknown url type: ftp"):
         opener.open("ftp://localhost/test")
 
+
 def test_check_file_size_non_regular():
     """Verify that check_file_size rejects non-regular files (directories)."""
     from src.utils import check_file_size
@@ -2013,7 +2138,7 @@ def test_check_file_size_non_regular():
 
 def test_compare_snapshots_depth_limit():
     """Verify that compare_snapshots respects the MAX_DEPTH limit in DeepDiff."""
-    from src.diff_engine import compare_snapshots, HAS_DEEPDIFF, MAX_DEPTH
+    from src.diff_engine import compare_snapshots, HAS_DEEPDIFF
     import os
     import json
     import shutil
@@ -2087,9 +2212,9 @@ def test_atomic_write_interruption():
     # NamedTemporaryFile usually has 'tmp' or a random name, but we can check specifically for our case
     # Since we use delete=False and manually remove it in except block, we should be clean.
     for f in remaining_files:
-        if f.startswith("tmp") and f != "tmp_history": # some dirs exist in tests/
-             # This is a bit loose but better than nothing
-             pass
+        if f.startswith("tmp") and f != "tmp_history":  # some dirs exist in tests/
+            # This is a bit loose but better than nothing
+            pass
 
     # Cleanup
     if os.path.exists(path):
@@ -2140,16 +2265,17 @@ def test_process_trial_list_hardening():
             "identificationModule": {"nctId": "NCT12345678", "briefTitle": "Title"},
             "conditionsModule": {"conditions": ["C" * 300] * 150 + [123, None]},
             "designModule": {"phases": ["PHASE1"] * 20},
-            "statusModule": {"overallStatus": "RECRUITING"}
+            "statusModule": {"overallStatus": "RECRUITING"},
         }
     }
 
-    with patch("src.main.fetch_trial_data", return_value=mock_data), \
-         patch("src.main.safe_json_load", return_value=[]), \
-         patch("src.main.update_history", return_value=[]), \
-         patch("src.main.save_snapshot"), \
-         patch("src.main.compare_snapshots", return_value=None):
-
+    with (
+        patch("src.main.fetch_trial_data", return_value=mock_data),
+        patch("src.main.safe_json_load", return_value=[]),
+        patch("src.main.update_history", return_value=[]),
+        patch("src.main.save_snapshot"),
+        patch("src.main.compare_snapshots", return_value=None),
+    ):
         report, _ = process_trial(trial, "Target")
 
         # Conditions: capped at 100 items, each item truncated to 255
@@ -2157,7 +2283,7 @@ def test_process_trial_list_hardening():
         expected_item = "C" * 255
         assert report["conditions"].count(expected_item) == 100
         assert "123" not in report["conditions"]  # Was at index 150
-        assert "None" not in report["conditions"] # Was at index 151
+        assert "None" not in report["conditions"]  # Was at index 151
 
         # Phases: capped at 10 items
         assert report["phases"].count("PHASE1") == 10
@@ -2199,19 +2325,41 @@ def test_discover_all_targets_hardening():
             with open(summary_path, "w", encoding="utf-8") as f:
                 json.dump([{"target": target_name, "id": "NCT12345678"}], f)
 
-        with patch("src.generate_target_pages.load_trials_yaml", return_value=[]), \
-             patch("src.generate_target_pages.check_file_size"), \
-             patch("os.path.exists", side_effect=lambda p: True if p == "data/targets" else real_path_exists(p)), \
-             patch("os.listdir", side_effect=lambda d: sorted(real_listdir(test_targets_dir)) if d == "data/targets" else real_listdir(d)), \
-             patch("os.path.join", side_effect=lambda *args: real_path_join(test_targets_dir, *args[1:]) if args[0] == "data/targets" else real_path_join(*args)):
-
+        with (
+            patch("src.generate_target_pages.load_trials_yaml", return_value=[]),
+            patch("src.generate_target_pages.check_file_size"),
+            patch(
+                "os.path.exists",
+                side_effect=lambda p: (
+                    True if p == "data/targets" else real_path_exists(p)
+                ),
+            ),
+            patch(
+                "os.listdir",
+                side_effect=lambda d: (
+                    sorted(real_listdir(test_targets_dir))
+                    if d == "data/targets"
+                    else real_listdir(d)
+                ),
+            ),
+            patch(
+                "os.path.join",
+                side_effect=lambda *args: (
+                    real_path_join(test_targets_dir, *args[1:])
+                    if args[0] == "data/targets"
+                    else real_path_join(*args)
+                ),
+            ),
+        ):
             targets = discover_all_targets()
 
             # Total targets should be capped at 100
             assert len(targets) == 100
 
             # Target names should be truncated
-            long_target = next((t for t in targets if t["name"].startswith("Long")), None)
+            long_target = next(
+                (t for t in targets if t["name"].startswith("Long")), None
+            )
             assert long_target is not None
             assert len(long_target["name"]) == 255
     finally:
@@ -2233,10 +2381,11 @@ def test_extract_trials_robustness():
             "protocolSection": {
                 "identificationModule": {
                     "nctId": f"NCT{i:08d}",
-                    "briefTitle": "Trial Title"
+                    "briefTitle": "Trial Title",
                 }
             }
-        } for i in range(2500)
+        }
+        for i in range(2500)
     ]
     res = extract_trials(large_input)
     assert len(res) == 2000
@@ -2247,7 +2396,6 @@ def test_search_trials_malformed_response():
     """Verify that search_trials handles missing or non-list 'studies' key in the API response."""
     from src.auto_discover_trials import search_trials
     from unittest.mock import patch, MagicMock
-    import json
 
     with patch("src.auto_discover_trials.get_session") as mock_get_session:
         mock_session = MagicMock()
@@ -2269,7 +2417,9 @@ def test_search_trials_malformed_response():
         mock_response_not_list.status_code = 200
         mock_response_not_list.headers = {"Content-Type": "application/json"}
         mock_response_not_list.url = "https://clinicaltrials.gov/api/v2/studies"
-        mock_response_not_list.iter_content.return_value = [b'{"studies": "not a list"}']
+        mock_response_not_list.iter_content.return_value = [
+            b'{"studies": "not a list"}'
+        ]
         mock_session.get.return_value = mock_response_not_list
         mock_response_not_list.__enter__.return_value = mock_response_not_list
 
@@ -2294,6 +2444,7 @@ def test_atomic_write_success():
     # Cleanup
     if os.path.exists(path):
         os.remove(path)
+
 
 def test_atomic_write_preserves_permissions():
     """Verify that atomic_write preserves the file mode (permissions) of the target file."""

@@ -141,7 +141,10 @@ def update_target(
         data["targets"] = []
 
     for t in data["targets"]:
-        if isinstance(t, dict) and str(t.get("name", ""))[:255].lower() == target_name.lower():
+        if (
+            isinstance(t, dict)
+            and str(t.get("name", ""))[:255].lower() == target_name.lower()
+        ):
             target = t
             break
 
@@ -149,7 +152,9 @@ def update_target(
     if target is None:
         # Security enhancement: Limit number of targets to prevent DoS (CWE-400)
         if len(data["targets"]) >= MAX_TARGETS:
-            print(f"Error: Maximum number of targets ({MAX_TARGETS}) reached. Cannot add '{target_name}'.")
+            print(
+                f"Error: Maximum number of targets ({MAX_TARGETS}) reached. Cannot add '{target_name}'."
+            )
             return data
 
         target = {
@@ -163,7 +168,11 @@ def update_target(
         target["trials"] = []
 
     # Get existing trial IDs
-    existing_ids = {trial.get("id") for trial in target.get("trials", []) if isinstance(trial, dict) and trial.get("id")}
+    existing_ids = {
+        trial.get("id")
+        for trial in target.get("trials", [])
+        if isinstance(trial, dict) and trial.get("id")
+    }
 
     # Load excluded trials
     excluded_ids = set()
@@ -175,7 +184,9 @@ def update_target(
         try:
             with open(exclusion_yaml, "r", encoding="utf-8") as f:
                 ex_data = yaml.safe_load(f)
-                if isinstance(ex_data, dict) and isinstance(ex_data.get("excluded_ids"), list):
+                if isinstance(ex_data, dict) and isinstance(
+                    ex_data.get("excluded_ids"), list
+                ):
                     excluded_ids = set(ex_data.get("excluded_ids", []))
         except (yaml.YAMLError, OSError) as e:
             print(f"Warning: Could not load exclusion list: {e}")
@@ -193,7 +204,9 @@ def update_target(
         if trial["id"] not in existing_ids:
             # Security enhancement: Limit trials per target to prevent DoS (CWE-400)
             if len(target["trials"]) >= MAX_TRIALS_PER_TARGET:
-                print(f"  Warning: Target '{target_name}' reached maximum trials ({MAX_TRIALS_PER_TARGET}).")
+                print(
+                    f"  Warning: Target '{target_name}' reached maximum trials ({MAX_TRIALS_PER_TARGET})."
+                )
                 break
 
             target["trials"].append(trial)
@@ -248,7 +261,10 @@ def main() -> int:
     # If replace mode, clear existing trials for this target
     if args.replace:
         for target in data.get("targets", []):
-            if isinstance(target, dict) and target.get("name", "").lower() == args.target.lower():
+            if (
+                isinstance(target, dict)
+                and target.get("name", "").lower() == args.target.lower()
+            ):
                 target["trials"] = []
                 break
 

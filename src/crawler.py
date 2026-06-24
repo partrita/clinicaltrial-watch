@@ -5,7 +5,25 @@ import random
 import threading
 from typing import Any, Dict, Optional
 from urllib.parse import urlparse
-from utils import sanitize_id, is_valid_nct_id, atomic_write, create_safe_session, HAS_REQUESTS, MAX_CONFIG_SIZE
+
+try:
+    from utils import (
+        sanitize_id,
+        is_valid_nct_id,
+        atomic_write,
+        create_safe_session,
+        HAS_REQUESTS,
+        MAX_CONFIG_SIZE,
+    )
+except ImportError:
+    from src.utils import (
+        sanitize_id,
+        is_valid_nct_id,
+        atomic_write,
+        create_safe_session,
+        HAS_REQUESTS,
+        MAX_CONFIG_SIZE,
+    )
 
 import ssl
 import urllib.request
@@ -76,23 +94,35 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                 parsed_url = urlparse(response.url)
                 hostname = parsed_url.hostname or ""
                 if parsed_url.scheme != "https" or not (
-                    hostname == "clinicaltrials.gov" or
-                    hostname.endswith(".clinicaltrials.gov")
+                    hostname == "clinicaltrials.gov"
+                    or hostname.endswith(".clinicaltrials.gov")
                 ):
-                    print(f"Error: Insecure or unexpected redirect for {safe_trial_id}: {response.url}")
+                    print(
+                        f"Error: Insecure or unexpected redirect for {safe_trial_id}: {response.url}"
+                    )
                     return None
 
                 if response.status_code == 200:
                     # Security enhancement: Validate Content-Type
                     content_type = response.headers.get("Content-Type", "")
-                    if not content_type or not content_type.lower().startswith("application/json"):
-                        print(f"Error: Unexpected Content-Type for {safe_trial_id}: {content_type}")
+                    if not content_type or not content_type.lower().startswith(
+                        "application/json"
+                    ):
+                        print(
+                            f"Error: Unexpected Content-Type for {safe_trial_id}: {content_type}"
+                        )
                         return None
 
                     # Check Content-Length header if present
                     content_length = response.headers.get("Content-Length")
-                    if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
-                        print(f"Error: Response too large for {safe_trial_id}: {content_length} bytes")
+                    if (
+                        content_length
+                        and content_length.strip().isdigit()
+                        and int(content_length) > MAX_RESPONSE_SIZE
+                    ):
+                        print(
+                            f"Error: Response too large for {safe_trial_id}: {content_length} bytes"
+                        )
                         return None
 
                     # Read in chunks to enforce limit even if header is missing/wrong
@@ -101,18 +131,24 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                     for chunk in response.iter_content(chunk_size=128 * 1024):
                         size += len(chunk)
                         if size > MAX_RESPONSE_SIZE:
-                            print(f"Error: Response exceeded size limit for {safe_trial_id}")
+                            print(
+                                f"Error: Response exceeded size limit for {safe_trial_id}"
+                            )
                             return None
                         content.append(chunk)
 
                     try:
                         data = json.loads(b"".join(content))
                     except RecursionError:
-                        print(f"Error: JSON response for {safe_trial_id} is too deeply nested (RecursionError)")
+                        print(
+                            f"Error: JSON response for {safe_trial_id} is too deeply nested (RecursionError)"
+                        )
                         return None
 
                     if not isinstance(data, dict):
-                        print(f"Error: Malformed JSON response for {safe_trial_id} (not a dictionary)")
+                        print(
+                            f"Error: Malformed JSON response for {safe_trial_id} (not a dictionary)"
+                        )
                         return None
                     return data
                 elif response.status_code == 404:
@@ -167,22 +203,32 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                 parsed_url = urlparse(final_url)
                 hostname = parsed_url.hostname or ""
                 if parsed_url.scheme != "https" or not (
-                    hostname == "clinicaltrials.gov" or
-                    hostname.endswith(".clinicaltrials.gov")
+                    hostname == "clinicaltrials.gov"
+                    or hostname.endswith(".clinicaltrials.gov")
                 ):
-                    print(f"Error: Insecure or unexpected redirect for {safe_trial_id} (urllib): {final_url}")
+                    print(
+                        f"Error: Insecure or unexpected redirect for {safe_trial_id} (urllib): {final_url}"
+                    )
                     return None
 
                 if response.status == 200:
                     # Security enhancement: Validate Content-Type
                     content_type = response.headers.get("Content-Type", "")
-                    if not content_type or not content_type.lower().startswith("application/json"):
-                        print(f"Error: Unexpected Content-Type for {safe_trial_id} (urllib): {content_type}")
+                    if not content_type or not content_type.lower().startswith(
+                        "application/json"
+                    ):
+                        print(
+                            f"Error: Unexpected Content-Type for {safe_trial_id} (urllib): {content_type}"
+                        )
                         return None
 
                     # Check Content-Length for urllib
                     content_length = response.headers.get("Content-Length")
-                    if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
+                    if (
+                        content_length
+                        and content_length.strip().isdigit()
+                        and int(content_length) > MAX_RESPONSE_SIZE
+                    ):
                         print(f"Error: Response too large for {safe_trial_id}")
                         return None
 
@@ -194,18 +240,24 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                             break
                         size += len(chunk)
                         if size > MAX_RESPONSE_SIZE:
-                            print(f"Error: Response exceeded size limit for {safe_trial_id}")
+                            print(
+                                f"Error: Response exceeded size limit for {safe_trial_id}"
+                            )
                             return None
                         content.append(chunk)
 
                     try:
                         data = json.loads(b"".join(content))
                     except RecursionError:
-                        print(f"Error: JSON response for {safe_trial_id} is too deeply nested (urllib, RecursionError)")
+                        print(
+                            f"Error: JSON response for {safe_trial_id} is too deeply nested (urllib, RecursionError)"
+                        )
                         return None
 
                     if not isinstance(data, dict):
-                        print(f"Error: Malformed JSON response for {safe_trial_id} (urllib, not a dictionary)")
+                        print(
+                            f"Error: Malformed JSON response for {safe_trial_id} (urllib, not a dictionary)"
+                        )
                         return None
                     return data
                 else:

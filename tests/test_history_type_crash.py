@@ -1,9 +1,8 @@
-import pytest
 import os
 import json
-import shutil
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from src.main import process_trial
+
 
 def test_process_trial_history_type_crash():
     """Confirm that process_trial crashes when history file is a dictionary instead of a list."""
@@ -20,18 +19,22 @@ def test_process_trial_history_type_crash():
 
     try:
         # Mock dependencies to reach the vulnerable 'if history:' block
-        with patch("src.main.fetch_trial_data") as mock_fetch, \
-             patch("src.main.compare_snapshots", return_value=None), \
-             patch("src.main.save_snapshot"):
-
+        with (
+            patch("src.main.fetch_trial_data") as mock_fetch,
+            patch("src.main.compare_snapshots", return_value=None),
+            patch("src.main.save_snapshot"),
+        ):
             mock_fetch.return_value = {
                 "protocolSection": {
                     "identificationModule": {"nctId": trial_id, "briefTitle": "Title"},
                     "statusModule": {"overallStatus": "RECRUITING"},
                     "sponsorCollaboratorsModule": {"leadSponsor": {"name": "Sponsor"}},
-                    "designModule": {"enrollmentInfo": {"count": 100}, "phases": ["PHASE1"]},
+                    "designModule": {
+                        "enrollmentInfo": {"count": 100},
+                        "phases": ["PHASE1"],
+                    },
                     "conditionsModule": {"conditions": ["Condition"]},
-                    "descriptionModule": {"briefSummary": "Summary"}
+                    "descriptionModule": {"briefSummary": "Summary"},
                 }
             }
 

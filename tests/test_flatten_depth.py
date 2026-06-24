@@ -1,5 +1,5 @@
-import pytest
 from src.main import flatten_dict, MAX_DEPTH
+
 
 def test_flatten_dict_depth_limit():
     """Verify that flatten_dict respects the MAX_DEPTH limit to prevent DoS."""
@@ -26,17 +26,12 @@ def test_flatten_dict_depth_limit():
         assert key.count("_") < MAX_DEPTH
         assert "leaf_deep" not in key
 
+
 def test_flatten_dict_normal_nesting():
     """Verify that flatten_dict works correctly for normal nesting."""
     d = {
-        "user": {
-            "id": 1,
-            "info": {
-                "name": "Sentinel",
-                "role": "Security"
-            }
-        },
-        "tags": ["security", "audit"]
+        "user": {"id": 1, "info": {"name": "Sentinel", "role": "Security"}},
+        "tags": ["security", "audit"],
     }
 
     flattened = flatten_dict(d)
