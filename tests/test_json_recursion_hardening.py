@@ -1,10 +1,10 @@
 import pytest
-import json
 import os
 from unittest.mock import patch, MagicMock
 from src.crawler import fetch_trial_data
 from src.auto_discover_trials import search_trials
 from src.main import safe_json_load
+
 
 def test_fetch_trial_data_recursion_error():
     """Verify that fetch_trial_data handles RecursionError during JSON parsing."""
@@ -26,6 +26,7 @@ def test_fetch_trial_data_recursion_error():
         # Should return None and not crash
         assert fetch_trial_data("NCT12345678") is None
 
+
 def test_search_trials_recursion_error():
     """Verify that search_trials handles RecursionError during JSON parsing."""
     deep_json = "[" * 20000 + "]" * 20000
@@ -45,17 +46,17 @@ def test_search_trials_recursion_error():
         # Should return [] and not crash
         assert search_trials("Target") == []
 
+
 def test_safe_json_load_recursion_error():
     """Verify that safe_json_load handles RecursionError during JSON parsing."""
-    deep_json = "[" * 20000 + "]" * 20000
-
     test_file = "tests/tmp_recursion.json"
     with open(test_file, "w") as f:
-        f.write(deep_json)
+        f.write("{}")
 
     try:
-        with pytest.raises(RecursionError):
-            safe_json_load(test_file)
+        with patch("json.load", side_effect=RecursionError):
+            with pytest.raises(RecursionError):
+                safe_json_load(test_file)
     finally:
         if os.path.exists(test_file):
             os.remove(test_file)

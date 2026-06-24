@@ -1,8 +1,6 @@
-
-import json
-import sys
 from src.main import flatten_dict
 from unittest.mock import patch
+
 
 def test_flatten_recursion_hardening():
     """Verify that flatten_dict handles deeply nested structures in lists without crashing."""
@@ -16,8 +14,8 @@ def test_flatten_recursion_hardening():
     with patch("json.dumps", side_effect=RecursionError):
         print("Testing with mocked RecursionError in json.dumps...")
         result = flatten_dict(data)
-        assert 'my_list' in result
-        assert '"[Complex Object: Too Deep]"' in result['my_list']
+        assert "my_list" in result
+        assert '"[Complex Object: Too Deep]"' in result["my_list"]
         print("Success: Placeholder found in result (mocked json.dumps).")
 
     # 2. Test str() recursion hardening
@@ -31,9 +29,10 @@ def test_flatten_recursion_hardening():
     data2 = {"my_list": [123, RecursiveStr()]}
     print("Testing with object that raises RecursionError in str()...")
     result2 = flatten_dict(data2)
-    assert 'my_list' in result2
-    assert "[Complex Object: Too Deep]" in result2['my_list']
+    assert "my_list" in result2
+    assert "[Complex Object: Too Deep]" in result2["my_list"]
     print("Success: Placeholder found in result (recursive str).")
+
 
 if __name__ == "__main__":
     test_flatten_recursion_hardening()

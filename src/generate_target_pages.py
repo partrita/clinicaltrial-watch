@@ -1,7 +1,7 @@
 import os
-import json
 import yaml
 from typing import Any, Dict, List
+
 try:
     from utils import sanitize_id, escape_html, check_file_size, atomic_write
 except ImportError:
@@ -65,47 +65,6 @@ def discover_all_targets() -> List[Dict[str, Any]]:
             "description": t.get("description", f"{name} 타겟 임상시험 모니터링"),
         }
 
-    # 2. Discover from data/targets directory
-    targets_data_dir = "data/targets"
-    if os.path.exists(targets_data_dir):
-        # Security enhancement: Explicitly sort directory listing for deterministic behavior
-        try:
-            items = sorted(os.listdir(targets_data_dir))
-        except OSError:
-            items = []
-
-        for d in items:
-            # Security enhancement: Limit total number of targets to prevent DoS (CWE-400)
-            if len(targets_dict) >= MAX_TARGETS:
-                break
-
-            # Security enhancement: Use sanitized ID for deduplication against YAML-loaded targets
-            target_id = sanitize_id(d).lower()
-            if target_id in targets_dict:
-                continue
-
-            summary_path = os.path.join(targets_data_dir, d, "status_summary.json")
-            if os.path.exists(summary_path):
-                try:
-                    # Security enhancement: Check file size before loading to prevent DoS (CWE-400)
-                    check_file_size(summary_path)
-
-                    with open(summary_path, "r", encoding="utf-8") as f:
-                        data = json.load(f)
-                        if data and isinstance(data, list) and isinstance(data[0], dict):
-                            name = data[0].get("target") or d
-                            # Security enhancement: Truncate target name to prevent DoS (CWE-400)
-                            safe_name = str(name)[:255]
-                            # Security enhancement: Use sanitized ID as key to prevent path collisions
-                            target_id = sanitize_id(safe_name).lower()
-                            if target_id not in targets_dict:
-                                targets_dict[target_id] = {
-                                    "name": safe_name,
-                                    "description": f"{safe_name} 타겟 임상시험 모니터링",
-                                }
-                except Exception:
-                    continue
-
     return list(targets_dict.values())
 
 
@@ -124,7 +83,9 @@ def generate_target_qmd(
     yaml_header = yaml.safe_dump(frontmatter, sort_keys=False, allow_unicode=True)
 
     safe_description = escape_html(description)
-    header = f"---\n{yaml_header}---\n\n::: {{.callout-note}}\n{safe_description}\n:::\n"
+    header = (
+        f"---\n{yaml_header}---\n\n::: {{.callout-note}}\n{safe_description}\n:::\n"
+    )
 
     body = (
         r'''
@@ -210,13 +171,14 @@ if os.path.exists(csv_path):
 
 ::: {.panel-tabset}
 
-### Target Milestones
+### Daily change
 
 ```{python}
 #| echo: false
 #| output: asis
 import json
 import os
+import re
 from src.utils import sanitize_id, escape_html, check_file_size
 
 target_id = "'''
@@ -241,9 +203,13 @@ if os.path.exists(target_h_file):
 
     print("")
     for record in reversed(history[-10:]):
-        print(f'- **{escape_html(record.get("timestamp", "N/A"))}**: {escape_html(record.get("event", "N/A"))}')
+        timestamp = escape_html(record.get("timestamp", "N/A"))
+        event_str = escape_html(record.get("event", "N/A"))
+        # Replace NCT IDs with markdown links
+        event_str = re.sub(r'(NCT\d+)', r'[\1](../trials/\1.qmd)', event_str)
+        print(f'- **{timestamp}**: {event_str}')
 else:
-    print(f"No target-level milestones recorded yet for {target_id}.")
+    print(f"No daily changes recorded yet for {target_id}.")
 ```
 
 ### Trial Changes
@@ -257,7 +223,7 @@ from src.utils import sanitize_id, escape_html, format_diff_line_markdown, check
 
 target_id = "'''
         + target_id
-        + r'''"
+        + r""""
 summary_path = f"data/targets/{target_id}/status_summary.json"
 
 # Get trial IDs for this target
@@ -314,14 +280,14 @@ if not history_found:
 
 ---
 
-<a href="../data/targets/'''
+<a href="../data/targets/"""
         + target_id
-        + r'''/all_trials_raw.csv" class="btn btn-primary" role="button" aria-label="Download all raw trial data for '''
+        + r"""/all_trials_raw.csv" class="btn btn-primary" role="button" aria-label="Download all raw trial data for """
         + safe_name
-        + r''' in CSV format">📥 Download Full Data (CSV)</a>
-<a href="../data/targets/'''
+        + r""" in CSV format">📥 Download Full Data (CSV)</a>
+<a href="../data/targets/"""
         + target_id
-        + r'''/status_summary.csv" class="btn btn-outline-secondary" role="button" aria-label="Download status summary for '''
+        + r"""/status_summary.csv" class="btn btn-outline-secondary" role="button" aria-label="Download status summary for """
         + safe_name
         + r''' in CSV format">📥 Download Status Summary (CSV)</a>
 
@@ -338,7 +304,7 @@ from src.utils import sanitize_id, get_status_badge, get_phase_badge, get_update
 
 target_id = "'''
         + target_id
-        + r'''"
+        + r""""
 summary_path = f"data/targets/{target_id}/status_summary.json"
 
 if os.path.exists(summary_path):
@@ -380,7 +346,7 @@ if os.path.exists(summary_path):
 else:
     print(f"No monitoring data available yet for {target_id} at {os.path.abspath(summary_path)}. Run the data collection script first.")
 ```
-'''
+"""
     )
 
     # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
@@ -409,13 +375,29 @@ import json
 import os
 from src.utils import sanitize_id, get_changed_count_badge, escape_html, check_file_size
 
+import yaml
+
 summary_path = "data/targets_summary.json"
 targets_dir = "data/targets"
 targets = []
 
+# Read valid targets from trials.yaml
+valid_target_ids = set()
+try:
+    with open("trials.yaml", "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f) or {}
+        for t in config.get("targets", []):
+            if isinstance(t, dict) and t.get("name"):
+                valid_target_ids.add(sanitize_id(t["name"]).lower())
+except Exception:
+    pass
+
 # Try to gather data from individual target summaries for maximum accuracy
 if os.path.exists(targets_dir):
     for d in os.listdir(targets_dir):
+        if valid_target_ids and d.lower() not in valid_target_ids:
+            continue
+            
         t_summary_path = os.path.join(targets_dir, d, "status_summary.json")
         if os.path.exists(t_summary_path):
             try:
@@ -549,15 +531,139 @@ def update_quarto_yml(
     print(f"Updated: {quarto_path}")
 
 
+def generate_all_trial_pages(
+    history_dir: str = "data/history", output_dir: str = "trials"
+) -> None:
+    """Generate a QMD file for each trial's history."""
+    if not os.path.exists(history_dir):
+        return
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Security enhancement: Explicitly sort directory listing for deterministic behavior
+    try:
+        items = sorted(os.listdir(history_dir))
+    except OSError:
+        items = []
+
+    count = 0
+    for filename in items:
+        if filename.startswith("NCT") and filename.endswith("_history.json"):
+            trial_id = filename.replace("_history.json", "")
+            qmd_path = os.path.join(output_dir, f"{trial_id}.qmd")
+
+            # Simple frontmatter
+            header = f'---\ntitle: "{trial_id} Change History"\n---\n\n'
+
+            body = f"""```{{python}}
+#| echo: false
+#| output: asis
+import json
+import os
+import re
+import pandas as pd
+from src.utils import escape_html, check_file_size
+
+trial_id = "{trial_id}"
+history_file = f"data/history/{{trial_id}}_history.json"
+
+if os.path.exists(history_file):
+    try:
+        check_file_size(history_file)
+        with open(history_file, "r", encoding="utf-8") as f:
+            history = json.load(f)
+    except Exception as e:
+        print(f"Error loading history: {{e}}")
+        history = []
+        
+    if isinstance(history, list):
+        # Filter valid records, skipping 'Initial data collection' if no diff
+        records = []
+        for r in history:
+            if isinstance(r, dict):
+                diff_text = r.get('diff', '')
+                if diff_text == 'Initial data collection':
+                    continue
+                    
+                timestamp = escape_html(r.get('timestamp', 'N/A'))
+                for line in diff_text.splitlines():
+                    line = line.strip()
+                    if not line: continue
+                    
+                    # Parse DeepDiff output
+                    m1 = re.match(r'Field `(.*?)` changed from `(.*?)` to `(.*?)`', line)
+                    if m1:
+                        field, before, after = escape_html(m1.group(1)), escape_html(m1.group(2)), escape_html(m1.group(3))
+                        records.append({{'Timestamp': timestamp, 'Before': f"**{{field}}**: {{before}}", 'After': f"**{{field}}**: {{after}}"}})
+                        continue
+                        
+                    # Parse Fallback Diff output
+                    m2 = re.match(r'(.*?): `(.*?)` -> `(.*?)`', line)
+                    if m2:
+                        field, before, after = escape_html(m2.group(1)), escape_html(m2.group(2)), escape_html(m2.group(3))
+                        records.append({{'Timestamp': timestamp, 'Before': f"**{{field}}**: {{before}}", 'After': f"**{{field}}**: {{after}}"}})
+                        continue
+                        
+                    m3 = re.match(r'New field added: `(.*?)`', line)
+                    if m3:
+                        field = escape_html(m3.group(1))
+                        records.append({{'Timestamp': timestamp, 'Before': '-', 'After': f"**{{field}}** (Added)"}})
+                        continue
+                        
+                    m4 = re.match(r'Field removed: `(.*?)`', line)
+                    if m4:
+                        field = escape_html(m4.group(1))
+                        records.append({{'Timestamp': timestamp, 'Before': f"**{{field}}** (Removed)", 'After': '-'}})
+                        continue
+                        
+                    # Fallback for truncation or other text
+                    records.append({{'Timestamp': timestamp, 'Before': '-', 'After': escape_html(line)}})
+        
+        if records:
+            df = pd.DataFrame(records)
+            # Use markdown table format
+            print(df.to_markdown(index=False))
+        else:
+            print(f"No changes recorded yet for {{trial_id}}.")
+    else:
+        print(f"Invalid history data for {{trial_id}}.")
+else:
+    print(f"No history file found for {{trial_id}}.")
+```
+"""
+            # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
+            with atomic_write(qmd_path, encoding="utf-8") as f:
+                f.write(header + body)
+
+            count += 1
+
+    print(f"Generated {count} trial history pages in {output_dir}/")
+
+
 def main() -> None:
-    # Discover all targets from trials.yaml AND data directory
+    # Discover all targets from trials.yaml
     targets = discover_all_targets()
 
     if not targets:
-        print("No targets found in trials.yaml or data/targets/")
+        print("No targets found in trials.yaml")
         return
 
     print(f"Found {len(targets)} targets")
+
+    # Get valid target IDs
+    valid_ids = {sanitize_id(t["name"]).lower() for t in targets}
+
+    output_dir = "targets"
+    if os.path.exists(output_dir):
+        for f in os.listdir(output_dir):
+            if f.endswith(".qmd"):
+                tid = f[:-4]
+                if tid not in valid_ids:
+                    print(f"Removing obsolete page: {f}")
+                    try:
+                        os.remove(os.path.join(output_dir, f))
+                    except OSError as e:
+                        print(f"Error removing {f}: {e}")
 
     # Generate QMD pages for all targets
     for target in targets:
@@ -572,7 +678,12 @@ def main() -> None:
     # Update _quarto.yml with all discovered targets
     update_quarto_yml(targets)
 
-    print(f"\n✓ Generated/Updated {len(targets)} target pages and updated index.qmd")
+    # Generate individual trial pages
+    generate_all_trial_pages()
+
+    print(
+        f"\n✓ Generated/Updated {len(targets)} target pages, trial pages, and updated index.qmd"
+    )
 
 
 if __name__ == "__main__":

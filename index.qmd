@@ -13,13 +13,29 @@ import json
 import os
 from src.utils import sanitize_id, get_changed_count_badge, escape_html, check_file_size
 
+import yaml
+
 summary_path = "data/targets_summary.json"
 targets_dir = "data/targets"
 targets = []
 
+# Read valid targets from trials.yaml
+valid_target_ids = set()
+try:
+    with open("trials.yaml", "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f) or {}
+        for t in config.get("targets", []):
+            if isinstance(t, dict) and t.get("name"):
+                valid_target_ids.add(sanitize_id(t["name"]).lower())
+except Exception:
+    pass
+
 # Try to gather data from individual target summaries for maximum accuracy
 if os.path.exists(targets_dir):
     for d in os.listdir(targets_dir):
+        if valid_target_ids and d.lower() not in valid_target_ids:
+            continue
+            
         t_summary_path = os.path.join(targets_dir, d, "status_summary.json")
         if os.path.exists(t_summary_path):
             try:

@@ -11,10 +11,35 @@ from functools import lru_cache
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
-from crawler import fetch_trial_data, save_snapshot, reset_session
-from utils import sanitize_id, is_valid_nct_id, sanitize_csv_value, check_file_size, atomic_write, safe_str, safe_json_dumps, MAX_VALUE_LENGTH
-from diff_engine import compare_snapshots, format_diff
-from generate_target_pages import main as generate_pages
+
+try:
+    from crawler import fetch_trial_data, save_snapshot, reset_session
+    from utils import (
+        sanitize_id,
+        is_valid_nct_id,
+        sanitize_csv_value,
+        check_file_size,
+        atomic_write,
+        safe_str,
+        safe_json_dumps,
+        MAX_VALUE_LENGTH,
+    )
+    from diff_engine import compare_snapshots, format_diff
+    from generate_target_pages import main as generate_pages
+except ImportError:
+    from src.crawler import fetch_trial_data, save_snapshot, reset_session
+    from src.utils import (
+        sanitize_id,
+        is_valid_nct_id,
+        sanitize_csv_value,
+        check_file_size,
+        atomic_write,
+        safe_str,
+        safe_json_dumps,
+        MAX_VALUE_LENGTH,
+    )
+    from src.diff_engine import compare_snapshots, format_diff
+    from src.generate_target_pages import main as generate_pages
 
 import yaml
 
@@ -113,7 +138,9 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
 
     for target in targets:
         if not isinstance(target, dict):
-            print(f"  Warning: Removing invalid target entry (not a dictionary): {target}")
+            print(
+                f"  Warning: Removing invalid target entry (not a dictionary): {target}"
+            )
             continue
 
         # Security enhancement: Truncate metadata
@@ -138,7 +165,9 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
         # Security enhancement: Prevent target ID collisions which cause data directory overwrites
         target_id = sanitize_id(target_name).lower()
         if target_id in seen_target_ids:
-            print(f"  Warning: Target ID collision detected: '{target_name}' and '{seen_target_ids[target_id]}' both resolve to '{target_id}'. Skipping '{target_name}'.")
+            print(
+                f"  Warning: Target ID collision detected: '{target_name}' and '{seen_target_ids[target_id]}' both resolve to '{target_id}'. Skipping '{target_name}'."
+            )
             total_invalid += 1
             continue
         seen_target_ids[target_id] = target_name
@@ -149,7 +178,9 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
 
         # Security enhancement: Limit trials per target to prevent DoS (CWE-400)
         if len(trials) > MAX_TRIALS_PER_TARGET:
-            print(f"  Warning: Target '{target_name}' exceeds {MAX_TRIALS_PER_TARGET} trials. Truncating.")
+            print(
+                f"  Warning: Target '{target_name}' exceeds {MAX_TRIALS_PER_TARGET} trials. Truncating."
+            )
             trials = trials[:MAX_TRIALS_PER_TARGET]
             any_truncation = True
 
@@ -163,7 +194,9 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
 
         for trial in trials:
             if not isinstance(trial, dict):
-                print(f"  Warning: Removing invalid trial entry (not a dictionary): {trial}")
+                print(
+                    f"  Warning: Removing invalid trial entry (not a dictionary): {trial}"
+                )
                 total_invalid += 1
                 continue
 
@@ -321,7 +354,9 @@ def update_target_history(
     history = safe_json_load(history_file, default=[])
 
     if not isinstance(history, list) or not all(isinstance(x, dict) for x in history):
-        print(f"  Warning: Target history for {target_name} is not a valid list. Resetting.")
+        print(
+            f"  Warning: Target history for {target_name} is not a valid list. Resetting."
+        )
         history = []
 
     # Check for changes today specifically for the daily log
@@ -334,7 +369,9 @@ def update_target_history(
         # Limit displayed IDs to prevent extremely large message strings
         display_limit = 10
         display_ids = changed_today[:display_limit]
-        message = f"Changes detected in {len(changed_today)} trials: {', '.join(display_ids)}"
+        message = (
+            f"Changes detected in {len(changed_today)} trials: {', '.join(display_ids)}"
+        )
         if len(changed_today) > display_limit:
             message += f" (and {len(changed_today) - display_limit} more)"
 
@@ -636,7 +673,9 @@ def process_trial(
         last_monitored = datetime.now().strftime("%Y-%m-%d")
 
         # Security enhancement: Truncate combined details to prevent DoS
-        combined_details = f"**[RECENT CHANGES FOUND]**\n{diff_text[:10000]}\n\n***\n{detailed_desc}"
+        combined_details = (
+            f"**[RECENT CHANGES FOUND]**\n{diff_text[:10000]}\n\n***\n{detailed_desc}"
+        )
         report_item.update(
             {
                 "changed_today": True,
@@ -654,11 +693,16 @@ def process_trial(
         # Security enhancement: Validate record type and key existence (CWE-400)
         last_record = history[-1]
         if isinstance(last_record, dict) and "timestamp" in last_record:
-            report_item["last_monitored_change"] = safe_str(last_record["timestamp"], 10).split(" ")[0]
+            report_item["last_monitored_change"] = safe_str(
+                last_record["timestamp"], 10
+            ).split(" ")[0]
 
         # Check 30 day window using efficient string comparison (~80x faster than strptime)
         for record in reversed(history):  # Search from newest
-            if not isinstance(record, dict) or record.get("diff") == "Initial data collection":
+            if (
+                not isinstance(record, dict)
+                or record.get("diff") == "Initial data collection"
+            ):
                 continue
 
             timestamp = record.get("timestamp")

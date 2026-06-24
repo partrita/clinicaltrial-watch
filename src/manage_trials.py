@@ -8,8 +8,13 @@ import argparse
 import os
 import json
 from typing import Any, Dict, Optional
-from utils import sanitize_id, is_valid_nct_id, check_file_size, atomic_write
-from generate_target_pages import main as generate_pages
+
+try:
+    from utils import sanitize_id, is_valid_nct_id, check_file_size, atomic_write
+    from generate_target_pages import main as generate_pages
+except ImportError:
+    from src.utils import sanitize_id, is_valid_nct_id, check_file_size, atomic_write
+    from src.generate_target_pages import main as generate_pages
 
 try:
     import yaml
@@ -111,7 +116,9 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
     if trial_id not in data["excluded_ids"]:
         # Security enhancement: Limit number of excluded trials to prevent DoS (CWE-400)
         if len(data["excluded_ids"]) >= MAX_EXCLUDED_IDS:
-            print(f"Warning: Exclusion list has reached maximum capacity ({MAX_EXCLUDED_IDS}). Cannot add {trial_id}.")
+            print(
+                f"Warning: Exclusion list has reached maximum capacity ({MAX_EXCLUDED_IDS}). Cannot add {trial_id}."
+            )
             return
 
         data["excluded_ids"].append(trial_id)
@@ -146,7 +153,11 @@ def remove_trial(
             continue
 
         original_count = len(target.get("trials", []))
-        target["trials"] = [t for t in target.get("trials", []) if isinstance(t, dict) and t.get("id") != trial_id]
+        target["trials"] = [
+            t
+            for t in target.get("trials", [])
+            if isinstance(t, dict) and t.get("id") != trial_id
+        ]
 
         if len(target["trials"]) < original_count:
             found = True
@@ -205,7 +216,9 @@ def perform_cleanup(trial_id: str):
                         raise ValueError(f"{summary_path} is not a JSON list")
 
                     new_summary = [
-                        item for item in summary if isinstance(item, dict) and item.get("id") != trial_id
+                        item
+                        for item in summary
+                        if isinstance(item, dict) and item.get("id") != trial_id
                     ]
 
                     if len(new_summary) < len(summary):

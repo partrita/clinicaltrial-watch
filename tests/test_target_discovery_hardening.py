@@ -3,7 +3,7 @@ import json
 import yaml
 import pytest
 from src.generate_target_pages import discover_all_targets
-from src.utils import atomic_write
+
 
 @pytest.fixture
 def mock_config(tmp_path):
@@ -21,6 +21,7 @@ def mock_config(tmp_path):
     # Restore CWD
     os.chdir(old_cwd)
 
+
 def test_target_discovery_collision_deduplication(mock_config):
     """Verify that targets with colliding sanitized IDs are deduplicated."""
     config_path, _ = mock_config
@@ -29,7 +30,7 @@ def test_target_discovery_collision_deduplication(mock_config):
     config = {
         "targets": [
             {"name": "Target A", "description": "Desc 1"},
-            {"name": "Target!A", "description": "Desc 2"}
+            {"name": "Target!A", "description": "Desc 2"},
         ]
     }
 
@@ -42,13 +43,16 @@ def test_target_discovery_collision_deduplication(mock_config):
     assert len(targets) == 1
     assert targets[0]["name"] == "Target A"
 
+
 def test_target_discovery_resource_limit(mock_config):
     """Verify that target discovery respects the 100-target limit from trials.yaml."""
     config_path, _ = mock_config
 
     # Create 150 targets
     config = {
-        "targets": [{"name": f"Target {i}", "description": f"Desc {i}"} for i in range(150)]
+        "targets": [
+            {"name": f"Target {i}", "description": f"Desc {i}"} for i in range(150)
+        ]
     }
 
     with open(config_path, "w") as f:
@@ -59,14 +63,13 @@ def test_target_discovery_resource_limit(mock_config):
     # Should be capped at 100
     assert len(targets) == 100
 
+
 def test_target_discovery_filesystem_deduplication(mock_config):
     """Verify that discovery from filesystem doesn't add duplicates already in trials.yaml."""
     config_path, targets_dir = mock_config
 
     # Target in trials.yaml
-    config = {
-        "targets": [{"name": "Target A", "description": "YAML Desc"}]
-    }
+    config = {"targets": [{"name": "Target A", "description": "YAML Desc"}]}
     with open(config_path, "w") as f:
         yaml.dump(config, f)
 
@@ -84,6 +87,7 @@ def test_target_discovery_filesystem_deduplication(mock_config):
     # Should only have 1 target, and it should be the one from trials.yaml (highest precedence)
     assert len(targets) == 1
     assert targets[0]["name"] == "Target A"
+
 
 def test_target_discovery_total_resource_limit(mock_config):
     """Verify that the 100-target limit applies across both discovery sources."""

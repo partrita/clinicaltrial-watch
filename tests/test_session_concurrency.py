@@ -1,8 +1,8 @@
 import threading
-import pytest
 from unittest.mock import patch, MagicMock
 import src.crawler
 import src.auto_discover_trials
+
 
 def test_crawler_session_concurrency():
     """Verify that crawler.get_session() is thread-safe and creates only one session."""
@@ -36,6 +36,7 @@ def test_crawler_session_concurrency():
 
         # Verify that requests.Session was only called once
         assert mock_session_cls.call_count == 1
+
 
 def test_auto_discover_session_concurrency():
     """Verify that auto_discover_trials.get_session() is thread-safe."""

@@ -10,14 +10,28 @@ import random
 import threading
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
-from utils import is_valid_nct_id, create_safe_session, HAS_REQUESTS, MAX_CONFIG_SIZE
+
+try:
+    from utils import (
+        is_valid_nct_id,
+        create_safe_session,
+        HAS_REQUESTS,
+        MAX_CONFIG_SIZE,
+    )
+    from update_trials_from_csv import load_yaml, save_yaml, update_target
+except ImportError:
+    from src.utils import (
+        is_valid_nct_id,
+        create_safe_session,
+        HAS_REQUESTS,
+        MAX_CONFIG_SIZE,
+    )
+    from src.update_trials_from_csv import load_yaml, save_yaml, update_target
 
 import ssl
 import urllib.request
 import urllib.parse
 import json
-
-from update_trials_from_csv import load_yaml, save_yaml, update_target
 
 _session = None
 _session_lock = threading.Lock()
@@ -66,28 +80,42 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
         try:
             time.sleep(random.uniform(0.5, 1.0))  # Be polite to API
             # Use stream=True to check Content-Length before downloading full body
-            with session.get(base_url, params=params, timeout=(5, 20), stream=True) as response:
+            with session.get(
+                base_url, params=params, timeout=(5, 20), stream=True
+            ) as response:
                 # Security enhancement: Verify final URL after redirects
                 parsed_url = urlparse(response.url)
                 hostname = parsed_url.hostname or ""
                 if parsed_url.scheme != "https" or not (
-                    hostname == "clinicaltrials.gov" or
-                    hostname.endswith(".clinicaltrials.gov")
+                    hostname == "clinicaltrials.gov"
+                    or hostname.endswith(".clinicaltrials.gov")
                 ):
-                    print(f"Error: Insecure or unexpected redirect for {query_term}: {response.url}")
+                    print(
+                        f"Error: Insecure or unexpected redirect for {query_term}: {response.url}"
+                    )
                     return []
 
                 if response.status_code == 200:
                     # Security enhancement: Validate Content-Type
                     content_type = response.headers.get("Content-Type", "")
-                    if not content_type or not content_type.lower().startswith("application/json"):
-                        print(f"Error: Unexpected Content-Type for {query_term}: {content_type}")
+                    if not content_type or not content_type.lower().startswith(
+                        "application/json"
+                    ):
+                        print(
+                            f"Error: Unexpected Content-Type for {query_term}: {content_type}"
+                        )
                         return []
 
                     # Check Content-Length header if present
                     content_length = response.headers.get("Content-Length")
-                    if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
-                        print(f"Error: Search response too large for {query_term}: {content_length} bytes")
+                    if (
+                        content_length
+                        and content_length.strip().isdigit()
+                        and int(content_length) > MAX_RESPONSE_SIZE
+                    ):
+                        print(
+                            f"Error: Search response too large for {query_term}: {content_length} bytes"
+                        )
                         return []
 
                     # Read in chunks to enforce limit
@@ -96,22 +124,30 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                     for chunk in response.iter_content(chunk_size=128 * 1024):
                         size += len(chunk)
                         if size > MAX_RESPONSE_SIZE:
-                            print(f"Error: Search response exceeded size limit for {query_term}")
+                            print(
+                                f"Error: Search response exceeded size limit for {query_term}"
+                            )
                             return []
                         content.append(chunk)
 
                     try:
                         data = json.loads(b"".join(content))
                     except RecursionError:
-                        print(f"Error: Search response for {query_term} is too deeply nested (RecursionError)")
+                        print(
+                            f"Error: Search response for {query_term} is too deeply nested (RecursionError)"
+                        )
                         return []
 
                     if not isinstance(data, dict):
-                        print(f"Error: Malformed search response for {query_term} (not a dictionary)")
+                        print(
+                            f"Error: Malformed search response for {query_term} (not a dictionary)"
+                        )
                         return []
                     studies = data.get("studies")
                     if not isinstance(studies, list):
-                        print(f"Error: 'studies' in search response for {query_term} is not a list")
+                        print(
+                            f"Error: 'studies' in search response for {query_term} is not a list"
+                        )
                         return []
                     return studies
                 else:
@@ -161,22 +197,32 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                 parsed_url = urlparse(final_url)
                 hostname = parsed_url.hostname or ""
                 if parsed_url.scheme != "https" or not (
-                    hostname == "clinicaltrials.gov" or
-                    hostname.endswith(".clinicaltrials.gov")
+                    hostname == "clinicaltrials.gov"
+                    or hostname.endswith(".clinicaltrials.gov")
                 ):
-                    print(f"Error: Insecure or unexpected redirect for {query_term} (urllib): {final_url}")
+                    print(
+                        f"Error: Insecure or unexpected redirect for {query_term} (urllib): {final_url}"
+                    )
                     return []
 
                 if response.status == 200:
                     # Security enhancement: Validate Content-Type
                     content_type = response.headers.get("Content-Type", "")
-                    if not content_type or not content_type.lower().startswith("application/json"):
-                        print(f"Error: Unexpected Content-Type for {query_term} (urllib): {content_type}")
+                    if not content_type or not content_type.lower().startswith(
+                        "application/json"
+                    ):
+                        print(
+                            f"Error: Unexpected Content-Type for {query_term} (urllib): {content_type}"
+                        )
                         return []
 
                     # Check Content-Length for urllib
                     content_length = response.headers.get("Content-Length")
-                    if content_length and content_length.strip().isdigit() and int(content_length) > MAX_RESPONSE_SIZE:
+                    if (
+                        content_length
+                        and content_length.strip().isdigit()
+                        and int(content_length) > MAX_RESPONSE_SIZE
+                    ):
                         print(f"Error: Search response too large for {query_term}")
                         return []
 
@@ -188,22 +234,30 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                             break
                         size += len(chunk)
                         if size > MAX_RESPONSE_SIZE:
-                            print(f"Error: Search response exceeded size limit for {query_term}")
+                            print(
+                                f"Error: Search response exceeded size limit for {query_term}"
+                            )
                             return []
                         content.append(chunk)
 
                     try:
                         data = json.loads(b"".join(content))
                     except RecursionError:
-                        print(f"Error: Search response for {query_term} is too deeply nested (urllib, RecursionError)")
+                        print(
+                            f"Error: Search response for {query_term} is too deeply nested (urllib, RecursionError)"
+                        )
                         return []
 
                     if not isinstance(data, dict):
-                        print(f"Error: Malformed search response for {query_term} (urllib, not a dictionary)")
+                        print(
+                            f"Error: Malformed search response for {query_term} (urllib, not a dictionary)"
+                        )
                         return []
                     studies = data.get("studies")
                     if not isinstance(studies, list):
-                        print(f"Error: 'studies' in search response for {query_term} (urllib) is not a list")
+                        print(
+                            f"Error: 'studies' in search response for {query_term} (urllib) is not a list"
+                        )
                         return []
                     return studies
                 else:
@@ -286,7 +340,6 @@ def main() -> int:
             if existing_target
             else set()
         )
-
 
         # Perform the update
         data = update_target(data, target_name, new_trials, target.get("description"))

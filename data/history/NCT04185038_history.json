@@ -1,10 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 17:02:51",
-    "diff": "Initial data collection"
-  },
-  {
-    "timestamp": "2026-03-23 11:18:21",
-    "diff": "Minor formatting updates."
-  }
-]
+[{"timestamp": "2026-02-05 17:02:51", "diff": "Initial data collection"}, {"timestamp": "2026-03-23 11:18:21", "diff": "Minor formatting updates."}, {"timestamp": "2026-06-24 14:40:23", "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-04` to `2026-04`\nField `statusModule.primaryCompletionDateStruct.date` changed from `2026-05` to `2027-05`\nField `statusModule.completionDateStruct.date` changed from `2041-05` to `2042-05`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-12-05` to `2026-04-07`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-12-15` to `2026-04-13`\nField `armsInterventionsModule.armGroups.[0]label` changed from `ARM A (Tumor Cavity Infusion)` to `ARM A (Tumor Cavity Infusion) - [CLOSED TO ENROLLMENT]`\nField `armsInterventionsModule.armGroups.[1]label` changed from `ARM B (Ventricular System Infusion)` to `ARM B (Ventricular System Infusion) - [CLOSED TO ENROLLMENT]`\nField `armsInterventionsModule.armGroups.[2]label` changed from `ARM C (DIPG)` to `ARM C (DIPG) - [CLOSED TO ENROLLMENT]`\nField `armsInterventionsModule.interventions.[0]armGroupLabels.[0]` changed from `ARM A (Tumor Cavity Infusion)` to `ARM A (Tumor Cavity Infusion) - [CLOSED TO ENROLLMENT]`\nField `armsInterventionsModule.interventions.[0]armGroupLabels.[1]` changed from `ARM B (Ventricular System Infusion)` to `ARM B (Ventricular System Infusion) - [CLOSED TO ENROLLMENT]`\nField `armsInterventionsModule.interventions.[0]armGroupLabels.[2]` changed from `ARM C (DIPG)` to `ARM C (DIPG) - [CLOSED TO ENROLLMENT]`"}]

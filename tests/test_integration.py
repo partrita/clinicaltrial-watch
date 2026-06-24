@@ -134,6 +134,7 @@ class TestProcessTrial:
 
         trial = {"id": "NCT00000004", "name": "Corrupted Local"}
         import pytest
+
         with pytest.raises(json.JSONDecodeError):
             process_trial(trial, "TestTarget")
 
