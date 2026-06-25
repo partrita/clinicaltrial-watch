@@ -21,6 +21,7 @@ jobs:
         uses: prefix-dev/setup-pixi@v0.9.6
         with:
           pixi-version: v0.66.0
+          locked: false
 
       - name: Run Tests
         run: |
