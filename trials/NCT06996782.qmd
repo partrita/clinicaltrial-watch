@@ -2,78 +2,39 @@
 title: "NCT06996782 Change History"
 ---
 
-```{python}
-#| echo: false
-#| output: asis
-import json
-import os
-import re
-import pandas as pd
-from src.utils import escape_html, check_file_size
-
-trial_id = "NCT06996782"
-history_file = f"data/history/{trial_id}_history.json"
-
-if os.path.exists(history_file):
-    try:
-        check_file_size(history_file)
-        with open(history_file, "r", encoding="utf-8") as f:
-            history = json.load(f)
-    except Exception as e:
-        print(f"Error loading history: {e}")
-        history = []
-        
-    if isinstance(history, list):
-        # Filter valid records, skipping 'Initial data collection' if no diff
-        records = []
-        for r in history:
-            if isinstance(r, dict):
-                diff_text = r.get('diff', '')
-                if diff_text == 'Initial data collection':
-                    continue
-                    
-                timestamp = escape_html(r.get('timestamp', 'N/A'))
-                for line in diff_text.splitlines():
-                    line = line.strip()
-                    if not line: continue
-                    
-                    # Parse DeepDiff output
-                    m1 = re.match(r'Field `(.*?)` changed from `(.*?)` to `(.*?)`', line)
-                    if m1:
-                        field, before, after = escape_html(m1.group(1)), escape_html(m1.group(2)), escape_html(m1.group(3))
-                        records.append({'Timestamp': timestamp, 'Before': f"**{field}**: {before}", 'After': f"**{field}**: {after}"})
-                        continue
-                        
-                    # Parse Fallback Diff output
-                    m2 = re.match(r'(.*?): `(.*?)` -> `(.*?)`', line)
-                    if m2:
-                        field, before, after = escape_html(m2.group(1)), escape_html(m2.group(2)), escape_html(m2.group(3))
-                        records.append({'Timestamp': timestamp, 'Before': f"**{field}**: {before}", 'After': f"**{field}**: {after}"})
-                        continue
-                        
-                    m3 = re.match(r'New field added: `(.*?)`', line)
-                    if m3:
-                        field = escape_html(m3.group(1))
-                        records.append({'Timestamp': timestamp, 'Before': '-', 'After': f"**{field}** (Added)"})
-                        continue
-                        
-                    m4 = re.match(r'Field removed: `(.*?)`', line)
-                    if m4:
-                        field = escape_html(m4.group(1))
-                        records.append({'Timestamp': timestamp, 'Before': f"**{field}** (Removed)", 'After': '-'})
-                        continue
-                        
-                    # Fallback for truncation or other text
-                    records.append({'Timestamp': timestamp, 'Before': '-', 'After': escape_html(line)})
-        
-        if records:
-            df = pd.DataFrame(records)
-            # Use markdown table format
-            print(df.to_markdown(index=False))
-        else:
-            print(f"No changes recorded yet for {trial_id}.")
-    else:
-        print(f"Invalid history data for {trial_id}.")
-else:
-    print(f"No history file found for {trial_id}.")
-```
+| Timestamp                   | Before                                                                       | After                                                                     |
+|:----------------------------|:-----------------------------------------------------------------------------|:--------------------------------------------------------------------------|
+| 2026-02-25 01&#58;02&#58;25 | **statusModule.statusVerifiedDate**: 2026-01                                 | **statusModule.statusVerifiedDate**: 2026-02                              |
+| 2026-02-25 01&#58;02&#58;25 | **statusModule.lastUpdateSubmitDate**: 2026-01-13                            | **statusModule.lastUpdateSubmitDate**: 2026-02-23                         |
+| 2026-02-25 01&#58;02&#58;25 | **statusModule.lastUpdatePostDateStruct.date**: 2026-01-14                   | **statusModule.lastUpdatePostDateStruct.date**: 2026-02-24                |
+| 2026-02-25 01&#58;02&#58;25 | **contactsLocationsModule.locations.&#91;7&#93;status**: NOT_YET_RECRUITING  | **contactsLocationsModule.locations.&#91;7&#93;status**: RECRUITING       |
+| 2026-02-25 01&#58;02&#58;25 | **contactsLocationsModule.locations.&#91;8&#93;status**: NOT_YET_RECRUITING  | **contactsLocationsModule.locations.&#91;8&#93;status**: WITHDRAWN        |
+| 2026-02-25 01&#58;02&#58;25 | **contactsLocationsModule.locations.&#91;47&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;47&#93;status**: WITHDRAWN       |
+| 2026-02-25 01&#58;02&#58;25 | **contactsLocationsModule.locations.&#91;79&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;79&#93;status**: RECRUITING      |
+| 2026-03-31 02&#58;31&#58;37 | **statusModule.statusVerifiedDate**: 2026-02                                 | **statusModule.statusVerifiedDate**: 2026-03                              |
+| 2026-03-31 02&#58;31&#58;37 | **statusModule.lastUpdateSubmitDate**: 2026-02-23                            | **statusModule.lastUpdateSubmitDate**: 2026-03-27                         |
+| 2026-03-31 02&#58;31&#58;37 | **statusModule.lastUpdatePostDateStruct.date**: 2026-02-24                   | **statusModule.lastUpdatePostDateStruct.date**: 2026-03-30                |
+| 2026-03-31 02&#58;31&#58;37 | **contactsLocationsModule.locations.&#91;46&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;46&#93;status**: WITHDRAWN       |
+| 2026-03-31 02&#58;31&#58;37 | **contactsLocationsModule.locations.&#91;55&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;55&#93;status**: RECRUITING      |
+| 2026-03-31 02&#58;31&#58;37 | **contactsLocationsModule.locations.&#91;56&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;56&#93;status**: RECRUITING      |
+| 2026-03-31 02&#58;31&#58;37 | **contactsLocationsModule.locations.&#91;58&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;58&#93;status**: RECRUITING      |
+| 2026-03-31 02&#58;31&#58;37 | **contactsLocationsModule.locations.&#91;60&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;60&#93;status**: RECRUITING      |
+| 2026-03-31 02&#58;31&#58;37 | **contactsLocationsModule.locations.&#91;62&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;62&#93;status**: RECRUITING      |
+| 2026-03-31 02&#58;31&#58;37 | **contactsLocationsModule.locations.&#91;82&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;82&#93;status**: RECRUITING      |
+| 2026-03-31 02&#58;31&#58;37 | **contactsLocationsModule.locations.&#91;97&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;97&#93;status**: RECRUITING      |
+| 2026-05-26 02&#58;38&#58;41 | **statusModule.statusVerifiedDate**: 2026-03                                 | **statusModule.statusVerifiedDate**: 2026-04                              |
+| 2026-05-26 02&#58;38&#58;41 | **statusModule.lastUpdateSubmitDate**: 2026-03-27                            | **statusModule.lastUpdateSubmitDate**: 2026-04-30                         |
+| 2026-05-26 02&#58;38&#58;41 | **statusModule.lastUpdatePostDateStruct.date**: 2026-03-30                   | **statusModule.lastUpdatePostDateStruct.date**: 2026-05-01                |
+| 2026-05-26 02&#58;38&#58;41 | **contactsLocationsModule.locations.&#91;77&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;77&#93;status**: WITHDRAWN       |
+| 2026-05-26 02&#58;38&#58;41 | **contactsLocationsModule.locations.&#91;78&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;78&#93;status**: WITHDRAWN       |
+| 2026-05-26 02&#58;38&#58;41 | **contactsLocationsModule.locations.&#91;103&#93;geoPoint.lat**: 39.94548    | **contactsLocationsModule.locations.&#91;103&#93;geoPoint.lat**: 37.05738 |
+| 2026-05-26 02&#58;38&#58;41 | **contactsLocationsModule.locations.&#91;103&#93;geoPoint.lon**: 32.87302    | **contactsLocationsModule.locations.&#91;103&#93;geoPoint.lon**: 34.58903 |
+| 2026-06-18 04&#58;04&#58;37 | **statusModule.statusVerifiedDate**: 2026-04                                 | **statusModule.statusVerifiedDate**: 2026-06                              |
+| 2026-06-18 04&#58;04&#58;37 | **statusModule.lastUpdateSubmitDate**: 2026-04-30                            | **statusModule.lastUpdateSubmitDate**: 2026-06-16                         |
+| 2026-06-18 04&#58;04&#58;37 | **statusModule.lastUpdatePostDateStruct.date**: 2026-05-01                   | **statusModule.lastUpdatePostDateStruct.date**: 2026-06-17                |
+| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;3&#93;status**: NOT_YET_RECRUITING  | **contactsLocationsModule.locations.&#91;3&#93;status**: RECRUITING       |
+| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;39&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;39&#93;status**: RECRUITING      |
+| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;42&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;42&#93;status**: RECRUITING      |
+| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;43&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;43&#93;status**: RECRUITING      |
+| 2026-06-24 14&#58;19&#58;41 | **contactsLocationsModule.locations.&#91;101&#93;geoPoint.lat**: 37.05738    | **contactsLocationsModule.locations.&#91;101&#93;geoPoint.lat**: 41.0225  |
+| 2026-06-24 14&#58;19&#58;41 | **contactsLocationsModule.locations.&#91;101&#93;geoPoint.lon**: 34.58903    | **contactsLocationsModule.locations.&#91;101&#93;geoPoint.lon**: 28.94083 |

@@ -2,78 +2,29 @@
 title: "NCT05537740 Change History"
 ---
 
-```{python}
-#| echo: false
-#| output: asis
-import json
-import os
-import re
-import pandas as pd
-from src.utils import escape_html, check_file_size
-
-trial_id = "NCT05537740"
-history_file = f"data/history/{trial_id}_history.json"
-
-if os.path.exists(history_file):
-    try:
-        check_file_size(history_file)
-        with open(history_file, "r", encoding="utf-8") as f:
-            history = json.load(f)
-    except Exception as e:
-        print(f"Error loading history: {e}")
-        history = []
-        
-    if isinstance(history, list):
-        # Filter valid records, skipping 'Initial data collection' if no diff
-        records = []
-        for r in history:
-            if isinstance(r, dict):
-                diff_text = r.get('diff', '')
-                if diff_text == 'Initial data collection':
-                    continue
-                    
-                timestamp = escape_html(r.get('timestamp', 'N/A'))
-                for line in diff_text.splitlines():
-                    line = line.strip()
-                    if not line: continue
-                    
-                    # Parse DeepDiff output
-                    m1 = re.match(r'Field `(.*?)` changed from `(.*?)` to `(.*?)`', line)
-                    if m1:
-                        field, before, after = escape_html(m1.group(1)), escape_html(m1.group(2)), escape_html(m1.group(3))
-                        records.append({'Timestamp': timestamp, 'Before': f"**{field}**: {before}", 'After': f"**{field}**: {after}"})
-                        continue
-                        
-                    # Parse Fallback Diff output
-                    m2 = re.match(r'(.*?): `(.*?)` -> `(.*?)`', line)
-                    if m2:
-                        field, before, after = escape_html(m2.group(1)), escape_html(m2.group(2)), escape_html(m2.group(3))
-                        records.append({'Timestamp': timestamp, 'Before': f"**{field}**: {before}", 'After': f"**{field}**: {after}"})
-                        continue
-                        
-                    m3 = re.match(r'New field added: `(.*?)`', line)
-                    if m3:
-                        field = escape_html(m3.group(1))
-                        records.append({'Timestamp': timestamp, 'Before': '-', 'After': f"**{field}** (Added)"})
-                        continue
-                        
-                    m4 = re.match(r'Field removed: `(.*?)`', line)
-                    if m4:
-                        field = escape_html(m4.group(1))
-                        records.append({'Timestamp': timestamp, 'Before': f"**{field}** (Removed)", 'After': '-'})
-                        continue
-                        
-                    # Fallback for truncation or other text
-                    records.append({'Timestamp': timestamp, 'Before': '-', 'After': escape_html(line)})
-        
-        if records:
-            df = pd.DataFrame(records)
-            # Use markdown table format
-            print(df.to_markdown(index=False))
-        else:
-            print(f"No changes recorded yet for {trial_id}.")
-    else:
-        print(f"Invalid history data for {trial_id}.")
-else:
-    print(f"No history file found for {trial_id}.")
-```
+| Timestamp                   | Before                                                                                                                      | After                                                                                                                               |
+|:----------------------------|:----------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------|
+| 2026-02-12 14&#58;01&#58;36 | **root&#91;&#x27;referencesModule&#x27;&#93;&#91;&#x27;seeAlsoLinks&#x27;&#93;** (Removed)                                  | -                                                                                                                                   |
+| 2026-02-24 00&#58;57&#58;04 | **statusModule.statusVerifiedDate**: 2026-01                                                                                | **statusModule.statusVerifiedDate**: 2026-02                                                                                        |
+| 2026-02-24 00&#58;57&#58;04 | **statusModule.lastUpdateSubmitDate**: 2026-01-21                                                                           | **statusModule.lastUpdateSubmitDate**: 2026-02-20                                                                                   |
+| 2026-02-24 00&#58;57&#58;04 | **statusModule.lastUpdatePostDateStruct.date**: 2026-01-22                                                                  | **statusModule.lastUpdatePostDateStruct.date**: 2026-02-23                                                                          |
+| 2026-02-24 00&#58;57&#58;04 | **contactsLocationsModule.locations.&#91;20&#93;facility**: Clinica Universidad De Navarra &#124; Oncologia Medica          | **contactsLocationsModule.locations.&#91;20&#93;facility**: Clinica Universidad de Navarra &#124; Pamplona &#124; Oncologia         |
+| 2026-02-24 00&#58;57&#58;04 | **contactsLocationsModule.locations.&#91;22&#93;facility**: Clinica Universidad De Navarra &#124; Oncologia Medica          | **contactsLocationsModule.locations.&#91;22&#93;facility**: Clinica Universidad de Navarra &#124; Madrid &#124; Oncologia           |
+| 2026-03-21 02&#58;05&#58;09 | **statusModule.statusVerifiedDate**: 2026-02                                                                                | **statusModule.statusVerifiedDate**: 2026-03                                                                                        |
+| 2026-03-21 02&#58;05&#58;09 | **statusModule.primaryCompletionDateStruct.date**: 2026-07-07                                                               | **statusModule.primaryCompletionDateStruct.date**: 2027-04-30                                                                       |
+| 2026-03-21 02&#58;05&#58;09 | **statusModule.lastUpdateSubmitDate**: 2026-02-20                                                                           | **statusModule.lastUpdateSubmitDate**: 2026-03-19                                                                                   |
+| 2026-03-21 02&#58;05&#58;09 | **statusModule.lastUpdatePostDateStruct.date**: 2026-02-23                                                                  | **statusModule.lastUpdatePostDateStruct.date**: 2026-03-20                                                                          |
+| 2026-03-21 02&#58;05&#58;09 | **contactsLocationsModule.locations.&#91;20&#93;facility**: Clinica Universidad de Navarra &#124; Pamplona &#124; Oncologia | **contactsLocationsModule.locations.&#91;20&#93;facility**: Clinica Universidad De Navarra &#124; Pamplona &#124; Oncologia         |
+| 2026-03-21 02&#58;05&#58;09 | **contactsLocationsModule.locations.&#91;22&#93;facility**: Clinica Universidad de Navarra &#124; Madrid &#124; Oncologia   | **contactsLocationsModule.locations.&#91;22&#93;facility**: Clinica Universidad De Navarra &#124; Madrid &#124; Oncologia           |
+| 2026-03-21 02&#58;05&#58;09 | -                                                                                                                           | **root&#91;&#x27;contactsLocationsModule&#x27;&#93;&#91;&#x27;locations&#x27;&#93;&#91;14&#93;&#91;&#x27;state&#x27;&#93;** (Added) |
+| 2026-03-21 02&#58;05&#58;09 | -                                                                                                                           | **root&#91;&#x27;contactsLocationsModule&#x27;&#93;&#91;&#x27;locations&#x27;&#93;&#91;13&#93;&#91;&#x27;state&#x27;&#93;** (Added) |
+| 2026-03-21 02&#58;05&#58;09 | -                                                                                                                           | **root&#91;&#x27;contactsLocationsModule&#x27;&#93;&#91;&#x27;locations&#x27;&#93;&#91;15&#93;&#91;&#x27;state&#x27;&#93;** (Added) |
+| 2026-03-21 02&#58;05&#58;09 | -                                                                                                                           | **root&#91;&#x27;contactsLocationsModule&#x27;&#93;&#91;&#x27;locations&#x27;&#93;&#91;16&#93;&#91;&#x27;state&#x27;&#93;** (Added) |
+| 2026-05-26 02&#58;38&#58;39 | **statusModule.statusVerifiedDate**: 2026-03                                                                                | **statusModule.statusVerifiedDate**: 2026-05                                                                                        |
+| 2026-05-26 02&#58;38&#58;39 | **statusModule.lastUpdateSubmitDate**: 2026-03-19                                                                           | **statusModule.lastUpdateSubmitDate**: 2026-05-19                                                                                   |
+| 2026-05-26 02&#58;38&#58;39 | **statusModule.lastUpdatePostDateStruct.date**: 2026-03-20                                                                  | **statusModule.lastUpdatePostDateStruct.date**: 2026-05-20                                                                          |
+| 2026-05-26 02&#58;38&#58;39 | **contactsLocationsModule.locations.&#91;14&#93;state**: Nouvelle-Aquitaine                                                 | **contactsLocationsModule.locations.&#91;14&#93;state**: New Aquitaine                                                              |
+| 2026-06-24 14&#58;19&#58;39 | **statusModule.statusVerifiedDate**: 2026-05                                                                                | **statusModule.statusVerifiedDate**: 2026-06                                                                                        |
+| 2026-06-24 14&#58;19&#58;39 | **statusModule.lastUpdateSubmitDate**: 2026-05-19                                                                           | **statusModule.lastUpdateSubmitDate**: 2026-06-18                                                                                   |
+| 2026-06-24 14&#58;19&#58;39 | **statusModule.lastUpdatePostDateStruct.date**: 2026-05-20                                                                  | **statusModule.lastUpdatePostDateStruct.date**: 2026-06-22                                                                          |
+| 2026-06-24 14&#58;19&#58;39 | -                                                                                                                           | **root&#91;&#x27;contactsLocationsModule&#x27;&#93;&#91;&#x27;locations&#x27;&#93;&#91;12&#93;&#91;&#x27;state&#x27;&#93;** (Added) |

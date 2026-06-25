@@ -2,78 +2,33 @@
 title: "NCT05020912 Change History"
 ---
 
-```{python}
-#| echo: false
-#| output: asis
-import json
-import os
-import re
-import pandas as pd
-from src.utils import escape_html, check_file_size
-
-trial_id = "NCT05020912"
-history_file = f"data/history/{trial_id}_history.json"
-
-if os.path.exists(history_file):
-    try:
-        check_file_size(history_file)
-        with open(history_file, "r", encoding="utf-8") as f:
-            history = json.load(f)
-    except Exception as e:
-        print(f"Error loading history: {e}")
-        history = []
-        
-    if isinstance(history, list):
-        # Filter valid records, skipping 'Initial data collection' if no diff
-        records = []
-        for r in history:
-            if isinstance(r, dict):
-                diff_text = r.get('diff', '')
-                if diff_text == 'Initial data collection':
-                    continue
-                    
-                timestamp = escape_html(r.get('timestamp', 'N/A'))
-                for line in diff_text.splitlines():
-                    line = line.strip()
-                    if not line: continue
-                    
-                    # Parse DeepDiff output
-                    m1 = re.match(r'Field `(.*?)` changed from `(.*?)` to `(.*?)`', line)
-                    if m1:
-                        field, before, after = escape_html(m1.group(1)), escape_html(m1.group(2)), escape_html(m1.group(3))
-                        records.append({'Timestamp': timestamp, 'Before': f"**{field}**: {before}", 'After': f"**{field}**: {after}"})
-                        continue
-                        
-                    # Parse Fallback Diff output
-                    m2 = re.match(r'(.*?): `(.*?)` -> `(.*?)`', line)
-                    if m2:
-                        field, before, after = escape_html(m2.group(1)), escape_html(m2.group(2)), escape_html(m2.group(3))
-                        records.append({'Timestamp': timestamp, 'Before': f"**{field}**: {before}", 'After': f"**{field}**: {after}"})
-                        continue
-                        
-                    m3 = re.match(r'New field added: `(.*?)`', line)
-                    if m3:
-                        field = escape_html(m3.group(1))
-                        records.append({'Timestamp': timestamp, 'Before': '-', 'After': f"**{field}** (Added)"})
-                        continue
-                        
-                    m4 = re.match(r'Field removed: `(.*?)`', line)
-                    if m4:
-                        field = escape_html(m4.group(1))
-                        records.append({'Timestamp': timestamp, 'Before': f"**{field}** (Removed)", 'After': '-'})
-                        continue
-                        
-                    # Fallback for truncation or other text
-                    records.append({'Timestamp': timestamp, 'Before': '-', 'After': escape_html(line)})
-        
-        if records:
-            df = pd.DataFrame(records)
-            # Use markdown table format
-            print(df.to_markdown(index=False))
-        else:
-            print(f"No changes recorded yet for {trial_id}.")
-    else:
-        print(f"Invalid history data for {trial_id}.")
-else:
-    print(f"No history file found for {trial_id}.")
-```
+| Timestamp                   | Before                                                                                                                                  | After                                                                                                                                                                                                                                                 |
+|:----------------------------|:----------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 2026-06-02 04&#58;04&#58;22 | **statusModule.statusVerifiedDate**: 2025-11                                                                                            | **statusModule.statusVerifiedDate**: 2026-05                                                                                                                                                                                                          |
+| 2026-06-02 04&#58;04&#58;22 | **statusModule.overallStatus**: RECRUITING                                                                                              | **statusModule.overallStatus**: ACTIVE_NOT_RECRUITING                                                                                                                                                                                                 |
+| 2026-06-02 04&#58;04&#58;22 | **statusModule.lastUpdateSubmitDate**: 2025-11-25                                                                                       | **statusModule.lastUpdateSubmitDate**: 2026-05-28                                                                                                                                                                                                     |
+| 2026-06-02 04&#58;04&#58;22 | **statusModule.lastUpdatePostDateStruct.date**: 2025-11-26                                                                              | **statusModule.lastUpdatePostDateStruct.date**: 2026-06-01                                                                                                                                                                                            |
+| 2026-06-02 04&#58;04&#58;22 | **designModule.enrollmentInfo.count**: 28                                                                                               | **designModule.enrollmentInfo.count**: 18                                                                                                                                                                                                             |
+| 2026-06-02 04&#58;04&#58;22 | **designModule.enrollmentInfo.type**: ESTIMATED                                                                                         | **designModule.enrollmentInfo.type**: ACTUAL                                                                                                                                                                                                          |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | Field &#96;eligibilityModule.eligibilityCriteria&#96; changed from &#96;Inclusion Criteria&#58;                                                                                                                                                       |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Adults scheduled to undergo Mohs surgery within the Dermatologic Surgery unit of the Department of Dermatology, Cleveland Clinic                                                                                                                    |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Must have at least one BCC tumor eligible for removal by surgical excision                                                                                                                                                                          |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Men and women of any ethnic group are eligible                                                                                                                                                                                                      |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Must provide informed consent to participate                                                                                                                                                                                                        |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | Exclusion Criteria&#58;                                                                                                                                                                                                                               |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Pregnant or breastfeeding                                                                                                                                                                                                                           |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Currently being treated for other cancers with medical or radiation therapy                                                                                                                                                                         |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Known hypersensitivity to 5-aminolevulinic acid (ALA)                                                                                                                                                                                               |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * History of a photosensitivity disease, e.g.,porphyria cutanea tarda&#96; to &#96;Inclusion Criteria                                                                                                                                                 |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Must be an adult parcticpant (&#92;&gt; 18 yrs) who is scheduled to undergo BCC surgery (via Mohs surgery, ED&#92;&amp;C, or standard elliptical excision) within the Dermatologic Surgery unit of the Department of Dermatology, Cleveland Clinic. |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Must have at least one BCC tumor eligible for surgical removal                                                                                                                                                                                      |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Participants of any ethnic group are eligible for this trial.                                                                                                                                                                                       |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Must provide informed consent to participate in the trial.                                                                                                                                                                                          |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | Exclusion Criteria                                                                                                                                                                                                                                    |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Pregnant or breastfeeding                                                                                                                                                                                                                           |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Currently being treated for other cancers with medical or radiation therapy                                                                                                                                                                         |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * Known hypersensitivity to 5-aminolevulinic acid                                                                                                                                                                                                     |
+| 2026-06-02 04&#58;04&#58;22 | -                                                                                                                                       | * History of a photosensitivity disease, e.g., porphyria cutanea tarda&#96;                                                                                                                                                                           |
+| 2026-06-02 04&#58;04&#58;22 | **root&#91;&#x27;contactsLocationsModule&#x27;&#93;&#91;&#x27;centralContacts&#x27;&#93;** (Removed)                                    | -                                                                                                                                                                                                                                                     |
+| 2026-06-02 04&#58;04&#58;22 | **root&#91;&#x27;contactsLocationsModule&#x27;&#93;&#91;&#x27;locations&#x27;&#93;&#91;0&#93;&#91;&#x27;status&#x27;&#93;** (Removed)   | -                                                                                                                                                                                                                                                     |
+| 2026-06-02 04&#58;04&#58;22 | **root&#91;&#x27;contactsLocationsModule&#x27;&#93;&#91;&#x27;locations&#x27;&#93;&#91;0&#93;&#91;&#x27;contacts&#x27;&#93;** (Removed) | -                                                                                                                                                                                                                                                     |
