@@ -535,6 +535,10 @@ def generate_all_trial_pages(
     history_dir: str = "data/history", output_dir: str = "trials"
 ) -> None:
     """Generate a QMD file for each trial's history."""
+    import json
+    import re
+    import pandas as pd
+
     if not os.path.exists(history_dir):
         return
 
@@ -551,89 +555,120 @@ def generate_all_trial_pages(
         if filename.startswith("NCT") and filename.endswith("_history.json"):
             trial_id = filename.replace("_history.json", "")
             qmd_path = os.path.join(output_dir, f"{trial_id}.qmd")
+            history_file = os.path.join(history_dir, filename)
 
             # Simple frontmatter
             header = f'---\ntitle: "{trial_id} Change History"\n---\n\n'
 
-            body = f"""```{{python}}
-#| echo: false
-#| output: asis
-import json
-import os
-import re
-import pandas as pd
-from src.utils import escape_html, check_file_size
+            body = ""
+            if os.path.exists(history_file):
+                try:
+                    check_file_size(history_file)
+                    with open(history_file, "r", encoding="utf-8") as f:
+                        history = json.load(f)
+                except Exception as e:
+                    body = f"Error loading history: {e}"
+                    history = []
 
-trial_id = "{trial_id}"
-history_file = f"data/history/{{trial_id}}_history.json"
+                if isinstance(history, list):
+                    # Filter valid records, skipping 'Initial data collection' if no diff
+                    records = []
+                    for r in history:
+                        if isinstance(r, dict):
+                            diff_text = r.get("diff", "")
+                            if diff_text == "Initial data collection":
+                                continue
 
-if os.path.exists(history_file):
-    try:
-        check_file_size(history_file)
-        with open(history_file, "r", encoding="utf-8") as f:
-            history = json.load(f)
-    except Exception as e:
-        print(f"Error loading history: {{e}}")
-        history = []
-        
-    if isinstance(history, list):
-        # Filter valid records, skipping 'Initial data collection' if no diff
-        records = []
-        for r in history:
-            if isinstance(r, dict):
-                diff_text = r.get('diff', '')
-                if diff_text == 'Initial data collection':
-                    continue
-                    
-                timestamp = escape_html(r.get('timestamp', 'N/A'))
-                for line in diff_text.splitlines():
-                    line = line.strip()
-                    if not line: continue
-                    
-                    # Parse DeepDiff output
-                    m1 = re.match(r'Field `(.*?)` changed from `(.*?)` to `(.*?)`', line)
-                    if m1:
-                        field, before, after = escape_html(m1.group(1)), escape_html(m1.group(2)), escape_html(m1.group(3))
-                        records.append({{'Timestamp': timestamp, 'Before': f"**{{field}}**: {{before}}", 'After': f"**{{field}}**: {{after}}"}})
-                        continue
-                        
-                    # Parse Fallback Diff output
-                    m2 = re.match(r'(.*?): `(.*?)` -> `(.*?)`', line)
-                    if m2:
-                        field, before, after = escape_html(m2.group(1)), escape_html(m2.group(2)), escape_html(m2.group(3))
-                        records.append({{'Timestamp': timestamp, 'Before': f"**{{field}}**: {{before}}", 'After': f"**{{field}}**: {{after}}"}})
-                        continue
-                        
-                    m3 = re.match(r'New field added: `(.*?)`', line)
-                    if m3:
-                        field = escape_html(m3.group(1))
-                        records.append({{'Timestamp': timestamp, 'Before': '-', 'After': f"**{{field}}** (Added)"}})
-                        continue
-                        
-                    m4 = re.match(r'Field removed: `(.*?)`', line)
-                    if m4:
-                        field = escape_html(m4.group(1))
-                        records.append({{'Timestamp': timestamp, 'Before': f"**{{field}}** (Removed)", 'After': '-'}})
-                        continue
-                        
-                    # Fallback for truncation or other text
-                    records.append({{'Timestamp': timestamp, 'Before': '-', 'After': escape_html(line)}})
-        
-        if records:
-            df = pd.DataFrame(records)
-            # Use markdown table format
-            print(df.to_markdown(index=False))
-        else:
-            print(f"No changes recorded yet for {{trial_id}}.")
-    else:
-        print(f"Invalid history data for {{trial_id}}.")
-else:
-    print(f"No history file found for {{trial_id}}.")
-```
-"""
+                            timestamp = escape_html(r.get("timestamp", "N/A"))
+                            for line in diff_text.splitlines():
+                                line = line.strip()
+                                if not line:
+                                    continue
+
+                                # Parse DeepDiff output
+                                m1 = re.match(
+                                    r"Field `(.*?)` changed from `(.*?)` to `(.*?)`",
+                                    line,
+                                )
+                                if m1:
+                                    field, before, after = (
+                                        escape_html(m1.group(1)),
+                                        escape_html(m1.group(2)),
+                                        escape_html(m1.group(3)),
+                                    )
+                                    records.append(
+                                        {
+                                            "Timestamp": timestamp,
+                                            "Before": f"**{field}**: {before}",
+                                            "After": f"**{field}**: {after}",
+                                        }
+                                    )
+                                    continue
+
+                                # Parse Fallback Diff output
+                                m2 = re.match(r"(.*?): `(.*?)` -> `(.*?)`", line)
+                                if m2:
+                                    field, before, after = (
+                                        escape_html(m2.group(1)),
+                                        escape_html(m2.group(2)),
+                                        escape_html(m2.group(3)),
+                                    )
+                                    records.append(
+                                        {
+                                            "Timestamp": timestamp,
+                                            "Before": f"**{field}**: {before}",
+                                            "After": f"**{field}**: {after}",
+                                        }
+                                    )
+                                    continue
+
+                                m3 = re.match(r"New field added: `(.*?)`", line)
+                                if m3:
+                                    field = escape_html(m3.group(1))
+                                    records.append(
+                                        {
+                                            "Timestamp": timestamp,
+                                            "Before": "-",
+                                            "After": f"**{field}** (Added)",
+                                        }
+                                    )
+                                    continue
+
+                                m4 = re.match(r"Field removed: `(.*?)`", line)
+                                if m4:
+                                    field = escape_html(m4.group(1))
+                                    records.append(
+                                        {
+                                            "Timestamp": timestamp,
+                                            "Before": f"**{field}** (Removed)",
+                                            "After": "-",
+                                        }
+                                    )
+                                    continue
+
+                                # Fallback for truncation or other text
+                                records.append(
+                                    {
+                                        "Timestamp": timestamp,
+                                        "Before": "-",
+                                        "After": escape_html(line),
+                                    }
+                                )
+
+                    if records:
+                        df = pd.DataFrame(records)
+                        # Use markdown table format
+                        body = df.to_markdown(index=False)
+                    else:
+                        body = f"No changes recorded yet for {trial_id}."
+                else:
+                    body = f"Invalid history data for {trial_id}."
+            else:
+                body = f"No history file found for {trial_id}."
+
             # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
             with atomic_write(qmd_path, encoding="utf-8") as f:
-                f.write(header + body)
+                f.write(header + body + "\n")
 
             count += 1
 
