@@ -51,10 +51,10 @@ pixi install
 pixi run python src/auto_discover_trials.py
 
 # 로컬에서 모니터링 스크립트 실행
-pixi run python src/main.py
+pixi run start
 
 # Quarto 웹사이트 미리보기
-pixi run quarto preview
+pixi run preview
 ```
 
 ### 모니터링 대상 일괄 추가 (CSV 활용)
