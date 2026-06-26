@@ -40,6 +40,8 @@ def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
 
 def discover_all_targets() -> List[Dict[str, Any]]:
     """Discover all targets from trials.yaml and data/targets directory."""
+    import json
+
     targets_dict = {}
     MAX_TARGETS = 100
 
@@ -55,6 +57,10 @@ def discover_all_targets() -> List[Dict[str, Any]]:
         if not name:
             continue
 
+        # Security enhancement: Truncate name to prevent DoS
+        if len(name) > 255:
+            name = name[:255]
+
         # Security enhancement: Use sanitized ID as key to prevent path collisions
         target_id = sanitize_id(name).lower()
         if target_id in targets_dict:
@@ -64,6 +70,53 @@ def discover_all_targets() -> List[Dict[str, Any]]:
             "name": name,
             "description": t.get("description", f"{name} 타겟 임상시험 모니터링"),
         }
+
+    # 2. Load from data/targets directory
+    targets_dir = "data/targets"
+    if os.path.exists(targets_dir):
+        try:
+            dirs = sorted(os.listdir(targets_dir))
+        except OSError:
+            dirs = []
+
+        for d in dirs:
+            if len(targets_dict) >= MAX_TARGETS:
+                break
+
+            t_dir = os.path.join(targets_dir, d)
+            if not os.path.isdir(t_dir):
+                continue
+
+            t_summary_path = os.path.join(t_dir, "status_summary.json")
+            if os.path.exists(t_summary_path):
+                try:
+                    check_file_size(t_summary_path)
+                    with open(t_summary_path, "r", encoding="utf-8") as f:
+                        trials = json.load(f)
+
+                    if (
+                        isinstance(trials, list)
+                        and trials
+                        and all(isinstance(t, dict) for t in trials)
+                    ):
+                        name = trials[0].get("target", d)
+                        if not name:
+                            continue
+
+                        # Security enhancement: Truncate name to prevent DoS
+                        if len(name) > 255:
+                            name = name[:255]
+
+                        target_id = sanitize_id(name).lower()
+                        if target_id in targets_dict:
+                            continue
+
+                        targets_dict[target_id] = {
+                            "name": name,
+                            "description": f"{name} 타겟 임상시험 모니터링",
+                        }
+                except (json.JSONDecodeError, RecursionError, OSError):
+                    continue
 
     return list(targets_dict.values())
 
