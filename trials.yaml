@@ -518,3 +518,5 @@ targets:
       Tumors
   - id: NCT07657416
     name: NK521 in the Treatment of Advanced Solid Tumors
+  - id: NCT07667842
+    name: Study of D3L-002 in Subjects With Advanced Solid Tumors
