@@ -159,14 +159,19 @@ Cohort 2: Two dose groups will be set up. Subjects with advanced non-small cell 
 For both Cohort 1 and Cohort 2, BC008-1A injection will be administered once every 3 weeks, and 21 days will be regarded as one cycle. Subjects will continue to take the drug until disease progression occurs, or intolerable toxicity develops, or they are lost to follow-up, or withdraw their informed consent, or start a new anti-tumor treatment, or the investigator decides to withdraw them based on the subject's benefit situation.",
 NCT06349980,"A Study to Explore the Reasonable Dosage and Evaluate the Efficacy, Safety and Tolerability of HLX10 and HLX04 with or Without HLX53 in Untreated, Locally Advanced or Metastatic Hepatocellular Carcinoma Patients.",TIGIT,Shanghai Henlius Biotech,RECRUITING,"Carcinoma, Hepatocellular",PHASE2,2024-12-15,2024-08-05,2027-02-10,117,ORR,No Change,2026-02-05,"The study is being conducted to to explore the reasonable dosage and evaluate the efficacy, safety and tolerability of Serplulimab Injection (HLX10, a Recombinant Anti-PD-1 Antibody) and HLX04 (a Biosimilar to Bevacizumab) With or Without HLX53 (an Anti-TIGIT Fc Fusion Protein) in Untreated, Locally Advanced or Metastatic Hepatocellular Carcinoma Patients.",
 NCT05706207,A Study of HB0030 Injection in Patients With Advanced Solid Tumors,TIGIT,"Huabo Biopharm Co., Ltd.",UNKNOWN,Advanced Solid Tumor,PHASE1,2023-01-20,2021-12-21,2023-09-30,36,Dose Limiting Toxicity(DLT),No Change,2026-02-05,The phase Ia study will enroll up to 19-36 subjects with advanced solid tumor who have progressing tumor after standard therapy and have no better treatment option.The conventional 3+3 design will be applied for dose escalation.This study will set up 8 dose groups.HB0030 injection is administered once every 3 weeks.,
-NCT05060432,Study of EOS-448 With Standard of Care and/or Investigational Therapies in Participants With Advanced Solid Tumors,TIGIT,iTeos Belgium SA,ACTIVE_NOT_RECRUITING,"Advanced Cancer, Lung Cancer, Head and Neck Cancer, Melanoma","PHASE1, PHASE2",2024-06-19,2021-09-06,2025-07,153,Percentage of participants with DLT and Adverse Events,No Change,2026-02-05,"The combinations evaluated will be:
+NCT05060432,Study of EOS-448 With Standard of Care and/or Investigational Therapies in Participants With Advanced Solid Tumors,TIGIT,iTeos Belgium SA,UNKNOWN,"Advanced Cancer, Lung Cancer, Head and Neck Cancer, Melanoma","PHASE1, PHASE2",2024-06-19,2021-09-06,2025-07,153,Percentage of participants with DLT and Adverse Events,Changed,2026-07-01,"**[RECENT CHANGES FOUND]**
+Field `statusModule.overallStatus` changed from `ACTIVE_NOT_RECRUITING` to `UNKNOWN`
+New field added: `root['statusModule']['lastKnownStatus']`
+
+***
+The combinations evaluated will be:
 
 * EOS-448 combined with pembrolizumab, an anti-PD-1 antibody
 * EOS-448 combined with inupadenant an investigational adenosine A2A receptor antagonist
 * EOS-448 combined with dostarlimab an anti-PD-1 antibody
 * inupadenant combined with dostarlimab
 * EOS-448 combined with inupadenant and dostarlimab
-* EOS-448 combined with dostarlimab and standard of care chemotherapies in participants with NSCLC",
+* EOS-448 combined with dostarlimab and standard of care chemotherapies in participants with NSCLC",True
 NCT06713798,Targeting PD-L1 and TIGIT in Tumors With Tertiary Lymphoid Structures,TIGIT,"Gustave Roussy, Cancer Campus, Grand Paris",WITHDRAWN,"Metastatic Cancer Lung, Advanced Lung Cancer, CBNPC Cancer",PHASE2,2026-03-19,2025-01-30,2025-09-15,0,Best overall response (BOR) rate,No Change,2026-03-24,"This study encompasses multicenter open-label, phase II trials.
 
 Patients will be dispatched into 2 cohorts:
@@ -840,111 +845,7 @@ NCT04256421,A Study of Atezolizumab Plus Carboplatin and Etoposide With or Witho
 Following the induction phase, participants will continue maintenance therapy with either atezolizumab plus tiragolumab (Arm A) or atezolizumab plus placebo (Arm B).",
 NCT06989112,"DESTINY-Endometrial01: A Phase III Study of Trastuzumab Deruxtecan Plus Rilvegostomig or Pembrolizumab as First-Line Treatment of HER2-Expressing (IHC 3+/2+), Mismatch Repair Proficient (pMMR) Endometrial Cancer",TIGIT,AstraZeneca,RECRUITING,Endometrial Cancer,PHASE3,2026-06-19,2025-03-27,2031-02-19,600,"Progression-free survival (PFS), as assessed by BICR",Changed,2026-06-24,"DESTINY-Endometrial01 will investigate the efficacy of first-line T-DXd + rilvegostomig (Arm A) and/or T-DXd+ pembrolizumab (Arm B) when compared to chemotherapy (carboplatin + paclitaxel) + pembrolizumab (Arm C), by assessment of progression free survival (PFS), as assessed by BICR, in participants with HER2-expressing (IHC 3+/2+), pMMR, primary advanced (Stage III/IV) or recurrent EC.",
 NCT05816460,The Sleepio After Cancer Study,TIGIT,University College Dublin,UNKNOWN,"Insomnia, Cancer",NA,2023-05-19,2023-05-22,2024-06-10,308,Mean continuous change in the intervention group compared to the control arm as measured by the Sleep Condition Indicator Score,No Change,2026-02-05,"Women who are eligible and provide informed consent will be enrolled into this 2-armed, parallel group open label randomised controlled trial. Participants will be randomised 1:1 to receive dCBT-I (intervention arm) or to sleep hygiene education (control arm). The primary outcome will be the mean continuous change in sleep condition indicator (SCI) score in the intervention arm compared to the control arm at 6 months. In addition to this, the proportion of women with an SCI \> 16 at 6 months will be assessed. Secondary outcomes will include fatigue, sleep related quality of life, depression, anxiety, as well as hot flush interference in those experiencing vasomotor symptoms.",
-NCT06627647,A Global Phase III Study of Rilvegostomig or Pembrolizumab Plus Chemotherapy for First-Line Treatment of Metastatic Non-squamous NSCLC,TIGIT,AstraZeneca,RECRUITING,Non-squamous Non-small Cell Lung Cancer,PHASE3,2026-06-26,2024-11-27,2030-11-18,878,Overall survival (OS),Changed,2026-06-30,"**[RECENT CHANGES FOUND]**
-Field `statusModule.statusVerifiedDate` changed from `2026-05` to `2026-06`
-Field `statusModule.primaryCompletionDateStruct.date` changed from `2029-05-10` to `2030-11-18`
-Field `statusModule.completionDateStruct.date` changed from `2030-03-25` to `2030-11-18`
-Field `statusModule.lastUpdateSubmitDate` changed from `2026-05-21` to `2026-06-26`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-05-22` to `2026-06-29`
-Field `contactsLocationsModule.locations.[113]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[124]status` changed from `ACTIVE_NOT_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[131]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[147]status` changed from `RECRUITING` to `WITHDRAWN`
-Field `contactsLocationsModule.locations.[149]status` changed from `RECRUITING` to `NOT_YET_RECRUITING`
-Field `contactsLocationsModule.locations.[149]city` changed from `Cologne` to `Bochum`
-Field `contactsLocationsModule.locations.[149]zip` changed from `51109` to `44791`
-Field `contactsLocationsModule.locations.[149]geoPoint.lat` changed from `50.93333` to `51.48165`
-Field `contactsLocationsModule.locations.[149]geoPoint.lon` changed from `6.95` to `7.21648`
-Field `contactsLocationsModule.locations.[150]city` changed from `Esslingen am Neckar` to `Cologne`
-Field `contactsLocationsModule.locations.[150]zip` changed from `73730` to `51109`
-Field `contactsLocationsModule.locations.[150]geoPoint.lat` changed from `48.73961` to `50.93333`
-Field `contactsLocationsModule.locations.[150]geoPoint.lon` changed from `9.30473` to `6.95`
-Field `contactsLocationsModule.locations.[151]city` changed from `Frankfurt` to `Esslingen am Neckar`
-Field `contactsLocationsModule.locations.[151]zip` changed from `60488` to `73730`
-Field `contactsLocationsModule.locations.[151]geoPoint.lat` changed from `49.68333` to `48.73961`
-Field `contactsLocationsModule.locations.[151]geoPoint.lon` changed from `10.53333` to `9.30473`
-Field `contactsLocationsModule.locations.[152]city` changed from `Gauting` to `Frankfurt`
-Field `contactsLocationsModule.locations.[152]zip` changed from `82131` to `60488`
-Field `contactsLocationsModule.locations.[152]geoPoint.lat` changed from `48.06919` to `49.68333`
-Field `contactsLocationsModule.locations.[152]geoPoint.lon` changed from `11.37703` to `10.53333`
-Field `contactsLocationsModule.locations.[153]city` changed from `Giessen` to `Gauting`
-Field `contactsLocationsModule.locations.[153]zip` changed from `35392` to `82131`
-Field `contactsLocationsModule.locations.[153]geoPoint.lat` changed from `50.58727` to `48.06919`
-Field `contactsLocationsModule.locations.[153]geoPoint.lon` changed from `8.67554` to `11.37703`
-Field `contactsLocationsModule.locations.[154]city` changed from `Großhansdorf` to `Giessen`
-Field `contactsLocationsModule.locations.[154]zip` changed from `22927` to `35392`
-Field `contactsLocationsModule.locations.[154]geoPoint.lat` changed from `53.66528` to `50.58727`
-Field `contactsLocationsModule.locations.[154]geoPoint.lon` changed from `10.28552` to `8.67554`
-Field `contactsLocationsModule.locations.[155]city` changed from `Hamburg` to `Großhansdorf`
-Field `contactsLocationsModule.locations.[155]zip` changed from `20251` to `22927`
-Field `contactsLocationsModule.locations.[155]geoPoint.lat` changed from `53.55073` to `53.66528`
-Field `contactsLocationsModule.locations.[155]geoPoint.lon` changed from `9.99302` to `10.28552`
-Field `contactsLocationsModule.locations.[156]city` changed from `Hanover` to `Hamburg`
-Field `contactsLocationsModule.locations.[156]zip` changed from `30459` to `20251`
-Field `contactsLocationsModule.locations.[156]geoPoint.lat` changed from `52.37052` to `53.55073`
-Field `contactsLocationsModule.locations.[156]geoPoint.lon` changed from `9.73322` to `9.99302`
-Field `contactsLocationsModule.locations.[157]zip` changed from `30625` to `30459`
-Field `contactsLocationsModule.locations.[158]city` changed from `Hemer` to `Hanover`
-Field `contactsLocationsModule.locations.[158]zip` changed from `58675` to `30625`
-Field `contactsLocationsModule.locations.[158]geoPoint.lat` changed from `51.38707` to `52.37052`
-Field `contactsLocationsModule.locations.[158]geoPoint.lon` changed from `7.77019` to `9.73322`
-Field `contactsLocationsModule.locations.[159]city` changed from `Homburg` to `Hemer`
-Field `contactsLocationsModule.locations.[159]zip` changed from `66424` to `58675`
-Field `contactsLocationsModule.locations.[159]geoPoint.lat` changed from `49.32637` to `51.38707`
-Field `contactsLocationsModule.locations.[159]geoPoint.lon` changed from `7.33867` to `7.77019`
-Field `contactsLocationsModule.locations.[160]city` changed from `Kassel` to `Homburg`
-Field `contactsLocationsModule.locations.[160]zip` changed from `34125` to `66424`
-Field `contactsLocationsModule.locations.[160]geoPoint.lat` changed from `51.31667` to `49.32637`
-Field `contactsLocationsModule.locations.[160]geoPoint.lon` changed from `9.5` to `7.33867`
-Field `contactsLocationsModule.locations.[161]city` changed from `Kiel` to `Kassel`
-Field `contactsLocationsModule.locations.[161]zip` changed from `24105` to `34125`
-Field `contactsLocationsModule.locations.[161]geoPoint.lat` changed from `54.32133` to `51.31667`
-Field `contactsLocationsModule.locations.[161]geoPoint.lon` changed from `10.13489` to `9.5`
-Field `contactsLocationsModule.locations.[162]city` changed from `Krefeld` to `Kiel`
-Field `contactsLocationsModule.locations.[162]zip` changed from `47805` to `24105`
-Field `contactsLocationsModule.locations.[162]geoPoint.lat` changed from `51.33645` to `54.32133`
-Field `contactsLocationsModule.locations.[162]geoPoint.lon` changed from `6.55381` to `10.13489`
-Field `contactsLocationsModule.locations.[163]city` changed from `Minden` to `Krefeld`
-Field `contactsLocationsModule.locations.[163]zip` changed from `32429` to `47805`
-Field `contactsLocationsModule.locations.[163]geoPoint.lat` changed from `52.28953` to `51.33645`
-Field `contactsLocationsModule.locations.[163]geoPoint.lon` changed from `8.91455` to `6.55381`
-Field `contactsLocationsModule.locations.[164]city` changed from `Moers` to `Minden`
-Field `contactsLocationsModule.locations.[164]zip` changed from `47441` to `32429`
-Field `contactsLocationsModule.locations.[164]geoPoint.lat` changed from `51.45342` to `52.28953`
-Field `contactsLocationsModule.locations.[164]geoPoint.lon` changed from `6.6326` to `8.91455`
-Field `contactsLocationsModule.locations.[165]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[165]city` changed from `München` to `Moers`
-Field `contactsLocationsModule.locations.[165]zip` changed from `81925` to `47441`
-Field `contactsLocationsModule.locations.[165]geoPoint.lat` changed from `51.60698` to `51.45342`
-Field `contactsLocationsModule.locations.[165]geoPoint.lon` changed from `13.31243` to `6.6326`
-Field `contactsLocationsModule.locations.[166]status` changed from `RECRUITING` to `NOT_YET_RECRUITING`
-Field `contactsLocationsModule.locations.[166]city` changed from `Regensburg` to `München`
-Field `contactsLocationsModule.locations.[166]zip` changed from `93053` to `81925`
-Field `contactsLocationsModule.locations.[166]geoPoint.lat` changed from `49.01513` to `51.60698`
-Field `contactsLocationsModule.locations.[166]geoPoint.lon` changed from `12.10161` to `13.31243`
-Field `contactsLocationsModule.locations.[167]city` changed from `Würzburg` to `Regensburg`
-Field `contactsLocationsModule.locations.[167]zip` changed from `97067` to `93053`
-Field `contactsLocationsModule.locations.[167]geoPoint.lat` changed from `49.79391` to `49.01513`
-Field `contactsLocationsModule.locations.[167]geoPoint.lon` changed from `9.95121` to `12.10161`
-Field `contactsLocationsModule.locations.[168]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[168]city` changed from `Budapest` to `Würzburg`
-Field `contactsLocationsModule.locations.[168]zip` changed from `1083` to `97067`
-Field `contactsLocationsModule.locations.[168]country` changed from `Hungary` to `Germany`
-Field `contactsLocationsModule.locations.[168]geoPoint.lat` changed from `47.49835` to `49.79391`
-Field `contactsLocationsModule.locations.[168]geoPoint.lon` changed from `19.04045` to `9.95121`
-Field `contactsLocationsModule.locations.[169]zip` changed from `1121` to `1083`
-Field `contactsLocationsModule.locations.[170]zip` changed from `1122` to `1121`
-Field `contactsLocationsModule.locations.[171]city` changed from `Debrecen` to `Budapest`
-Field `contactsLocationsModule.locations.[171]zip` changed from `4032` to `1122`
-Field `contactsLocationsModule.locations.[171]geoPoint.lat` changed from `47.53167` to `47.49835`
-Field `contactsLocationsModule.locations.[171]geoPoint.lon` changed from `21.62444` to `19.04045`
-Field `contactsLocationsModule.locations.[172]status` changed from `WITHDRAWN` to `RECRUITING`
-Field `contactsLocationsModule.locations.[172]city` changed from `Gyöngyös` to `Debrecen`
-Field `contactsLocationsModule.locations.[172]zip` changed from `3200` to `4032`
-... (additional changes truncated for brevity)
-
-***
-This is a Phase III, two-arm, randomized, double-blind, global, multicenter study assessing the efficacy and safety of rilvegostomig compared to pembrolizumab, both in combination with platinum-based doublet chemotherapy, as a 1L treatment for patients with non-squamous mNSCLC whose tumors express PD-L1 (TC ≥ 1%).",True
+NCT06627647,A Global Phase III Study of Rilvegostomig or Pembrolizumab Plus Chemotherapy for First-Line Treatment of Metastatic Non-squamous NSCLC,TIGIT,AstraZeneca,RECRUITING,Non-squamous Non-small Cell Lung Cancer,PHASE3,2026-06-26,2024-11-27,2030-11-18,878,Overall survival (OS),Changed,2026-06-30,"This is a Phase III, two-arm, randomized, double-blind, global, multicenter study assessing the efficacy and safety of rilvegostomig compared to pembrolizumab, both in combination with platinum-based doublet chemotherapy, as a 1L treatment for patients with non-squamous mNSCLC whose tumors express PD-L1 (TC ≥ 1%).",
 NCT04305054,Substudy 02B: Safety and Efficacy of Pembrolizumab in Combination With Investigational Agents or Pembrolizumab Alone in Participants With First Line (1L) Advanced Melanoma (MK-3475-02B/KEYMAKER-U02),TIGIT,Merck Sharp & Dohme LLC,COMPLETED,Melanoma,"PHASE1, PHASE2",2026-05-27,2020-07-01,2026-05-18,335,Percentage of participants who experience a dose-limiting toxicity (DLT): Safety lead-in phase,No Change,2026-05-29,"With Amendment 6, all arms are closed to enrollment. Participants in arms 2 (pembrolizumab), 3 (coformulation pembrolizumab/quavonlimab), and 4 (coformulation pembrolizumab/quavonlimab + lenvatinib) who complete study treatment or otherwise meet end of treatment (EOT) criteria will be discontinued from the study after completing the EOT visit and any required safety follow-up visits. Participants in arm 6 (coformulation favezelimab/pembrolizumab + All-trans Retinoic Acid \[ATRA\]) will discontinue ATRA and participants in arms 5 and 6 can continue on coformulation favezelimab/pembrolizumab or pembrolizumab.",
 NCT04294810,A Study of Tiragolumab in Combination With Atezolizumab Compared With Placebo in Combination With Atezolizumab in Patients With Previously Untreated Locally Advanced Unresectable or Metastatic PD-L1-Selected Non-Small Cell Lung Cancer,TIGIT,Hoffmann-La Roche,COMPLETED,Non-Small Cell Lung Cancer,PHASE3,2026-01-29,2020-03-04,2025-12-30,620,Investigator-Assessed Progression-Free Survival (PFS) in the Primary Analysis Set,Changed,2026-06-24,"The purpose of the study is to evaluate the efficacy and safety of tiragolumab plus atezolizumab compared with placebo plus atezolizumab in participants with previously untreated locally advanced, unresectable or metastatic PD-L1-selected non-small cell lung cancer (NSCLC), with no epidermal growth factor receptor (EGFR) mutation or anaplastic lymphoma kinase (ALK) translocation. Eligible participants will be randomized in a 1:1 ratio to receive either tiragolumab plus atezolizumab or placebo plus atezolizumab.",
 NCT03198546,GPC3-CAR-T Cells for Immunotherapy of Cancer With GPC3 Expression,TIGIT,Second Affiliated Hospital of Guangzhou Medical University,RECRUITING,"Hepatocellular Carcinoma, Immunotherapy, CAR, GPC3 Gene Inactivation, T Cell, Squamous Cell Lung Cancer",PHASE1,2024-06-22,2017-07-01,2036-08-01,30,Number of Patients with Dose Limiting Toxicity,No Change,2026-02-05,"1. Choose appropriate patients with advanced hepatocellular carcinoma,with written consent for this study;
