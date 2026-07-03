@@ -593,61 +593,116 @@ Secondary Objectives: To analyze in participants with \<200 vs ≥350 CD4/μl af
 * Quantification of specific IgG titers against SARS-CoV-2
 * The association of the T response to SARS-CoV-2 with humoral response parameters.
 * The association of the T response against SARS-CoV-2 with other parameters of immune activation, inflammation and immunosenescence. The phenotypes of maturation (CD45RA and CD27), activation (HLA-DR and CD38), senescence (CD57+CD28-) and markers of immune exhaustion (TIGIT, LAG-3, TIM-3 and PD-1) in CD4 and CD8 lymphocytes T will be determined by multiparametric flow cytometry.",
-NCT04836507,Study of Efficacy and Safety of CRC01 in Adult Large B-cell Lymphoma Patients,TIGIT,Curocell Inc.,RECRUITING,"Relapsed Large B-cell Lymphoma, Refractory Large B-cell Lymphoma, Diffuse Large B-cell Lymphoma (DLBCL), Primary Mediastinal Large B-Cell Lymphoma (PMBCL), High-grade B-cell Lymphoma, Transformed Follicular Lymphoma (TFL), ALL (Acute B-Lymphoblastic Leukemia)","PHASE1, PHASE2",2026-06-29,2021-03-02,2030-09-26,91,Phase 1 Study: Maximum Tolerated Dose (MTD) which will be the Recommended Phase 2 Dose (RP2D),Changed,2026-07-02,"**[RECENT CHANGES FOUND]**
-Field `identificationModule.briefTitle` changed from `Study of Efficacy and Safety of CRC01 in Adult Large B-cell Lymphoma Patients` to `Study of Efficacy and Safety of CRC01 in Adult Large B-cell Lymphoma and B-cell Acute Lymphoblastic Leukemia Patients`
-Field `identificationModule.officialTitle` changed from `An Open-label, Multi-center, Single-arm Phase 1/2 Study to Assess Tolerability, Safety and Efficacy of CRC01 in Adult Patients With Relapsed or Refractory Large B-cell Lymphoma` to `An Open-label, Multi-center, Single-arm Phase 1/2 Study to Assess Tolerability, Safety and Efficacy of CRC01 in Adult Patients With Relapsed or Refractory Large B-cell Lymphoma and B-cell Acute Lymphoblastic Leukemia`
-Field `statusModule.statusVerifiedDate` changed from `2021-04` to `2026-06`
-Field `statusModule.primaryCompletionDateStruct.date` changed from `2023-05` to `2030-08-15`
-Field `statusModule.completionDateStruct.date` changed from `2028-02` to `2030-09-26`
-Field `statusModule.lastUpdateSubmitDate` changed from `2021-04-29` to `2026-06-29`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2021-05-03` to `2026-07-01`
-Field `descriptionModule.briefSummary` changed from `This is a multi-center, phase I/II study to determine the efficacy and safety of CRC01 in adult patients with relapsed or refractory large B-cell lymphoma.` to `This is a multi-center, phase I/II study to determine the efficacy and safety of CRC01 in adult patients with relapsed or refractory large B-cell lymphoma and B-cell Acute Lymphoblastic Leukemia.`
-Field `armsInterventionsModule.interventions.[0]description` changed from `A single infusion of chimeric antigen receptor (CAR)-transduced autologous T cells administered intravenously at a target dose of 2 x 10\^6 anti-CD19 CAR T cells/kg.` to `Cohort A :A single infusion of chimeric antigen receptor (CAR)-transduced autologous T cells administered intravenously at a target dose of 2 x 10\^6 anti-CD19 CAR T cells/kg.
-
-Cohort B :A single infusion of chimeric antigen receptor (CAR)-transduced autologous T cells administered intravenously at a target dose of 1.5 x 10\^6 anti-CD19 CAR T cells/kg.`
-Field `outcomesModule.primaryOutcomes.[1]measure` changed from `Phase 2 Pivotal Study: Overall Response Rate (ORR)` to `Phase 2 Pivotal Study: Cohort A : Overall Response Rate (ORR) Cohort B : Overall Complete Remission Rate (OCR)`
-Field `outcomesModule.primaryOutcomes.[1]description` changed from `ORR is defined as the incidence of either a complete response (CR) or a partial response (PR) per the Lugano Criteria for Response Assessment (2014).` to `Cohort A : ORR is defined as the incidence of either a complete response (CR) or a partial response (PR) per the Lugano Criteria for Response Assessment (2014).
-
-Cohort B : OCR is defined as the incidence of either a complete Remission (CR) or a Complete Remission with incomplete hematologic recovery (CRi) per the ALL Response Criteria.`
-Field `eligibilityModule.eligibilityCriteria` changed from `Inclusion Criteria:
-
-1. ≥ 19 years of age and provided written informed consent
-2. Histologically confirmed following large B-cell lymphomas according to the World Health Organization classification 2017
-
-   * Diffuse large B-cell lymphoma, not otherwise specified Including Large cell transformation from follicular lymphoma (Transformed follicular lymphoma)
-   * High-grade B-cell lymphoma, not otherwise specified
-   * High-grade B-cell lymphoma with double-hit/triple-hit
-   * Primary mediastinal large B cell lymphoma
-3. Relapsed or refractory disease after ≥ two lines of chemotherapy including rituximab, anthracycline and either having failed autologous Hematopoietic stem cell transplantation (ASCT) or being ineligible for or not consenting to ASCT.
-4. At least one measurable lesion (Long diameter ≥ 1.5cm)
-5. Eastern Cooperative Oncology Group (ECOG) performance status 0 or 1
-6. Adequate renal and hepatic functions based on the laboratory test results
-
-   * Total Bilirubin ≤ 2.0mg/dL w` to `Cohort A:
-
-Inclusion Criteria:
-
-1. ≥ 19 years of age and provided written informed consent
-2. Histologically confirmed following large B-cell lymphomas according to the World Health Organization classification 2017
-
-   * Diffuse large B-cell lymphoma, not otherwise specified Including Large cell transformation from follicular lymphoma (Transformed follicular lymphoma)
-   * High-grade B-cell lymphoma, not otherwise specified
-   * High-grade B-cell lymphoma with double-hit/triple-hit
-   * Primary mediastinal large B cell lymphoma
-3. Relapsed or refractory disease after ≥ two lines of chemotherapy including rituximab, anthracycline and either having failed autologous Hematopoietic stem cell transplantation (ASCT) or being ineligible for or not consenting to ASCT.
-4. At least one measurable lesion (Long diameter ≥ 1.5cm)
-5. Eastern Cooperative Oncology Group (ECOG) performance status 0 or 1
-6. Adequate renal and hepatic functions based on the laboratory test results
-
-   * Total Bilirubin ≤`
+NCT04836507,Study of Efficacy and Safety of CRC01 in Adult Large B-cell Lymphoma Patients,TIGIT,Curocell Inc.,RECRUITING,"Relapsed Large B-cell Lymphoma, Refractory Large B-cell Lymphoma, Diffuse Large B-cell Lymphoma (DLBCL), Primary Mediastinal Large B-Cell Lymphoma (PMBCL), High-grade B-cell Lymphoma, Transformed Follicular Lymphoma (TFL), ALL (Acute B-Lymphoblastic Leukemia)","PHASE1, PHASE2",2026-06-29,2021-03-02,2030-09-26,91,Phase 1 Study: Maximum Tolerated Dose (MTD) which will be the Recommended Phase 2 Dose (RP2D),Changed,2026-07-02,"This is a multi-center, phase I/II study to determine the efficacy and safety of CRC01 in adult patients with relapsed or refractory large B-cell lymphoma and B-cell Acute Lymphoblastic Leukemia.",
+NCT05775159,Study of Novel Immunomodulators as Monotherapy and in Combination With Anticancer Agents in Participants With Advanced Hepatobiliary Cancer,TIGIT,AstraZeneca,ACTIVE_NOT_RECRUITING,"Hepatocellular Carcinoma, Biliary Tract Cancer",PHASE2,2026-07-01,2023-04-24,2027-10-28,294,Objective response rate (ORR),Changed,2026-07-03,"**[RECENT CHANGES FOUND]**
+Field `statusModule.statusVerifiedDate` changed from `2026-04` to `2026-06`
+Field `statusModule.overallStatus` changed from `RECRUITING` to `ACTIVE_NOT_RECRUITING`
+Field `statusModule.lastUpdateSubmitDate` changed from `2026-04-16` to `2026-07-01`
+Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-04-17` to `2026-07-02`
+Field `contactsLocationsModule.locations.[1]city` changed from `Costa Mesa` to `Los Angeles`
+Field `contactsLocationsModule.locations.[1]zip` changed from `92627` to `90089`
+Field `contactsLocationsModule.locations.[1]geoPoint.lat` changed from `33.64113` to `34.05223`
+Field `contactsLocationsModule.locations.[1]geoPoint.lon` changed from `-117.91867` to `-118.24368`
+Field `contactsLocationsModule.locations.[2]city` changed from `Los Angeles` to `Orange`
+Field `contactsLocationsModule.locations.[2]zip` changed from `90089` to `92868`
+Field `contactsLocationsModule.locations.[2]geoPoint.lat` changed from `34.05223` to `33.78779`
+Field `contactsLocationsModule.locations.[2]geoPoint.lon` changed from `-118.24368` to `-117.85311`
+Field `contactsLocationsModule.locations.[3]city` changed from `Orange` to `Kansas City`
+Field `contactsLocationsModule.locations.[3]state` changed from `California` to `Kansas`
+Field `contactsLocationsModule.locations.[3]zip` changed from `92868` to `66103`
+Field `contactsLocationsModule.locations.[3]geoPoint.lat` changed from `33.78779` to `39.11417`
+Field `contactsLocationsModule.locations.[3]geoPoint.lon` changed from `-117.85311` to `-94.62746`
+Field `contactsLocationsModule.locations.[4]city` changed from `Miami Beach` to `New York`
+Field `contactsLocationsModule.locations.[4]state` changed from `Florida` to `New York`
+Field `contactsLocationsModule.locations.[4]zip` changed from `33140` to `10065`
+Field `contactsLocationsModule.locations.[4]geoPoint.lat` changed from `25.79065` to `40.71427`
+Field `contactsLocationsModule.locations.[4]geoPoint.lon` changed from `-80.13005` to `-74.00597`
+Field `contactsLocationsModule.locations.[5]city` changed from `Dyer` to `Beijing`
+Field `contactsLocationsModule.locations.[5]zip` changed from `46311` to `100050`
+Field `contactsLocationsModule.locations.[5]country` changed from `United States` to `China`
+Field `contactsLocationsModule.locations.[5]geoPoint.lat` changed from `41.4942` to `39.9075`
+Field `contactsLocationsModule.locations.[5]geoPoint.lon` changed from `-87.52171` to `116.39723`
+Field `contactsLocationsModule.locations.[6]city` changed from `Kansas City` to `Beijing`
+Field `contactsLocationsModule.locations.[6]zip` changed from `66103` to `100142`
+Field `contactsLocationsModule.locations.[6]country` changed from `United States` to `China`
+Field `contactsLocationsModule.locations.[6]geoPoint.lat` changed from `39.11417` to `39.9075`
+Field `contactsLocationsModule.locations.[6]geoPoint.lon` changed from `-94.62746` to `116.39723`
+Field `contactsLocationsModule.locations.[7]city` changed from `New York` to `Beijing`
+Field `contactsLocationsModule.locations.[7]zip` changed from `10065` to `101100`
+Field `contactsLocationsModule.locations.[7]country` changed from `United States` to `China`
+Field `contactsLocationsModule.locations.[7]geoPoint.lat` changed from `40.71427` to `39.9075`
+Field `contactsLocationsModule.locations.[7]geoPoint.lon` changed from `-74.00597` to `116.39723`
+Field `contactsLocationsModule.locations.[8]city` changed from `Dallas` to `Chengdu`
+Field `contactsLocationsModule.locations.[8]zip` changed from `75251` to `610000`
+Field `contactsLocationsModule.locations.[8]country` changed from `United States` to `China`
+Field `contactsLocationsModule.locations.[8]geoPoint.lat` changed from `32.78306` to `30.66667`
+Field `contactsLocationsModule.locations.[8]geoPoint.lon` changed from `-96.80667` to `104.06667`
+Field `contactsLocationsModule.locations.[9]city` changed from `Fairfax` to `Chengdu`
+Field `contactsLocationsModule.locations.[9]zip` changed from `22031` to `610041`
+Field `contactsLocationsModule.locations.[9]country` changed from `United States` to `China`
+Field `contactsLocationsModule.locations.[9]geoPoint.lat` changed from `38.84622` to `30.66667`
+Field `contactsLocationsModule.locations.[9]geoPoint.lon` changed from `-77.30637` to `104.06667`
+Field `contactsLocationsModule.locations.[10]city` changed from `Beijing` to `Chongqing`
+Field `contactsLocationsModule.locations.[10]zip` changed from `100050` to `400030`
+Field `contactsLocationsModule.locations.[10]geoPoint.lat` changed from `39.9075` to `29.56026`
+Field `contactsLocationsModule.locations.[10]geoPoint.lon` changed from `116.39723` to `106.55771`
+Field `contactsLocationsModule.locations.[11]city` changed from `Beijing` to `Fuzhou`
+Field `contactsLocationsModule.locations.[11]zip` changed from `100142` to `350007`
+Field `contactsLocationsModule.locations.[11]geoPoint.lat` changed from `39.9075` to `26.06139`
+Field `contactsLocationsModule.locations.[11]geoPoint.lon` changed from `116.39723` to `119.30611`
+Field `contactsLocationsModule.locations.[12]city` changed from `Beijing` to `Guangzhou`
+Field `contactsLocationsModule.locations.[12]zip` changed from `101100` to `510060`
+Field `contactsLocationsModule.locations.[12]geoPoint.lat` changed from `39.9075` to `23.11667`
+Field `contactsLocationsModule.locations.[12]geoPoint.lon` changed from `116.39723` to `113.25`
+Field `contactsLocationsModule.locations.[13]city` changed from `Chengdu` to `Guangzhou`
+Field `contactsLocationsModule.locations.[13]zip` changed from `610000` to `510515`
+Field `contactsLocationsModule.locations.[13]geoPoint.lat` changed from `30.66667` to `23.11667`
+Field `contactsLocationsModule.locations.[13]geoPoint.lon` changed from `104.06667` to `113.25`
+Field `contactsLocationsModule.locations.[14]city` changed from `Chengdu` to `Harbin`
+Field `contactsLocationsModule.locations.[14]zip` changed from `610041` to `150081`
+Field `contactsLocationsModule.locations.[14]geoPoint.lat` changed from `30.66667` to `45.75`
+Field `contactsLocationsModule.locations.[14]geoPoint.lon` changed from `104.06667` to `126.65`
+Field `contactsLocationsModule.locations.[15]city` changed from `Chongqing` to `Nanning`
+Field `contactsLocationsModule.locations.[15]zip` changed from `400030` to `530021`
+Field `contactsLocationsModule.locations.[15]geoPoint.lat` changed from `29.56026` to `22.81667`
+Field `contactsLocationsModule.locations.[15]geoPoint.lon` changed from `106.55771` to `108.31667`
+Field `contactsLocationsModule.locations.[16]city` changed from `Fuzhou` to `Shanghai`
+Field `contactsLocationsModule.locations.[16]zip` changed from `350007` to `200032`
+Field `contactsLocationsModule.locations.[16]geoPoint.lat` changed from `26.06139` to `31.22222`
+Field `contactsLocationsModule.locations.[16]geoPoint.lon` changed from `119.30611` to `121.45806`
+Field `contactsLocationsModule.locations.[17]city` changed from `Guangzhou` to `Hong Kong`
+Field `contactsLocationsModule.locations.[17]zip` changed from `510060` to `999077`
+Field `contactsLocationsModule.locations.[17]country` changed from `China` to `Hong Kong`
+Field `contactsLocationsModule.locations.[17]geoPoint.lat` changed from `23.11667` to `22.27832`
+Field `contactsLocationsModule.locations.[17]geoPoint.lon` changed from `113.25` to `114.17469`
+Field `contactsLocationsModule.locations.[18]city` changed from `Guangzhou` to `Shatin`
+Field `contactsLocationsModule.locations.[18]zip` changed from `510515` to `00000`
+Field `contactsLocationsModule.locations.[18]country` changed from `China` to `Hong Kong`
+Field `contactsLocationsModule.locations.[18]geoPoint.lat` changed from `23.11667` to `22.38333`
+Field `contactsLocationsModule.locations.[18]geoPoint.lon` changed from `113.25` to `114.18333`
+Field `contactsLocationsModule.locations.[19]city` changed from `Harbin` to `Florence`
+Field `contactsLocationsModule.locations.[19]zip` changed from `150081` to `50134`
+Field `contactsLocationsModule.locations.[19]country` changed from `China` to `Italy`
+Field `contactsLocationsModule.locations.[19]geoPoint.lat` changed from `45.75` to `43.77925`
+Field `contactsLocationsModule.locations.[19]geoPoint.lon` changed from `126.65` to `11.24626`
+Field `contactsLocationsModule.locations.[20]city` changed from `Hefei` to `Milan`
+Field `contactsLocationsModule.locations.[20]zip` changed from `230001` to `20132`
+Field `contactsLocationsModule.locations.[20]country` changed from `China` to `Italy`
+Field `contactsLocationsModule.locations.[20]geoPoint.lat` changed from `31.86389` to `42.78235`
+Field `contactsLocationsModule.locations.[20]geoPoint.lon` changed from `117.28083` to `12.59836`
+Field `contactsLocationsModule.locations.[21]city` changed from `Hefei` to `Naples`
+Field `contactsLocationsModule.locations.[21]zip` changed from `230022` to `80131`
+Field `contactsLocationsModule.locations.[21]country` changed from `China` to `Italy`
+Field `contactsLocationsModule.locations.[21]geoPoint.lat` changed from `31.86389` to `40.85216`
+Field `contactsLocationsModule.locations.[21]geoPoint.lon` changed from `117.28083` to `14.26811`
+... (additional changes truncated for brevity)
 
 ***
-This is a multi-center, phase I/II study to determine the efficacy and safety of CRC01 in adult patients with relapsed or refractory large B-cell lymphoma and B-cell Acute Lymphoblastic Leukemia.",True
-NCT05775159,Study of Novel Immunomodulators as Monotherapy and in Combination With Anticancer Agents in Participants With Advanced Hepatobiliary Cancer,TIGIT,AstraZeneca,RECRUITING,"Hepatocellular Carcinoma, Biliary Tract Cancer",PHASE2,2026-04-16,2023-04-24,2027-10-28,294,Objective response rate (ORR),No Change,2026-05-26,"This Phase II, open-label, uncontrolled, multicentre study evaluating the preliminary efficacy and safety of Volrustomig or Rilvegostomig as monotherapy (MONO) and/or in combination with anticancer agents (COMBO) in participants with advanced hepatobiliary cancer (e.g., HCC, BTC, etc.).
+This Phase II, open-label, uncontrolled, multicentre study evaluating the preliminary efficacy and safety of Volrustomig or Rilvegostomig as monotherapy (MONO) and/or in combination with anticancer agents (COMBO) in participants with advanced hepatobiliary cancer (e.g., HCC, BTC, etc.).
 
 This study has a modular design with independent substudies. In Substudy 1, Volrustomig and Rilvegostomig will be evaluated as monotherapy and/or in combination with other anticancer drugs in approximately 200 evaluable participants with advanced HCC.
 
-In Substudy 2, the efficacy and safety of Rilvegostomig or Volrustomig plus gemcitabine and cisplatin are investigated in approximately 90 evaluable participants with advanced BTC who have not received previous treatment for advanced/metastatic disease.",
+In Substudy 2, the efficacy and safety of Rilvegostomig or Volrustomig plus gemcitabine and cisplatin are investigated in approximately 90 evaluable participants with advanced BTC who have not received previous treatment for advanced/metastatic disease.",True
 NCT06338657,FID-007 Followed by Standard of Care Surgery in Head and Neck Cancer,TIGIT,University of Southern California,TERMINATED,Head and Neck Squamous Cell Carcinoma,PHASE1,2025-09-09,2024-04-01,2025-09-09,1,Evaluate the phenotypical and functional changes of different T cell subsets within the tumor microenvironment after treatment with FID-007,No Change,2026-02-05,"PRIMARY OBJECTIVE:
 
 I. To describe the phenotypical and functional changes of different T cell subsets within the tumor microenvironment after treatment with FID-007.
@@ -771,26 +826,13 @@ This study will enroll patients in 2 cohorts: A and B. Patients in Cohort A will
 NCT05014815,Ociperlimab With Tislelizumab and Chemotherapy in Participants With Untreated Metastatic Non-Small Cell Lung Cancer,TIGIT,BeiGene,COMPLETED,"Locally Advanced, Unresectable, or Metastatic Nonsmall Cell Lung Cancer (NSCLC), Nonsmall Cell Lung Cancer, Stage IIIB, Nonsmall Cell Lung Cancer, Stage IV",PHASE2,2025-08-28,2021-11-16,2024-09-04,272,Progression-free Survival (PFS),Changed,2026-06-24,"This study aimed to evaluate the safety and effectiveness of ociperlimab combined with tislelizumab and chemotherapy, compared to tislelizumab and chemotherapy alone, in participants with non-small cell lung cancer (NSCLC) that was locally advanced, could not be removed by surgery, or had spread to other parts of the body.",
 NCT07307053,Rare Tumor Focused Platform Study of Innovative Therapies and Technologies (PLATFORM2),TIGIT,"Cancer Institute and Hospital, Chinese Academy of Medical Sciences",NOT_YET_RECRUITING,"Rare Malignant Neoplasm, Advanced Solid Tumors, Metastatic Solid Tumors","PHASE1, PHASE2",2025-12-13,2026-01-01,2031-01-31,600,Objective Response Rate (ORR),No Change,2026-02-05,"This is an open-label, non-randomized, multi-arm, single-center Phase I/II platform study (PLATFORM2). Based on the definition of rare tumors in China (incidence \< 2.5/100,000 or specific list), eligible patients will undergo multi-omics screening. Based on the molecular profiling results (gene variations or protein expression), patients will be assigned to corresponding treatment arms (Sub-studies). Therapies include small molecules, protein drugs, Cell and Gene Therapy (CGT) products, and therapeutic vaccines. The study employs a Clopper-Pearson Two-Stage Minimax design for each arm.",
 NCT04746924,A Study of Ociperlimab With Tislelizumab Compared to Pembrolizumab in Participants With Untreated Lung Cancer,TIGIT,BeiGene,TERMINATED,"Non-small Cell Lung Cancer, NSCLC",PHASE3,2026-04-20,2021-05-24,2026-03-18,669,Overall Survival (OS) in Arms A and B,No Change,2026-05-26,"The purpose of this study is to evaluate the efficacy and safety of ociperlimab + tislelizumab compared with that of pembrolizumab in adults with high levels of programmed cell death ligand-1 (PD-L1), locally advanced/recurrent or untreated metastatic non-small cell lung cancer (NSCLC).",
-NCT07098338,A Study of Novel Combinations in Non-Small Cell Lung Cancer (NSCLC),TIGIT,AstraZeneca,RECRUITING,Non-Small Cell Lung Cancer,PHASE2,2026-06-30,2025-08-07,2029-04-06,278,Number of participants with adverse events (AE) and serious adverse events (SAE),Changed,2026-07-02,"**[RECENT CHANGES FOUND]**
-Field `statusModule.statusVerifiedDate` changed from `2026-05` to `2026-06`
-Field `statusModule.lastUpdateSubmitDate` changed from `2026-05-25` to `2026-06-30`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-05-27` to `2026-07-01`
-Field `contactsLocationsModule.locations.[0]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[33]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[66]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[67]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[68]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[79]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-Field `contactsLocationsModule.locations.[82]status` changed from `NOT_YET_RECRUITING` to `RECRUITING`
-
-***
-The master protocol will include 3 sub-studies, each focused on a specific disease population.
+NCT07098338,A Study of Novel Combinations in Non-Small Cell Lung Cancer (NSCLC),TIGIT,AstraZeneca,RECRUITING,Non-Small Cell Lung Cancer,PHASE2,2026-06-30,2025-08-07,2029-04-06,278,Number of participants with adverse events (AE) and serious adverse events (SAE),Changed,2026-07-02,"The master protocol will include 3 sub-studies, each focused on a specific disease population.
 
 * Sub-study 1 will investigate rilvegostomig± ramucirumab in 1L non-actionable genomic alterations (AGA) NSCLC with PD-L1 ≥50%.
 * Sub-study 2 will investigate rilvegostomig + ramucirumab in 1L non-actionable genomic alterations (AGA) NSCLC with PD-L1 1-49%.
 * Sub-study 3 will investigate Dato-DXd + ramucirumab ± rilvegostomig in 2/3L AGA+
 
-Each sub-study may include 2 parts (unless stated in the individual sub study protocols): Part A: one or more Safety Run-in cohort(s), and Part B: one or more Dose Expansion cohort(s).",True
+Each sub-study may include 2 parts (unless stated in the individual sub study protocols): Part A: one or more Safety Run-in cohort(s), and Part B: one or more Dose Expansion cohort(s).",
 NCT06532539,Cadonilimab With Chemoradiation for Recurrent and Oligometastatic Endometrial Carcinoma,TIGIT,Shandong Cancer Hospital and Institute,RECRUITING,"Endometrial Neoplasms, Neoplasm Recurrence, Local, Neoplasm Metastasis",PHASE2,2026-04-21,2024-06-13,2026-09,30,Progression-Free Survival,No Change,2026-05-26,"The goal of this clinical trial is to evaluate the efficacy and safety of cadonilimab in combination with paclitaxel, cisplatin, and radiation therapy for the treatment of locally recurrent and oligometastatic endometrial carcinoma. The main questions it aims to answer are:
 
 1. Does the combination therapy improve the overall response rate (ORR), progression-free survival (PFS), disease control rate (DCR), overall survival (OS), and safety in participants?
@@ -831,7 +873,12 @@ NCT04303169,Substudy 02C: Safety and Efficacy of Pembrolizumab in Combination Wi
 The goal of substudy 02C is to evaluate the safety and efficacy of investigational treatment arms in participants with Stage III melanoma who are candidates for neoadjuvant therapy to identify the investigational agent(s) that, when used in combination, are superior to the current treatment options/historical control available.
 
 Arm 1: Pembrolizumab + Vibostolimab, Arm 2: Pembrolizumab + Gebasaxturev, and Arm 3: Pembrolizumab were added in the base protocol on 13-Nov-2019, and enrollment into those arms has been completed. Arm 4: Pembrolizumab + MK-4830 was added in Amendment 04 on 20-Dec-2021, and enrollment into that arm has been completed. Arm 5: Favezelimab + Pembrolizumab and Arm 6: Pembrolizumab + all-trans retinoic acid (ATRA) were added in Amendment 06 on 25-Jun-2022, and enrollment is ongoing.",
-NCT05329766,A Safety and Efficacy Study of Treatment Combinations With and Without Chemotherapy in Adult Participants With Advanced Upper Gastrointestinal Tract Malignancies,TIGIT,"Arcus Biosciences, Inc.",ACTIVE_NOT_RECRUITING,Gastrointestinal Tract Malignancies,PHASE2,2026-05-29,2022-06-10,2027-06,332,Number of Participants with Adverse Events (AEs),Changed,2026-06-03,"The purpose of this study is to evaluate the safety and preliminary clinical activity of treatment combinations with and without chemotherapy in participants with locally advanced unresectable or metastatic gastric, GEJ, and esophageal adenocarcinoma. Chemotherapy will consist of FOLFOX (oxaliplatin, leucovorin, fluorouracil).",
+NCT05329766,A Safety and Efficacy Study of Treatment Combinations With and Without Chemotherapy in Adult Participants With Advanced Upper Gastrointestinal Tract Malignancies,TIGIT,"Arcus Biosciences, Inc.",ACTIVE_NOT_RECRUITING,Gastrointestinal Tract Malignancies,PHASE2,2026-06-30,2022-06-10,2027-06,332,Number of Participants with Adverse Events (AEs),Changed,2026-07-03,"**[RECENT CHANGES FOUND]**
+Field `statusModule.lastUpdateSubmitDate` changed from `2026-05-29` to `2026-06-30`
+Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-06-02` to `2026-07-02`
+
+***
+The purpose of this study is to evaluate the safety and preliminary clinical activity of treatment combinations with and without chemotherapy in participants with locally advanced unresectable or metastatic gastric, GEJ, and esophageal adenocarcinoma. Chemotherapy will consist of FOLFOX (oxaliplatin, leucovorin, fluorouracil).",True
 NCT04323202,Neoadjuvant-Adjuvant Pembrolizumab in Resectable Advanced Basal Cell Carcinoma of H&N,TIGIT,Case Comprehensive Cancer Center,COMPLETED,Basal Cell Carcinoma of the Head and Neck,PHASE1,2025-10-23,2020-08-04,2025-06-25,13,Pathologic response as assessed by change in tumor volume (RECIST 1.1),No Change,2026-02-05,"This is a phase 1 study looking at anti-PD-1 Neoadjuvant therapy in Basal cell carcinoma in participants with locoregionally advanced, but resectable basal cell carcinoma of the head and neck. Participants will undergo fine cut CT imaging (head and neck) and treatment with the study drug pembrolizumab.
 
 The primary objective of this study is to evaluate pathologic response to pre-operative treatment of pembrolizumab in the study group.
