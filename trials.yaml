@@ -530,3 +530,7 @@ targets:
   - id: NCT07679841
     name: Safety and Efficacy of Nivolumab and Imiquimod Combination in Vulvar Squamous
       Cell Carcinoma Patients
+  - id: NCT07707245
+    name: Identification of Diagnostic and Prognostic Biomarkers in the Pathological
+      Continuum of Bronco Chronic Obstructive Pulmonary Disease, Idiopathic Pulmonary
+      Fibrosis and Pulmonary Neoplasia

@@ -562,7 +562,14 @@ There are observational and laboratory data supporting the notion that the omega
 The mechanism(s) by which EPA might influence post-operative survival are not well understood. Recent data support the idea that the anti-CRC benefit of EPA may be mediated by modulating the intestinal microbiota and ameliorating tumour-permissive immunosuppressive mechanisms, including inhibition of the activity of regulatory T cells (Tregs) and myeloid-derived suppressor cells (MDSCs), as well as reduced synthesis of inflammatory mediators such as prostaglandin (PG) E2 and chemokine (C-C motif) ligand 2 (CCL2). Mice fed with a high-EPA-containing diet demonstrate 1) increased abundance of gut bacteria, such as Bifidobacterium and Lactobacillus genera that support the host anti-tumour immune response and improve the efficacy of cancer immunotherapy, and 2) decreased abundance of lipopolysaccharide (LPS)-producing bacteria that trigger chronic inflammation and can promote CRC. These data support a hypothesis that a prebiotic effect of EPA abrogates intra-tumoural immunosuppression and ameliorates systemic inflammation to improve survival of CRCLM patients.
 
 EMT2 trial participants are ideally placed to provide biospecimens that can be analysed in order to understand the mechanism(s) of action of EPA given that the laboratory data can eventually be linked to the clinical outcomes from the trial. Biospecimens can be obtained without interference with the EMT2 trial protocol. Stool, urine, and blood samples will be obtained 1) after EMT2 trial randomization, before starting EPA or placebo, 2) just before surgery, and 3) at 6-monthly intervals thereafter, plus liver metastases tumour tissue during surgery. Using these biospecimens, the microbiome and immune pathways altered by EPA will be investigated in relation to participant survival. Mechanistic insights about the anti-CRC activity of EPA from the biospecimen collection project will maximize the knowledge and insights gained from the EMT2 trial and its participants, thereby leading to personalized use of EPA, which will be targeted at those most likely to benefit.",
-NCT05123482,"A Phase I/IIa Study of AZD8205 Given Alone or Combined, in Participants With Advanced/Metastatic Solid Malignancies",TIGIT,AstraZeneca,RECRUITING,"Breast Cancer, Biliary Tract Carcinoma, Ovarian Cancer, Endometrial Cancer, Squamous Non-Small Cell Lung Cancer","PHASE1, PHASE2",2026-06-16,2021-10-18,2027-09-29,460,The number of patients with adverse events,Changed,2026-06-18,"This study is a Phase I/IIa Multi-center, Open-label Master Protocol Dose Escalation and Expansion Study of AZD8205 as Monotherapy and in Combination with Anticancer Agents in Participants with Advanced Solid Tumors",
+NCT05123482,"A Phase I/IIa Study of AZD8205 Given Alone or Combined, in Participants With Advanced/Metastatic Solid Malignancies",TIGIT,AstraZeneca,RECRUITING,"Breast Cancer, Biliary Tract Carcinoma, Ovarian Cancer, Endometrial Cancer, Squamous Non-Small Cell Lung Cancer","PHASE1, PHASE2",2026-07-15,2021-10-18,2027-09-29,460,The number of patients with adverse events,Changed,2026-07-17,"**[RECENT CHANGES FOUND]**
+Field `statusModule.statusVerifiedDate` changed from `2026-06` to `2026-07`
+Field `statusModule.lastUpdateSubmitDate` changed from `2026-06-16` to `2026-07-15`
+Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-06-17` to `2026-07-16`
+Field `contactsLocationsModule.locations.[16]status` changed from `RECRUITING` to `ACTIVE_NOT_RECRUITING`
+
+***
+This study is a Phase I/IIa Multi-center, Open-label Master Protocol Dose Escalation and Expansion Study of AZD8205 as Monotherapy and in Combination with Anticancer Agents in Participants with Advanced Solid Tumors",True
 NCT07161414,A Study to Investigate the Pharmacokinetics and Safety of Subcutaneous Rilvegostomig in Adult Participants With Advanced Solid Tumors Previously Treated With Standard of Care Therapy,TIGIT,AstraZeneca,RECRUITING,Advanced Solid Tumors,PHASE1,2026-07-08,2025-11-25,2029-07-24,40,Area under the Concentration-time Curve During One Dosing Interval (AUCtau),Changed,2026-07-10,"This is a Phase I, open-label, multicenter, multi-part, dose finding and dose confirmation study to evaluate the PK and safety of SC rilvegostomig.
 
 The study includes 2 parts: Part 1 (Dose Finding) and Part 2 (Dose Confirmation).
@@ -691,21 +698,12 @@ NCT04457778,First in Human Study of M6223,TIGIT,"EMD Serono Research & Developme
 NCT03772899,Fecal Microbial Transplantation in Combination With Immunotherapy in Melanoma Patients (MIMic),TIGIT,London Health Sciences Centre Research Institute OR Lawson Research Institute of St. Joseph's,ACTIVE_NOT_RECRUITING,Melanoma,PHASE1,2025-03-26,2019-03-27,2026-08,20,To evaluate the safety of combining Fecal Microbial Transplantation (FMT) using intestinal bacteria existing in the stool of healthy donors with immunotherapy in melanoma patients.,No Change,2026-02-05,"Immunotherapy has helped many cancer patients in the last 5 years by enhancing a patient's immune system to fight cancer. Anti-Programmed Death (PD-1) immunotherapy drugs such as pembrolizumab and nivolumab remove the breaks from cancer-fighting immune cells and have been effective in treating some melanoma patients. Despite the major breakthrough of immunotherapy in oncology treatment, many patients do not respond to this new class of anti-cancer drugs. Recently, evidence suggests that the microorganisms living in a patient's intestines play a major role in modifying the response to anti-PD-1drugs. Patients who respond to these drugs have a unique and healthy group of microorganisms in their gut. Therefore, positive modification of a cancer patient's gut microorganisms to create a more diverse and healthy microbiome may improve the response to immunotherapy. One method of modifying the microbiome is Fecal Microbial Transplantation (FMT) that is already being successfully used in the clinic to treat non-cancer patients with persistent bacterial infections.
 
 In this study, the investigators will combine FMT with the approved immunotherapy drugs pembrolizumab or nivolumab that are the standard of care for the treatment of advanced melanoma. The purpose of this study is to examine the safety of combining these two therapies in melanoma patients. The investigator will use fecal material from a healthy donor selected via our stringent protocol that is Health Canada approved. In addition to assessing the safety of the combination, the investigator will also study the effect of FMT on the immune system and microbial ecosystem of the gut.",
-NCT04374877,Study of CHS-388 (Formerly Known as SRF388) in Patients With Advanced Solid Tumors,TIGIT,"Coherus Oncology, Inc.",COMPLETED,"Advanced Solid Tumor, Clear Cell Renal Cell Carcinoma, Hepatocellular Carcinoma, Non-small Cell Lung Cancer",PHASE1,2026-07-14,2020-04-22,2025-06-05,145,[Part A] Dose Limiting Toxicity (DLT),Changed,2026-07-16,"**[RECENT CHANGES FOUND]**
-Field `statusModule.statusVerifiedDate` changed from `2025-11` to `2026-07`
-Field `statusModule.lastUpdateSubmitDate` changed from `2025-11-06` to `2026-07-14`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2025-11-10` to `2026-07-15`
-Field `contactsLocationsModule.overallOfficials.[0]name` changed from `Koho Iizuka, MD` to `Study Director`
-Field `contactsLocationsModule.overallOfficials.[0]affiliation` changed from `Coherus BioSciences` to `Coherus Oncology`
-Field `contactsLocationsModule.overallOfficials.[0]role` changed from `STUDY_CHAIR` to `STUDY_DIRECTOR`
-
-***
-This is a Phase 1/1b, open-label, first-in-human (FIH), dose-escalation and expansion study of CHS-388, a monoclonal antibody targeting IL-27, as a monotherapy and in combination in patients with solid tumors that will be conducted in 4 parts:
+NCT04374877,Study of CHS-388 (Formerly Known as SRF388) in Patients With Advanced Solid Tumors,TIGIT,"Coherus Oncology, Inc.",COMPLETED,"Advanced Solid Tumor, Clear Cell Renal Cell Carcinoma, Hepatocellular Carcinoma, Non-small Cell Lung Cancer",PHASE1,2026-07-14,2020-04-22,2025-06-05,145,[Part A] Dose Limiting Toxicity (DLT),Changed,2026-07-16,"This is a Phase 1/1b, open-label, first-in-human (FIH), dose-escalation and expansion study of CHS-388, a monoclonal antibody targeting IL-27, as a monotherapy and in combination in patients with solid tumors that will be conducted in 4 parts:
 
 * Part A: CHS-388 monotherapy dose-escalation portion of the study will evaluate the safety, tolerability, PK, pharmacodynamics, and preliminary efficacy of CHS-388 as monotherapy in patients with advanced solid tumors.
 * Part B: CHS-388 monotherapy expansion cohorts will evaluate the safety, efficacy, tolerability, PK, and pharmacodynamics of CHS-388 monotherapy in patients with advanced or metastatic ccRCC, advanced or metastatic HCC, and advanced or metastatic NSCLC in indication specific cohorts.
 * Part C will evaluate the safety, preliminary efficacy, tolerability, and PK of CHS-388 in combination with pembrolizumab in patients with advanced RCC,HCC, or NSCLC.
-* Part D will evaluate the safety, preliminary efficacy, tolerability, and PK of CHS-388 in combination with toripalimab in patients with advanced NSCLC.",True
+* Part D will evaluate the safety, preliminary efficacy, tolerability, and PK of CHS-388 in combination with toripalimab in patients with advanced NSCLC.",
 NCT06346197,Combination of Immune Checkpoint in Locally Advanced or Metastatic MSI/dMMR Esogastric Adenocarcinomas,TIGIT,Centre Leon Berard,RECRUITING,"Gastric Cancer, MSI-H, Metastatic Cancer, Advanced Cancer",PHASE3,2026-06-23,2025-12-08,2028-05-15,132,Survival of patients,Changed,2026-06-27,"CIME is a multicenter, randomised, comparative, open-label phase III study aiming to compare the survival of patients suffering from MSI-H/dMMR locally advanced or metastatic oeasogastric adenocarcinoma treated by a bi-immunotherapy (experimental arm) versus standard current treatment (FOLFOX/XELOX + nivolumab : standard arm).",
 NCT05780073,Safety and Impact of Dasatinib on Viral Persistence and Inflammation in People With HIV Under Antiretroviral Treatment,TIGIT,Fundació Institut Germans Trias i Pujol,COMPLETED,HIV Infection Primary,PHASE2,2025-09-16,2023-10-16,2025-04-01,60,Grade 3 or 4 treatment-related adverse events or laboratory abnormalities during the study (based on the Common Terminology Criteria for Adverse Events (CTCAE) v5.0 grading scale).,No Change,2026-02-05,"This is a Phase II, single-center, randomized, double-blind, placebo-controlled clinical trial in People with Human Immunodeficiency Virus (PWH) on suppressive Combined Antiretroviral Therapy (cART).
 
@@ -730,7 +728,11 @@ All participants will receive a fixed-dose regimen of the three agents: atezoliz
 This study will enroll patients in 2 cohorts: A and B. Patients in Cohort A will undergo pre-treatment and on-treatment tumor biopsies for correlative studies. Patient in Cohort B will not receive study biopsies. Patients in Cohorts A and B will otherwise receive identical treatment.",
 NCT05014815,Ociperlimab With Tislelizumab and Chemotherapy in Participants With Untreated Metastatic Non-Small Cell Lung Cancer,TIGIT,BeiGene,COMPLETED,"Locally Advanced, Unresectable, or Metastatic Nonsmall Cell Lung Cancer (NSCLC), Nonsmall Cell Lung Cancer, Stage IIIB, Nonsmall Cell Lung Cancer, Stage IV",PHASE2,2025-08-28,2021-11-16,2024-09-04,272,Progression-free Survival (PFS),Changed,2026-06-24,"This study aimed to evaluate the safety and effectiveness of ociperlimab combined with tislelizumab and chemotherapy, compared to tislelizumab and chemotherapy alone, in participants with non-small cell lung cancer (NSCLC) that was locally advanced, could not be removed by surgery, or had spread to other parts of the body.",
 NCT07307053,Rare Tumor Focused Platform Study of Innovative Therapies and Technologies (PLATFORM2),TIGIT,"Cancer Institute and Hospital, Chinese Academy of Medical Sciences",NOT_YET_RECRUITING,"Rare Malignant Neoplasm, Advanced Solid Tumors, Metastatic Solid Tumors","PHASE1, PHASE2",2025-12-13,2026-01-01,2031-01-31,600,Objective Response Rate (ORR),No Change,2026-02-05,"This is an open-label, non-randomized, multi-arm, single-center Phase I/II platform study (PLATFORM2). Based on the definition of rare tumors in China (incidence \< 2.5/100,000 or specific list), eligible patients will undergo multi-omics screening. Based on the molecular profiling results (gene variations or protein expression), patients will be assigned to corresponding treatment arms (Sub-studies). Therapies include small molecules, protein drugs, Cell and Gene Therapy (CGT) products, and therapeutic vaccines. The study employs a Clopper-Pearson Two-Stage Minimax design for each arm.",
-NCT04746924,A Study of Ociperlimab With Tislelizumab Compared to Pembrolizumab in Participants With Untreated Lung Cancer,TIGIT,BeiGene,TERMINATED,"Non-small Cell Lung Cancer, NSCLC",PHASE3,2026-04-20,2021-05-24,2026-03-18,669,Overall Survival (OS) in Arms A and B,No Change,2026-05-26,"The purpose of this study is to evaluate the efficacy and safety of ociperlimab + tislelizumab compared with that of pembrolizumab in adults with high levels of programmed cell death ligand-1 (PD-L1), locally advanced/recurrent or untreated metastatic non-small cell lung cancer (NSCLC).",
+NCT04746924,A Study of Ociperlimab With Tislelizumab Compared to Pembrolizumab in Participants With Untreated Lung Cancer,TIGIT,BeiGene,TERMINATED,"Non-small Cell Lung Cancer, NSCLC",PHASE3,2026-04-20,2021-05-24,2026-03-18,669,Overall Survival (OS) in Arms A and B,Changed,2026-07-17,"**[RECENT CHANGES FOUND]**
+New field added: `root['referencesModule']`
+
+***
+The purpose of this study is to evaluate the efficacy and safety of ociperlimab + tislelizumab compared with that of pembrolizumab in adults with high levels of programmed cell death ligand-1 (PD-L1), locally advanced/recurrent or untreated metastatic non-small cell lung cancer (NSCLC).",True
 NCT07098338,A Study of Novel Combinations in Non-Small Cell Lung Cancer (NSCLC),TIGIT,AstraZeneca,RECRUITING,Non-Small Cell Lung Cancer,PHASE2,2026-06-30,2025-08-07,2029-04-06,278,Number of participants with adverse events (AE) and serious adverse events (SAE),Changed,2026-07-02,"The master protocol will include 3 sub-studies, each focused on a specific disease population.
 
 * Sub-study 1 will investigate rilvegostomig± ramucirumab in 1L non-actionable genomic alterations (AGA) NSCLC with PD-L1 ≥50%.
@@ -908,3 +910,62 @@ The study is based on the hypothesis that chronological age and clinical frailty
 
 Participants will be followed according to routine clinical practice. Clinical data collected during follow-up will include disease characteristics, geriatric assessment, sarcopenia assessment, treatment response, and treatment-related toxicities. The primary objective is to evaluate the association between baseline immune fitness and treatment response at 3 months. Secondary analyses will investigate the relationship between immune profiles and adverse events, geriatric status, and sarcopenia. The results are expected to improve understanding of the biological determinants of response and toxicity to T-cell-directed immunotherapies and to support improved risk stratification in older patients with relapsed or refractory multiple myeloma.",
 NCT07679841,Safety and Efficacy of Nivolumab and Imiquimod Combination in Vulvar Squamous Cell Carcinoma Patients,TIGIT,Centre Leon Berard,NOT_YET_RECRUITING,Vulvar Squamous Cell Carcinoma,"PHASE1, PHASE2",2026-06-25,2026-09,2029-09,50,"Phase I Safety run-in: Dose-limiting toxicity (DLT) related to imiquimod and/or nivolumab, occurring during the induction period (first 6 weeks of treatment)",No Change,2026-07-02,"COLOMBE is a multicenter, single arm, phase 1/2 trial designed to evaluate the safety and efficacy of imiquimod cream with IV low dose nivolumab in primary resectable vulvar squamous cell carcinoma patients prior to surgery, leveraging the preoperative ""window of opportunity"" period, an unavoidable interval due to surgical scheduling.",
+NCT07707245,"Identification of Diagnostic and Prognostic Biomarkers in the Pathological Continuum of Bronco Chronic Obstructive Pulmonary Disease, Idiopathic Pulmonary Fibrosis and Pulmonary Neoplasia",TIGIT,Fondazione Don Carlo Gnocchi ETS,RECRUITING,"COPD, Idiopathic Pulmonary Fibrosis (IPF), Lung Cancer",NA,2026-07-15,2026-04-22,2028-10-30,120,Innate immunity,No Change,2026-07-17,"This is a non-profit, interventional pilot study without an investigational medicinal product. The study consists of two phases: a prospective phase (Phase I) and a retrospective phase (Phase II).
+
+Study Timeline
+
+The overall study duration will be 30 months, as follows:
+
+Patient enrollment and biological sample collection: 18 months. Follow-up visit: 12 months after enrollment for each participant. Laboratory analyses: 20 months. Statistical analyses: at Month 24 (primary endpoint) and at Month 30 (12-month follow-up analyses).
+
+Phase I - Prospective
+
+Participants enrolled in the prospective phase will undergo study assessments according to the following schedule:
+
+T0 (Baseline): Enrollment. T1: 12-month follow-up after enrollment. Clinical and laboratory data will be collected at baseline (T0) and at the 12-month follow-up visit (T1), as specified in the study schedule of assessments.
+
+Phase II - Retrospective Archived tissue samples will be used.
+
+Study Setting Phase I
+
+The prospective phase will enroll:
+
+40 patients with chronic obstructive pulmonary disease (COPD), current or former smokers; 40 patients with idiopathic pulmonary fibrosis (IPF), current or former smokers; 30 never-smoking patients with resectable Stage I or II lung adenocarcinoma undergoing surgical resection; 30 current or former smoking patients with resectable Stage I, II, or III lung adenocarcinoma undergoing surgical resection.
+
+Patients with COPD and IPF will be recruited during outpatient visits. Patients with lung cancer will be recruited either during the preoperative outpatient evaluation or upon hospital admission for surgical treatment.
+
+Phase II Archived tissue biopsy specimens collected during routine clinical practice, either fresh-frozen or formalin-fixed paraffin-embedded (FFPE).
+
+The retrospective cohort will include samples from:
+
+40 patients with COPD; 40 patients with IPF; 30 never-smoking patients with Stage I or II lung adenocarcinoma; 30 smoking patients with Stage I or II lung adenocarcinoma. Study Procedures Phase I - Prospective
+
+Following written informed consent, all participants will undergo collection of approximately 40 mL of peripheral blood:
+
+Three EDTA tubes of whole blood; Two serum tubes.
+
+Peripheral blood mononuclear cells (PBMCs) will be isolated by Ficoll-Paque Plus density-gradient centrifugation, washed with phosphate-buffered saline (PBS), counted, and processed as follows:
+
+Immunophenotypic characterization of innate and adaptive immune cell markers using monoclonal antibody staining and flow cytometry; In vitro stimulation with culture medium alone and with lipopolysaccharide (LPS) plus nigericin to evaluate NLRP3 inflammasome activation; Cryopreservation of a PBMC aliquot in dimethyl sulfoxide (DMSO) at -140°C until analysis.
+
+Serum samples will undergo:
+
+Automated extraction of microRNAs using commercially available column-based extraction kits; Reverse transcription into complementary DNA (cDNA), with storage at -20°C until analysis.
+
+PBMCs will also be used for:
+
+Genomic DNA extraction using the phenol-chloroform method, followed by storage at -20°C until analysis.
+
+Phase II - Retrospective
+
+Archived fresh-frozen and FFPE tissue samples collected during routine clinical care will be retrieved from the participating biobank and pathology department.
+
+Patients whose biological samples are eligible for inclusion will be contacted to obtain specific informed consent for the use of their archived specimens for the present research project. Only samples from participants providing written informed consent will be included.
+
+From FFPE tissue samples:
+
+Genomic DNA will be extracted using the QIAamp DNA FFPE Tissue Kit (Qiagen) and an automated extraction platform, then stored at -20°C until analysis.
+
+MicroRNAs will be extracted using the RNeasy FFPE Kit (Qiagen) and an automated extraction platform, reverse-transcribed into cDNA, and stored at -20°C until analysis.
+
+In addition to the translational research analyses specified in the protocol, results from routine molecular diagnostic testing previously performed on retrospective lung tumor specimens will also be collected. These include PD-L1 expression analysis in squamous cell carcinomas and Myriapod next-generation sequencing (NGS) mutational profiling (DNA and RNA) in lung adenocarcinomas. These molecular variables will be included as covariates in the statistical analyses.",
