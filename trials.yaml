@@ -537,3 +537,5 @@ targets:
   - id: NCT07720284
     name: An Open-label Study to Investigate the Efficacy and Safety of Dato-DXd +
       Rilvegostomig vs SoC in Adult Participants With High-risk MIUC
+  - id: NCT07723638
+    name: New Diagnostic Approaches in the Management of Inflammatory Lung Diseases
