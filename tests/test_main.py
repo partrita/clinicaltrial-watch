@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Tests for safe_json_load and history-related functions in main.py.
 Covers: corrupted JSON, missing files, valid files, and history append logic.
@@ -13,11 +12,11 @@ from typing import Any
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from main import (
+    flatten_dict,
     safe_json_load,
+    save_target_data,
     update_history,
     update_target_history,
-    flatten_dict,
-    save_target_data,
 )
 
 

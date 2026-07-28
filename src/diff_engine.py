@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, Dict, Optional
+from typing import Any
 
 try:
     from deepdiff import DeepDiff
@@ -10,9 +10,9 @@ except ImportError:
     HAS_DEEPDIFF = False
 
 try:
-    from utils import sanitize_id, check_file_size, safe_str
+    from utils import check_file_size, safe_str, sanitize_id
 except ImportError:
-    from src.utils import sanitize_id, check_file_size, safe_str
+    from src.utils import check_file_size, safe_str, sanitize_id
 
 # Security limits for diff formatting to prevent DoS (CWE-400)
 MAX_CHANGES = 100
@@ -21,8 +21,8 @@ MAX_DEPTH = 20
 
 
 def compare_snapshots(
-    trial_id: str, new_data: Dict[str, Any], snapshot_dir: str = "data/snapshots"
-) -> Optional[Any]:
+    trial_id: str, new_data: dict[str, Any], snapshot_dir: str = "data/snapshots"
+) -> Any | None:
     """
     Compares the new data with the previous snapshot of the trial using DeepDiff.
     """
@@ -39,7 +39,7 @@ def compare_snapshots(
     try:
         with open(previous_path, "r", encoding="utf-8") as f:
             old_data = json.load(f)
-    except Exception as e:
+    except (OSError, json.JSONDecodeError, ValueError) as e:
         print(f"  Warning: Failed to load previous snapshot for {trial_id}: {e}")
         return None
 

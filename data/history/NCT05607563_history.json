@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:22",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:22", "diff": "Initial data collection"}, {"timestamp": "2026-07-28 00:26:03", "diff": "Field `identificationModule.organization.fullName` changed from `Biotheus Inc.` to `BioNTech SE`"}]

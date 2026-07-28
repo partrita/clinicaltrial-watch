@@ -1,7 +1,8 @@
 import threading
-from unittest.mock import patch, MagicMock
-import src.crawler
+from unittest.mock import MagicMock, patch
+
 import src.auto_discover_trials
+import src.crawler
 
 
 def test_crawler_session_concurrency():

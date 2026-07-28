@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:47",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:47", "diff": "Initial data collection"}, {"timestamp": "2026-07-28 00:26:05", "diff": "Field `statusModule.statusVerifiedDate` changed from `2025-11` to `2026-07`\nField `statusModule.lastUpdateSubmitDate` changed from `2025-11-06` to `2026-07-14`\nField `statusModule.lastUpdatePostDateStruct.date` changed from `2025-11-10` to `2026-07-15`\nField `contactsLocationsModule.overallOfficials.[0]name` changed from `Koho Iizuka, MD` to `Study Director`\nField `contactsLocationsModule.overallOfficials.[0]affiliation` changed from `Coherus BioSciences` to `Coherus Oncology`\nField `contactsLocationsModule.overallOfficials.[0]role` changed from `STUDY_CHAIR` to `STUDY_DIRECTOR`"}]

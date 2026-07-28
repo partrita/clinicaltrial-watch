@@ -2,4 +2,6 @@
 title: "NCT05537051 Change History"
 ---
 
-No changes recorded yet for NCT05537051.
+| Timestamp                   | Before                                                        | After                                                       |
+|:----------------------------|:--------------------------------------------------------------|:------------------------------------------------------------|
+| 2026-07-28 00&#58;26&#58;04 | **identificationModule.organization.fullName**: Biotheus Inc. | **identificationModule.organization.fullName**: BioNTech SE |

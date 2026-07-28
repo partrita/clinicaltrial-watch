@@ -26,3 +26,6 @@ title: "NCT07161414 Change History"
 | 2026-06-11 04&#58;04&#58;07 | **statusModule.lastUpdatePostDateStruct.date**: 2026-05-08                  | **statusModule.lastUpdatePostDateStruct.date**: 2026-06-10          |
 | 2026-06-11 04&#58;04&#58;07 | **contactsLocationsModule.locations.&#91;3&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;3&#93;status**: RECRUITING |
 | 2026-06-11 04&#58;04&#58;07 | **contactsLocationsModule.locations.&#91;4&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;4&#93;status**: RECRUITING |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.statusVerifiedDate**: 2026-06                                | **statusModule.statusVerifiedDate**: 2026-07                        |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdateSubmitDate**: 2026-06-09                           | **statusModule.lastUpdateSubmitDate**: 2026-07-08                   |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdatePostDateStruct.date**: 2026-06-10                  | **statusModule.lastUpdatePostDateStruct.date**: 2026-07-09          |

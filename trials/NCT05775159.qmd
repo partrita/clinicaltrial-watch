@@ -18,3 +18,104 @@ title: "NCT05775159 Change History"
 | 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;55&#93;city**: Taoyuan District  | **contactsLocationsModule.locations.&#91;55&#93;city**: Taoyuan           |
 | 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;55&#93;geoPoint.lat**: 24.9896   | **contactsLocationsModule.locations.&#91;55&#93;geoPoint.lat**: 24.99368  |
 | 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;55&#93;geoPoint.lon**: 121.3187  | **contactsLocationsModule.locations.&#91;55&#93;geoPoint.lon**: 121.29696 |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.statusVerifiedDate**: 2026-04                              | **statusModule.statusVerifiedDate**: 2026-06                              |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.overallStatus**: RECRUITING                                | **statusModule.overallStatus**: ACTIVE_NOT_RECRUITING                     |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdateSubmitDate**: 2026-04-16                         | **statusModule.lastUpdateSubmitDate**: 2026-07-01                         |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdatePostDateStruct.date**: 2026-04-17                | **statusModule.lastUpdatePostDateStruct.date**: 2026-07-02                |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;1&#93;city**: Costa Mesa         | **contactsLocationsModule.locations.&#91;1&#93;city**: Los Angeles        |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;1&#93;zip**: 92627               | **contactsLocationsModule.locations.&#91;1&#93;zip**: 90089               |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;1&#93;geoPoint.lat**: 33.64113   | **contactsLocationsModule.locations.&#91;1&#93;geoPoint.lat**: 34.05223   |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;1&#93;geoPoint.lon**: -117.91867 | **contactsLocationsModule.locations.&#91;1&#93;geoPoint.lon**: -118.24368 |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;2&#93;city**: Los Angeles        | **contactsLocationsModule.locations.&#91;2&#93;city**: Orange             |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;2&#93;zip**: 90089               | **contactsLocationsModule.locations.&#91;2&#93;zip**: 92868               |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;2&#93;geoPoint.lat**: 34.05223   | **contactsLocationsModule.locations.&#91;2&#93;geoPoint.lat**: 33.78779   |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;2&#93;geoPoint.lon**: -118.24368 | **contactsLocationsModule.locations.&#91;2&#93;geoPoint.lon**: -117.85311 |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;3&#93;city**: Orange             | **contactsLocationsModule.locations.&#91;3&#93;city**: Kansas City        |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;3&#93;state**: California        | **contactsLocationsModule.locations.&#91;3&#93;state**: Kansas            |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;3&#93;zip**: 92868               | **contactsLocationsModule.locations.&#91;3&#93;zip**: 66103               |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;3&#93;geoPoint.lat**: 33.78779   | **contactsLocationsModule.locations.&#91;3&#93;geoPoint.lat**: 39.11417   |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;3&#93;geoPoint.lon**: -117.85311 | **contactsLocationsModule.locations.&#91;3&#93;geoPoint.lon**: -94.62746  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;4&#93;city**: Miami Beach        | **contactsLocationsModule.locations.&#91;4&#93;city**: New York           |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;4&#93;state**: Florida           | **contactsLocationsModule.locations.&#91;4&#93;state**: New York          |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;4&#93;zip**: 33140               | **contactsLocationsModule.locations.&#91;4&#93;zip**: 10065               |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;4&#93;geoPoint.lat**: 25.79065   | **contactsLocationsModule.locations.&#91;4&#93;geoPoint.lat**: 40.71427   |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;4&#93;geoPoint.lon**: -80.13005  | **contactsLocationsModule.locations.&#91;4&#93;geoPoint.lon**: -74.00597  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;5&#93;city**: Dyer               | **contactsLocationsModule.locations.&#91;5&#93;city**: Beijing            |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;5&#93;zip**: 46311               | **contactsLocationsModule.locations.&#91;5&#93;zip**: 100050              |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;5&#93;country**: United States   | **contactsLocationsModule.locations.&#91;5&#93;country**: China           |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;5&#93;geoPoint.lat**: 41.4942    | **contactsLocationsModule.locations.&#91;5&#93;geoPoint.lat**: 39.9075    |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;5&#93;geoPoint.lon**: -87.52171  | **contactsLocationsModule.locations.&#91;5&#93;geoPoint.lon**: 116.39723  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;6&#93;city**: Kansas City        | **contactsLocationsModule.locations.&#91;6&#93;city**: Beijing            |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;6&#93;zip**: 66103               | **contactsLocationsModule.locations.&#91;6&#93;zip**: 100142              |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;6&#93;country**: United States   | **contactsLocationsModule.locations.&#91;6&#93;country**: China           |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;6&#93;geoPoint.lat**: 39.11417   | **contactsLocationsModule.locations.&#91;6&#93;geoPoint.lat**: 39.9075    |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;6&#93;geoPoint.lon**: -94.62746  | **contactsLocationsModule.locations.&#91;6&#93;geoPoint.lon**: 116.39723  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;7&#93;city**: New York           | **contactsLocationsModule.locations.&#91;7&#93;city**: Beijing            |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;7&#93;zip**: 10065               | **contactsLocationsModule.locations.&#91;7&#93;zip**: 101100              |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;7&#93;country**: United States   | **contactsLocationsModule.locations.&#91;7&#93;country**: China           |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;7&#93;geoPoint.lat**: 40.71427   | **contactsLocationsModule.locations.&#91;7&#93;geoPoint.lat**: 39.9075    |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;7&#93;geoPoint.lon**: -74.00597  | **contactsLocationsModule.locations.&#91;7&#93;geoPoint.lon**: 116.39723  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;8&#93;city**: Dallas             | **contactsLocationsModule.locations.&#91;8&#93;city**: Chengdu            |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;8&#93;zip**: 75251               | **contactsLocationsModule.locations.&#91;8&#93;zip**: 610000              |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;8&#93;country**: United States   | **contactsLocationsModule.locations.&#91;8&#93;country**: China           |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;8&#93;geoPoint.lat**: 32.78306   | **contactsLocationsModule.locations.&#91;8&#93;geoPoint.lat**: 30.66667   |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;8&#93;geoPoint.lon**: -96.80667  | **contactsLocationsModule.locations.&#91;8&#93;geoPoint.lon**: 104.06667  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;9&#93;city**: Fairfax            | **contactsLocationsModule.locations.&#91;9&#93;city**: Chengdu            |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;9&#93;zip**: 22031               | **contactsLocationsModule.locations.&#91;9&#93;zip**: 610041              |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;9&#93;country**: United States   | **contactsLocationsModule.locations.&#91;9&#93;country**: China           |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;9&#93;geoPoint.lat**: 38.84622   | **contactsLocationsModule.locations.&#91;9&#93;geoPoint.lat**: 30.66667   |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;9&#93;geoPoint.lon**: -77.30637  | **contactsLocationsModule.locations.&#91;9&#93;geoPoint.lon**: 104.06667  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;10&#93;city**: Beijing           | **contactsLocationsModule.locations.&#91;10&#93;city**: Chongqing         |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;10&#93;zip**: 100050             | **contactsLocationsModule.locations.&#91;10&#93;zip**: 400030             |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;10&#93;geoPoint.lat**: 39.9075   | **contactsLocationsModule.locations.&#91;10&#93;geoPoint.lat**: 29.56026  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;10&#93;geoPoint.lon**: 116.39723 | **contactsLocationsModule.locations.&#91;10&#93;geoPoint.lon**: 106.55771 |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;11&#93;city**: Beijing           | **contactsLocationsModule.locations.&#91;11&#93;city**: Fuzhou            |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;11&#93;zip**: 100142             | **contactsLocationsModule.locations.&#91;11&#93;zip**: 350007             |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;11&#93;geoPoint.lat**: 39.9075   | **contactsLocationsModule.locations.&#91;11&#93;geoPoint.lat**: 26.06139  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;11&#93;geoPoint.lon**: 116.39723 | **contactsLocationsModule.locations.&#91;11&#93;geoPoint.lon**: 119.30611 |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;12&#93;city**: Beijing           | **contactsLocationsModule.locations.&#91;12&#93;city**: Guangzhou         |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;12&#93;zip**: 101100             | **contactsLocationsModule.locations.&#91;12&#93;zip**: 510060             |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;12&#93;geoPoint.lat**: 39.9075   | **contactsLocationsModule.locations.&#91;12&#93;geoPoint.lat**: 23.11667  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;12&#93;geoPoint.lon**: 116.39723 | **contactsLocationsModule.locations.&#91;12&#93;geoPoint.lon**: 113.25    |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;13&#93;city**: Chengdu           | **contactsLocationsModule.locations.&#91;13&#93;city**: Guangzhou         |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;13&#93;zip**: 610000             | **contactsLocationsModule.locations.&#91;13&#93;zip**: 510515             |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;13&#93;geoPoint.lat**: 30.66667  | **contactsLocationsModule.locations.&#91;13&#93;geoPoint.lat**: 23.11667  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;13&#93;geoPoint.lon**: 104.06667 | **contactsLocationsModule.locations.&#91;13&#93;geoPoint.lon**: 113.25    |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;14&#93;city**: Chengdu           | **contactsLocationsModule.locations.&#91;14&#93;city**: Harbin            |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;14&#93;zip**: 610041             | **contactsLocationsModule.locations.&#91;14&#93;zip**: 150081             |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;14&#93;geoPoint.lat**: 30.66667  | **contactsLocationsModule.locations.&#91;14&#93;geoPoint.lat**: 45.75     |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;14&#93;geoPoint.lon**: 104.06667 | **contactsLocationsModule.locations.&#91;14&#93;geoPoint.lon**: 126.65    |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;15&#93;city**: Chongqing         | **contactsLocationsModule.locations.&#91;15&#93;city**: Nanning           |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;15&#93;zip**: 400030             | **contactsLocationsModule.locations.&#91;15&#93;zip**: 530021             |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;15&#93;geoPoint.lat**: 29.56026  | **contactsLocationsModule.locations.&#91;15&#93;geoPoint.lat**: 22.81667  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;15&#93;geoPoint.lon**: 106.55771 | **contactsLocationsModule.locations.&#91;15&#93;geoPoint.lon**: 108.31667 |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;16&#93;city**: Fuzhou            | **contactsLocationsModule.locations.&#91;16&#93;city**: Shanghai          |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;16&#93;zip**: 350007             | **contactsLocationsModule.locations.&#91;16&#93;zip**: 200032             |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;16&#93;geoPoint.lat**: 26.06139  | **contactsLocationsModule.locations.&#91;16&#93;geoPoint.lat**: 31.22222  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;16&#93;geoPoint.lon**: 119.30611 | **contactsLocationsModule.locations.&#91;16&#93;geoPoint.lon**: 121.45806 |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;17&#93;city**: Guangzhou         | **contactsLocationsModule.locations.&#91;17&#93;city**: Hong Kong         |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;17&#93;zip**: 510060             | **contactsLocationsModule.locations.&#91;17&#93;zip**: 999077             |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;17&#93;country**: China          | **contactsLocationsModule.locations.&#91;17&#93;country**: Hong Kong      |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;17&#93;geoPoint.lat**: 23.11667  | **contactsLocationsModule.locations.&#91;17&#93;geoPoint.lat**: 22.27832  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;17&#93;geoPoint.lon**: 113.25    | **contactsLocationsModule.locations.&#91;17&#93;geoPoint.lon**: 114.17469 |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;18&#93;city**: Guangzhou         | **contactsLocationsModule.locations.&#91;18&#93;city**: Shatin            |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;18&#93;zip**: 510515             | **contactsLocationsModule.locations.&#91;18&#93;zip**: 00000              |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;18&#93;country**: China          | **contactsLocationsModule.locations.&#91;18&#93;country**: Hong Kong      |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lat**: 23.11667  | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lat**: 22.38333  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lon**: 113.25    | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lon**: 114.18333 |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;19&#93;city**: Harbin            | **contactsLocationsModule.locations.&#91;19&#93;city**: Florence          |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;19&#93;zip**: 150081             | **contactsLocationsModule.locations.&#91;19&#93;zip**: 50134              |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;19&#93;country**: China          | **contactsLocationsModule.locations.&#91;19&#93;country**: Italy          |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;19&#93;geoPoint.lat**: 45.75     | **contactsLocationsModule.locations.&#91;19&#93;geoPoint.lat**: 43.77925  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;19&#93;geoPoint.lon**: 126.65    | **contactsLocationsModule.locations.&#91;19&#93;geoPoint.lon**: 11.24626  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;20&#93;city**: Hefei             | **contactsLocationsModule.locations.&#91;20&#93;city**: Milan             |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;20&#93;zip**: 230001             | **contactsLocationsModule.locations.&#91;20&#93;zip**: 20132              |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;20&#93;country**: China          | **contactsLocationsModule.locations.&#91;20&#93;country**: Italy          |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;20&#93;geoPoint.lat**: 31.86389  | **contactsLocationsModule.locations.&#91;20&#93;geoPoint.lat**: 42.78235  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;20&#93;geoPoint.lon**: 117.28083 | **contactsLocationsModule.locations.&#91;20&#93;geoPoint.lon**: 12.59836  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;21&#93;city**: Hefei             | **contactsLocationsModule.locations.&#91;21&#93;city**: Naples            |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;21&#93;zip**: 230022             | **contactsLocationsModule.locations.&#91;21&#93;zip**: 80131              |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;21&#93;country**: China          | **contactsLocationsModule.locations.&#91;21&#93;country**: Italy          |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;21&#93;geoPoint.lat**: 31.86389  | **contactsLocationsModule.locations.&#91;21&#93;geoPoint.lat**: 40.85216  |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;21&#93;geoPoint.lon**: 117.28083 | **contactsLocationsModule.locations.&#91;21&#93;geoPoint.lon**: 14.26811  |
+| 2026-07-28 00&#58;26&#58;05 | -                                                                         | ... (additional changes truncated for brevity)                            |

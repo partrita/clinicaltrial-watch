@@ -38,3 +38,9 @@ title: "NCT06996782 Change History"
 | 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;43&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;43&#93;status**: RECRUITING      |
 | 2026-06-24 14&#58;19&#58;41 | **contactsLocationsModule.locations.&#91;101&#93;geoPoint.lat**: 37.05738    | **contactsLocationsModule.locations.&#91;101&#93;geoPoint.lat**: 41.0225  |
 | 2026-06-24 14&#58;19&#58;41 | **contactsLocationsModule.locations.&#91;101&#93;geoPoint.lon**: 34.58903    | **contactsLocationsModule.locations.&#91;101&#93;geoPoint.lon**: 28.94083 |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.statusVerifiedDate**: 2026-06                                 | **statusModule.statusVerifiedDate**: 2026-07                              |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdateSubmitDate**: 2026-06-16                            | **statusModule.lastUpdateSubmitDate**: 2026-07-20                         |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdatePostDateStruct.date**: 2026-06-17                   | **statusModule.lastUpdatePostDateStruct.date**: 2026-07-21                |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;25&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;25&#93;status**: RECRUITING      |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;26&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;26&#93;status**: RECRUITING      |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;99&#93;status**: NOT_YET_RECRUITING | **contactsLocationsModule.locations.&#91;99&#93;status**: RECRUITING      |

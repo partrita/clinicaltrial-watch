@@ -1,20 +1,19 @@
-#!/usr/bin/env python3
 """
 Management script for clinical trials.
 Allows removing NCT codes from tracking and cleaning up associated data.
 """
 
 import argparse
-import os
 import json
-from typing import Any, Dict, Optional
+import os
+from typing import Any
 
 try:
-    from utils import sanitize_id, is_valid_nct_id, check_file_size, atomic_write
     from generate_target_pages import main as generate_pages
+    from utils import atomic_write, check_file_size, is_valid_nct_id, sanitize_id
 except ImportError:
-    from src.utils import sanitize_id, is_valid_nct_id, check_file_size, atomic_write
     from src.generate_target_pages import main as generate_pages
+    from src.utils import atomic_write, check_file_size, is_valid_nct_id, sanitize_id
 
 try:
     import yaml
@@ -27,7 +26,7 @@ except ImportError:
 MAX_EXCLUDED_IDS = 5000
 
 
-def load_yaml(yaml_path: str = "trials.yaml") -> Dict[str, Any]:
+def load_yaml(yaml_path: str = "trials.yaml") -> dict[str, Any]:
     """Load trials configuration from YAML file."""
     if not os.path.exists(yaml_path):
         return {"targets": []}
@@ -66,7 +65,7 @@ def load_yaml(yaml_path: str = "trials.yaml") -> Dict[str, Any]:
         )
 
 
-def save_yaml(data: Dict[str, Any], yaml_path: str = "trials.yaml") -> None:
+def save_yaml(data: dict[str, Any], yaml_path: str = "trials.yaml") -> None:
     """Save YAML data to file."""
     # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
     with atomic_write(yaml_path, encoding="utf-8") as f:
@@ -104,7 +103,7 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
 
     if not isinstance(data, dict):
         print(f"Error: {yaml_path} is not a valid YAML dictionary.")
-        raise ValueError(f"{yaml_path} must be a dictionary")
+        raise TypeError(f"{yaml_path} must be a dictionary")
 
     if "excluded_ids" in data and not isinstance(data["excluded_ids"], list):
         print(f"Error: 'excluded_ids' in {yaml_path} must be a list.")
@@ -130,9 +129,7 @@ def add_to_exclusion_list(trial_id: str, yaml_path: str = "excluded_trials.yaml"
         print(f"Added {trial_id} to exclusion list ({yaml_path})")
 
 
-def remove_trial(
-    trial_id: str, target_name: Optional[str] = None, cleanup: bool = False
-):
+def remove_trial(trial_id: str, target_name: str | None = None, cleanup: bool = False):
     """Remove a trial by ID from trials.yaml and optionally clean up data."""
     # Security enhancement: Validate NCT ID format
     if not is_valid_nct_id(trial_id):
@@ -213,7 +210,7 @@ def perform_cleanup(trial_id: str):
                         summary = json.load(f)
 
                     if not isinstance(summary, list):
-                        raise ValueError(f"{summary_path} is not a JSON list")
+                        raise TypeError(f"{summary_path} is not a JSON list")
 
                     new_summary = [
                         item
@@ -227,7 +224,7 @@ def perform_cleanup(trial_id: str):
                             # Optimized: Removed indent for performance and smaller file sizes
                             json.dump(new_summary, f, ensure_ascii=False)
                         print(f"Updated {summary_path}")
-                except Exception as e:
+                except (OSError, json.JSONDecodeError, TypeError, ValueError) as e:
                     print(f"Error updating {summary_path}: {e}")
 
 

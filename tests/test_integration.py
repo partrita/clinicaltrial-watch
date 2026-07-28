@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Integration test for process_trial.
 Uses mocking to avoid real network calls while testing the full processing pipeline.
@@ -8,12 +7,11 @@ import json
 import os
 import sys
 from typing import Any
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from main import process_trial
-
 
 # Sample trial data mimicking real ClinicalTrials.gov API response
 SAMPLE_TRIAL_DATA = {
@@ -106,7 +104,7 @@ class TestProcessTrial:
         snapshot_file.write_text(json.dumps(SAMPLE_TRIAL_DATA), encoding="utf-8")
 
         trial = {"id": "NCT00000003", "name": "Local Trial"}
-        report, raw = process_trial(trial, "TestTarget")
+        report, _raw = process_trial(trial, "TestTarget")
 
         assert report is not None
         assert report["sponsor"] == "Test University"
@@ -166,7 +164,7 @@ class TestProcessTrial:
         original = diff_engine.HAS_DEEPDIFF
         diff_engine.HAS_DEEPDIFF = False
         try:
-            report, raw = process_trial(trial, "TestTarget")
+            report, _raw = process_trial(trial, "TestTarget")
         finally:
             diff_engine.HAS_DEEPDIFF = original
 
@@ -194,7 +192,7 @@ class TestProcessTrial:
         mock_fetch.return_value = minimal_data
 
         trial = {"id": "NCT00000006", "name": "Minimal Trial"}
-        report, raw = process_trial(trial, "TestTarget")
+        report, _raw = process_trial(trial, "TestTarget")
 
         assert report is not None
         assert report["status"] == "UNKNOWN"

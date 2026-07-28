@@ -1,5 +1,6 @@
-from src.main import flatten_dict
 from unittest.mock import patch
+
+from src.main import flatten_dict
 
 
 def test_flatten_recursion_hardening():

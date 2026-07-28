@@ -2,4 +2,11 @@
 title: "NCT04374877 Change History"
 ---
 
-No changes recorded yet for NCT04374877.
+| Timestamp                   | Before                                                                                   | After                                                                                 |
+|:----------------------------|:-----------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------|
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.statusVerifiedDate**: 2025-11                                             | **statusModule.statusVerifiedDate**: 2026-07                                          |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdateSubmitDate**: 2025-11-06                                        | **statusModule.lastUpdateSubmitDate**: 2026-07-14                                     |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdatePostDateStruct.date**: 2025-11-10                               | **statusModule.lastUpdatePostDateStruct.date**: 2026-07-15                            |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.overallOfficials.&#91;0&#93;name**: Koho Iizuka, MD            | **contactsLocationsModule.overallOfficials.&#91;0&#93;name**: Study Director          |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.overallOfficials.&#91;0&#93;affiliation**: Coherus BioSciences | **contactsLocationsModule.overallOfficials.&#91;0&#93;affiliation**: Coherus Oncology |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.overallOfficials.&#91;0&#93;role**: STUDY_CHAIR                | **contactsLocationsModule.overallOfficials.&#91;0&#93;role**: STUDY_DIRECTOR          |

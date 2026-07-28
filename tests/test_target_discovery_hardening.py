@@ -1,7 +1,9 @@
-import os
 import json
-import yaml
+import os
+
 import pytest
+import yaml
+
 from src.generate_target_pages import discover_all_targets
 
 

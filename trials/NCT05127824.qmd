@@ -2,4 +2,11 @@
 title: "NCT05127824 Change History"
 ---
 
-No changes recorded yet for NCT05127824.
+| Timestamp                   | Before                                                                                  | After                                                      |
+|:----------------------------|:----------------------------------------------------------------------------------------|:-----------------------------------------------------------|
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.statusVerifiedDate**: 2025-04                                            | **statusModule.statusVerifiedDate**: 2026-07               |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.primaryCompletionDateStruct.date**: 2026-12                              | **statusModule.primaryCompletionDateStruct.date**: 2027-12 |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.completionDateStruct.date**: 2026-12                                     | **statusModule.completionDateStruct.date**: 2027-12        |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdateSubmitDate**: 2025-04-30                                       | **statusModule.lastUpdateSubmitDate**: 2026-07-03          |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdatePostDateStruct.date**: 2025-05-04                              | **statusModule.lastUpdatePostDateStruct.date**: 2026-07-07 |
+| 2026-07-28 00&#58;26&#58;05 | **root&#91;&#x27;oversightModule&#x27;&#93;&#91;&#x27;isUsExport&#x27;&#93;** (Removed) | -                                                          |

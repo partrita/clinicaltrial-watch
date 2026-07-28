@@ -1,15 +1,20 @@
-name: Daily Clinical Trial Watch
+name: Daily Clinical Trial Watch and Deploy
 
 on:
   schedule:
     - cron: '0 0 * * *'  # Daily at midnight UTC
   workflow_dispatch:      # Manual trigger
+  push:
+    branches:
+      - main
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
-  update-data:
+  update-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -36,10 +41,25 @@ jobs:
         run: |
           pixi run python src/main.py
 
+      - name: Render Quarto Website
+        run: |
+          pixi run render
+
       - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           # Stage all modified files including config and generated pages
-          git add data/ trials.yaml _quarto.yml index.qmd targets/
-          git diff --staged --quiet || (git commit -m "Update clinical trial data and configuration" && git push)
+          git add data/ trials.yaml _quarto.yml index.qmd targets/ trials/ _freeze/
+          git diff --staged --quiet || (git commit -m "Update clinical trial data and generated pages" && git push)
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Deploy to GitHub Pages
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+          render: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

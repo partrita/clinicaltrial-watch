@@ -2,4 +2,7 @@
 title: "NCT06479759 Change History"
 ---
 
-No changes recorded yet for NCT06479759.
+| Timestamp                   | Before                                     | After                                                                                   |
+|:----------------------------|:-------------------------------------------|:----------------------------------------------------------------------------------------|
+| 2026-07-28 00&#58;26&#58;03 | **statusModule.overallStatus**: RECRUITING | **statusModule.overallStatus**: UNKNOWN                                                 |
+| 2026-07-28 00&#58;26&#58;03 | -                                          | **root&#91;&#x27;statusModule&#x27;&#93;&#91;&#x27;lastKnownStatus&#x27;&#93;** (Added) |

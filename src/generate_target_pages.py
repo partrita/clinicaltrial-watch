@@ -1,14 +1,16 @@
+import json
 import os
+from typing import Any
+
 import yaml
-from typing import Any, Dict, List
 
 try:
-    from utils import sanitize_id, escape_html, check_file_size, atomic_write
+    from utils import atomic_write, check_file_size, escape_html, sanitize_id
 except ImportError:
-    from src.utils import sanitize_id, escape_html, check_file_size, atomic_write
+    from src.utils import atomic_write, check_file_size, escape_html, sanitize_id
 
 
-def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
+def load_trials_yaml(path: str = "trials.yaml") -> list[dict[str, Any]]:
     """Load trials configuration from YAML file."""
     if not os.path.exists(path):
         return []
@@ -30,7 +32,7 @@ def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
 
     if not isinstance(data, dict):
         print(f"Error: {path} is not a valid YAML dictionary.")
-        raise ValueError(f"{path} must be a dictionary")
+        raise TypeError(f"{path} must be a dictionary")
 
     if "targets" in data and isinstance(data["targets"], list):
         return data["targets"]
@@ -38,7 +40,7 @@ def load_trials_yaml(path: str = "trials.yaml") -> List[Dict[str, Any]]:
     return []
 
 
-def discover_all_targets() -> List[Dict[str, Any]]:
+def discover_all_targets() -> list[dict[str, Any]]:
     """Discover all targets from trials.yaml and data/targets directory."""
     targets_dict = {}
     MAX_TARGETS = 100
@@ -64,6 +66,51 @@ def discover_all_targets() -> List[Dict[str, Any]]:
             "name": name,
             "description": t.get("description", f"{name} 타겟 임상시험 모니터링"),
         }
+
+    # 2. Discover from data/targets directory
+    targets_dir = "data/targets"
+    if os.path.exists(targets_dir):
+        try:
+            entries = sorted(os.listdir(targets_dir))
+        except OSError:
+            entries = []
+
+        for entry in entries:
+            if len(targets_dict) >= MAX_TARGETS:
+                break
+
+            target_path = os.path.join(targets_dir, entry)
+            if not os.path.isdir(target_path):
+                continue
+
+            dir_sanitized_id = sanitize_id(entry).lower()
+            if dir_sanitized_id in targets_dict:
+                continue
+
+            summary_file = os.path.join(target_path, "status_summary.json")
+            target_name = entry
+            if os.path.exists(summary_file):
+                try:
+                    check_file_size(summary_file)
+                    with open(summary_file, "r", encoding="utf-8") as f:
+                        summary_data = json.load(f)
+                    if isinstance(summary_data, list) and summary_data:
+                        first_item = summary_data[0]
+                        if isinstance(first_item, dict) and "target" in first_item:
+                            raw_name = first_item["target"]
+                            if raw_name:
+                                target_name = raw_name[:255]
+                except (OSError, json.JSONDecodeError, ValueError):
+                    pass
+
+            target_id = sanitize_id(target_name).lower()
+            if target_id in targets_dict or dir_sanitized_id in targets_dict:
+                continue
+
+            targets_dict[target_id] = {
+                "name": target_name,
+                "description": f"{target_name} 타겟 임상시험 모니터링",
+            }
 
     return list(targets_dict.values())
 
@@ -481,7 +528,7 @@ else:
 
 
 def update_quarto_yml(
-    targets: List[Dict[str, Any]], quarto_path: str = "_quarto.yml"
+    targets: list[dict[str, Any]], quarto_path: str = "_quarto.yml"
 ) -> None:
     """Update _quarto.yml with navbar for all targets."""
 
@@ -537,6 +584,7 @@ def generate_all_trial_pages(
     """Generate a QMD file for each trial's history."""
     import json
     import re
+
     import pandas as pd
 
     if not os.path.exists(history_dir):
@@ -566,7 +614,7 @@ def generate_all_trial_pages(
                     check_file_size(history_file)
                     with open(history_file, "r", encoding="utf-8") as f:
                         history = json.load(f)
-                except Exception as e:
+                except (OSError, json.JSONDecodeError, ValueError) as e:
                     body = f"Error loading history: {e}"
                     history = []
 

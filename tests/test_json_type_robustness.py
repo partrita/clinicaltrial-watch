@@ -1,6 +1,7 @@
-import os
 import json
+import os
 from unittest.mock import patch
+
 from src.main import process_trial
 
 

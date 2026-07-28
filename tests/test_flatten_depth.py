@@ -1,4 +1,4 @@
-from src.main import flatten_dict, MAX_DEPTH
+from src.main import MAX_DEPTH, flatten_dict
 
 
 def test_flatten_dict_depth_limit():
@@ -22,7 +22,7 @@ def test_flatten_dict_depth_limit():
 
     # Deep leaf should NOT be present
     # The key would be very long with many underscores
-    for key in flattened.keys():
+    for key in flattened:
         assert key.count("_") < MAX_DEPTH
         assert "leaf_deep" not in key
 

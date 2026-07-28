@@ -1,7 +1,9 @@
 import os
-import yaml
+
 import pytest
-from src.manage_trials import add_to_exclusion_list, remove_trial, load_yaml
+import yaml
+
+from src.manage_trials import add_to_exclusion_list, load_yaml, remove_trial
 from src.update_trials_from_csv import load_yaml as load_yaml_csv
 
 
@@ -13,8 +15,8 @@ def test_add_to_exclusion_list_malformed_yaml(tmp_path):
     with open(yaml_path, "w", encoding="utf-8") as f:
         f.write("- item1\n- item2")
 
-    # Should raise ValueError as it's not a dictionary
-    with pytest.raises(ValueError, match="must be a dictionary"):
+    # Should raise ValueError/TypeError as it's not a dictionary
+    with pytest.raises((ValueError, TypeError), match="must be a dictionary"):
         add_to_exclusion_list("NCT12345678", yaml_path=yaml_path)
 
 

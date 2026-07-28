@@ -1,11 +1,12 @@
-import sys
 import os
+import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from main import process_trial
-from auto_discover_trials import extract_trials
 from unittest.mock import patch
+
+from auto_discover_trials import extract_trials
+from main import process_trial
 
 
 def test_process_trial_malformed_api_data():
@@ -20,7 +21,7 @@ def test_process_trial_malformed_api_data():
         patch("main.safe_json_load", return_value=[]),
         patch("main.update_history", return_value=[]),
     ):
-        report, raw = process_trial(trial, "Target")
+        report, _raw = process_trial(trial, "Target")
         assert report is not None
         assert report["sponsor"] == "N/A"
         assert report["status"] == "N/A"
@@ -33,7 +34,7 @@ def test_process_trial_malformed_api_data():
         patch("main.safe_json_load", return_value=[]),
         patch("main.update_history", return_value=[]),
     ):
-        report, raw = process_trial(trial, "Target")
+        report, _raw = process_trial(trial, "Target")
         assert report is not None
         assert report["study_start"] == "N/A"
         assert report["status"] == "N/A"
@@ -46,7 +47,7 @@ def test_process_trial_malformed_api_data():
         patch("main.safe_json_load", return_value=[]),
         patch("main.update_history", return_value=[]),
     ):
-        report, raw = process_trial(trial, "Target")
+        report, _raw = process_trial(trial, "Target")
         assert report is not None
         assert report["sponsor"] == "N/A"
 
@@ -58,7 +59,7 @@ def test_process_trial_malformed_api_data():
         patch("main.safe_json_load", return_value=[]),
         patch("main.update_history", return_value=[]),
     ):
-        report, raw = process_trial(trial, "Target")
+        report, _raw = process_trial(trial, "Target")
         assert report is not None
         assert report["enrollment"] == "N/A"
         assert report["phases"] == "N/A"
@@ -71,7 +72,7 @@ def test_process_trial_malformed_api_data():
         patch("main.safe_json_load", return_value=[]),
         patch("main.update_history", return_value=[]),
     ):
-        report, raw = process_trial(trial, "Target")
+        report, _raw = process_trial(trial, "Target")
         assert report is not None
         assert report["primary_outcome"] == "N/A"
 
@@ -83,7 +84,7 @@ def test_process_trial_malformed_api_data():
         patch("main.safe_json_load", return_value=[]),
         patch("main.update_history", return_value=[]),
     ):
-        report, raw = process_trial(trial, "Target")
+        report, _raw = process_trial(trial, "Target")
         assert report is not None
         assert report["details"] == "N/A"
 
@@ -130,6 +131,6 @@ def test_api_nested_data_type_confusion():
         patch("main.safe_json_load", return_value=[]),
         patch("main.update_history", return_value=[]),
     ):
-        report, raw = process_trial(trial, "Target")
+        report, _raw = process_trial(trial, "Target")
         assert report is not None
         assert report["sponsor"] == "N/A"

@@ -1,11 +1,11 @@
-import re
-import os
-import html
-import tempfile
 import contextlib
+import html
+import os
+import re
 import ssl
-from typing import Any, Optional
+import tempfile
 from functools import lru_cache
+from typing import Any
 
 try:
     import requests
@@ -23,15 +23,13 @@ try:
             ctx = ssl.create_default_context()
             ctx.minimum_version = ssl.TLSVersion.TLSv1_2
             pool_kwargs["ssl_context"] = ctx
-            return super(TLSAdapter, self).init_poolmanager(
-                connections, maxsize, block, **pool_kwargs
-            )
+            return super().init_poolmanager(connections, maxsize, block, **pool_kwargs)
 
         def proxy_manager_for(self, *args, **kwargs):
             ctx = ssl.create_default_context()
             ctx.minimum_version = ssl.TLSVersion.TLSv1_2
             kwargs["ssl_context"] = ctx
-            return super(TLSAdapter, self).proxy_manager_for(*args, **kwargs)
+            return super().proxy_manager_for(*args, **kwargs)
 
     class BlockedAdapter(HTTPAdapter):
         """
@@ -361,7 +359,9 @@ def get_phase_badge(phase: str) -> str:
 
 
 @lru_cache(maxsize=1024)
-def _get_update_badge_cached(monitor_status: str, last_change_date: str = None) -> str:
+def _get_update_badge_cached(
+    monitor_status: str, last_change_date: str | None = None
+) -> str:
     """Internal cached helper for get_update_badge."""
     safe_status = escape_html(monitor_status)
     title_attr = ""
@@ -374,7 +374,7 @@ def _get_update_badge_cached(monitor_status: str, last_change_date: str = None) 
     return f'<span class="badge bg-success"{title_attr}>{safe_status}</span>'
 
 
-def get_update_badge(monitor_status: str, last_change_date: str = None) -> str:
+def get_update_badge(monitor_status: str, last_change_date: str | None = None) -> str:
     """
     Return a badge for monitoring status.
     Truncates input BEFORE caching to prevent memory exhaustion DoS.
@@ -506,7 +506,7 @@ def format_diff_line_markdown(line: str) -> str:
 
 def create_safe_session(
     user_agent: str, max_retries: int = 2, pool_size: int = 10
-) -> Optional[Any]:
+) -> Any | None:
     """
     Creates and returns a security-hardened requests.Session object.
     Enforces TLS 1.2+, limited redirects, and safe environment defaults.
@@ -555,7 +555,7 @@ def atomic_write(
     filepath: str,
     mode: str = "w",
     encoding: str = "utf-8",
-    newline: Optional[str] = None,
+    newline: str | None = None,
 ):
     """
     Context manager for atomic file writes.

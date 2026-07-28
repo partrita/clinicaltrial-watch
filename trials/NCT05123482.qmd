@@ -2,38 +2,42 @@
 title: "NCT05123482 Change History"
 ---
 
-| Timestamp                   | Before                                                                         | After                                                                        |
-|:----------------------------|:-------------------------------------------------------------------------------|:-----------------------------------------------------------------------------|
-| 2026-02-16 21&#58;08&#58;10 | **statusModule.statusVerifiedDate**: 2025-11                                   | **statusModule.statusVerifiedDate**: 2026-02                                 |
-| 2026-02-16 21&#58;08&#58;10 | **statusModule.lastUpdateSubmitDate**: 2025-12-02                              | **statusModule.lastUpdateSubmitDate**: 2026-02-11                            |
-| 2026-02-16 21&#58;08&#58;10 | **statusModule.lastUpdatePostDateStruct.date**: 2025-12-08                     | **statusModule.lastUpdatePostDateStruct.date**: 2026-02-13                   |
-| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;0&#93;status**: RECRUITING            | **contactsLocationsModule.locations.&#91;0&#93;status**: COMPLETED           |
-| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;1&#93;status**: RECRUITING            | **contactsLocationsModule.locations.&#91;1&#93;status**: COMPLETED           |
-| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;status**: WITHDRAWN            | **contactsLocationsModule.locations.&#91;18&#93;status**: NOT_YET_RECRUITING |
-| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;city**: South Brisbane         | **contactsLocationsModule.locations.&#91;18&#93;city**: Taichung             |
-| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;zip**: 4101                    | **contactsLocationsModule.locations.&#91;18&#93;zip**: 40705                 |
-| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;country**: Australia           | **contactsLocationsModule.locations.&#91;18&#93;country**: Taiwan            |
-| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lat**: -27.48034      | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lat**: 24.1469      |
-| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lon**: 153.02049      | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lon**: 120.6839     |
-| 2026-03-24 02&#58;11&#58;01 | **statusModule.statusVerifiedDate**: 2026-02                                   | **statusModule.statusVerifiedDate**: 2026-03                                 |
-| 2026-03-24 02&#58;11&#58;01 | **statusModule.lastUpdateSubmitDate**: 2026-02-11                              | **statusModule.lastUpdateSubmitDate**: 2026-03-20                            |
-| 2026-03-24 02&#58;11&#58;01 | **statusModule.lastUpdatePostDateStruct.date**: 2026-02-13                     | **statusModule.lastUpdatePostDateStruct.date**: 2026-03-23                   |
-| 2026-03-24 02&#58;11&#58;01 | **contactsLocationsModule.locations.&#91;26&#93;status**: SUSPENDED            | **contactsLocationsModule.locations.&#91;26&#93;status**: TERMINATED         |
-| 2026-05-26 02&#58;38&#58;40 | **statusModule.statusVerifiedDate**: 2026-03                                   | **statusModule.statusVerifiedDate**: 2026-05                                 |
-| 2026-05-26 02&#58;38&#58;40 | **statusModule.lastUpdateSubmitDate**: 2026-03-20                              | **statusModule.lastUpdateSubmitDate**: 2026-05-15                            |
-| 2026-05-26 02&#58;38&#58;40 | **statusModule.lastUpdatePostDateStruct.date**: 2026-03-23                     | **statusModule.lastUpdatePostDateStruct.date**: 2026-05-18                   |
-| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;4&#93;status**: ACTIVE_NOT_RECRUITING | **contactsLocationsModule.locations.&#91;4&#93;status**: COMPLETED           |
-| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;31&#93;geoPoint.lat**: 26.82656       | **contactsLocationsModule.locations.&#91;31&#93;geoPoint.lat**: 40.28464     |
-| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;31&#93;geoPoint.lon**: 114.95747      | **contactsLocationsModule.locations.&#91;31&#93;geoPoint.lon**: 120.48412    |
-| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;57&#93;status**: NOT_YET_RECRUITING   | **contactsLocationsModule.locations.&#91;57&#93;status**: RECRUITING         |
-| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;61&#93;city**: Taoyuan District       | **contactsLocationsModule.locations.&#91;61&#93;city**: Taoyuan              |
-| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;61&#93;geoPoint.lat**: 24.9896        | **contactsLocationsModule.locations.&#91;61&#93;geoPoint.lat**: 24.99368     |
-| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;61&#93;geoPoint.lon**: 121.3187       | **contactsLocationsModule.locations.&#91;61&#93;geoPoint.lon**: 121.29696    |
-| 2026-06-18 04&#58;04&#58;37 | **statusModule.statusVerifiedDate**: 2026-05                                   | **statusModule.statusVerifiedDate**: 2026-06                                 |
-| 2026-06-18 04&#58;04&#58;37 | **statusModule.lastUpdateSubmitDate**: 2026-05-15                              | **statusModule.lastUpdateSubmitDate**: 2026-06-16                            |
-| 2026-06-18 04&#58;04&#58;37 | **statusModule.lastUpdatePostDateStruct.date**: 2026-05-18                     | **statusModule.lastUpdatePostDateStruct.date**: 2026-06-17                   |
-| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;38&#93;city**: Rozzano                | **contactsLocationsModule.locations.&#91;38&#93;city**: Milan                |
-| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;38&#93;zip**: 20089                   | **contactsLocationsModule.locations.&#91;38&#93;zip**: 20159                 |
-| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;38&#93;geoPoint.lat**: 45.38193       | **contactsLocationsModule.locations.&#91;38&#93;geoPoint.lat**: 42.78235     |
-| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;38&#93;geoPoint.lon**: 9.1559         | **contactsLocationsModule.locations.&#91;38&#93;geoPoint.lon**: 12.59836     |
-| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;65&#93;status**: RECRUITING           | **contactsLocationsModule.locations.&#91;65&#93;status**: COMPLETED          |
+| Timestamp                   | Before                                                                         | After                                                                           |
+|:----------------------------|:-------------------------------------------------------------------------------|:--------------------------------------------------------------------------------|
+| 2026-02-16 21&#58;08&#58;10 | **statusModule.statusVerifiedDate**: 2025-11                                   | **statusModule.statusVerifiedDate**: 2026-02                                    |
+| 2026-02-16 21&#58;08&#58;10 | **statusModule.lastUpdateSubmitDate**: 2025-12-02                              | **statusModule.lastUpdateSubmitDate**: 2026-02-11                               |
+| 2026-02-16 21&#58;08&#58;10 | **statusModule.lastUpdatePostDateStruct.date**: 2025-12-08                     | **statusModule.lastUpdatePostDateStruct.date**: 2026-02-13                      |
+| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;0&#93;status**: RECRUITING            | **contactsLocationsModule.locations.&#91;0&#93;status**: COMPLETED              |
+| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;1&#93;status**: RECRUITING            | **contactsLocationsModule.locations.&#91;1&#93;status**: COMPLETED              |
+| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;status**: WITHDRAWN            | **contactsLocationsModule.locations.&#91;18&#93;status**: NOT_YET_RECRUITING    |
+| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;city**: South Brisbane         | **contactsLocationsModule.locations.&#91;18&#93;city**: Taichung                |
+| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;zip**: 4101                    | **contactsLocationsModule.locations.&#91;18&#93;zip**: 40705                    |
+| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;country**: Australia           | **contactsLocationsModule.locations.&#91;18&#93;country**: Taiwan               |
+| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lat**: -27.48034      | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lat**: 24.1469         |
+| 2026-02-16 21&#58;08&#58;10 | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lon**: 153.02049      | **contactsLocationsModule.locations.&#91;18&#93;geoPoint.lon**: 120.6839        |
+| 2026-03-24 02&#58;11&#58;01 | **statusModule.statusVerifiedDate**: 2026-02                                   | **statusModule.statusVerifiedDate**: 2026-03                                    |
+| 2026-03-24 02&#58;11&#58;01 | **statusModule.lastUpdateSubmitDate**: 2026-02-11                              | **statusModule.lastUpdateSubmitDate**: 2026-03-20                               |
+| 2026-03-24 02&#58;11&#58;01 | **statusModule.lastUpdatePostDateStruct.date**: 2026-02-13                     | **statusModule.lastUpdatePostDateStruct.date**: 2026-03-23                      |
+| 2026-03-24 02&#58;11&#58;01 | **contactsLocationsModule.locations.&#91;26&#93;status**: SUSPENDED            | **contactsLocationsModule.locations.&#91;26&#93;status**: TERMINATED            |
+| 2026-05-26 02&#58;38&#58;40 | **statusModule.statusVerifiedDate**: 2026-03                                   | **statusModule.statusVerifiedDate**: 2026-05                                    |
+| 2026-05-26 02&#58;38&#58;40 | **statusModule.lastUpdateSubmitDate**: 2026-03-20                              | **statusModule.lastUpdateSubmitDate**: 2026-05-15                               |
+| 2026-05-26 02&#58;38&#58;40 | **statusModule.lastUpdatePostDateStruct.date**: 2026-03-23                     | **statusModule.lastUpdatePostDateStruct.date**: 2026-05-18                      |
+| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;4&#93;status**: ACTIVE_NOT_RECRUITING | **contactsLocationsModule.locations.&#91;4&#93;status**: COMPLETED              |
+| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;31&#93;geoPoint.lat**: 26.82656       | **contactsLocationsModule.locations.&#91;31&#93;geoPoint.lat**: 40.28464        |
+| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;31&#93;geoPoint.lon**: 114.95747      | **contactsLocationsModule.locations.&#91;31&#93;geoPoint.lon**: 120.48412       |
+| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;57&#93;status**: NOT_YET_RECRUITING   | **contactsLocationsModule.locations.&#91;57&#93;status**: RECRUITING            |
+| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;61&#93;city**: Taoyuan District       | **contactsLocationsModule.locations.&#91;61&#93;city**: Taoyuan                 |
+| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;61&#93;geoPoint.lat**: 24.9896        | **contactsLocationsModule.locations.&#91;61&#93;geoPoint.lat**: 24.99368        |
+| 2026-05-26 02&#58;38&#58;40 | **contactsLocationsModule.locations.&#91;61&#93;geoPoint.lon**: 121.3187       | **contactsLocationsModule.locations.&#91;61&#93;geoPoint.lon**: 121.29696       |
+| 2026-06-18 04&#58;04&#58;37 | **statusModule.statusVerifiedDate**: 2026-05                                   | **statusModule.statusVerifiedDate**: 2026-06                                    |
+| 2026-06-18 04&#58;04&#58;37 | **statusModule.lastUpdateSubmitDate**: 2026-05-15                              | **statusModule.lastUpdateSubmitDate**: 2026-06-16                               |
+| 2026-06-18 04&#58;04&#58;37 | **statusModule.lastUpdatePostDateStruct.date**: 2026-05-18                     | **statusModule.lastUpdatePostDateStruct.date**: 2026-06-17                      |
+| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;38&#93;city**: Rozzano                | **contactsLocationsModule.locations.&#91;38&#93;city**: Milan                   |
+| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;38&#93;zip**: 20089                   | **contactsLocationsModule.locations.&#91;38&#93;zip**: 20159                    |
+| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;38&#93;geoPoint.lat**: 45.38193       | **contactsLocationsModule.locations.&#91;38&#93;geoPoint.lat**: 42.78235        |
+| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;38&#93;geoPoint.lon**: 9.1559         | **contactsLocationsModule.locations.&#91;38&#93;geoPoint.lon**: 12.59836        |
+| 2026-06-18 04&#58;04&#58;37 | **contactsLocationsModule.locations.&#91;65&#93;status**: RECRUITING           | **contactsLocationsModule.locations.&#91;65&#93;status**: COMPLETED             |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.statusVerifiedDate**: 2026-06                                   | **statusModule.statusVerifiedDate**: 2026-07                                    |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdateSubmitDate**: 2026-06-16                              | **statusModule.lastUpdateSubmitDate**: 2026-07-15                               |
+| 2026-07-28 00&#58;26&#58;05 | **statusModule.lastUpdatePostDateStruct.date**: 2026-06-17                     | **statusModule.lastUpdatePostDateStruct.date**: 2026-07-16                      |
+| 2026-07-28 00&#58;26&#58;05 | **contactsLocationsModule.locations.&#91;16&#93;status**: RECRUITING           | **contactsLocationsModule.locations.&#91;16&#93;status**: ACTIVE_NOT_RECRUITING |
