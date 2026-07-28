@@ -50,7 +50,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           # Stage all modified files including config and generated pages
-          git add data/ trials.yaml _quarto.yml index.qmd targets/ trials/ _freeze/
+          git add data/ trials.yaml _quarto.yml index.qmd targets/ trials/
           git diff --staged --quiet || (git commit -m "Update clinical trial data and generated pages" && git push)
 
       - name: Set up Quarto
