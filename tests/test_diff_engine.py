@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Tests for diff_engine.py.
 Covers: compare_snapshots with corrupted files, missing files, identical/changed data.
@@ -9,6 +8,7 @@ import json
 import os
 import sys
 from typing import Any
+
 import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))

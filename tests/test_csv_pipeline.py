@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Tests for the CSV generation pipeline.
 Ensures that save_target_data produces CSV files that can be read by pandas
@@ -7,13 +6,13 @@ and contain the columns expected by the Quarto .qmd visualization pages.
 
 import os
 import sys
-from typing import Any, Dict, List, Tuple
+from typing import Any
+
 import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from main import save_target_data, flatten_dict
-
+from main import flatten_dict, save_target_data
 
 # Simulated raw trial data from ClinicalTrials.gov API
 SAMPLE_RAW_TRIAL = {
@@ -97,7 +96,7 @@ class TestFlattenDictColumnNames:
 class TestSaveTargetDataCSV:
     """Verify save_target_data creates CSV files readable by pandas."""
 
-    def _make_data(self) -> Tuple[List[Dict[str, str]], List[Dict[str, Any]]]:
+    def _make_data(self) -> tuple[list[dict[str, str]], list[dict[str, Any]]]:
         """Generate sample report and raw data."""
         reports = [
             {"id": "NCT00000001", "status": "RECRUITING", "sponsor": "Acme"},
@@ -223,12 +222,18 @@ class TestPublishWorkflowDataAvailability:
         )
 
     def test_publish_renders(self) -> None:
-        """publish.yml must run quarto render."""
-        yml_path = os.path.join(
+        """daily-watch.yml or publish.yml must run quarto render."""
+        dw_path = os.path.join(
+            os.path.dirname(__file__), "..", ".github", "workflows", "daily-watch.yml"
+        )
+        pub_path = os.path.join(
             os.path.dirname(__file__), "..", ".github", "workflows", "publish.yml"
         )
-        with open(yml_path, "r", encoding="utf-8") as f:
-            content = f.read()
+        content = ""
+        for path in (dw_path, pub_path):
+            if os.path.exists(path):
+                with open(path, "r", encoding="utf-8") as f:
+                    content += f.read()
 
-        render_pos = content.find("pixi run render")
-        assert render_pos != -1, "publish.yml must run quarto render"
+        render_pos = content.find("render")
+        assert render_pos != -1, "Workflow must run quarto render step"

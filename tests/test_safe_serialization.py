@@ -1,5 +1,6 @@
 import pytest
-from src.utils import safe_str, safe_json_dumps, MAX_VALUE_LENGTH
+
+from src.utils import MAX_VALUE_LENGTH, safe_json_dumps, safe_str
 
 
 def test_safe_str_recursion():

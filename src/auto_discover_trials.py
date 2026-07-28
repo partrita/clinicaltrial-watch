@@ -1,37 +1,37 @@
-#!/usr/bin/env python3
 """
 Auto-discover new clinical trials from ClinicalTrials.gov based on targets in trials.yaml.
 Queries the API for each target and appends new trials to trials.yaml.
 """
 
-import sys
-import time
+import contextlib
 import random
+import sys
 import threading
-from typing import Any, Dict, List, Optional
+import time
+from typing import Any
 from urllib.parse import urlparse
 
 try:
-    from utils import (
-        is_valid_nct_id,
-        create_safe_session,
-        HAS_REQUESTS,
-        MAX_CONFIG_SIZE,
-    )
     from update_trials_from_csv import load_yaml, save_yaml, update_target
-except ImportError:
-    from src.utils import (
-        is_valid_nct_id,
-        create_safe_session,
+    from utils import (
         HAS_REQUESTS,
         MAX_CONFIG_SIZE,
+        create_safe_session,
+        is_valid_nct_id,
     )
+except ImportError:
     from src.update_trials_from_csv import load_yaml, save_yaml, update_target
+    from src.utils import (
+        HAS_REQUESTS,
+        MAX_CONFIG_SIZE,
+        create_safe_session,
+        is_valid_nct_id,
+    )
 
-import ssl
-import urllib.request
-import urllib.parse
 import json
+import ssl
+import urllib.parse
+import urllib.request
 
 _session = None
 _session_lock = threading.Lock()
@@ -42,14 +42,12 @@ def reset_session() -> None:
     global _session
     with _session_lock:
         if _session is not None and HAS_REQUESTS:
-            try:
+            with contextlib.suppress(Exception):
                 _session.close()
-            except Exception:
-                pass
         _session = None
 
 
-def get_session() -> Optional[Any]:
+def get_session() -> Any | None:
     global _session
     if not HAS_REQUESTS:
         return None
@@ -66,7 +64,7 @@ def get_session() -> Optional[Any]:
     return _session
 
 
-def search_trials(query_term: str) -> List[Dict[str, Any]]:
+def search_trials(query_term: str) -> list[dict[str, Any]]:
     """Search ClinicalTrials.gov API for a given term."""
     # Searching with max 1000 items (maximum allowed by pageSize)
     base_url = "https://clinicaltrials.gov/api/v2/studies"
@@ -155,7 +153,7 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                         f"Error fetching data for term {query_term}: {response.status_code}"
                     )
                     return []
-        except Exception as e:
+        except (ValueError, KeyError, OSError, TypeError) as e:
             print(f"Exception fetching data for term {query_term}: {e}")
             reset_session()
             return []
@@ -265,12 +263,18 @@ def search_trials(query_term: str) -> List[Dict[str, Any]]:
                         f"Error fetching data for term {query_term} (urllib): {response.status}"
                     )
                     return []
-        except Exception as e:
+        except (
+            urllib.error.URLError,
+            ssl.SSLError,
+            ValueError,
+            KeyError,
+            OSError,
+        ) as e:
             print(f"Exception fetching data for term {query_term} (urllib): {e}")
             return []
 
 
-def extract_trials(api_studies: List[Dict[str, Any]]) -> List[Dict[str, str]]:
+def extract_trials(api_studies: list[dict[str, Any]]) -> list[dict[str, str]]:
     """Extract required trial info from API response."""
     if not isinstance(api_studies, list):
         print("Error: api_studies must be a list")
@@ -301,7 +305,7 @@ def extract_trials(api_studies: List[Dict[str, Any]]) -> List[Dict[str, str]]:
                     trials.append({"id": nct_id, "name": title})
                 else:
                     print(f"  Warning: Skipping invalid NCT ID from API: {nct_id}")
-        except Exception as e:
+        except (AttributeError, TypeError, KeyError) as e:
             print(f"Error extracting study data: {e}")
     return trials
 

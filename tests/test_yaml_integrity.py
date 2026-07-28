@@ -1,6 +1,8 @@
 import pytest
+
 from src.main import load_config
-from src.manage_trials import load_yaml as load_yaml_manage, add_to_exclusion_list
+from src.manage_trials import add_to_exclusion_list
+from src.manage_trials import load_yaml as load_yaml_manage
 from src.update_trials_from_csv import load_yaml as load_yaml_update
 from src.utils import sanitize_csv_value
 

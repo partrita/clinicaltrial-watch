@@ -106,6 +106,11 @@ targets:
     name: A Multicenter, Phase Ib/II Clinical Trial to Evaluate the Efficacy and Safety
       of Concurrent Combination Therapy of S-531011 Plus Fruquintinib or S-531011
       Plus Fruquintinib Plus Pembrolizumab in Patients With MSS/pMMR Colorectal Cancer
+  - id: NCT07680764
+    name: A Study To Assess the Safety, Tolerability, and Efficacy of Imzokitug in
+      Combination With Pumitamig and Platinum-Doublet Chemotherapy (PDCT) Versus Pumitamig
+      and PDCT as First-line Treatment for Participants With Locally Advanced or Metastatic
+      Non-Small Cell Lung Cancer (NSCLC)
 - description: TIGIT 타겟 임상시험 모니터링
   name: TIGIT
   trials:
@@ -518,3 +523,19 @@ targets:
       Tumors
   - id: NCT07657416
     name: NK521 in the Treatment of Advanced Solid Tumors
+  - id: NCT07679841
+    name: Safety and Efficacy of Nivolumab and Imiquimod Combination in Vulvar Squamous
+      Cell Carcinoma Patients
+  - id: NCT07723638
+    name: New Diagnostic Approaches in the Management of Inflammatory Lung Diseases
+  - id: NCT07720284
+    name: An Open-label Study to Investigate the Efficacy and Safety of Dato-DXd +
+      Rilvegostomig vs SoC in Adult Participants With High-risk MIUC
+  - id: NCT07674498
+    name: Immune Fitness in Older Patients With Relapsed and Refractory Multiple Myeloma
+  - id: NCT07667842
+    name: Study of D3L-002 in Subjects With Advanced Solid Tumors
+  - id: NCT07707245
+    name: Identification of Diagnostic and Prognostic Biomarkers in the Pathological
+      Continuum of Bronco Chronic Obstructive Pulmonary Disease, Idiopathic Pulmonary
+      Fibrosis and Pulmonary Neoplasia

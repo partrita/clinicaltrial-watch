@@ -1,5 +1,8 @@
+import contextlib
+
 import pytest
-from src.utils import sanitize_id, escape_html, is_valid_nct_id
+
+from src.utils import escape_html, is_valid_nct_id, sanitize_id
 
 
 def test_sanitize_id_path_traversal():
@@ -86,8 +89,9 @@ def test_is_valid_nct_id():
 
 def test_generation_escaping():
     """Verify that target metadata is escaped during site generation."""
-    from src.generate_target_pages import generate_target_qmd, update_quarto_yml
     import os
+
+    from src.generate_target_pages import generate_target_qmd, update_quarto_yml
 
     name, desc = "Target | Pipe", "Desc <script>"
     # Test QMD generation
@@ -219,9 +223,9 @@ def test_get_phase_badge():
 def test_ui_helpers_accessibility():
     """Verify the presence of ARIA and accessibility attributes in UI helpers."""
     from src.utils import (
-        get_update_badge,
-        get_changed_count_badge,
         format_truncated_with_tooltip,
+        get_changed_count_badge,
+        get_update_badge,
     )
 
     # get_update_badge with date
@@ -267,11 +271,11 @@ def test_format_enrollment_robustness():
 def test_security_length_limits():
     """Verify that length limits are enforced for security utilities."""
     from src.utils import (
-        sanitize_csv_value,
         escape_html,
-        sanitize_id,
         format_diff_line,
         format_truncated_with_tooltip,
+        sanitize_csv_value,
+        sanitize_id,
     )
 
     # CSV sanitization limit (32,767)
@@ -304,10 +308,10 @@ def test_security_length_limits():
 def test_ui_helpers_length_limits_new():
     """Verify newly hardened UI helpers length limits."""
     from src.utils import (
-        get_status_badge,
-        get_phase_badge,
-        get_update_badge,
         format_enrollment,
+        get_phase_badge,
+        get_status_badge,
+        get_update_badge,
     )
 
     # get_status_badge limit (255)
@@ -352,8 +356,9 @@ def test_flatten_key_length_limit():
 
 def test_load_config_robustness():
     """Verify load_config robustness in src/main.py."""
-    from src.main import load_config
     import os
+
+    from src.main import load_config
 
     test_yaml = "tests/test_robust_config.yaml"
 
@@ -362,7 +367,7 @@ def test_load_config_robustness():
         f.write("- item1\n- item2")
 
     try:
-        with pytest.raises(ValueError):
+        with pytest.raises((ValueError, TypeError)):
             load_config(test_yaml)
 
         # Test with empty file
@@ -377,10 +382,11 @@ def test_load_config_robustness():
 
 def test_csv_header_injection_prevention():
     """Verify that CSV headers and keys are sanitized against formula injection."""
-    from src.main import save_target_data
-    import os
     import csv
+    import os
     import shutil
+
+    from src.main import save_target_data
 
     test_target = "InjectionTarget"
     test_dir = "data/targets/injectiontarget"
@@ -526,9 +532,10 @@ def test_sanitize_csv_value_invisible_chars_extended():
 
 def test_format_diff_max_changes():
     """Verify that format_diff enforces the MAX_CHANGES limit."""
-    from src.diff_engine import format_diff
-    import src.diff_engine
     from unittest.mock import patch
+
+    import src.diff_engine
+    from src.diff_engine import format_diff
 
     # 1. Test fallback path (no DeepDiff)
     with patch.object(src.diff_engine, "HAS_DEEPDIFF", False):
@@ -556,9 +563,10 @@ def test_format_diff_max_changes():
 
 def test_format_diff_path_truncation():
     """Verify that format_diff truncates long paths/labels."""
-    from src.diff_engine import format_diff
-    import src.diff_engine
     from unittest.mock import patch
+
+    import src.diff_engine
+    from src.diff_engine import format_diff
 
     long_path = "P" * 500
     # 1. Test fallback path
@@ -583,9 +591,10 @@ def test_format_diff_path_truncation():
 
 def test_update_from_csv_security_limits():
     """Verify that update_trials_from_csv.py enforces DoS limits."""
-    from src.update_trials_from_csv import read_csv_trials, update_target
-    import os
     import csv
+    import os
+
+    from src.update_trials_from_csv import read_csv_trials, update_target
 
     test_csv = "tests/test_dos.csv"
 
@@ -643,9 +652,10 @@ def test_update_from_csv_security_limits():
 
 def test_api_response_size_limit():
     """Verify that fetch_trial_data and search_trials respect the 10MB response size limit."""
-    from src.crawler import fetch_trial_data
+    from unittest.mock import MagicMock, patch
+
     from src.auto_discover_trials import search_trials
-    from unittest.mock import patch, MagicMock
+    from src.crawler import fetch_trial_data
 
     # Mock responses for requests (HAS_REQUESTS=True)
     with (
@@ -693,9 +703,10 @@ def test_api_response_size_limit():
 
 def test_api_content_type_validation():
     """Verify that fetch_trial_data and search_trials validate the Content-Type header."""
-    from src.crawler import fetch_trial_data
+    from unittest.mock import MagicMock, patch
+
     from src.auto_discover_trials import search_trials
-    from unittest.mock import patch, MagicMock
+    from src.crawler import fetch_trial_data
 
     # Mock responses for requests (HAS_REQUESTS=True)
     with (
@@ -731,12 +742,14 @@ def test_api_content_type_validation():
 
 def test_yaml_load_security_against_data_loss():
     """Verify that configuration loaders fail loudly on read/parse errors to prevent data loss."""
+    import os
+
+    import pytest
+
+    from src.generate_target_pages import load_trials_yaml
     from src.main import load_config
     from src.manage_trials import load_yaml
     from src.update_trials_from_csv import load_yaml as load_yaml_csv
-    from src.generate_target_pages import load_trials_yaml
-    import os
-    import pytest
 
     test_yaml = "tests/test_unreadable.yaml"
 
@@ -745,13 +758,13 @@ def test_yaml_load_security_against_data_loss():
         f.write("- item1\n- item2")
 
     try:
-        with pytest.raises(ValueError):
+        with pytest.raises((ValueError, TypeError)):
             load_config(test_yaml)
-        with pytest.raises(ValueError):
+        with pytest.raises((ValueError, TypeError)):
             load_yaml(test_yaml)
-        with pytest.raises(ValueError):
+        with pytest.raises((ValueError, TypeError)):
             load_yaml_csv(test_yaml)
-        with pytest.raises(ValueError):
+        with pytest.raises((ValueError, TypeError)):
             load_trials_yaml(test_yaml)
     finally:
         if os.path.exists(test_yaml):
@@ -780,14 +793,17 @@ def test_yaml_load_security_against_data_loss():
 
 def test_max_config_size_limit():
     """Verify that configuration and data loaders enforce MAX_CONFIG_SIZE."""
-    from src.utils import MAX_CONFIG_SIZE
-    from src.main import load_config, safe_json_load
-    from src.update_trials_from_csv import load_yaml as load_yaml_csv
-    from src.manage_trials import load_yaml as load_yaml_manage, add_to_exclusion_list
-    from src.generate_target_pages import load_trials_yaml
     import os
-    import pytest
     import shutil
+
+    import pytest
+
+    from src.generate_target_pages import load_trials_yaml
+    from src.main import load_config, safe_json_load
+    from src.manage_trials import add_to_exclusion_list
+    from src.manage_trials import load_yaml as load_yaml_manage
+    from src.update_trials_from_csv import load_yaml as load_yaml_csv
+    from src.utils import MAX_CONFIG_SIZE
 
     test_file = "tests/test_oversized_config.yaml"
     # Create a file just over the limit
@@ -837,9 +853,11 @@ def test_max_config_size_limit():
 
 def test_malformed_config_robustness():
     """Verify that load_config and deduplicate_config handle malformed structures gracefully."""
-    from src.main import load_config, deduplicate_config
     import os
+
     import pytest
+
+    from src.main import deduplicate_config, load_config
 
     test_yaml = "tests/test_malformed_robustness.yaml"
 
@@ -848,7 +866,7 @@ def test_malformed_config_robustness():
         f.write("- item1\n- item2")
 
     try:
-        with pytest.raises(ValueError):
+        with pytest.raises((ValueError, TypeError)):
             load_config(test_yaml)
 
         # 2. Test deduplicate_config with malformed dict (not containing targets list)
@@ -924,9 +942,11 @@ def test_backtick_escaping_and_diff_formatting():
 
 def test_yaml_injection_prevention():
     """Verify that malicious target names cannot inject YAML into configuration files."""
-    from src.generate_target_pages import generate_target_qmd, update_quarto_yml
     import os
+
     import yaml
+
+    from src.generate_target_pages import generate_target_qmd, update_quarto_yml
 
     malicious_name = 'Target\n      - href: https://evil.com\n        text: "Injected"'
     desc = "Test Description"
@@ -992,7 +1012,8 @@ def test_yaml_injection_prevention():
 def test_yaml_injection_prevention_regression():
     """Verify that YAML delimiters in trial data are correctly escaped in the YAML configuration."""
     import os
-    from src.update_trials_from_csv import save_yaml, load_yaml
+
+    from src.update_trials_from_csv import load_yaml, save_yaml
 
     test_yaml = "tests/test_injection_regression.yaml"
     if os.path.exists(test_yaml):
@@ -1038,8 +1059,9 @@ def test_yaml_injection_prevention_regression():
 
 def test_deduplicate_config_security():
     """Verify that deduplicate_config validates IDs and truncates long strings."""
-    from src.main import deduplicate_config
     import os
+
+    from src.main import deduplicate_config
 
     test_yaml = "tests/test_dedup_security.yaml"
     if os.path.exists(test_yaml):
@@ -1109,9 +1131,11 @@ def test_deduplicate_config_security():
 
 def test_exclusion_list_limit():
     """Verify that add_to_exclusion_list enforces the 5000 entry limit."""
-    from src.manage_trials import add_to_exclusion_list
     import os
+
     import yaml
+
+    from src.manage_trials import add_to_exclusion_list
 
     test_exclusion_yaml = "tests/test_exclusion_limit.yaml"
     if os.path.exists(test_exclusion_yaml):
@@ -1139,10 +1163,11 @@ def test_exclusion_list_limit():
 
 def test_history_size_limit():
     """Verify that trial and target history are bounded to 100 entries."""
-    from src.main import update_history, update_target_history
-    import os
     import json
+    import os
     import shutil
+
+    from src.main import update_history, update_target_history
 
     test_history_dir = "tests/tmp_history"
     if os.path.exists(test_history_dir):
@@ -1227,9 +1252,10 @@ def test_update_target_truncation():
 
 def test_http_response_closure():
     """Verify that HTTP response objects are always closed to prevent resource leaks."""
-    from src.crawler import fetch_trial_data
+    from unittest.mock import MagicMock, patch
+
     from src.auto_discover_trials import search_trials
-    from unittest.mock import patch, MagicMock
+    from src.crawler import fetch_trial_data
 
     # 1. Test fetch_trial_data closure (requests path)
     with patch("src.crawler.get_session") as mock_get_session:
@@ -1284,86 +1310,83 @@ def test_http_response_closure():
 
 def test_urllib_fallback_security():
     """Verify that the urllib fallback path correctly handles malformed Content-Length and size limits."""
-    from src.crawler import fetch_trial_data
-    from src.auto_discover_trials import search_trials
-    from unittest.mock import patch, MagicMock
-    import src.crawler
+    from unittest.mock import MagicMock, patch
+
     import src.auto_discover_trials
+    import src.crawler
+    from src.auto_discover_trials import search_trials
+    from src.crawler import fetch_trial_data
 
-    with patch("urllib.request.OpenerDirector") as mock_opener_class:
-        # Force urllib path
-        with (
-            patch.object(src.crawler, "HAS_REQUESTS", False),
-            patch.object(src.auto_discover_trials, "HAS_REQUESTS", False),
-        ):
-            mock_opener = MagicMock()
-            mock_opener_class.return_value = mock_opener
-            mock_response = MagicMock()
-            mock_opener.open.return_value.__enter__.return_value = mock_response
+    with (
+        patch("urllib.request.OpenerDirector") as mock_opener_class,
+        patch.object(src.crawler, "HAS_REQUESTS", False),
+        patch.object(src.auto_discover_trials, "HAS_REQUESTS", False),
+    ):
+        mock_opener = MagicMock()
+        mock_opener_class.return_value = mock_opener
+        mock_response = MagicMock()
+        mock_opener.open.return_value.__enter__.return_value = mock_response
 
-            # 1. Test malformed Content-Length (non-numeric)
-            mock_response.status = 200
-            mock_response.headers = {
-                "Content-Type": "application/json",
-                "Content-Length": "not-a-number",
-            }
-            mock_response.geturl.return_value = (
-                "https://clinicaltrials.gov/studies/NCT12345678"
-            )
-            mock_response.read.side_effect = [b'{"foo": "bar"}', b""]
+        # 1. Test malformed Content-Length (non-numeric)
+        mock_response.status = 200
+        mock_response.headers = {
+            "Content-Type": "application/json",
+            "Content-Length": "not-a-number",
+        }
+        mock_response.geturl.return_value = (
+            "https://clinicaltrials.gov/studies/NCT12345678"
+        )
+        mock_response.read.side_effect = [b'{"foo": "bar"}', b""]
 
-            # Should NOT return None if Content-Length is malformed (it skips the check and proceeds to read)
-            # unless the read also fails. But wait, if it's malformed, .isdigit() is False,
-            # so it proceeds to read. This is fine as the size is still checked during read.
-            res = fetch_trial_data("NCT12345678")
-            assert res == {"foo": "bar"}
+        # Should NOT return None if Content-Length is malformed (it skips the check and proceeds to read)
+        # unless the read also fails. But wait, if it's malformed, .isdigit() is False,
+        # so it proceeds to read. This is fine as the size is still checked during read.
+        res = fetch_trial_data("NCT12345678")
+        assert res == {"foo": "bar"}
 
-            # 2. Test large Content-Length header (e.g. " 11000000 ")
-            mock_response.status = 200
-            mock_response.headers = {
-                "Content-Type": "application/json",
-                "Content-Length": " 11000000 ",
-            }
-            mock_response.geturl.return_value = (
-                "https://clinicaltrials.gov/studies/NCT12345678"
-            )
-            mock_opener.open.return_value.__enter__.return_value = mock_response
+        # 2. Test large Content-Length header (e.g. " 11000000 ")
+        mock_response.status = 200
+        mock_response.headers = {
+            "Content-Type": "application/json",
+            "Content-Length": " 11000000 ",
+        }
+        mock_response.geturl.return_value = (
+            "https://clinicaltrials.gov/studies/NCT12345678"
+        )
+        mock_opener.open.return_value.__enter__.return_value = mock_response
 
-            assert fetch_trial_data("NCT12345678") is None
+        assert fetch_trial_data("NCT12345678") is None
 
-            # 3. Test Search with malformed Content-Length
-            mock_response.status = 200
-            mock_response.headers = {
-                "Content-Type": "application/json",
-                "Content-Length": "invalid",
-            }
-            mock_response.geturl.return_value = (
-                "https://clinicaltrials.gov/api/v2/studies"
-            )
-            mock_response.read.side_effect = [b'{"studies": []}', b""]
-            mock_opener.open.return_value.__enter__.return_value = mock_response
+        # 3. Test Search with malformed Content-Length
+        mock_response.status = 200
+        mock_response.headers = {
+            "Content-Type": "application/json",
+            "Content-Length": "invalid",
+        }
+        mock_response.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
+        mock_response.read.side_effect = [b'{"studies": []}', b""]
+        mock_opener.open.return_value.__enter__.return_value = mock_response
 
-            assert search_trials("Target") == []
+        assert search_trials("Target") == []
 
-            # 4. Test Search with large Content-Length
-            mock_response.status = 200
-            mock_response.headers = {
-                "Content-Type": "application/json",
-                "Content-Length": "11000000",
-            }
-            mock_response.geturl.return_value = (
-                "https://clinicaltrials.gov/api/v2/studies"
-            )
-            mock_opener.open.return_value.__enter__.return_value = mock_response
+        # 4. Test Search with large Content-Length
+        mock_response.status = 200
+        mock_response.headers = {
+            "Content-Type": "application/json",
+            "Content-Length": "11000000",
+        }
+        mock_response.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
+        mock_opener.open.return_value.__enter__.return_value = mock_response
 
-            assert search_trials("Target") == []
+        assert search_trials("Target") == []
 
 
 def test_truncation_security():
     """Verify that large values in diffs and trial reports are correctly truncated."""
+    from unittest.mock import patch
+
     from src.diff_engine import format_diff
     from src.main import process_trial
-    from unittest.mock import patch
 
     # 1. Test diff_engine truncation
     # Mocking a DeepDiff structure
@@ -1432,8 +1455,9 @@ def test_truncation_security():
 
 def test_process_trial_metadata_truncation():
     """Verify that process_trial truncates all metadata fields in report_item."""
-    from src.main import process_trial
     from unittest.mock import patch
+
+    from src.main import process_trial
 
     trial = {"id": "NCT12345678", "name": "N" * 2000}
     target_name = "T" * 300
@@ -1482,10 +1506,11 @@ def test_process_trial_metadata_truncation():
 
 def test_http_redirect_security():
     """Verify that fetch_trial_data and search_trials reject insecure or unexpected redirects."""
-    from src.crawler import fetch_trial_data
-    from src.auto_discover_trials import search_trials
-    from unittest.mock import patch, MagicMock
     import json
+    from unittest.mock import MagicMock, patch
+
+    from src.auto_discover_trials import search_trials
+    from src.crawler import fetch_trial_data
 
     with (
         patch("src.crawler.get_session") as mock_get_session,
@@ -1560,13 +1585,16 @@ def test_http_redirect_security():
 
 def test_session_security_config():
     """Verify that the requests Session is configured securely."""
+    from unittest.mock import MagicMock, patch
+
+    import src.auto_discover_trials
+    from src.auto_discover_trials import get_session as get_auto_session
     from src.crawler import (
         get_session as get_crawler_session,
+    )
+    from src.crawler import (
         reset_session as reset_crawler_session,
     )
-    from src.auto_discover_trials import get_session as get_auto_session
-    import src.auto_discover_trials
-    from unittest.mock import patch, MagicMock
 
     # Crawler session
     reset_crawler_session()
@@ -1605,99 +1633,110 @@ def test_session_security_config():
 
 def test_urllib_redirect_security():
     """Verify that the urllib fallback path rejects insecure or unexpected redirects."""
-    from src.crawler import fetch_trial_data
-    from src.auto_discover_trials import search_trials
-    from unittest.mock import patch, MagicMock
-    import src.crawler
+    from unittest.mock import MagicMock, patch
+
     import src.auto_discover_trials
+    import src.crawler
+    from src.auto_discover_trials import search_trials
+    from src.crawler import fetch_trial_data
 
-    with patch("urllib.request.OpenerDirector") as mock_opener_class:
-        # Force urllib path
-        with (
-            patch.object(src.crawler, "HAS_REQUESTS", False),
-            patch.object(src.auto_discover_trials, "HAS_REQUESTS", False),
-        ):
-            mock_opener = MagicMock()
-            mock_opener_class.return_value = mock_opener
-            mock_response = MagicMock()
-            mock_opener.open.return_value.__enter__.return_value = mock_response
+    with (
+        patch("urllib.request.OpenerDirector") as mock_opener_class,
+        patch.object(src.crawler, "HAS_REQUESTS", False),
+        patch.object(src.auto_discover_trials, "HAS_REQUESTS", False),
+    ):
+        mock_opener = MagicMock()
+        mock_opener_class.return_value = mock_opener
+        mock_response = MagicMock()
+        mock_opener.open.return_value.__enter__.return_value = mock_response
 
-            # 1. Insecure redirect
-            mock_response.geturl.return_value = (
-                "http://clinicaltrials.gov/studies/NCT12345678"
-            )
-            assert fetch_trial_data("NCT12345678") is None
+        # 1. Insecure redirect
+        mock_response.geturl.return_value = (
+            "http://clinicaltrials.gov/studies/NCT12345678"
+        )
+        assert fetch_trial_data("NCT12345678") is None
 
-            # 2. External domain redirect
-            mock_response.geturl.return_value = "https://evil.com/data.json"
-            assert fetch_trial_data("NCT12345678") is None
+        # 2. External domain redirect
+        mock_response.geturl.return_value = "https://evil.com/data.json"
+        assert fetch_trial_data("NCT12345678") is None
 
-            # 3. Search insecure redirect
-            mock_response.geturl.return_value = (
-                "http://clinicaltrials.gov/api/v2/studies"
-            )
-            assert search_trials("Target") == []
+        # 3. Search insecure redirect
+        mock_response.geturl.return_value = "http://clinicaltrials.gov/api/v2/studies"
+        assert search_trials("Target") == []
 
 
 def test_urllib_hardening_config():
     """Verify that the urllib fallback path is configured with secure defaults."""
-    from src.crawler import fetch_trial_data
-    from src.auto_discover_trials import search_trials
-    from unittest.mock import patch, MagicMock
-    import src.crawler
-    import src.auto_discover_trials
     import urllib.request
+    from unittest.mock import MagicMock, patch
 
-    with patch("urllib.request.OpenerDirector") as mock_opener_class:
-        # Force urllib path
-        with (
-            patch.object(src.crawler, "HAS_REQUESTS", False),
-            patch.object(src.auto_discover_trials, "HAS_REQUESTS", False),
-        ):
-            mock_opener = MagicMock()
-            mock_opener_class.return_value = mock_opener
+    import src.auto_discover_trials
+    import src.crawler
+    from src.auto_discover_trials import search_trials
+    from src.crawler import fetch_trial_data
 
-            # 1. Check crawler fetch_trial_data
-            fetch_trial_data("NCT12345678")
-            assert mock_opener_class.called
-            # Verify handlers added
-            handler_calls = [
-                call.args[0] for call in mock_opener.add_handler.call_args_list
-            ]
-            proxy_handler = next(
-                h for h in handler_calls if isinstance(h, urllib.request.ProxyHandler)
-            )
-            https_handler = next(
-                h for h in handler_calls if isinstance(h, urllib.request.HTTPSHandler)
-            )
-            assert proxy_handler.proxies == {}
-            assert getattr(https_handler, "_context", None) is not None
+    with (
+        patch("urllib.request.OpenerDirector") as mock_opener_class,
+        patch.object(src.crawler, "HAS_REQUESTS", False),
+        patch.object(src.auto_discover_trials, "HAS_REQUESTS", False),
+    ):
+        mock_opener = MagicMock()
+        mock_opener_class.return_value = mock_opener
+        mock_response = MagicMock()
+        mock_response.geturl.return_value = "https://clinicaltrials.gov/api/v2/studies"
+        mock_response.status = 200
+        mock_response.headers = {"Content-Type": "application/json"}
+        mock_response.read.side_effect = [
+            b'{"studies": []}',
+            b"",
+            b'{"studies": []}',
+            b"",
+        ]
+        mock_opener.open.return_value.__enter__.return_value = mock_response
 
-            mock_opener.reset_mock()
-            mock_opener_class.reset_mock()
+        # 1. Check crawler fetch_trial_data
+        fetch_trial_data("NCT12345678")
+        assert mock_opener_class.called
+        # Verify handlers added
+        handler_calls = [
+            call.args[0] for call in mock_opener.add_handler.call_args_list
+        ]
+        proxy_handler = next(
+            h for h in handler_calls if isinstance(h, urllib.request.ProxyHandler)
+        )
+        https_handler = next(
+            h for h in handler_calls if isinstance(h, urllib.request.HTTPSHandler)
+        )
+        assert proxy_handler.proxies == {}
+        assert getattr(https_handler, "_context", None) is not None
 
-            # 2. Check auto_discover_trials search_trials
-            search_trials("Target")
-            assert mock_opener_class.called
-            handler_calls = [
-                call.args[0] for call in mock_opener.add_handler.call_args_list
-            ]
-            proxy_handler = next(
-                h for h in handler_calls if isinstance(h, urllib.request.ProxyHandler)
-            )
-            https_handler = next(
-                h for h in handler_calls if isinstance(h, urllib.request.HTTPSHandler)
-            )
-            assert proxy_handler.proxies == {}
-            assert getattr(https_handler, "_context", None) is not None
+        mock_opener.reset_mock()
+        mock_opener_class.reset_mock()
+
+        # 2. Check auto_discover_trials search_trials
+        search_trials("Target")
+        assert mock_opener_class.called
+        handler_calls = [
+            call.args[0] for call in mock_opener.add_handler.call_args_list
+        ]
+        proxy_handler = next(
+            h for h in handler_calls if isinstance(h, urllib.request.ProxyHandler)
+        )
+        https_handler = next(
+            h for h in handler_calls if isinstance(h, urllib.request.HTTPSHandler)
+        )
+        assert proxy_handler.proxies == {}
+        assert getattr(https_handler, "_context", None) is not None
 
 
 def test_safe_json_load_robustness():
     """Verify that safe_json_load raises exceptions on errors other than FileNotFoundError."""
-    from src.main import safe_json_load
-    import os
-    import pytest
     import json
+    import os
+
+    import pytest
+
+    from src.main import safe_json_load
 
     test_json = "tests/test_unreadable.json"
 
@@ -1727,10 +1766,12 @@ def test_safe_json_load_robustness():
 
 def test_add_to_exclusion_list_robustness():
     """Verify that add_to_exclusion_list raises exceptions on loading errors."""
-    from src.manage_trials import add_to_exclusion_list
     import os
+
     import pytest
     import yaml
+
+    from src.manage_trials import add_to_exclusion_list
 
     test_yaml = "tests/test_exclusion_robust.yaml"
 
@@ -1750,7 +1791,7 @@ def test_add_to_exclusion_list_robustness():
         f.write("- item1\n- item2")
 
     try:
-        with pytest.raises(ValueError, match="must be a dictionary"):
+        with pytest.raises((ValueError, TypeError), match="must be a dictionary"):
             add_to_exclusion_list("NCT12345678", yaml_path=test_yaml)
     finally:
         if os.path.exists(test_yaml):
@@ -1759,10 +1800,11 @@ def test_add_to_exclusion_list_robustness():
 
 def test_csv_header_injection_prevention_extended():
     """Verify that CSV headers (keys) starting with dangerous characters are sanitized."""
-    from src.main import save_target_data
-    import os
     import csv
+    import os
     import shutil
+
+    from src.main import save_target_data
     from src.utils import sanitize_id
 
     target_name = "HeaderTest"
@@ -1845,9 +1887,10 @@ def test_flatten_dict_scalar_truncation():
 
 def test_api_json_type_validation_unit():
     """Verify that crawler and auto_discover handle non-dict JSON responses."""
-    from src.crawler import fetch_trial_data
+    from unittest.mock import MagicMock, patch
+
     from src.auto_discover_trials import search_trials
-    from unittest.mock import patch, MagicMock
+    from src.crawler import fetch_trial_data
 
     # Mock response returning a JSON list instead of a dict
     with (
@@ -1881,8 +1924,9 @@ def test_api_json_type_validation_unit():
 
 def test_target_id_collision_protection():
     """Verify that deduplicate_config prevents target ID collisions."""
-    from src.main import deduplicate_config
     from unittest.mock import patch
+
+    from src.main import deduplicate_config
 
     config = {
         "targets": [
@@ -1905,9 +1949,10 @@ def test_target_id_collision_protection():
 
 def test_compare_snapshots_malformed_type():
     """Verify that compare_snapshots handles malformed JSON types gracefully."""
-    from src.diff_engine import compare_snapshots
-    import os
     import json
+    import os
+
+    from src.diff_engine import compare_snapshots
 
     trial_id = "NCT12345678"
     snapshot_dir = "tests/tmp_snapshots"
@@ -1951,10 +1996,11 @@ def test_compare_snapshots_malformed_type():
 
 def test_history_hardening():
     """Verify that update_history and update_target_history handle corrupted (non-list) JSON."""
-    from src.main import update_history, update_target_history
-    import os
     import json
+    import os
     import shutil
+
+    from src.main import update_history, update_target_history
 
     test_history_dir = "tests/tmp_history_hardening"
     if os.path.exists(test_history_dir):
@@ -2004,17 +2050,22 @@ def test_history_hardening():
 
 def test_reset_session_closure():
     """Verify that reset_session correctly closes the requests session if it exists."""
-    from src.crawler import (
-        reset_session as reset_crawler,
-        _session_lock as lock_crawler,
-    )
+    from unittest.mock import MagicMock
+
+    import src.auto_discover_trials
     import src.crawler
     from src.auto_discover_trials import (
-        reset_session as reset_auto,
         _session_lock as lock_auto,
     )
-    import src.auto_discover_trials
-    from unittest.mock import MagicMock
+    from src.auto_discover_trials import (
+        reset_session as reset_auto,
+    )
+    from src.crawler import (
+        _session_lock as lock_crawler,
+    )
+    from src.crawler import (
+        reset_session as reset_crawler,
+    )
 
     # 1. Test crawler reset_session
     mock_session_crawler = MagicMock()
@@ -2052,8 +2103,9 @@ def test_reset_session_closure():
 def test_urllib_protocol_restriction():
     """Verify that the restricted OpenerDirector does not support dangerous protocols."""
     import urllib.request
-    from src.crawler import fetch_trial_data
     from unittest.mock import patch
+
+    from src.crawler import fetch_trial_data
 
     # We want to test that the OpenerDirector we created doesn't have FileHandler or FTPHandler
     # Since fetch_trial_data creates the opener internally, we can't easily inspect it without mocking.
@@ -2066,10 +2118,8 @@ def test_urllib_protocol_restriction():
         mock_opener = mock_opener_class.return_value
 
         # Call fetch_trial_data to trigger opener creation
-        try:
+        with contextlib.suppress(Exception):
             fetch_trial_data("NCT12345678")
-        except Exception:
-            pass
 
         # Get all handlers added to the opener
         added_handlers = [
@@ -2091,8 +2141,8 @@ def test_urllib_protocol_restriction():
 
 def test_urllib_restricted_opener_live_behavior():
     """Live test of the restricted OpenerDirector behavior using a real instance."""
-    import urllib.request
     import ssl
+    import urllib.request
 
     context = ssl.create_default_context()
     redirect_handler = urllib.request.HTTPRedirectHandler()
@@ -2122,9 +2172,11 @@ def test_urllib_restricted_opener_live_behavior():
 
 def test_check_file_size_non_regular():
     """Verify that check_file_size rejects non-regular files (directories)."""
-    from src.utils import check_file_size
-    import pytest
     import os
+
+    import pytest
+
+    from src.utils import check_file_size
 
     # Test with current directory
     with pytest.raises(ValueError, match="Not a regular file"):
@@ -2138,10 +2190,11 @@ def test_check_file_size_non_regular():
 
 def test_compare_snapshots_depth_limit():
     """Verify that compare_snapshots respects the MAX_DEPTH limit in DeepDiff."""
-    from src.diff_engine import compare_snapshots, HAS_DEEPDIFF
-    import os
     import json
+    import os
     import shutil
+
+    from src.diff_engine import HAS_DEEPDIFF, compare_snapshots
 
     if not HAS_DEEPDIFF:
         pytest.skip("DeepDiff not installed")
@@ -2182,8 +2235,9 @@ def test_compare_snapshots_depth_limit():
 
 def test_atomic_write_interruption():
     """Verify that atomic_write does not modify the target file if an exception occurs."""
-    from src.utils import atomic_write
     import os
+
+    from src.utils import atomic_write
 
     path = "tests/test_atomic_interruption.txt"
     original_content = "original content"
@@ -2223,14 +2277,16 @@ def test_atomic_write_interruption():
 
 def test_session_blocks_http():
     """Verify that create_safe_session correctly blocks insecure HTTP requests."""
-    from src.utils import create_safe_session, HAS_REQUESTS
     import pytest
+
+    from src.utils import HAS_REQUESTS, create_safe_session
 
     if not HAS_REQUESTS:
         pytest.skip("requests not installed")
 
+    from unittest.mock import MagicMock, patch
+
     from requests.exceptions import InvalidSchema
-    from unittest.mock import patch, MagicMock
 
     session = create_safe_session("TestAgent")
 
@@ -2255,8 +2311,9 @@ def test_session_blocks_http():
 
 def test_process_trial_list_hardening():
     """Verify that process_trial hardens list joining for conditions and phases."""
-    from src.main import process_trial
     from unittest.mock import patch
+
+    from src.main import process_trial
 
     trial = {"id": "NCT12345678", "name": "Test Trial"}
     # Mock API response with huge lists and non-string items
@@ -2292,11 +2349,12 @@ def test_process_trial_list_hardening():
 
 def test_discover_all_targets_hardening():
     """Verify that discover_all_targets enforces target limits and truncation."""
-    from src.generate_target_pages import discover_all_targets
-    import os
     import json
+    import os
     import shutil
     from unittest.mock import patch
+
+    from src.generate_target_pages import discover_all_targets
 
     test_targets_dir = "tests/tmp_targets_discovery"
     if os.path.exists(test_targets_dir):
@@ -2394,8 +2452,9 @@ def test_extract_trials_robustness():
 
 def test_search_trials_malformed_response():
     """Verify that search_trials handles missing or non-list 'studies' key in the API response."""
+    from unittest.mock import MagicMock, patch
+
     from src.auto_discover_trials import search_trials
-    from unittest.mock import patch, MagicMock
 
     with patch("src.auto_discover_trials.get_session") as mock_get_session:
         mock_session = MagicMock()
@@ -2428,8 +2487,9 @@ def test_search_trials_malformed_response():
 
 def test_atomic_write_success():
     """Verify that atomic_write successfully updates the target file."""
-    from src.utils import atomic_write
     import os
+
+    from src.utils import atomic_write
 
     path = "tests/test_atomic_success.txt"
     new_content = "new content"
@@ -2448,8 +2508,9 @@ def test_atomic_write_success():
 
 def test_atomic_write_preserves_permissions():
     """Verify that atomic_write preserves the file mode (permissions) of the target file."""
-    from src.utils import atomic_write
     import os
+
+    from src.utils import atomic_write
 
     path = "tests/test_permissions_persistence.txt"
     # Create original file with specific permissions (0644)

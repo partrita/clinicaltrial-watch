@@ -1,10 +1,10 @@
 import os
 import re
+
 import yaml
-from typing import Set
 
 
-def get_valid_nct_ids(yaml_path: str = "trials.yaml") -> Set[str]:
+def get_valid_nct_ids(yaml_path: str = "trials.yaml") -> set[str]:
     """Extract all valid NCT IDs from trials.yaml."""
     if not os.path.exists(yaml_path):
         print(f"Error: {yaml_path} not found.")
@@ -13,7 +13,7 @@ def get_valid_nct_ids(yaml_path: str = "trials.yaml") -> Set[str]:
     try:
         with open(yaml_path, "r", encoding="utf-8") as f:
             config = yaml.safe_load(f) or {}
-    except Exception as e:
+    except (OSError, yaml.YAMLError) as e:
         print(f"Error reading {yaml_path}: {e}")
         return set()
 
@@ -32,7 +32,7 @@ def get_valid_nct_ids(yaml_path: str = "trials.yaml") -> Set[str]:
 
 
 def cleanup_directory(
-    directory: str, pattern: str, valid_ids: Set[str], dry_run: bool = True
+    directory: str, pattern: str, valid_ids: set[str], dry_run: bool = True
 ) -> None:
     """Remove files in directory matching pattern if the NCT ID is not in valid_ids."""
     if not os.path.exists(directory):

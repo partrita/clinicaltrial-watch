@@ -1,8 +1,10 @@
-import pytest
 import os
-from unittest.mock import patch, MagicMock
-from src.crawler import fetch_trial_data
+from unittest.mock import MagicMock, patch
+
+import pytest
+
 from src.auto_discover_trials import search_trials
+from src.crawler import fetch_trial_data
 from src.main import safe_json_load
 
 
@@ -54,9 +56,11 @@ def test_safe_json_load_recursion_error():
         f.write("{}")
 
     try:
-        with patch("json.load", side_effect=RecursionError):
-            with pytest.raises(RecursionError):
-                safe_json_load(test_file)
+        with (
+            patch("json.load", side_effect=RecursionError),
+            pytest.raises(RecursionError),
+        ):
+            safe_json_load(test_file)
     finally:
         if os.path.exists(test_file):
             os.remove(test_file)

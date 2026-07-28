@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Update trials.yaml by adding trials from a CSV file to a specific target.
 Usage: python update_trials_from_csv.py --target CCR8 --csv data/ctg-studies.csv
@@ -8,12 +7,12 @@ import argparse
 import csv
 import os
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 try:
-    from utils import is_valid_nct_id, check_file_size, atomic_write
+    from utils import atomic_write, check_file_size, is_valid_nct_id
 except ImportError:
-    from src.utils import is_valid_nct_id, check_file_size, atomic_write
+    from src.utils import atomic_write, check_file_size, is_valid_nct_id
 
 import yaml
 
@@ -24,7 +23,7 @@ MAX_CSV_ROWS = 5000
 MAX_CSV_SIZE = 10 * 1024 * 1024  # 10MB
 
 
-def load_yaml(yaml_path: str) -> Dict[str, Any]:
+def load_yaml(yaml_path: str) -> dict[str, Any]:
     """Load existing YAML file or return empty structure."""
     if not os.path.exists(yaml_path):
         return {"targets": []}
@@ -46,7 +45,7 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
 
     if not isinstance(data, dict):
         print(f"Error: {yaml_path} is not a valid YAML dictionary.")
-        raise ValueError(f"{yaml_path} must be a dictionary")
+        raise TypeError(f"{yaml_path} must be a dictionary")
 
     # Handle legacy format (flat trials list)
     if "trials" in data and "targets" not in data:
@@ -75,7 +74,7 @@ def load_yaml(yaml_path: str) -> Dict[str, Any]:
     return data
 
 
-def save_yaml(data: Dict[str, Any], yaml_path: str) -> None:
+def save_yaml(data: dict[str, Any], yaml_path: str) -> None:
     """Save YAML data to file."""
     # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
     with atomic_write(yaml_path, encoding="utf-8") as f:
@@ -85,7 +84,7 @@ def save_yaml(data: Dict[str, Any], yaml_path: str) -> None:
     print(f"Saved to {yaml_path}")
 
 
-def read_csv_trials(csv_path: str) -> List[Dict[str, str]]:
+def read_csv_trials(csv_path: str) -> list[dict[str, str]]:
     """Read trials from CSV file."""
     if not os.path.exists(csv_path):
         return []
@@ -101,9 +100,7 @@ def read_csv_trials(csv_path: str) -> List[Dict[str, str]]:
     try:
         with open(csv_path, mode="r", encoding="utf-8-sig") as f:
             reader = csv.DictReader(f)
-            row_count = 0
-            for row in reader:
-                row_count += 1
+            for row_count, row in enumerate(reader, 1):
                 if row_count > MAX_CSV_ROWS:
                     print(f"  Warning: CSV exceeds {MAX_CSV_ROWS} rows. Truncating.")
                     break
@@ -118,17 +115,17 @@ def read_csv_trials(csv_path: str) -> List[Dict[str, str]]:
                         trials.append({"id": nct_id, "name": title})
                     else:
                         print(f"  Warning: Skipping invalid NCT ID: {nct_id}")
-    except Exception as e:
+    except (csv.Error, OSError, ValueError) as e:
         print(f"Error reading CSV: {e}")
     return trials
 
 
 def update_target(
-    data: Dict[str, Any],
+    data: dict[str, Any],
     target_name: str,
-    new_trials: List[Dict[str, str]],
-    description: Optional[str] = None,
-) -> Dict[str, Any]:
+    new_trials: list[dict[str, str]],
+    description: str | None = None,
+) -> dict[str, Any]:
     """Update or create a target with new trials."""
     # Security enhancement: Truncate target name and description to prevent DoS
     target_name = str(target_name)[:255]

@@ -1,28 +1,29 @@
+import contextlib
 import json
 import os
-import time
 import random
 import threading
-from typing import Any, Dict, Optional
+import time
+from typing import Any
 from urllib.parse import urlparse
 
 try:
     from utils import (
-        sanitize_id,
-        is_valid_nct_id,
-        atomic_write,
-        create_safe_session,
         HAS_REQUESTS,
         MAX_CONFIG_SIZE,
+        atomic_write,
+        create_safe_session,
+        is_valid_nct_id,
+        sanitize_id,
     )
 except ImportError:
     from src.utils import (
-        sanitize_id,
-        is_valid_nct_id,
-        atomic_write,
-        create_safe_session,
         HAS_REQUESTS,
         MAX_CONFIG_SIZE,
+        atomic_write,
+        create_safe_session,
+        is_valid_nct_id,
+        sanitize_id,
     )
 
 import ssl
@@ -38,14 +39,12 @@ def reset_session() -> None:
     global _session
     with _session_lock:
         if _session is not None and HAS_REQUESTS:
-            try:
+            with contextlib.suppress(Exception):
                 _session.close()
-            except Exception:
-                pass
         _session = None
 
 
-def get_session() -> Optional[Any]:
+def get_session() -> Any | None:
     """Returns a requests session with retry logic and custom headers."""
     global _session
     if not HAS_REQUESTS:
@@ -65,7 +64,7 @@ def get_session() -> Optional[Any]:
     return _session
 
 
-def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
+def fetch_trial_data(trial_id: str) -> dict[str, Any] | None:
     """
     Fetches clinical trial data from ClinicalTrials.gov API v2.
     Uses connection pooling and retries for speed and reliability.
@@ -159,7 +158,7 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                         f"Error fetching data for {safe_trial_id}: {response.status_code}"
                     )
                     return None
-        except Exception as e:
+        except (ValueError, KeyError, OSError, TypeError) as e:
             print(f"Exception fetching data for {safe_trial_id}: {e}")
             # Reset session on connection errors to avoid stuck connections
             reset_session()
@@ -265,13 +264,20 @@ def fetch_trial_data(trial_id: str) -> Optional[Dict[str, Any]]:
                         f"Error fetching data for {safe_trial_id} (urllib): {response.status}"
                     )
                     return None
-        except Exception as e:
+        except (
+            urllib.error.URLError,
+            ssl.SSLError,
+            ValueError,
+            KeyError,
+            OSError,
+            TypeError,
+        ) as e:
             print(f"Exception fetching data for {safe_trial_id} (urllib): {e}")
             return None
 
 
 def save_snapshot(
-    trial_id: str, data: Dict[str, Any], snapshot_dir: str = "data/snapshots"
+    trial_id: str, data: dict[str, Any], snapshot_dir: str = "data/snapshots"
 ) -> str:
     """
     Saves the fetched data as a JSON snapshot.

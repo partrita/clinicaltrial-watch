@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Tests for crawler.py.
 Covers: save_snapshot and fetch_trial_data (mocked).
@@ -7,12 +6,13 @@ Covers: save_snapshot and fetch_trial_data (mocked).
 import json
 import os
 import sys
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from typing import Any
-from crawler import save_snapshot, fetch_trial_data
+
+from crawler import fetch_trial_data, save_snapshot
 
 
 class TestSaveSnapshot:

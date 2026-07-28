@@ -1,45 +1,44 @@
-#!/usr/bin/env python3
 """
 Main script for clinical trial monitoring.
 Fetches trial data, compares with previous snapshots, and generates target-based reports.
 """
 
-import os
-import json
 import csv
+import json
+import os
+from concurrent.futures import ThreadPoolExecutor, TimeoutError, as_completed
+from datetime import datetime, timedelta, timezone
 from functools import lru_cache
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
-from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
+from typing import Any
 
 try:
-    from crawler import fetch_trial_data, save_snapshot, reset_session
-    from utils import (
-        sanitize_id,
-        is_valid_nct_id,
-        sanitize_csv_value,
-        check_file_size,
-        atomic_write,
-        safe_str,
-        safe_json_dumps,
-        MAX_VALUE_LENGTH,
-    )
+    from crawler import fetch_trial_data, reset_session, save_snapshot
     from diff_engine import compare_snapshots, format_diff
     from generate_target_pages import main as generate_pages
-except ImportError:
-    from src.crawler import fetch_trial_data, save_snapshot, reset_session
-    from src.utils import (
-        sanitize_id,
-        is_valid_nct_id,
-        sanitize_csv_value,
-        check_file_size,
-        atomic_write,
-        safe_str,
-        safe_json_dumps,
+    from utils import (
         MAX_VALUE_LENGTH,
+        atomic_write,
+        check_file_size,
+        is_valid_nct_id,
+        safe_json_dumps,
+        safe_str,
+        sanitize_csv_value,
+        sanitize_id,
     )
+except ImportError:
+    from src.crawler import fetch_trial_data, reset_session, save_snapshot
     from src.diff_engine import compare_snapshots, format_diff
     from src.generate_target_pages import main as generate_pages
+    from src.utils import (
+        MAX_VALUE_LENGTH,
+        atomic_write,
+        check_file_size,
+        is_valid_nct_id,
+        safe_json_dumps,
+        safe_str,
+        sanitize_csv_value,
+        sanitize_id,
+    )
 
 import yaml
 
@@ -50,7 +49,7 @@ MAX_HISTORY_ENTRIES = 100
 MAX_DEPTH = 20
 
 
-def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
+def load_config(config_path: str = "trials.yaml") -> dict[str, Any]:
     """Load trials configuration from YAML file."""
     if not os.path.exists(config_path):
         return {"targets": []}
@@ -72,21 +71,19 @@ def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
 
     if not isinstance(data, dict):
         print(f"Error: {config_path} is not a valid YAML dictionary.")
-        raise ValueError(f"{config_path} must be a dictionary")
+        raise TypeError(f"{config_path} must be a dictionary")
 
-    if "targets" not in data:
-        # Handle legacy format (flat trials list)
-        if "trials" in data:
-            print("Converting legacy format to target-based structure...")
-            data = {
-                "targets": [
-                    {
-                        "name": "Default",
-                        "description": "Migrated from legacy format",
-                        "trials": data.get("trials", []),
-                    }
-                ]
-            }
+    if "targets" not in data and "trials" in data:
+        print("Converting legacy format to target-based structure...")
+        data = {
+            "targets": [
+                {
+                    "name": "Default",
+                    "description": "Migrated from legacy format",
+                    "trials": data.get("trials", []),
+                }
+            ]
+        }
 
     # Re-check type after possible conversion
     if not isinstance(data, dict):
@@ -106,7 +103,7 @@ def load_config(config_path: str = "trials.yaml") -> Dict[str, Any]:
     return data
 
 
-def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
+def deduplicate_config(config: dict[str, Any]) -> dict[str, Any]:
     """
     Check for duplicate trial IDs within and across targets.
     Merges trial configurations for the same ID within a target.
@@ -219,12 +216,14 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
                 idx = seen_in_target[trial_id]
                 existing_trial = unique_target_trials[idx]
                 # Merge logic: favor non-empty names or longer names
-                if not existing_trial.get("name") and trial.get("name"):
-                    existing_trial["name"] = trial["name"]
-                elif (
-                    existing_trial.get("name")
+                if (
+                    not existing_trial.get("name")
                     and trial.get("name")
-                    and len(trial["name"]) > len(existing_trial["name"])
+                    or (
+                        existing_trial.get("name")
+                        and trial.get("name")
+                        and len(trial["name"]) > len(existing_trial["name"])
+                    )
                 ):
                     existing_trial["name"] = trial["name"]
                 total_duplicates += 1
@@ -261,14 +260,14 @@ def deduplicate_config(config: Dict[str, Any]) -> Dict[str, Any]:
     return config
 
 
-def save_config(config: Dict[str, Any], config_path: str = "trials.yaml") -> None:
+def save_config(config: dict[str, Any], config_path: str = "trials.yaml") -> None:
     """Save cleaned trials configuration back to YAML file."""
     try:
         # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
         with atomic_write(config_path, encoding="utf-8") as f:
             yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
         print(f"  ✓ Cleaned configuration saved to {config_path}")
-    except Exception as e:
+    except (OSError, yaml.YAMLError) as e:
         print(f"  Warning: Failed to save cleaned config: {e}")
 
 
@@ -304,13 +303,13 @@ def update_history(
     trial_id: str,
     diff_text: str,
     history_dir: str = "data/history",
-    history: Optional[List[Dict[str, Any]]] = None,
-) -> List[Dict[str, Any]]:
+    history: list[dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
     """Save change history for a trial. Returns the updated history list."""
     if not os.path.exists(history_dir):
         os.makedirs(history_dir)
 
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     safe_trial_id = sanitize_id(trial_id)
     history_file = os.path.join(history_dir, f"{safe_trial_id}_history.json")
 
@@ -340,14 +339,14 @@ def update_history(
 
 def update_target_history(
     target_name: str,
-    current_reports: List[Dict[str, Any]],
+    current_reports: list[dict[str, Any]],
     history_dir: str = "data/history",
 ) -> None:
     """Save change history for a target."""
     if not os.path.exists(history_dir):
         os.makedirs(history_dir)
 
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     safe_target_name = sanitize_id(target_name)
     history_file = os.path.join(history_dir, f"target_{safe_target_name.lower()}.json")
 
@@ -435,11 +434,11 @@ def _get_flatten_key(parent_key: str, k: str, sep: str = "_") -> str:
 
 
 def flatten_dict(
-    d: Dict[str, Any],
+    d: dict[str, Any],
     parent_key: str = "",
     sep: str = "_",
-    result: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
+    result: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """
     Flatten nested dictionary for CSV export.
     Optimized with iterative approach to avoid recursion and redundant type checks.
@@ -525,8 +524,8 @@ def flatten_dict(
 
 
 def process_trial(
-    trial: Dict[str, Any], target_name: str, thirty_days_ago_str: str = ""
-) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
+    trial: dict[str, Any], target_name: str, thirty_days_ago_str: str = ""
+) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
     """Process a single trial and return report data."""
     trial_id = trial["id"]
 
@@ -551,7 +550,9 @@ def process_trial(
 
     # Ensure thirty_days_ago_str is set for efficient comparison
     if not thirty_days_ago_str:
-        thirty_days_ago_str = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+        thirty_days_ago_str = (
+            datetime.now(timezone.utc) - timedelta(days=30)
+        ).strftime("%Y-%m-%d")
 
     new_data = fetch_trial_data(trial_id)
     if not new_data:
@@ -670,7 +671,7 @@ def process_trial(
         print(f"  Changes found for {trial_id}")
         # Reuse pre-loaded history
         history = update_history(trial_id, diff_text, history=history)
-        last_monitored = datetime.now().strftime("%Y-%m-%d")
+        last_monitored = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
         # Security enhancement: Truncate combined details to prevent DoS
         combined_details = (
@@ -716,8 +717,8 @@ def process_trial(
 
 def save_target_data(
     target_name: str,
-    summary_report: List[Dict[str, Any]],
-    all_raw_data: List[Dict[str, Any]],
+    summary_report: list[dict[str, Any]],
+    all_raw_data: list[dict[str, Any]],
 ) -> None:
     """Save data for a specific target."""
     safe_target_name = sanitize_id(target_name)
@@ -780,7 +781,7 @@ def save_target_data(
     if all_raw_data:
         # Optimized: Single-pass header collection using union of keys
         all_keys = set().union(*(row.keys() for row in all_raw_data))
-        sorted_keys = sorted(list(all_keys))
+        sorted_keys = sorted(all_keys)
 
         # Security enhancement: Sanitize headers to prevent CSV formula injection
         headers = [sanitize_csv_value(safe_str(k)) for k in sorted_keys]
@@ -842,7 +843,9 @@ def main() -> None:
     current_idx = 0
 
     # Pre-calculate 30-day threshold for efficient date checking in workers
-    thirty_days_ago_str = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+    thirty_days_ago_str = (datetime.now(timezone.utc) - timedelta(days=30)).strftime(
+        "%Y-%m-%d"
+    )
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         future_to_id = {
@@ -863,7 +866,7 @@ def main() -> None:
                     print(
                         f"[{current_idx}/{total_unique}] Timeout processing {trial_id}"
                     )
-                except Exception as e:
+                except (OSError, ValueError, KeyError, RuntimeError) as e:
                     print(
                         f"[{current_idx}/{total_unique}] Error processing {trial_id}: {e}"
                     )
@@ -904,7 +907,7 @@ def main() -> None:
             try:
                 save_target_data(target_name, target_reports, target_raw)
                 update_target_history(target_name, target_reports)
-            except Exception as e:
+            except (OSError, json.JSONDecodeError, ValueError, KeyError) as e:
                 print(f"  Error saving data for target {target_name}: {e}")
 
         # Collect target summary
