@@ -9,3 +9,6 @@ title: "NCT05009069 Change History"
 | 2026-05-26 02&#58;38&#58;40 | **statusModule.completionDateStruct.date**: 2026-11-06     | **statusModule.completionDateStruct.date**: 2026-11-10     |
 | 2026-05-26 02&#58;38&#58;40 | **statusModule.lastUpdateSubmitDate**: 2026-01-16          | **statusModule.lastUpdateSubmitDate**: 2026-04-16          |
 | 2026-05-26 02&#58;38&#58;40 | **statusModule.lastUpdatePostDateStruct.date**: 2026-01-22 | **statusModule.lastUpdatePostDateStruct.date**: 2026-04-21 |
+| 2026-07-29 02&#58;40&#58;59 | **statusModule.statusVerifiedDate**: 2026-04               | **statusModule.statusVerifiedDate**: 2026-07               |
+| 2026-07-29 02&#58;40&#58;59 | **statusModule.lastUpdateSubmitDate**: 2026-04-16          | **statusModule.lastUpdateSubmitDate**: 2026-07-27          |
+| 2026-07-29 02&#58;40&#58;59 | **statusModule.lastUpdatePostDateStruct.date**: 2026-04-21 | **statusModule.lastUpdatePostDateStruct.date**: 2026-07-28 |
