@@ -279,13 +279,7 @@ NCT03447678,Pembrolizumab in First Line Treatment of Advanced NSCLC Patients Wit
 Treatment with Pembrolizumab will continue until two years of therapy have been administered, documented disease progression, unacceptable adverse event(s), intercurrent illness that prevents further administration of treatment, investigator's decision to withdraw the subject, subject withdraws consent, pregnancy of the subject, noncompliance with trial treatment or procedure requirements, or administrative reasons. Pembrolizumab treated subjects who obtain a confirmed Complete Response (CR) per RECIST 1.1 may consider stopping trial treatment. These subjects may be eligible for re-treatment with Pembrolizumab after they have experienced radiographic disease progression at the discretion of the investigator, this re-treatment will be the Second Course Phase.",
 NCT04672369,A Study to Evaluate the Efficacy of IBI939 in Combination With Sintilimab in Patients With Advanced NSCLC,TIGIT,Innovent Biologics (Suzhou) Co. Ltd.,COMPLETED,Advanced Lung Cancer,PHASE1,2023-06-18,2021-06-06,2023-06-01,42,Objective response rate(ORR),No Change,2026-06-06,"This study is an open-label, phase I clinical study to evaluate the efficacy, tolerability and safety of recombinant fully human anti-TIGIT antibody (IBI939) in combination with recombinant fully human anti-programmed cell death receptor 1 (PD-1) antibody (sintilimab) in subjects with advanced lung cancer.",
 NCT04672356,"A Study to Evaluate the Safety , Tolerability and Efficacy of IBI939 in Combination With Sintilimab in Patients With Advanced Lung Cancer",TIGIT,Innovent Biologics (Suzhou) Co. Ltd.,COMPLETED,Advanced Lung Cancer,PHASE1,2023-06-18,2021-01-25,2023-06-01,19,Adverse Events,No Change,2026-06-06,"This study is an open-label, phase I clinical study to evaluate the efficacy, tolerability and safety of recombinant fully human anti-TIGIT antibody (IBI939) in combination with recombinant fully human anti-programmed cell death receptor 1 (PD-1) antibody (sintilimab) in subjects with advanced lung cancer.",
-NCT05009069,A Study of Atezolizumab With or Without Tiragolumab Following Neoadjuvant Chemoradiotherapy in Participants With Locally Advanced Rectal Cancer,TIGIT,Hoffmann-La Roche,ACTIVE_NOT_RECRUITING,"Rectal Neoplasms, Rectal Cancer",PHASE2,2026-07-27,2022-03-18,2026-11-10,58,Percentage of Participants With Pathological Complete Response (pCR),Changed,2026-07-29,"**[RECENT CHANGES FOUND]**
-Field `statusModule.statusVerifiedDate` changed from `2026-04` to `2026-07`
-Field `statusModule.lastUpdateSubmitDate` changed from `2026-04-16` to `2026-07-27`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-04-21` to `2026-07-28`
-
-***
-This study will evaluate the efficacy and safety of atezolizumab plus tiragolumab or atezolizumab alone following neoadjuvant chemoradiotherapy (nCRT) in participants with locally advanced rectal cancer (LARC). The study consists of a safety run-in phase and a randomization phase. Participants enrolled in the safety run-in phase will receive atezolizumab + tiragolumab following nCRT. Upon determination of the safety of the treatment regimen, the study will be proceed to the randomization phase. Participants will be randomized in a 1:1 ratio to the atezolizumab + tiragolumab arm or atezolizumab arm.",True
+NCT05009069,A Study of Atezolizumab With or Without Tiragolumab Following Neoadjuvant Chemoradiotherapy in Participants With Locally Advanced Rectal Cancer,TIGIT,Hoffmann-La Roche,ACTIVE_NOT_RECRUITING,"Rectal Neoplasms, Rectal Cancer",PHASE2,2026-07-27,2022-03-18,2026-11-10,58,Percentage of Participants With Pathological Complete Response (pCR),Changed,2026-07-29,"This study will evaluate the efficacy and safety of atezolizumab plus tiragolumab or atezolizumab alone following neoadjuvant chemoradiotherapy (nCRT) in participants with locally advanced rectal cancer (LARC). The study consists of a safety run-in phase and a randomization phase. Participants enrolled in the safety run-in phase will receive atezolizumab + tiragolumab following nCRT. Upon determination of the safety of the treatment regimen, the study will be proceed to the randomization phase. Participants will be randomized in a 1:1 ratio to the atezolizumab + tiragolumab arm or atezolizumab arm.",
 NCT04353830,"A Study Evaluating the Safety, Tolerability, and Initial Efficacy of Recombinant Human Anti-T-cell Immunoreceptor With Ig and ITIM Domains (TIGIT) Monoclonal Antibody Injection (IBI939) in Subjects With Advanced Malignant Tumors",TIGIT,Innovent Biologics (Suzhou) Co. Ltd.,COMPLETED,Advanced Malignancies,PHASE1,2023-02-28,2020-05-22,2022-05-11,34,Number of subjects with AEs and SAEs,No Change,2026-02-05,"This is an open-label, dose escalation, Phase I study to evaluate the safety, tolerability, pharmacokinetics and efficacy of IBI939 in subjects with advanced malignancies",
 NCT07337447,Trial of FOLFIRI + Zimberelimab + Domvanalimab vs FOLFIRI With a Hybrid Synthetic Control Arm in Second Line Treatment of Neuroendocrine Carcinoma of Gastro-enteropancreatic or Unknown Origin (REWENEC 01),TIGIT,Hospices Civils de Lyon,NOT_YET_RECRUITING,"Carcinoma, Neuroendocrine",PHASE2,2026-01-07,2026-04,2030-04,122,Overall survival (%) between FOLFIRI and FOLFIRI+Zimberelimab+Domvanalimab,No Change,2026-02-05,"Background Neuroendocrine carcinomas (NECs) of gastro-entero-pancreatic (GEP) or unknown (UK) origin are rare and highly aggressive diseases. The recommended first-line (L1) treatment is platinum-etoposide combination therapy, which has a progression-free survival (PFS) of only 4-9 months and a median overall survival (OS) of approximately 12 months. All patients experience relapse, often rapidly after this first line of chemotherapy. The standard second-line (L2) chemotherapies recommended by ESMO, ENETS, and NCCN, FOLFIRI and FOLFOX, have modest efficacy with a PFS of 3 months and a median OS of 6 months. The BEVANEC study (PHRCK 2014, NCT02820857) reported no benefit of FOLFIRI + bevacizumab compared to FOLFIRI in a randomized phase II study that enrolled 150 patients in 26 centers over a period of 5 years in France.
 
@@ -503,7 +497,111 @@ GROUP D: Patients undergo surgical resection on study. Following surgery patient
 After completion of study treatment, patients are followed up at 30 days, and then every 3 months.",
 NCT04465643,Neoadjuvant Nivolumab Plus Ipilimumab for Newly Diagnosed Malignant Peripheral Nerve Sheath Tumor,TIGIT,Sidney Kimmel Comprehensive Cancer Center at Johns Hopkins,COMPLETED,Nerve Sheath Tumors,PHASE1,2026-07-09,2021-06-08,2025-07-30,13,Safety of combination nivolumab and ipilimumab as assessed by number of participants who experience adverse events,Changed,2026-07-28,"The purpose of the study is to evaluate safety and feasibility of neoadjuvant nivolumab plus ipilimumab prior to standard therapy (surgery, chemotherapy or radiation therapy) in patients with Neurofibromatosis Type 1 (NF1) and newly diagnosed pre-malignant and malignant peripheral nerve sheath tumors (MPNST) for whom surgery for resection of tumor is indicated.",
 NCT04262856,Study to Evaluate Monotherapy and Combination Immunotherapies in Participants With PD-L1 Positive Non-small Cell Lung Cancer,TIGIT,"Arcus Biosciences, Inc.",COMPLETED,"Non Small Cell Lung Cancer, Nonsquamous Non Small Cell Lung Cancer, Squamous Non Small Cell Lung Cancer, Lung Cancer",PHASE2,2026-06-11,2020-05-28,2025-07-09,151,Objective response rate (ORR),No Change,2026-06-16,"This randomized phase 2 open-label study will evaluate the safety and efficacy of zimberelimab (AB122) monotherapy, domvanalimab (AB154) in combination with zimberelimab, and domvanalimab in combination with zimberelimab and etrumadenant (AB928) in front-line, PD-L1 positive, metastatic non-small cell lung cancer.",
-NCT04736173,Study Evaluating Effectiveness and Safety of Zimberelimab and Domvanalimab in Lung Cancer,TIGIT,"Arcus Biosciences, Inc.",ACTIVE_NOT_RECRUITING,"Non Small Cell Lung Cancer, Nonsquamous Non Small Cell Lung Cancer, Squamous Non Small Cell Lung Cancer, Lung Cancer",PHASE2,2026-05-28,2021-02-08,2027-05,169,Progression-free Survival (PFS),No Change,2026-06-02,"This is a phase 2 study to evaluate zimberelimab (AB122) combined with domvanalimab (AB154) in front-line, PD-L1-high, locally advanced or metastatic Non-Small Cell Lung Cancer (NSCLC).",
+NCT04736173,Study Evaluating Effectiveness and Safety of Zimberelimab and Domvanalimab in Lung Cancer,TIGIT,"Arcus Biosciences, Inc.",ACTIVE_NOT_RECRUITING,"Non Small Cell Lung Cancer, Nonsquamous Non Small Cell Lung Cancer, Squamous Non Small Cell Lung Cancer, Lung Cancer",PHASE2,2026-07-28,2021-02-08,2027-05,169,Progression-free Survival (PFS),Changed,2026-07-30,"**[RECENT CHANGES FOUND]**
+Field `statusModule.lastUpdateSubmitDate` changed from `2026-05-28` to `2026-07-28`
+Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-06-01` to `2026-07-29`
+Field `contactsLocationsModule.locations.[10]city` changed from `Davao City` to `Mexico City`
+Field `contactsLocationsModule.locations.[10]country` changed from `Philippines` to `Mexico`
+Field `contactsLocationsModule.locations.[10]geoPoint.lat` changed from `7.07306` to `19.42847`
+Field `contactsLocationsModule.locations.[10]geoPoint.lon` changed from `125.61278` to `-99.12766`
+Field `contactsLocationsModule.locations.[11]city` changed from `Manila` to `San Luis Potosí City`
+Field `contactsLocationsModule.locations.[11]country` changed from `Philippines` to `Mexico`
+Field `contactsLocationsModule.locations.[11]geoPoint.lat` changed from `14.6042` to `22.15234`
+Field `contactsLocationsModule.locations.[11]geoPoint.lon` changed from `120.9822` to `-100.97135`
+Field `contactsLocationsModule.locations.[12]city` changed from `George` to `Cebu`
+Field `contactsLocationsModule.locations.[12]country` changed from `South Africa` to `Philippines`
+Field `contactsLocationsModule.locations.[12]geoPoint.lat` changed from `-33.963` to `16.75187`
+Field `contactsLocationsModule.locations.[12]geoPoint.lon` changed from `22.46173` to `121.5961`
+Field `contactsLocationsModule.locations.[13]city` changed from `Johannesburg` to `Davao City`
+Field `contactsLocationsModule.locations.[13]country` changed from `South Africa` to `Philippines`
+Field `contactsLocationsModule.locations.[13]geoPoint.lat` changed from `-26.20227` to `7.07306`
+Field `contactsLocationsModule.locations.[13]geoPoint.lon` changed from `28.04363` to `125.61278`
+Field `contactsLocationsModule.locations.[14]city` changed from `Pretoria` to `Manila`
+Field `contactsLocationsModule.locations.[14]country` changed from `South Africa` to `Philippines`
+Field `contactsLocationsModule.locations.[14]geoPoint.lat` changed from `-25.74486` to `14.6042`
+Field `contactsLocationsModule.locations.[14]geoPoint.lon` changed from `28.18783` to `120.9822`
+Field `contactsLocationsModule.locations.[15]city` changed from `Daegu` to `Michalovce`
+Field `contactsLocationsModule.locations.[15]country` changed from `South Korea` to `Slovakia`
+Field `contactsLocationsModule.locations.[15]geoPoint.lat` changed from `35.87028` to `48.75434`
+Field `contactsLocationsModule.locations.[15]geoPoint.lon` changed from `128.59111` to `21.9195`
+Field `contactsLocationsModule.locations.[16]city` changed from `Incheon` to `George`
+Field `contactsLocationsModule.locations.[16]country` changed from `South Korea` to `South Africa`
+Field `contactsLocationsModule.locations.[16]geoPoint.lat` changed from `37.45646` to `-33.963`
+Field `contactsLocationsModule.locations.[16]geoPoint.lon` changed from `126.70515` to `22.46173`
+Field `contactsLocationsModule.locations.[17]city` changed from `Jinju` to `Johannesburg`
+Field `contactsLocationsModule.locations.[17]country` changed from `South Korea` to `South Africa`
+Field `contactsLocationsModule.locations.[17]geoPoint.lat` changed from `35.19278` to `-26.20227`
+Field `contactsLocationsModule.locations.[17]geoPoint.lon` changed from `128.08472` to `28.04363`
+Field `contactsLocationsModule.locations.[18]city` changed from `Seoul` to `Pretoria`
+Field `contactsLocationsModule.locations.[18]country` changed from `South Korea` to `South Africa`
+Field `contactsLocationsModule.locations.[18]geoPoint.lat` changed from `37.566` to `-25.74486`
+Field `contactsLocationsModule.locations.[18]geoPoint.lon` changed from `126.9784` to `28.18783`
+Field `contactsLocationsModule.locations.[19]city` changed from `Suwon` to `Busan`
+Field `contactsLocationsModule.locations.[19]geoPoint.lat` changed from `37.29111` to `35.10168`
+Field `contactsLocationsModule.locations.[19]geoPoint.lon` changed from `127.00889` to `129.03004`
+Field `contactsLocationsModule.locations.[20]city` changed from `Taichung` to `Daegu`
+Field `contactsLocationsModule.locations.[20]country` changed from `Taiwan` to `South Korea`
+Field `contactsLocationsModule.locations.[20]geoPoint.lat` changed from `24.1469` to `35.87028`
+Field `contactsLocationsModule.locations.[20]geoPoint.lon` changed from `120.6839` to `128.59111`
+Field `contactsLocationsModule.locations.[21]city` changed from `Bangkok` to `Incheon`
+Field `contactsLocationsModule.locations.[21]country` changed from `Thailand` to `South Korea`
+Field `contactsLocationsModule.locations.[21]geoPoint.lat` changed from `13.75398` to `37.45646`
+Field `contactsLocationsModule.locations.[21]geoPoint.lon` changed from `100.50144` to `126.70515`
+Field `contactsLocationsModule.locations.[22]city` changed from `Changwat Sara Buri` to `Jinju`
+Field `contactsLocationsModule.locations.[22]country` changed from `Thailand` to `South Korea`
+Field `contactsLocationsModule.locations.[22]geoPoint.lat` changed from `14.53333` to `35.19278`
+Field `contactsLocationsModule.locations.[22]geoPoint.lon` changed from `100.91667` to `128.08472`
+Field `contactsLocationsModule.locations.[23]city` changed from `Chanthaburi` to `Seoul`
+Field `contactsLocationsModule.locations.[23]country` changed from `Thailand` to `South Korea`
+Field `contactsLocationsModule.locations.[23]geoPoint.lat` changed from `12.60961` to `37.566`
+Field `contactsLocationsModule.locations.[23]geoPoint.lon` changed from `102.10447` to `126.9784`
+Field `contactsLocationsModule.locations.[24]city` changed from `Chiang Mai` to `Suwon`
+Field `contactsLocationsModule.locations.[24]country` changed from `Thailand` to `South Korea`
+Field `contactsLocationsModule.locations.[24]geoPoint.lat` changed from `18.79038` to `37.29111`
+Field `contactsLocationsModule.locations.[24]geoPoint.lon` changed from `98.98468` to `127.00889`
+Field `contactsLocationsModule.locations.[25]city` changed from `Khon Kaen` to `Taichung`
+Field `contactsLocationsModule.locations.[25]country` changed from `Thailand` to `Taiwan`
+Field `contactsLocationsModule.locations.[25]geoPoint.lat` changed from `16.44671` to `24.1469`
+Field `contactsLocationsModule.locations.[25]geoPoint.lon` changed from `102.833` to `120.6839`
+Field `contactsLocationsModule.locations.[26]city` changed from `Lampang` to `Bangkok`
+Field `contactsLocationsModule.locations.[26]geoPoint.lat` changed from `18.29232` to `13.75398`
+Field `contactsLocationsModule.locations.[26]geoPoint.lon` changed from `99.49277` to `100.50144`
+Field `contactsLocationsModule.locations.[27]city` changed from `Nakhon Nayok` to `Changwat Sara Buri`
+Field `contactsLocationsModule.locations.[27]geoPoint.lat` changed from `14.20463` to `14.53333`
+Field `contactsLocationsModule.locations.[27]geoPoint.lon` changed from `101.21295` to `100.91667`
+Field `contactsLocationsModule.locations.[28]city` changed from `Nakhon Ratchasima` to `Chanthaburi`
+Field `contactsLocationsModule.locations.[28]geoPoint.lat` changed from `14.97066` to `12.60961`
+Field `contactsLocationsModule.locations.[28]geoPoint.lon` changed from `102.10196` to `102.10447`
+Field `contactsLocationsModule.locations.[29]city` changed from `Phitsanulok` to `Chiang Mai`
+Field `contactsLocationsModule.locations.[29]geoPoint.lat` changed from `16.82481` to `18.79038`
+Field `contactsLocationsModule.locations.[29]geoPoint.lon` changed from `100.25858` to `98.98468`
+Field `contactsLocationsModule.locations.[30]city` changed from `Songkhla` to `Khon Kaen`
+Field `contactsLocationsModule.locations.[30]geoPoint.lat` changed from `7.19882` to `16.44671`
+Field `contactsLocationsModule.locations.[30]geoPoint.lon` changed from `100.5951` to `102.833`
+Field `contactsLocationsModule.locations.[31]city` changed from `Ubon Ratchathani` to `Lampang`
+Field `contactsLocationsModule.locations.[31]geoPoint.lat` changed from `15.23844` to `18.29232`
+Field `contactsLocationsModule.locations.[31]geoPoint.lon` changed from `104.84866` to `99.49277`
+Field `contactsLocationsModule.locations.[32]city` changed from `Adana` to `Nakhon Nayok`
+Field `contactsLocationsModule.locations.[32]country` changed from `Turkey (Türkiye)` to `Thailand`
+Field `contactsLocationsModule.locations.[32]geoPoint.lat` changed from `36.98615` to `14.20463`
+Field `contactsLocationsModule.locations.[32]geoPoint.lon` changed from `35.32531` to `101.21295`
+Field `contactsLocationsModule.locations.[33]city` changed from `Ankara` to `Nakhon Ratchasima`
+Field `contactsLocationsModule.locations.[33]country` changed from `Turkey (Türkiye)` to `Thailand`
+Field `contactsLocationsModule.locations.[33]geoPoint.lat` changed from `39.91987` to `14.97066`
+Field `contactsLocationsModule.locations.[33]geoPoint.lon` changed from `32.85427` to `102.10196`
+Field `contactsLocationsModule.locations.[34]city` changed from `Edirne` to `Phitsanulok`
+Field `contactsLocationsModule.locations.[34]country` changed from `Turkey (Türkiye)` to `Thailand`
+Field `contactsLocationsModule.locations.[34]geoPoint.lat` changed from `41.67719` to `16.82481`
+Field `contactsLocationsModule.locations.[34]geoPoint.lon` changed from `26.55597` to `100.25858`
+Field `contactsLocationsModule.locations.[35]city` changed from `Istanbul` to `Songkhla`
+Field `contactsLocationsModule.locations.[35]country` changed from `Turkey (Türkiye)` to `Thailand`
+Field `contactsLocationsModule.locations.[35]geoPoint.lat` changed from `41.01384` to `7.19882`
+Field `contactsLocationsModule.locations.[35]geoPoint.lon` changed from `28.94966` to `100.5951`
+Field `contactsLocationsModule.locations.[36]city` changed from `Kocaeli` to `Ubon Ratchathani`
+... (additional changes truncated for brevity)
+
+***
+This is a phase 2 study to evaluate zimberelimab (AB122) combined with domvanalimab (AB154) in front-line, PD-L1-high, locally advanced or metastatic Non-Small Cell Lung Cancer (NSCLC).",True
 NCT05126537,Co-inhibitory Molecules on Treg and miR-155-5p in Patients With Sepsis,TIGIT,"Southeast University, China",UNKNOWN,28 Day Mortality,N/A,2022-11-25,2022-01-01,2022-12-31,100,28 day mortality,No Change,2026-02-05,"1. peripheral blood Treg cells and their surface PD-1、CTLA-4 and TIGIT levels in sepsis patients were measured by flowcytometry. SOFA score、APACHE II score were recorded
 2. the level of miR-155-5p were measured by RT-qPCR in patients with sepsis on day 0-1 and day 3-5, and the correlation between the expression of the co-inhibitory molecules and miR-155-5p were evaluated",
 NCT05289492,Study of Novel Regimens in Relapsed or Refractory Multiple Myeloma,TIGIT,iTeos Therapeutics,TERMINATED,Multiple Myeloma,PHASE1,2024-10-23,2022-05-01,2023-11-29,16,Number of participants with any adverse events (AEs) and serious adverse events (SAEs),No Change,2026-02-05,"This is a multicenter, open-label, phase I/II clinical study, to assess the safety, tolerability, antitumor activity, pharmacokinetics and pharmacodynamics of EOS884448 (also known as EOS-448 or GSK4428859A), alone or in combination with iberdomide with and without dexamethasone in participants with relapsed/refractory multiple myeloma (RRMM).",
@@ -669,32 +767,14 @@ Scope of the study will be to investigate the immune modulation after SBRT in:
 
 * patients with diagnosis of oligorecurrence during a treatment-free interval
 * patients with oligoprogression or oligopersistance during hormonal therapy",
-NCT05574335,Siplizumab in T1DM,TIGIT,National Institute of Allergy and Infectious Diseases (NIAID),TERMINATED,Type 1 Diabetes Mellitus,"PHASE1, PHASE2",2026-06-30,2023-05-18,2025-10-20,8,Number of Participants With a T Cell Phenotype Signature Response,Changed,2026-07-29,"**[RECENT CHANGES FOUND]**
-Field `statusModule.statusVerifiedDate` changed from `2026-02` to `2026-06`
-Field `statusModule.startDateStruct.date` changed from `2023-04-26` to `2023-05-18`
-Field `statusModule.lastUpdateSubmitDate` changed from `2026-02-10` to `2026-06-30`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-02-11` to `2026-07-28`
-Field `outcomesModule.primaryOutcomes.[0]measure` changed from `Number of Participants with a T cell phenotype signature response` to `Number of Participants With a T Cell Phenotype Signature Response`
-Field `outcomesModule.primaryOutcomes.[0]description` changed from `Evaluating four siplizumab dosing regimens for induction of a T cell phenotype signature is based on a 20% increase or greater from baseline in PD1+TIGIT+ frequency within circulating CD4 Tem and a 75% increase or greater from baseline in the CD4 Treg/Tem ratio in blood.
-
-The two criteria will be evaluated at weeks 2, 4, 8, and 12. An individual who achieves both signature criteria at any time point on or before week 12 is counted as having the signature response. Both criteria do not need to be achieved at the same time point.` to `A participant is defined as achieving a T Cell phenotype signature response if the participant experiences both a 75% increase or greater from baseline in the CD4 Treg/Tem ratio in blood and a 20% increase or greater from baseline in PD1+TIGIT+ frequency within circulating CD4 Tem. The two criteria will be evaluated at weeks 2, 4, 8, and 12. Both criteria do not need to be achieved at the same time point.`
-Field `outcomesModule.primaryOutcomes.[0]timeFrame` changed from `From week 0 (baseline) to week 12` to `Week 0 to Week 12`
-Field `outcomesModule.secondaryOutcomes.[0]measure` changed from `Frequency of Adverse Events (AEs) in all siplizumab dosing arms` to `Frequency of Adverse Events (AEs) in All Siplizumab Dosing Arms`
-Field `outcomesModule.secondaryOutcomes.[1]measure` changed from `Mixed Meal Tolerance Test (MMTT)-stimulated mean 2-hour C-peptide AUC` to `Mixed Meal Tolerance Test (MMTT)-Stimulated Mean 2-hour C-peptide AUC`
-Field `outcomesModule.secondaryOutcomes.[2]measure` changed from `Insulin use (U/kg/day)` to `Insulin Use (U/kg/Day)`
-New field added: `root['statusModule']['resultsFirstSubmitDate']`
-New field added: `root['statusModule']['resultsFirstSubmitQcDate']`
-New field added: `root['statusModule']['resultsFirstPostDateStruct']`
-
-***
-This is a multicenter, Phase Ib, open-label, siplizumab dose-finding study in individuals aged 8-45 years with a Type 1 diabetes mellitus (T1DM) diagnosis. within 18 months of V0. Participants will be randomized 1:1:1:1 to one of four possible siplizumab dosing arms. All dosing arms will receive weekly siplizumab doses for a total of 12 weeks. After the completion of treatment, participants will undergo follow-up visits at weeks 12, 24, 36 and 52 which include longitudinal MMTTs. If indicated, participants will enter into long-term safety monitoring for up to an additional 48 weeks. Blood samples for mechanistic analyses will be obtained during the treatment phase and thereafter. Adults aged 18- 45 will be enrolled initially at the study sites.
+NCT05574335,Siplizumab in T1DM,TIGIT,National Institute of Allergy and Infectious Diseases (NIAID),TERMINATED,Type 1 Diabetes Mellitus,"PHASE1, PHASE2",2026-06-30,2023-05-18,2025-10-20,8,Number of Participants With a T Cell Phenotype Signature Response,Changed,2026-07-29,"This is a multicenter, Phase Ib, open-label, siplizumab dose-finding study in individuals aged 8-45 years with a Type 1 diabetes mellitus (T1DM) diagnosis. within 18 months of V0. Participants will be randomized 1:1:1:1 to one of four possible siplizumab dosing arms. All dosing arms will receive weekly siplizumab doses for a total of 12 weeks. After the completion of treatment, participants will undergo follow-up visits at weeks 12, 24, 36 and 52 which include longitudinal MMTTs. If indicated, participants will enter into long-term safety monitoring for up to an additional 48 weeks. Blood samples for mechanistic analyses will be obtained during the treatment phase and thereafter. Adults aged 18- 45 will be enrolled initially at the study sites.
 
 The primary objective is to identify a safe, metabolically favorable, dosing regimen for siplizumab in patients with type 1 diabetes that induces changes in T cell phenotypes observed with alefacept therapy in new-onset T1DM.
 
 The secondary objectives are to:
 
 1. Assess the safety profile of siplizumab in recently diagnosed T1DM.
-2. Assess the effects of siplizumab on residual beta cell function in recently diagnosed T1DM participants.",True
+2. Assess the effects of siplizumab on residual beta cell function in recently diagnosed T1DM participants.",
 NCT06302556,The Role of Immune Checkpoints in Lung Transplant (ILTRA),TIGIT,"Fondazione IRCCS Ca' Granda, Ospedale Maggiore Policlinico",UNKNOWN,Lung Transplant Rejection,N/A,2024-03-06,2024-04,2026-02,280,Lung-tissue immune-checkpoint profile and bronchoalveolar immune-cells mRNA signature in acute rejection after lung transplantation.,No Change,2026-04-04,"Lung transplantation is the less common solid organ transplant performed; it is the treatment of choice for end stage lung disease. Lung transplantation is ""problematic"" for a number of reasons: low graft availability, high waitlist mortality and unsatisfactory survival. Acute rejection, occurring days to months after surgery, has been identified as one of the main risk factors for the development of chronic rejection: in the first five years after lung transplantation, chronic rejection is the major cause of graft failure, morbidity and mortality. A deep knowledge of the immunological scenarios associated with lung graft tolerance could allow selectively switch-off T-cells involved in the rejection process. The researches, preliminary demonstrated the central role of immunological checkpoints in the development of acute rejection and its evolution towards chronic rejection. The aim of this study is the identification of markers that could be associated with the establishment of lung graft tolerance.
 
 The project is articulated into two parts: a retrospective and a prospective section. The retrospective section is constituted by a cross-sectional study of immune checkpoints on lungs explanted during lung re-transplantation for chronic rejection (cohort 1). In addition, the retrospective section includes a retrospective cohort study of immune checkpoints on specimens from transbronchial lung biopsies of participants who received lung transplantation and have 3 years of follow-up (cohort 2). The prospective section is a cohort study of immune checkpoints on specimens from transbronchial lung biopsies and gene expression analysis on immune cells purified from bronchoalveolar lavage; participants will be subjects receiving the lung transplantation during the first year of recruitment and followed for one year (cohort 3).",
@@ -710,13 +790,7 @@ Additionally, the efficacy and safety of the triple combination (ociperlimab + t
 
 Study treatment will continue until the participant experiences one of the following: disease progression per investigator's assessment by Response Evaluation Criteria In Solid Tumors (RECIST) 1.1, unacceptable toxicity, pregnancy, treatment is discontinued at the discretion of the investigator or participant, start of a new antineoplastic therapy, withdrawal of consent, lost to follow-up, death, or study is terminated by the sponsor.",
 NCT04732494,Anti-PD-1 Monoclonal Antibody Tislelizumab (BGB-A317) Combined With or Without Anti-TIGIT Monoclonal Antibody Ociperlimab (BGB-A1217) in Participants With Recurrent or Metastatic Esophageal Squamous Cell Carcinoma,TIGIT,BeiGene,COMPLETED,Esophageal Squamous Cell Carcinoma,PHASE2,2024-12-23,2021-03-31,2023-12-26,125,Objective Response Rate (ORR) Assessed by the Investigator,No Change,2026-05-26,"A study of tislelizumab (BGB-A317) plus ociperlimab versus tislelizumab plus placebo as second-line treatment in participants with programmed cell death protein-ligand 1 (PD-L1) tumor area positivity (TAP) ≥ 10% unresectable, locally advanced, recurrent or metastatic esophageal squamous cell carcinoma.",
-NCT05645692,"A Study Evaluating Different Immunotherapies (LAG-3 and PD-1 With or Without TIGIT, Compared to PD-L1 Alone) in Participants With Untreated Locally Advanced Metastatic Urothelial Cancer",TIGIT,Hoffmann-La Roche,ACTIVE_NOT_RECRUITING,Urothelial Cancer,PHASE2,2026-07-27,2023-04-13,2026-12-31,204,Incidence and Severity of Adverse Events,Changed,2026-07-29,"**[RECENT CHANGES FOUND]**
-Field `statusModule.statusVerifiedDate` changed from `2026-04` to `2026-07`
-Field `statusModule.lastUpdateSubmitDate` changed from `2026-04-28` to `2026-07-27`
-Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-04-29` to `2026-07-28`
-
-***
-This study will evaluate the safety of tobemstomig alone or in combination with tiragolumab compared with atezolizumab in participants with previously untreated, locally advanced or metastatic urothelial cancer (mUC) who are ineligible to receive a platinum containing chemotherapy.",True
+NCT05645692,"A Study Evaluating Different Immunotherapies (LAG-3 and PD-1 With or Without TIGIT, Compared to PD-L1 Alone) in Participants With Untreated Locally Advanced Metastatic Urothelial Cancer",TIGIT,Hoffmann-La Roche,ACTIVE_NOT_RECRUITING,Urothelial Cancer,PHASE2,2026-07-27,2023-04-13,2026-12-31,204,Incidence and Severity of Adverse Events,Changed,2026-07-29,"This study will evaluate the safety of tobemstomig alone or in combination with tiragolumab compared with atezolizumab in participants with previously untreated, locally advanced or metastatic urothelial cancer (mUC) who are ineligible to receive a platinum containing chemotherapy.",
 NCT04457778,First in Human Study of M6223,TIGIT,"EMD Serono Research & Development Institute, Inc.",COMPLETED,Metastatic Solid Tumors,PHASE1,2026-04-13,2020-07-10,2023-06-23,58,Part 1A and 1B: Number of Participants Who Experienced Dose Limiting Toxicities (DLTs) Assessed Using National Cancer Institute (NCI) Common Toxicity Criteria for Adverse Events (CTCAE) Version 5.0,No Change,2026-05-26,"The main purpose of this study was to determine the safety, tolerability, pharmacokinetics (PK), immunogenicity and (if observed) the maximum tolerated dose (MTD) of M6223 as a single agent (Part 1A) for both the every 2 weeks (Q2W) regimen and the every 3 weeks (Q3W) regimen and of M6223 combined with bintrafusp alfa (Part 1B) for Q2W regimen in participants with metastatic or locally advanced solid unresectable tumors.",
 NCT03772899,Fecal Microbial Transplantation in Combination With Immunotherapy in Melanoma Patients (MIMic),TIGIT,London Health Sciences Centre Research Institute OR Lawson Research Institute of St. Joseph's,ACTIVE_NOT_RECRUITING,Melanoma,PHASE1,2025-03-26,2019-03-27,2026-08,20,To evaluate the safety of combining Fecal Microbial Transplantation (FMT) using intestinal bacteria existing in the stool of healthy donors with immunotherapy in melanoma patients.,No Change,2026-02-05,"Immunotherapy has helped many cancer patients in the last 5 years by enhancing a patient's immune system to fight cancer. Anti-Programmed Death (PD-1) immunotherapy drugs such as pembrolizumab and nivolumab remove the breaks from cancer-fighting immune cells and have been effective in treating some melanoma patients. Despite the major breakthrough of immunotherapy in oncology treatment, many patients do not respond to this new class of anti-cancer drugs. Recently, evidence suggests that the microorganisms living in a patient's intestines play a major role in modifying the response to anti-PD-1drugs. Patients who respond to these drugs have a unique and healthy group of microorganisms in their gut. Therefore, positive modification of a cancer patient's gut microorganisms to create a more diverse and healthy microbiome may improve the response to immunotherapy. One method of modifying the microbiome is Fecal Microbial Transplantation (FMT) that is already being successfully used in the clinic to treat non-cancer patients with persistent bacterial infections.
 
@@ -799,7 +873,12 @@ NCT04303169,Substudy 02C: Safety and Efficacy of Pembrolizumab in Combination Wi
 The goal of substudy 02C is to evaluate the safety and efficacy of investigational treatment arms in participants with Stage III melanoma who are candidates for neoadjuvant therapy to identify the investigational agent(s) that, when used in combination, are superior to the current treatment options/historical control available.
 
 Arm 1: Pembrolizumab + Vibostolimab, Arm 2: Pembrolizumab + Gebasaxturev, and Arm 3: Pembrolizumab were added in the base protocol on 13-Nov-2019, and enrollment into those arms has been completed. Arm 4: Pembrolizumab + MK-4830 was added in Amendment 04 on 20-Dec-2021, and enrollment into that arm has been completed. Arm 5: Favezelimab + Pembrolizumab and Arm 6: Pembrolizumab + all-trans retinoic acid (ATRA) were added in Amendment 06 on 25-Jun-2022, and enrollment is ongoing.",
-NCT05329766,A Safety and Efficacy Study of Treatment Combinations With and Without Chemotherapy in Adult Participants With Advanced Upper Gastrointestinal Tract Malignancies,TIGIT,"Arcus Biosciences, Inc.",ACTIVE_NOT_RECRUITING,Gastrointestinal Tract Malignancies,PHASE2,2026-06-30,2022-06-10,2027-06,332,Number of Participants with Adverse Events (AEs),Changed,2026-07-28,"The purpose of this study is to evaluate the safety and preliminary clinical activity of treatment combinations with and without chemotherapy in participants with locally advanced unresectable or metastatic gastric, GEJ, and esophageal adenocarcinoma. Chemotherapy will consist of FOLFOX (oxaliplatin, leucovorin, fluorouracil).",
+NCT05329766,A Safety and Efficacy Study of Treatment Combinations With and Without Chemotherapy in Adult Participants With Advanced Upper Gastrointestinal Tract Malignancies,TIGIT,"Arcus Biosciences, Inc.",ACTIVE_NOT_RECRUITING,Gastrointestinal Tract Malignancies,PHASE2,2026-07-28,2022-06-10,2027-06,332,Number of Participants with Adverse Events (AEs),Changed,2026-07-30,"**[RECENT CHANGES FOUND]**
+Field `statusModule.lastUpdateSubmitDate` changed from `2026-06-30` to `2026-07-28`
+Field `statusModule.lastUpdatePostDateStruct.date` changed from `2026-07-02` to `2026-07-29`
+
+***
+The purpose of this study is to evaluate the safety and preliminary clinical activity of treatment combinations with and without chemotherapy in participants with locally advanced unresectable or metastatic gastric, GEJ, and esophageal adenocarcinoma. Chemotherapy will consist of FOLFOX (oxaliplatin, leucovorin, fluorouracil).",True
 NCT04323202,Neoadjuvant-Adjuvant Pembrolizumab in Resectable Advanced Basal Cell Carcinoma of H&N,TIGIT,Case Comprehensive Cancer Center,COMPLETED,Basal Cell Carcinoma of the Head and Neck,PHASE1,2025-10-23,2020-08-04,2025-06-25,13,Pathologic response as assessed by change in tumor volume (RECIST 1.1),No Change,2026-02-05,"This is a phase 1 study looking at anti-PD-1 Neoadjuvant therapy in Basal cell carcinoma in participants with locoregionally advanced, but resectable basal cell carcinoma of the head and neck. Participants will undergo fine cut CT imaging (head and neck) and treatment with the study drug pembrolizumab.
 
 The primary objective of this study is to evaluate pathologic response to pre-operative treatment of pembrolizumab in the study group.
