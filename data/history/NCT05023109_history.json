@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:25",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:25", "diff": "Initial data collection"}, {"timestamp": "2026-08-01 02:50:45", "diff": "New field added: `root['referencesModule']`"}]
