@@ -15,7 +15,12 @@ from collections import Counter
 import yaml
 
 from src.generate_target_pages import _build_mini_bar
-from src.utils import check_file_size, escape_html, sanitize_id
+from src.utils import (
+    check_file_size,
+    escape_html,
+    humanize_feed_event,
+    sanitize_id,
+)
 
 ACTIVE_STATUSES = ['ACTIVE_NOT_RECRUITING', 'ENROLLING_BY_INVITATION', 'NOT_YET_RECRUITING', 'RECRUITING']
 STATUS_COLORS = {'RECRUITING': '#198754', 'ACTIVE_NOT_RECRUITING': '#0dcaf0', 'ENROLLING_BY_INVITATION': '#20c997', 'NOT_YET_RECRUITING': '#ffc107', 'COMPLETED': '#6c757d', 'SUSPENDED': '#dc3545', 'TERMINATED': '#dc3545', 'WITHDRAWN': '#dc3545', 'NO_LONGER_AVAILABLE': '#adb5bd', 'AVAILABLE': '#adb5bd', 'UNKNOWN': '#ced4da'}
@@ -131,7 +136,7 @@ print("")
 if feed:
     print('<div class="change-feed">')
     for ts, tname, tid, event in feed[:15]:
-        ev = escape_html(event)
+        ev = escape_html(humanize_feed_event(event))
         ev = re.sub(
             r"(NCT\d+)",
             lambda m: f'<a href="trials/{m.group(1)}.html">{m.group(1)}</a>',

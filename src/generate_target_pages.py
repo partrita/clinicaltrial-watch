@@ -1,9 +1,7 @@
 """Generate Quarto dashboard pages for clinical trial monitoring."""
 
-import html
 import json
 import os
-import re
 from typing import Any
 
 import yaml
@@ -13,9 +11,7 @@ try:
         atomic_write,
         check_file_size,
         escape_html,
-        humanize_diff_field,
-        humanize_diff_value,
-        parse_diff_records,
+        render_trial_history_body,
         sanitize_id,
     )
 except ImportError:
@@ -23,9 +19,7 @@ except ImportError:
         atomic_write,
         check_file_size,
         escape_html,
-        humanize_diff_field,
-        humanize_diff_value,
-        parse_diff_records,
+        render_trial_history_body,
         sanitize_id,
     )
 
@@ -216,11 +210,12 @@ def generate_target_qmd(
 
     safe_description = escape_html(description)
     header = (
-        f"---\n{yaml_header}---\n\n::: {{.callout-note appearance=\"simple\"}}\n"
+        f'---\n{yaml_header}---\n\n::: {{.callout-note appearance="simple"}}\n'
         f"{safe_description}\n:::\n\n"
     )
 
-    overview_block = r'''
+    overview_block = (
+        r"""
 ```{python}
 #| echo: false
 #| output: asis
@@ -241,9 +236,15 @@ from src.utils import (
 
 target_id = "__TARGET_ID__"
 
-STATUS_COLORS = ''' + repr(STATUS_COLORS) + r'''
-ACTIVE_STATUSES = ''' + repr(sorted(ACTIVE_STATUSES)) + r'''
-PRIORITY = ''' + repr(STATUS_PRIORITY) + r'''
+STATUS_COLORS = """
+        + repr(STATUS_COLORS)
+        + r"""
+ACTIVE_STATUSES = """
+        + repr(sorted(ACTIVE_STATUSES))
+        + r"""
+PRIORITY = """
+        + repr(STATUS_PRIORITY)
+        + r"""
 
 def _upper(v):
     return str(v or "").strip().upper()
@@ -356,6 +357,8 @@ print("")
 #| output: asis
 import re
 
+from src.utils import humanize_feed_event
+
 target_h_file = f"data/history/target_{target_id}.json"
 history = []
 if os.path.exists(target_h_file):
@@ -375,7 +378,7 @@ if history:
     print('<div class="change-feed">')
     for record in reversed(history[-12:]):
         ts = escape_html(str(record.get("timestamp", "N/A"))[:16])
-        event_str = escape_html(record.get("event", "N/A"))
+        event_str = escape_html(humanize_feed_event(str(record.get("event", "N/A"))))
         event_str = re.sub(
             r"(NCT\d+)",
             lambda m: f'<a href="../trials/{m.group(1)}.html">{m.group(1)}</a>',
@@ -394,10 +397,10 @@ print("")
 #| echo: false
 #| output: asis
 from src.utils import (
+    check_file_size,
     escape_html,
-    humanize_diff_field,
-    humanize_diff_value,
-    parse_diff_records,
+    render_history_sections,
+    sanitize_id,
 )
 
 trial_ids = [item["id"] for item in rows]
@@ -413,36 +416,16 @@ for trial_id in trial_ids:
             hist = json.load(f)
     except Exception:
         continue
-    if not isinstance(hist, list):
-        continue
 
-    real_changes = [
-        r for r in hist if isinstance(r, dict) and r.get("diff") != "Initial data collection"
-    ]
-    if real_changes:
+    sections = render_history_sections(hist, max_events=5, heading_level=None)
+    if sections:
         history_found = True
-        print(f"#### [{escape_html(trial_id)}](https://clinicaltrials.gov/study/{sanitize_id(trial_id)})")
+        print(
+            f"#### [{escape_html(trial_id)}]"
+            f"(https://clinicaltrials.gov/study/{sanitize_id(trial_id)})"
+        )
         print("")
-        for rec in reversed(real_changes[-5:]):
-            print(f'- **{escape_html(rec.get("timestamp", "N/A"))}**')
-            recs = parse_diff_records(str(rec.get("diff", "")))
-            for cr in recs[:8]:
-                kind = cr.get("kind", "raw")
-                label = escape_html(humanize_diff_field(cr.get("field", "")))
-                if kind == "added":
-                    print(f'    - <span class="text-success fw-bold">{label}</span>: 새로 추가됨')
-                elif kind == "removed":
-                    print(f'    - <span class="text-danger fw-bold">{label}</span>: 삭제됨')
-                elif kind == "raw":
-                    text = escape_html(str(cr.get("new", ""))[:200])
-                    print(f"    - {text}")
-                else:
-                    old_v = escape_html(humanize_diff_value(cr.get("old"), 70))
-                    new_v = escape_html(humanize_diff_value(cr.get("new"), 70))
-                    print(f"    - {label}: ~~{old_v}~~ → **{new_v}**")
-            if len(recs) > 8:
-                print(f"    - … 외 {len(recs) - 8}개 항목")
-            print("")
+        print(sections)
 
 if not history_found:
     print("_아직 초기 수집 이후의 개별 임상 변경내역이 없습니다._")
@@ -560,7 +543,8 @@ if rows:
 
 <a href="../data/targets/__TARGET_ID__/all_trials_raw.csv" class="btn btn-primary" role="button" aria-label="Download all raw trial data CSV">📥 전체 데이터 다운로드 (CSV)</a>
 <a href="../data/targets/__TARGET_ID__/status_summary.csv" class="btn btn-outline-secondary" role="button" aria-label="Download status summary CSV">📥 요약 데이터 다운로드 (CSV)</a>
-'''
+"""
+    )
 
     body = overview_block.replace("__TARGET_ID__", target_id)
 
@@ -575,7 +559,8 @@ if rows:
 def generate_index_qmd(output_path: str = "index.qmd") -> None:
     """Generate the dashboard home page with per-target overview cards."""
 
-    content = r'''---
+    content = (
+        r"""---
 title: "Clinical Trial Watch"
 ---
 
@@ -592,11 +577,22 @@ from collections import Counter
 import yaml
 
 from src.generate_target_pages import _build_mini_bar
-from src.utils import check_file_size, escape_html, sanitize_id
+from src.utils import (
+    check_file_size,
+    escape_html,
+    humanize_feed_event,
+    sanitize_id,
+)
 
-ACTIVE_STATUSES = ''' + repr(sorted(ACTIVE_STATUSES)) + r'''
-STATUS_COLORS = ''' + repr(STATUS_COLORS) + r'''
-STATUS_LABELS = ''' + repr(STATUS_LABELS_KO) + r'''
+ACTIVE_STATUSES = """
+        + repr(sorted(ACTIVE_STATUSES))
+        + r"""
+STATUS_COLORS = """
+        + repr(STATUS_COLORS)
+        + r"""
+STATUS_LABELS = """
+        + repr(STATUS_LABELS_KO)
+        + r"""
 
 valid_ids = {}
 try:
@@ -708,7 +704,7 @@ print("")
 if feed:
     print('<div class="change-feed">')
     for ts, tname, tid, event in feed[:15]:
-        ev = escape_html(event)
+        ev = escape_html(humanize_feed_event(event))
         ev = re.sub(
             r"(NCT\d+)",
             lambda m: f'<a href="trials/{m.group(1)}.html">{m.group(1)}</a>',
@@ -723,7 +719,8 @@ if feed:
 else:
     print("_아직 기록된 변경사항이 없습니다._")
 ```
-'''
+"""
+    )
 
     # Security enhancement: Use atomic write to prevent data corruption (CWE-459)
     with atomic_write(output_path, encoding="utf-8") as f:
@@ -781,111 +778,6 @@ def update_quarto_yml(
         )
 
     print(f"Updated: {quarto_path}")
-
-
-_DIFF_TS_SAFE_RE = re.compile(r"[^0-9A-Za-z: .\-]")
-
-
-def _safe_timestamp(value: Any) -> str:
-    """
-    Sanitize a history timestamp for display (keeps date/time chars only,
-    so colons stay readable instead of being HTML-escaped).
-    """
-    text = str(value or "").strip()
-    cleaned = _DIFF_TS_SAFE_RE.sub("", text)[:16].strip()
-    return cleaned if cleaned else "-"
-
-
-def _format_diff_cell(value: str, max_length: int = 90) -> str:
-    """Escape and truncate a diff value for a Markdown table cell."""
-    if not value:
-        return "-"
-    # Collapse whitespace: literal newlines would break the Markdown table.
-    flat = " ".join(str(value).split())
-    shown = flat if len(flat) <= max_length else flat[:max_length] + "…"
-    cell = escape_html(shown)
-    if len(flat) > max_length:
-        # Title attribute only needs HTML escaping (no Markdown translation).
-        tooltip = html.escape(flat, quote=True)
-        cell = f'<span class="truncated-text" title="{tooltip}">{cell}</span>'
-    return cell
-
-
-DIFF_KIND_ICONS = {
-    "changed": "✏️",
-    "added": "➕",
-    "removed": "➖",
-    "raw": "ℹ️",
-}
-
-
-def _render_trial_history_body(history: Any, trial_id: str) -> str:
-    """
-    Render a trial's history records as human-readable Markdown.
-
-    Changes are grouped by detection time; each group becomes a section with
-    a table of 항목(무엇이) / 이전 값 / 변경 후 값 (어떻게 바뀌었는지).
-    """
-    events: list[tuple[str, list[dict[str, str]]]] = []
-    if isinstance(history, list):
-        for r in history:
-            if not isinstance(r, dict):
-                continue
-            diff_text = str(r.get("diff", ""))
-            if diff_text == "Initial data collection":
-                continue
-            recs = parse_diff_records(diff_text)
-            if recs:
-                events.append((_safe_timestamp(r.get("timestamp")), recs))
-
-    if not events:
-        return f"아직 {trial_id}에 대한 변경 기록이 없습니다."
-
-    lines: list[str] = [f"## 🕘 변경 이력 ({len(events)}회)", ""]
-    for timestamp, recs in reversed(events):  # newest first
-        n_changed = sum(1 for x in recs if x["kind"] == "changed")
-        n_added = sum(1 for x in recs if x["kind"] == "added")
-        n_removed = sum(1 for x in recs if x["kind"] == "removed")
-        parts = []
-        if n_changed:
-            parts.append(f"변경 {n_changed}건")
-        if n_added:
-            parts.append(f"추가 {n_added}건")
-        if n_removed:
-            parts.append(f"삭제 {n_removed}건")
-        summary = ", ".join(parts) if parts else f"{len(recs)}건"
-
-        lines.append(f"### 📅 {timestamp} · {summary}")
-        lines.append("")
-        lines.append("| 구분 | 항목 | 이전 값 | 변경 후 값 |")
-        lines.append("| :-- | --- | --- | --- |")
-        for rec in recs:
-            kind = rec.get("kind", "raw")
-            icon = DIFF_KIND_ICONS.get(kind, "ℹ️")
-            label = humanize_diff_field(rec.get("field", ""))
-            if kind == "added":
-                old_cell, new_cell = "-", "새로 추가됨"
-            elif kind == "removed":
-                old_cell, new_cell = "삭제됨", "-"
-            elif kind == "raw":
-                old_cell, new_cell = "-", _format_diff_cell(str(rec.get("new", "")))
-            else:
-                old_h = humanize_diff_value(rec.get("old"))
-                new_h = humanize_diff_value(rec.get("new"))
-                old_cell = _format_diff_cell(old_h)
-                new_cell = _format_diff_cell(new_h)
-                if old_h == new_h and old_h and old_h != "-":
-                    # Raw values differ but summarize to the same label
-                    # (e.g. only a long description inside an object changed).
-                    new_cell += (
-                        ' <span class="text-muted"><small>(세부 내용 변경)</small></span>'
-                    )
-            lines.append(
-                f"| {icon} | {escape_html(label) or '-'} | {old_cell} | {new_cell} |"
-            )
-        lines.append("")
-
-    return "\n".join(lines)
 
 
 def generate_all_trial_pages(
@@ -970,7 +862,7 @@ def generate_all_trial_pages(
                     body = f"Error loading history: {e}"
                     history = []
 
-                body = _render_trial_history_body(history, trial_id)
+                body = render_trial_history_body(history, trial_id)
             else:
                 body = f"No history file found for {trial_id}."
 

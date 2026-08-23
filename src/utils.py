@@ -664,14 +664,14 @@ _CAMEL_SPLIT_RE = re.compile(r"(?<=[a-z0-9])(?=[A-Z])")
 # Values may contain newlines (e.g. long descriptions), so records are split
 # on their line-start boundary first and then matched with DOTALL.
 _DIFF_RECORD_SPLIT_RE = re.compile(
-    r"(?=^(?:Field `|New field added:|Field removed:))", re.M
+    r"(?=^(?:Field `|New field added:|Field removed:))", re.MULTILINE
 )
 _DIFF_CHANGED_RE = re.compile(
-    r"\AField `([^`]*)` changed from `(.*?)` to `(.*)`\Z", re.S
+    r"\AField `([^`]*)` changed from `(.*?)` to `(.*)`\Z", re.DOTALL
 )
-_DIFF_ADDED_RE = re.compile(r"\ANew field added: `(.*)`\Z", re.S)
-_DIFF_REMOVED_RE = re.compile(r"\AField removed: `(.*)`\Z", re.S)
-_DIFF_FALLBACK_RE = re.compile(r"\A([^:`]*)`: `(.*?)` -> `(.*)`\Z", re.S)
+_DIFF_ADDED_RE = re.compile(r"\ANew field added: `(.*)`\Z", re.DOTALL)
+_DIFF_REMOVED_RE = re.compile(r"\AField removed: `(.*)`\Z", re.DOTALL)
+_DIFF_FALLBACK_RE = re.compile(r"\A([^:`]*)`: `(.*?)` -> `(.*)`\Z", re.DOTALL)
 
 # Token like "8", "39", or "39city" (index possibly glued to the next key),
 # produced after bracket-stripping normalization of DeepDiff list paths.
@@ -685,7 +685,7 @@ def _truncate_middle(text: str, max_length: int) -> str:
     keep = max(max_length - 1, 0)
     head = keep - keep // 2
     tail = keep // 2
-    return text[:head] + "…" + (text[len(text) - tail:] if tail else "")
+    return text[:head] + "…" + (text[len(text) - tail :] if tail else "")
 
 
 def _prettify_token(token: str) -> str:
@@ -712,7 +712,7 @@ def _prettify_leaf_fallback(leaf_tokens: list[str]) -> str:
     """Prettify unknown leaf tokens into a readable phrase."""
     fallback_parts = []
     for t in leaf_tokens[-2:]:
-        stripped = t[:-6] if t.endswith("Module") else t
+        stripped = t.removesuffix("Module")
         fallback_parts.append(_prettify_token(stripped))
     return " · ".join(fallback_parts)
 
@@ -740,8 +740,7 @@ def humanize_diff_field(path: str) -> str:
     # Normalize DeepDiff-style paths into dot-separated tokens.
     # Handles both `root['a']['b'][8]['c']` and cleaned forms like
     # `a.b.[39]city` / `a.b.8` produced by diff_engine.format_diff().
-    if raw.startswith("root"):
-        raw = raw[4:]
+    raw = raw.removeprefix("root")
     raw = raw.replace("['", ".").replace("']", "")
     raw = raw.replace("[", ".").replace("]", "")
     tokens = [t for t in raw.split(".") if t and t != "root"]
@@ -766,9 +765,9 @@ def humanize_diff_field(path: str) -> str:
             if leaf_tokens:
                 # Index applies to the nested list named by the pending
                 # leaf tokens (e.g. `contacts` inside one location).
-                nested_name = _lookup_leaf_label(leaf_tokens) or _prettify_leaf_fallback(
+                nested_name = _lookup_leaf_label(
                     leaf_tokens
-                )
+                ) or _prettify_leaf_fallback(leaf_tokens)
                 chain.append(f"{nested_name} #{idx + 1}")
                 leaf_tokens = []
             elif item_index is None:
@@ -913,7 +912,12 @@ def parse_diff_records(diff_text: str) -> list[dict[str, str]]:
         m = _DIFF_CHANGED_RE.match(segment)
         if m:
             records.append(
-                {"kind": "changed", "field": m.group(1), "old": m.group(2), "new": m.group(3)}
+                {
+                    "kind": "changed",
+                    "field": m.group(1),
+                    "old": m.group(2),
+                    "new": m.group(3),
+                }
             )
             continue
 
@@ -924,7 +928,9 @@ def parse_diff_records(diff_text: str) -> list[dict[str, str]]:
 
         m = _DIFF_REMOVED_RE.match(segment)
         if m:
-            records.append({"kind": "removed", "field": m.group(1), "old": "", "new": ""})
+            records.append(
+                {"kind": "removed", "field": m.group(1), "old": "", "new": ""}
+            )
             continue
 
         m = _DIFF_FALLBACK_RE.match(segment)
@@ -942,6 +948,204 @@ def parse_diff_records(diff_text: str) -> list[dict[str, str]]:
         records.append({"kind": "raw", "field": "", "old": "", "new": segment})
 
     return records
+
+
+# ---------------------------------------------------------------------------
+# History rendering (human-readable change tables)
+# ---------------------------------------------------------------------------
+
+DIFF_KIND_ICONS: dict[str, str] = {
+    "changed": "✏️",
+    "added": "➕",
+    "removed": "➖",
+    "raw": "ℹ️",
+}
+
+_DIFF_TS_SAFE_RE = re.compile(r"[^0-9A-Za-z: .\-]")
+
+# Patterns for feed events written by main.update_target_history().
+_FEED_MORE_RE = re.compile(r"\s*\(and (\d+) more\)\Z")
+_FEED_CHANGES_RE = re.compile(r"\AChanges detected in (\d+) trials?: (.*)\Z", re.DOTALL)
+_FEED_INITIAL_RE = re.compile(r"\AInitial data collection: (\d+) trials found\.?\Z")
+
+
+def safe_timestamp(value: Any) -> str:
+    """
+    Sanitize a history timestamp for display (keeps date/time chars only,
+    so colons stay readable instead of being HTML-escaped).
+    """
+    text = str(value or "").strip()
+    cleaned = _DIFF_TS_SAFE_RE.sub("", text)[:16].strip()
+    return cleaned if cleaned else "-"
+
+
+def humanize_feed_event(event: Any) -> str:
+    """
+    Translate a target-level feed event into Korean for display.
+
+    Storage keeps the original English messages; translation happens at
+    render time so that existing history files remain readable too.
+    Unrecognized texts are returned unchanged.
+    """
+    if event is None:
+        return "-"
+    text = safe_str(event, 2000).strip()
+    if not text:
+        return ""
+
+    more_count = None
+    more_match = _FEED_MORE_RE.search(text)
+    if more_match:
+        more_count = more_match.group(1)
+        text = text[: more_match.start()].rstrip()
+
+    translated = ""
+    m = _FEED_CHANGES_RE.match(text)
+    if m:
+        translated = f"{m.group(1)}개 임상에서 변경 감지: {m.group(2)}"
+    else:
+        m2 = _FEED_INITIAL_RE.match(text)
+        if m2:
+            translated = f"최초 데이터 수집: {m2.group(1)}개 임상"
+
+    if not translated:
+        return safe_str(event, 2000).strip() or "-"
+    if more_count:
+        translated += f" (외 {more_count}건)"
+    return translated
+
+
+def format_diff_cell(value: Any, max_length: int = 90) -> str:
+    """
+    Escape and truncate a diff value for a Markdown table cell.
+    Literal newlines would break Markdown tables, so whitespace is collapsed;
+    over-long values get an HTML tooltip with the full flattened text.
+    """
+    if not value:
+        return "-"
+    flat = " ".join(str(value).split())
+    shown = flat if len(flat) <= max_length else flat[:max_length] + "…"
+    cell = escape_html(shown)
+    if len(flat) > max_length:
+        # Title attribute needs plain HTML escaping only (no Markdown rules).
+        tooltip = html.escape(flat, quote=True)
+        cell = f'<span class="truncated-text" title="{tooltip}">{cell}</span>'
+    return cell
+
+
+def collect_history_events(history: Any) -> list[tuple[str, list[dict[str, str]]]]:
+    """
+    Parse a trial history JSON payload into (timestamp, records) pairs,
+    skipping non-dict entries and the initial data-collection marker.
+    Order is preserved as stored (oldest first).
+    """
+    events: list[tuple[str, list[dict[str, str]]]] = []
+    if not isinstance(history, list):
+        return events
+    for r in history:
+        if not isinstance(r, dict):
+            continue
+        diff_text = str(r.get("diff", ""))
+        if diff_text == "Initial data collection":
+            continue
+        recs = parse_diff_records(diff_text)
+        if recs:
+            events.append((safe_timestamp(r.get("timestamp")), recs))
+    return events
+
+
+def _summarize_change_counts(recs: list[dict[str, str]]) -> str:
+    """Summarize change records as '변경 N건, 추가 M건, 삭제 K건'."""
+    n_changed = sum(1 for x in recs if x["kind"] == "changed")
+    n_added = sum(1 for x in recs if x["kind"] == "added")
+    n_removed = sum(1 for x in recs if x["kind"] == "removed")
+    parts = []
+    if n_changed:
+        parts.append(f"변경 {n_changed}건")
+    if n_added:
+        parts.append(f"추가 {n_added}건")
+    if n_removed:
+        parts.append(f"삭제 {n_removed}건")
+    return ", ".join(parts) if parts else f"{len(recs)}건"
+
+
+def _format_change_table(recs: list[dict[str, str]]) -> list[str]:
+    """Render parsed diff records as a Markdown table of 항목/이전 값/변경 후 값."""
+    lines = ["| 구분 | 항목 | 이전 값 | 변경 후 값 |", "| :-- | --- | --- | --- |"]
+    for rec in recs:
+        kind = rec.get("kind", "raw")
+        icon = DIFF_KIND_ICONS.get(kind, "ℹ️")
+        label = humanize_diff_field(rec.get("field", ""))
+        if kind == "added":
+            old_cell, new_cell = "-", "새로 추가됨"
+        elif kind == "removed":
+            old_cell, new_cell = "삭제됨", "-"
+        elif kind == "raw":
+            old_cell, new_cell = "-", format_diff_cell(str(rec.get("new", "")))
+        else:
+            old_h = humanize_diff_value(rec.get("old"))
+            new_h = humanize_diff_value(rec.get("new"))
+            old_cell = format_diff_cell(old_h)
+            new_cell = format_diff_cell(new_h)
+            if old_h == new_h and old_h and old_h != "-":
+                # Raw values differ but summarize to the same label
+                # (e.g. only a long description inside an object changed).
+                new_cell += (
+                    ' <span class="text-muted"><small>(세부 내용 변경)</small></span>'
+                )
+        lines.append(
+            f"| {icon} | {escape_html(label) or '-'} | {old_cell} | {new_cell} |"
+        )
+    return lines
+
+
+def _render_event_blocks(
+    events: list[tuple[str, list[dict[str, str]]]],
+    max_events: int | None = None,
+    heading_level: int | None = 3,
+) -> str:
+    """Render collected events newest-first as Markdown sections."""
+    if max_events is not None:
+        events = events[-max_events:]
+    blocks: list[str] = []
+    for timestamp, recs in reversed(events):
+        summary = _summarize_change_counts(recs)
+        header = (
+            f"{'#' * heading_level} 📅 {timestamp} · {summary}"
+            if heading_level
+            else f"**📅 {timestamp} · {summary}**"
+        )
+        blocks.append("\n".join([header, ""] + _format_change_table(recs) + [""]))
+    return "\n".join(blocks)
+
+
+def render_history_sections(
+    history: Any,
+    max_events: int | None = None,
+    heading_level: int | None = 3,
+) -> str:
+    """
+    Render history records as human-readable Markdown change sections.
+
+    Each detection time becomes one section: a dated heading with a change
+    summary followed by a table of 항목 / 이전 값 / 변경 후 값.
+    Returns an empty string when there is nothing to show.
+    """
+    return _render_event_blocks(
+        collect_history_events(history), max_events, heading_level
+    )
+
+
+def render_trial_history_body(history: Any, trial_id: str) -> str:
+    """
+    Render a full trial history page body with an event-count header,
+    or a friendly message when no changes were recorded yet.
+    """
+    events = collect_history_events(history)
+    if not events:
+        return f"아직 {trial_id}에 대한 변경 기록이 없습니다."
+    header = [f"## 🕘 변경 이력 ({len(events)}회)", ""]
+    return "\n".join(header) + "\n" + _render_event_blocks(events)
 
 
 def create_safe_session(
