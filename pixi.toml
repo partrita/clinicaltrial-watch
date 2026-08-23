@@ -5,6 +5,9 @@ name = "quarto-website-template"
 platforms = ["osx-arm64", "linux-64"]
 version = "0.1.1"
 
+[activation]
+scripts = ["scripts/activate_quarto.sh"]
+
 [tasks]
 preview = "quarto preview"
 render = "quarto render"

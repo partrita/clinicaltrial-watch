@@ -35,3 +35,123 @@
 html {
     scroll-behavior: smooth;
 }
+
+/* ===== Dashboard: KPI cards ===== */
+.kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0 1.5rem 0;
+}
+
+.kpi-card {
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .5rem;
+    padding: .8rem 1rem;
+    text-align: center;
+    background: #fff;
+}
+
+[data-bs-theme="dark"] .kpi-card {
+    background: #222;
+}
+
+.kpi-value {
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.kpi-label {
+    font-size: .82rem;
+    color: #6c757d;
+    margin-top: .15rem;
+}
+
+/* ===== Dashboard: target card grid ===== */
+.target-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.target-card {
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .5rem;
+    padding: 1rem 1.1rem;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+}
+
+[data-bs-theme="dark"] .target-card {
+    background: #222;
+}
+
+.target-card h3 {
+    margin: 0;
+    font-size: 1.15rem;
+}
+
+.target-stats {
+    display: flex;
+    gap: 1.2rem;
+    font-size: .92rem;
+}
+
+.target-stat b {
+    font-size: 1.25rem;
+    display: block;
+    line-height: 1.1;
+}
+
+.target-stat small {
+    color: #6c757d;
+}
+
+/* Stacked status distribution mini-bar */
+.status-mini-bar {
+    display: flex;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #e9ecef;
+}
+
+.status-mini-bar div {
+    min-width: 2px;
+}
+
+.mini-bar-legend {
+    font-size: .72rem;
+    color: #6c757d;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .65rem;
+}
+
+.legend-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 3px;
+}
+
+/* Change feed */
+.change-feed {
+    border-left: 3px solid #0d6efd;
+    margin-left: .4rem;
+    padding-left: 1rem;
+}
+
+.change-feed-item {
+    margin-bottom: .7rem;
+}
+
+.change-feed-time {
+    font-size: .78rem;
+    color: #6c757d;
+}
