@@ -53,8 +53,11 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          # Stage all modified files including config and generated pages
-          git add data/ trials.yaml _quarto.yml index.qmd excluded_trials.yaml
+          # Stage only state that persists across runs (snapshots, history) and
+          # config. Derived output under data/targets/ is gitignored — it is
+          # regenerated from the API on every run and would otherwise bloat
+          # the repository history.
+          git add data/snapshots data/history trials.yaml _quarto.yml index.qmd excluded_trials.yaml
           git diff --staged --quiet || (git commit -m "Update clinical trial data and generated pages" && git push)
 
       - name: Upload GitHub Pages artifact
