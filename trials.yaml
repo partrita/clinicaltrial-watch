@@ -899,3 +899,18 @@ targets:
   - id: NCT07612176
     name: A Phase 1 Study of NEOK001, a B7-H3 and ROR1 Targeting Bispecific ADC in
       Participants With Select Solid Tumors
+  - id: NCT07680439
+    name: 'Illuminate: A Clinical Study Evaluating CAR T Immune Cell Therapy (BCB-276)
+      for Patients With Diffuse Intrinsic Pontine Glioma (DIPG).'
+  - id: NCT05220098
+    name: First-in-Human Study of TAK-280 in Participants With Solid Tumors
+  - id: NCT07736612
+    name: A Pan-RAS Inhibitor in Combination With Anti-Tumor Therapy in Participants
+      With Advanced Pancreatic Cancer
+  - id: NCT07774533
+    name: 68Ga-B7-H3 Nanobody ImmunoPET in Osteosarcoma
+  - id: NCT07751380
+    name: Multi-modular Chimeric Antigen Receptor T Cells tarGeting B7-H3 in Children,
+      Teenage & Young Adult Sarcoma
+  - id: NCT07700667
+    name: SKB500 Combinations in Patients With Esophageal Squamous Cell Carcinoma
