@@ -539,6 +539,9 @@ targets:
     name: Identification of Diagnostic and Prognostic Biomarkers in the Pathological
       Continuum of Bronco Chronic Obstructive Pulmonary Disease, Idiopathic Pulmonary
       Fibrosis and Pulmonary Neoplasia
+  - id: NCT07788664
+    name: Local and Systemic Immune Modulation by Rilvegostomig (AZD2936) in the Treatment
+      of Advanced Gastric Cancer (RILVE Project)
 - description: B7-H3 타겟 임상시험 모니터링
   name: B7-H3
   trials:
