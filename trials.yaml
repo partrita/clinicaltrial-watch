@@ -920,3 +920,7 @@ targets:
   - id: NCT07802704
     name: A Study of Risvutatug Rezetecan in Participants With Metastatic Castration-resistant
       Prostate Cancer (mCRPC)
+  - id: NCT07803783
+    name: A Study to Compare the Efficacy and Safety of YL201 With Standard Chemotherapy
+      in Patients With Metastatic Pancreatic Cancer After Failure of Gemcitabine-Based
+      Systemic Chemotherapy
