@@ -924,3 +924,6 @@ targets:
     name: A Study to Compare the Efficacy and Safety of YL201 With Standard Chemotherapy
       in Patients With Metastatic Pancreatic Cancer After Failure of Gemcitabine-Based
       Systemic Chemotherapy
+  - id: NCT07807241
+    name: A Study of MX006 in Patients With Advanced and/or Metastatic Tumors Known
+      to Express B7-H3
