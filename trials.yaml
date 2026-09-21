@@ -927,3 +927,196 @@ targets:
   - id: NCT07807241
     name: A Study of MX006 in Patients With Advanced and/or Metastatic Tumors Known
       to Express B7-H3
+- description: FcRn 타겟 임상시험 모니터링
+  name: FcRn
+  trials:
+  - id: NCT06437574
+    name: Intensive Cholesterol-Lowering and CD8+ T Cells in Prostate Cancer
+  - id: NCT04633187
+    name: Effects of EDP-938 in Hematopoietic Cell Transplant Recipients Infected
+      With Respiratory Syncytial Virus of the Upper Respiratory Tract
+  - id: NCT04906759
+    name: Meal Delivery and Exercise
+  - id: NCT05907668
+    name: A Proof-of-Concept Study to Assess Batoclimab in Participants With Graves'
+      Disease
+  - id: NCT01103076
+    name: Effects of High Cut-off (HCO) Hemodialysis on Central Memory CD4+ T and
+      Treg Cells in Patients With End-stage Kidney Disease
+  - id: NCT07806916
+    name: Efficacy and Safety of Efgartigimod in the Treatment of Guillain-Barré Syndrome(GREAT)
+  - id: NCT05581199
+    name: To Assess Efficacy and Safety of Batoclimab in Adult Participants With Active
+      CIDP
+  - id: NCT06685055
+    name: Markers of Favorable Response to FcRn Inhibitors(INFORM)
+  - id: NCT05047601
+    name: A Study of a Potential Oral Treatment to Prevent COVID-19 in Adults Who
+      Are Exposed to Household Member(s) With a Confirmed Symptomatic COVID-19 Infection
+  - id: NCT02855775
+    name: Monoclonal Antibodies Elimination in Breast Cancer Patient
+  - id: NCT04723537
+    name: Upamostat, a Serine Protease Inhibitor, or Placebo for Treatment of COVID-19
+      Disease
+  - id: NCT05403541
+    name: Phase 3 Study to Assess the Efficacy and Safety of Batoclimab as Induction
+      and Maintenance Therapy in Adult Participants With Generalized Myasthenia Gravis
+  - id: NCT05701189
+    name: Evaluating Efgartigimod in Patients With Guillain-Barré Syndrome
+  - id: NCT05761899
+    name: Safety and Efficacy of PMT Therapy of hPAP
+  - id: NCT05639192
+    name: Asunercept for the Treatment of Patients With Moderate to Severe COVID-19
+      Disease
+  - id: NCT06736418
+    name: Study of 225Ac-ABD147 to Establish Optimal Dose in Patients With SCLC and
+      LCNEC of the Lung That Previously Received Platinum-based Chemotherapy
+  - id: NCT04730804
+    name: A Study of ALXN1830 in Healthy Adult Participants
+  - id: NCT05859191
+    name: 'Study of Neonatal IgG Fc Receptor Expression in Natural Killer T Cells
+      Expressing an Invariant T Receptor : Implication in the Pathophysiology of Systemic
+      Lupus'
+  - id: NCT07254728
+    name: A Study to Evaluate Vaxart's Oral Bivalent GI.1/GII.4 Norovirus Vaccine
+      in Healthy Lactating Females and Their Nursing Infants
+  - id: NCT05603143
+    name: Study of Obeldesivir in Participants With COVID-19 Who Have a High Risk
+      of Developing Serious or Severe Illness
+  - id: NCT06087640
+    name: A Clinical Study to Evaluate the Efficacy, Safety and Immunogenicity of
+      an Adjuvanted Influenza Vaccine Compared to a Non-adjuvanted Influenza Vaccine
+      in Adults ≥65 Years of Age
+  - id: NCT00001941
+    name: Anti-Tac for Treatment of Leukemia
+  - id: NCT05178862
+    name: A Phase 3, Randomized, Double-blind Study for Patients With Invasive Candidiasis
+      Treated With IV Echinocandin Followed by Either Oral Ibrexafungerp or Oral Fluconazole
+  - id: NCT04569890
+    name: Treatment of Pregnancy RA
+  - id: NCT07025330
+    name: A Study of Efgartigimod in Patients With IgG4-Related Disease
+  - id: NCT05776004
+    name: Blinded Efficacy and Safety Study of CAL02 IV Plus SOC in Subjects With
+      Severe Community-Acquired Bacterial Pneumonia
+  - id: NCT00847106
+    name: Augmentation of Dendritic Cell-Based Vaccines in Melanoma Patients by Depletion
+      of Regulatory T Cells in Stage IV Melanoma Patients
+  - id: NCT03334058
+    name: A Study to Evaluate the Safety, PD, PK and Efficacy of ARGX-113 in Patients
+      With Pemphigus
+  - id: NCT03842189
+    name: A Study to Evaluate the Safety, Efficacy, Pharmacokinetics and Pharmacodynamics
+      of M281 Administered to Pregnant Women at High Risk for Early Onset Severe Hemolytic
+      Disease of the Fetus and Newborn (HDFN)
+  - id: NCT07286006
+    name: A Long-Term Extension Study of IMVT-1402 in Adult Participants With Graves'
+      Disease (GD)
+  - id: NCT06528392
+    name: Efgartigimod for Stiff Person Syndrome (ESPS)
+  - id: NCT05517447
+    name: Extension Study to Assess Batoclimab in Participants With Thyroid Eye Disease
+  - id: NCT02296879
+    name: A Multicenter, Open Label, Phase I Dose Escalation Study to Evaluate the
+      Safety, Tolerability, and Pharmacokinetics of Intravenous SAIT301 in Subjects
+      With Advanced c-MET Positive (+) Solid Tumors Followed by Expansion in Selected
+      Tumor Types
+  - id: NCT03318900
+    name: T-Cell Infusion, Aldesleukin, and Utomilumab in Treating Patients With Recurrent
+      Ovarian Cancer
+  - id: NCT07021495
+    name: SKIN Disease Profiling by an Exploratory, pRospective, Biomarker Study in
+      dermatoloGY Practice (SKINERGY)
+  - id: NCT05540522
+    name: A Study to Evaluate a Modified RNA Vaccine Against Influenza in Adults 18
+      Years of Age or Older
+  - id: NCT00048074
+    name: DIVA Study - A Study of Different Regimens of Intravenous Administration
+      of Bonviva (Ibandronate) in Women With Post-Menopausal Osteoporosis
+  - id: NCT05524571
+    name: Study to Assess Batoclimab in Participants With Active Thyroid Eye Disease
+  - id: NCT06196879
+    name: A Study to Investigate the Efficacy and Safety of Verekitug (UPB-101) in
+      Adult Participants With Severe Asthma (VALIANT)
+  - id: NCT00048061
+    name: MOBILE Study - A Study of Bonviva (Ibandronate) Regimens in Women With Post-Menopausal
+      Osteoporosis
+  - id: NCT06497374
+    name: FcRn Antagonists (Efgartigimod) for Acute NMOSD Attack
+  - id: NCT05405660
+    name: A Study of CDX-0159 in Patients With Chronic Inducible Urticaria
+  - id: NCT07039916
+    name: Study to Assess the Efficacy and Safety of IMVT-1402 in Participants With
+      Mild to Severe Generalized Myasthenia Gravis
+  - id: NCT05035212
+    name: Study to Evaluate the Efficacy, Immunogenicity, and Safety of RSVpreF in
+      Adults.
+  - id: NCT07072988
+    name: Evaluate the Benefit of Corticoid Sparing in Elderly With Generalized AntiRAch
+      Myasthenia Gravis Treated With IV or SC Efgartigimod
+  - id: NCT01632852
+    name: A Study of CSL362 in Patients With CD123+ Acute Myeloid Leukemia Currently
+      in Remission
+  - id: NCT01723254
+    name: A Study To Assess The Safety And Tolerability Of Different Doses Of PF-06444753
+      And PF-06444752 In Subjects With Allergic Rhinitis
+  - id: NCT03922321
+    name: Study of RVT-1401 for the Treatment of Patients With Moderate to Severe
+      Active Graves' Ophthalmopathy (GO)
+  - id: NCT05368285
+    name: A Phase 2 Study of CDX-0159 in Patients With Chronic Spontaneous Urticaria
+  - id: NCT05037669
+    name: Programmed Allogeneic CRISPR-edited T Cells Engineered to Express Anti-CD19
+      Chimeric Antigen Receptor (PACE CART19) in Patients With Relapsed Or Refractory
+      CD19+ Leukemia and Lymphoma
+  - id: NCT06754462
+    name: A Study to Evaluate the Efficacy, Safety, and Tolerability of IMVT-1402
+      in Adult Participants With Active, Difficult to Treat Rheumatoid Arthritis
+  - id: NCT04973566
+    name: A Study of Nipocalimab With Co-administration of Etanercept or Hydroxychloroquine
+      in Healthy Participants
+  - id: NCT07064018
+    name: Trial of Single Protein Encapsulated Doxorubicin, SPEDOX-6 in Advanced Malignancies
+  - id: NCT05517421
+    name: Study to Assess Batoclimab in Participants With Active Thyroid Eye Disease
+  - id: NCT03896373
+    name: Role of the Neonatal Fc Receptor for IgG in the Pathophysiology of Lupus
+  - id: NCT07822776
+    name: Efgartigimod in Anti-NMDA Receptor Encephalitis.
+  - id: NCT04761614
+    name: Riluzole in Combination With mFOLFOX6 and Bevacizumab in Treating Patients
+      With Metastatic Colorectal Cancer
+  - id: NCT04552288
+    name: Study of Benralizumab in People With Skin Side Effects Caused by Cancer
+      Therapies
+  - id: NCT06445023
+    name: A Phase 3 Study of Barzolvolimab in Participants With Chronic Spontaneous
+      Urticaria
+  - id: NCT03938545
+    name: 'ASCEND GO-2: Study of RVT-1401 for the Treatment of Participants With Active,
+      Moderate to Severe Graves'' Ophthalmopathy ( GO )'
+  - id: NCT05011513
+    name: Evaluation of Protease Inhibition for COVID-19 in Standard-Risk Patients
+      (EPIC-SR).
+  - id: NCT05817669
+    name: A Study of the Safety and Effectiveness of Efgartigimod in Patients With
+      Primary Sjögren's Syndrome (pSS)
+  - id: NCT00840957
+    name: Pharmaco Kinetic Variability of Infliximab in Rheumatoid Arthritis
+  - id: NCT06688253
+    name: Intravenous Human IgG1 Fc Fragment (Efgartigimod) in Myasthenic Crisis
+  - id: NCT05371392
+    name: Polymorphism of ITGA4 Gene in Chronic Lymphocytic Leukemia
+  - id: NCT03338218
+    name: Safety and Efficacy of a 6% Hydroxyethyl Starch (HES) Solution Versus an
+      Electrolyte Solution in Trauma Patients
+  - id: NCT06490627
+    name: Unraveling the Impact of Thalidomide at Diverse Doses in Transfusion Dependent
+      Beta Thalassemia
+  - id: NCT03059992
+    name: Study to Evaluate the Efficacy and Safety of Ibrexafungerp in Patients With
+      Fungal Diseases That Are Refractory to or Intolerant of Standard Antifungal
+      Treatment
+  - id: NCT02322190
+    name: Biomarkers in Acute Graft-Versus-Host Disease and Extracorporeal Photopheresis
+      Added to Investigator Chosen Therapies of Steroid Refractory Acute GVHD
