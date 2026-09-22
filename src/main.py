@@ -19,6 +19,7 @@ try:
         MAX_VALUE_LENGTH,
         atomic_write,
         check_file_size,
+        extract_trial_summary_from_snapshot,
         is_valid_nct_id,
         safe_json_dumps,
         safe_str,
@@ -33,6 +34,7 @@ except ImportError:
         MAX_VALUE_LENGTH,
         atomic_write,
         check_file_size,
+        extract_trial_summary_from_snapshot,
         is_valid_nct_id,
         safe_json_dumps,
         safe_str,
@@ -901,6 +903,17 @@ def main() -> None:
                 target_reports.append(report)
                 target_raw.append(raw)
                 total_processed_entries += 1
+            else:
+                # Fallback to local snapshot if network processing timed out or failed
+                fallback_report = extract_trial_summary_from_snapshot(
+                    trial_id=tid,
+                    trial_name=trial_config.get("name", "N/A"),
+                    target_name=target_name,
+                    thirty_days_ago_str=thirty_days_ago_str,
+                )
+                if fallback_report:
+                    target_reports.append(fallback_report)
+                    total_processed_entries += 1
 
         # Save target-specific data
         if target_reports:

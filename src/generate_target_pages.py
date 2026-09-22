@@ -11,6 +11,7 @@ try:
         atomic_write,
         check_file_size,
         escape_html,
+        load_target_status_summary,
         render_trial_history_body,
         sanitize_id,
     )
@@ -19,6 +20,7 @@ except ImportError:
         atomic_write,
         check_file_size,
         escape_html,
+        load_target_status_summary,
         render_trial_history_body,
         sanitize_id,
     )
@@ -231,6 +233,7 @@ from src.utils import (
     get_phase_badge,
     get_status_badge,
     get_update_badge,
+    load_target_status_summary,
     sanitize_id,
 )
 
@@ -249,17 +252,7 @@ PRIORITY = """
 def _upper(v):
     return str(v or "").strip().upper()
 
-rows = []
-sp = f"data/targets/{target_id}/status_summary.json"
-if os.path.exists(sp):
-    try:
-        check_file_size(sp)
-        with open(sp, "r", encoding="utf-8") as f:
-            raw = json.load(f)
-        if isinstance(raw, list):
-            rows = [r for r in raw if isinstance(r, dict) and r.get("id")]
-    except Exception:
-        rows = []
+rows = load_target_status_summary(target_id)
 
 active_rows = sorted(
     [r for r in rows if _upper(r.get("status")) in ACTIVE_STATUSES],
@@ -581,6 +574,7 @@ from src.utils import (
     check_file_size,
     escape_html,
     humanize_feed_event,
+    load_target_status_summary,
     sanitize_id,
 )
 
@@ -594,6 +588,7 @@ STATUS_LABELS = """
         + repr(STATUS_LABELS_KO)
         + r"""
 
+valid_targets = []
 valid_ids = {}
 try:
     with open("trials.yaml", "r", encoding="utf-8") as f:
@@ -602,33 +597,43 @@ try:
             if isinstance(t, dict) and t.get("name"):
                 sid = sanitize_id(t["name"]).lower()
                 valid_ids[sid] = t["name"]
+                valid_targets.append(t)
 except Exception:
     pass
 
 targets_data = []
+seen_ids = set()
+
+for t in valid_targets:
+    tname = t["name"]
+    tid = sanitize_id(tname).lower()
+    seen_ids.add(tid)
+    rows = load_target_status_summary(tid, target_trials=t.get("trials", []))
+    if not rows:
+        continue
+    dist = Counter(str(r.get("status", "")).strip().upper() for r in rows if r.get("status"))
+    changed = sum(1 for r in rows if r.get("monitor_status") == "Changed")
+    targets_data.append({
+        "id": tid,
+        "name": tname,
+        "total": len(rows),
+        "recruiting": dist.get("RECRUITING", 0),
+        "ongoing": sum(cnt for s, cnt in dist.items() if s in set(ACTIVE_STATUSES)),
+        "changed": changed,
+        "dist": dist,
+    })
+
 targets_dir = "data/targets"
 if os.path.isdir(targets_dir):
     for d in sorted(os.listdir(targets_dir)):
-        if valid_ids and d.lower() not in valid_ids:
+        if d.lower() in seen_ids:
             continue
-        spath = os.path.join(targets_dir, d, "status_summary.json")
-        if not os.path.exists(spath):
-            continue
-        try:
-            check_file_size(spath)
-            with open(spath, "r", encoding="utf-8") as f:
-                raw = json.load(f)
-        except Exception:
-            continue
-        if not isinstance(raw, list):
-            continue
-        rows = [r for r in raw if isinstance(r, dict) and r.get("id")]
+        rows = load_target_status_summary(d.lower())
         if not rows:
             continue
-
         dist = Counter(str(r.get("status", "")).strip().upper() for r in rows if r.get("status"))
         changed = sum(1 for r in rows if r.get("monitor_status") == "Changed")
-        name = valid_ids.get(d.lower()) or d
+        name = (rows[0].get("target") if rows else None) or valid_ids.get(d.lower()) or d
         targets_data.append({
             "id": d.lower(),
             "name": name,
@@ -791,6 +796,16 @@ def generate_all_trial_pages(
 
     # Build a lookup of current trial info from all target summaries
     current_info: dict[str, dict[str, Any]] = {}
+    for target in load_trials_yaml():
+        tname = target.get("name")
+        if not tname:
+            continue
+        tid = sanitize_id(tname).lower()
+        rows = load_target_status_summary(tid, target_trials=target.get("trials", []))
+        for r in rows:
+            if isinstance(r, dict) and r.get("id") and r["id"] not in current_info:
+                current_info[r["id"]] = r
+
     targets_dir = "data/targets"
     if os.path.isdir(targets_dir):
         for entry in sorted(os.listdir(targets_dir)):
@@ -803,7 +818,7 @@ def generate_all_trial_pages(
                     rows = json.load(f)
                 if isinstance(rows, list):
                     for r in rows:
-                        if isinstance(r, dict) and r.get("id"):
+                        if isinstance(r, dict) and r.get("id") and r["id"] not in current_info:
                             current_info[r["id"]] = r
             except (OSError, json.JSONDecodeError, ValueError):
                 continue

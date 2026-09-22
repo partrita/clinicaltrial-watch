@@ -19,6 +19,7 @@ from src.utils import (
     check_file_size,
     escape_html,
     humanize_feed_event,
+    load_target_status_summary,
     sanitize_id,
 )
 
@@ -26,6 +27,7 @@ ACTIVE_STATUSES = ['ACTIVE_NOT_RECRUITING', 'ENROLLING_BY_INVITATION', 'NOT_YET_
 STATUS_COLORS = {'RECRUITING': '#198754', 'ACTIVE_NOT_RECRUITING': '#0dcaf0', 'ENROLLING_BY_INVITATION': '#20c997', 'NOT_YET_RECRUITING': '#ffc107', 'COMPLETED': '#6c757d', 'SUSPENDED': '#dc3545', 'TERMINATED': '#dc3545', 'WITHDRAWN': '#dc3545', 'NO_LONGER_AVAILABLE': '#adb5bd', 'AVAILABLE': '#adb5bd', 'UNKNOWN': '#ced4da'}
 STATUS_LABELS = {'RECRUITING': '모집 중', 'ACTIVE_NOT_RECRUITING': '진행 중(비모집)', 'ENROLLING_BY_INVITATION': '초청 모집', 'NOT_YET_RECRUITING': '모집 예정', 'COMPLETED': '완료', 'SUSPENDED': '중단', 'TERMINATED': '조기종료', 'WITHDRAWN': '철회', 'UNKNOWN': '알 수 없음'}
 
+valid_targets = []
 valid_ids = {}
 try:
     with open("trials.yaml", "r", encoding="utf-8") as f:
@@ -34,33 +36,43 @@ try:
             if isinstance(t, dict) and t.get("name"):
                 sid = sanitize_id(t["name"]).lower()
                 valid_ids[sid] = t["name"]
+                valid_targets.append(t)
 except Exception:
     pass
 
 targets_data = []
+seen_ids = set()
+
+for t in valid_targets:
+    tname = t["name"]
+    tid = sanitize_id(tname).lower()
+    seen_ids.add(tid)
+    rows = load_target_status_summary(tid, target_trials=t.get("trials", []))
+    if not rows:
+        continue
+    dist = Counter(str(r.get("status", "")).strip().upper() for r in rows if r.get("status"))
+    changed = sum(1 for r in rows if r.get("monitor_status") == "Changed")
+    targets_data.append({
+        "id": tid,
+        "name": tname,
+        "total": len(rows),
+        "recruiting": dist.get("RECRUITING", 0),
+        "ongoing": sum(cnt for s, cnt in dist.items() if s in set(ACTIVE_STATUSES)),
+        "changed": changed,
+        "dist": dist,
+    })
+
 targets_dir = "data/targets"
 if os.path.isdir(targets_dir):
     for d in sorted(os.listdir(targets_dir)):
-        if valid_ids and d.lower() not in valid_ids:
+        if d.lower() in seen_ids:
             continue
-        spath = os.path.join(targets_dir, d, "status_summary.json")
-        if not os.path.exists(spath):
-            continue
-        try:
-            check_file_size(spath)
-            with open(spath, "r", encoding="utf-8") as f:
-                raw = json.load(f)
-        except Exception:
-            continue
-        if not isinstance(raw, list):
-            continue
-        rows = [r for r in raw if isinstance(r, dict) and r.get("id")]
+        rows = load_target_status_summary(d.lower())
         if not rows:
             continue
-
         dist = Counter(str(r.get("status", "")).strip().upper() for r in rows if r.get("status"))
         changed = sum(1 for r in rows if r.get("monitor_status") == "Changed")
-        name = valid_ids.get(d.lower()) or d
+        name = (rows[0].get("target") if rows else None) or valid_ids.get(d.lower()) or d
         targets_data.append({
             "id": d.lower(),
             "name": name,

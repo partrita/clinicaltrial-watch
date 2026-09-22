@@ -1,6 +1,7 @@
 import ast
 import contextlib
 import html
+import json
 import os
 import re
 import ssl
@@ -1249,3 +1250,223 @@ def atomic_write(
             except OSError:
                 pass
         raise
+
+
+def extract_trial_summary_from_snapshot(
+    trial_id: str,
+    trial_name: str = "N/A",
+    target_name: str = "N/A",
+    snapshot_data: dict[str, Any] | None = None,
+    history_data: list[dict[str, Any]] | None = None,
+    thirty_days_ago_str: str = "",
+    snapshots_dir: str = "data/snapshots",
+    history_dir: str = "data/history",
+) -> dict[str, Any] | None:
+    """Extract dashboard report summary row from snapshot JSON data."""
+    if not is_valid_nct_id(trial_id):
+        return None
+
+    safe_trial_id = sanitize_id(trial_id)
+    if snapshot_data is None:
+        snap_path = os.path.join(snapshots_dir, f"{safe_trial_id}_latest.json")
+        if not os.path.exists(snap_path):
+            return None
+        try:
+            check_file_size(snap_path)
+            with open(snap_path, "r", encoding="utf-8") as f:
+                snapshot_data = json.load(f)
+        except Exception:
+            return None
+
+    if not isinstance(snapshot_data, dict):
+        return None
+
+    protocol = snapshot_data.get("protocolSection")
+    if not isinstance(protocol, dict):
+        protocol = {}
+    status_mod = protocol.get("statusModule")
+    if not isinstance(status_mod, dict):
+        status_mod = {}
+    sponsor_mod = protocol.get("sponsorCollaboratorsModule")
+    if not isinstance(sponsor_mod, dict):
+        sponsor_mod = {}
+    design_mod = protocol.get("designModule")
+    if not isinstance(design_mod, dict):
+        design_mod = {}
+    outcomes_mod = protocol.get("outcomesModule")
+    if not isinstance(outcomes_mod, dict):
+        outcomes_mod = {}
+    desc_mod = protocol.get("descriptionModule")
+    if not isinstance(desc_mod, dict):
+        desc_mod = {}
+    cond_mod = protocol.get("conditionsModule")
+    if not isinstance(cond_mod, dict):
+        cond_mod = {}
+    id_mod = protocol.get("identificationModule")
+    if not isinstance(id_mod, dict):
+        id_mod = {}
+
+    lead_sponsor = sponsor_mod.get("leadSponsor")
+    sponsor = lead_sponsor.get("name", "N/A") if isinstance(lead_sponsor, dict) else "N/A"
+
+    start_date_struct = status_mod.get("startDateStruct")
+    start_date = start_date_struct.get("date", "N/A") if isinstance(start_date_struct, dict) else "N/A"
+
+    end_date_struct = status_mod.get("completionDateStruct")
+    end_date = end_date_struct.get("date", "N/A") if isinstance(end_date_struct, dict) else "N/A"
+
+    enrollment_info = design_mod.get("enrollmentInfo")
+    enrollment = enrollment_info.get("count", "N/A") if isinstance(enrollment_info, dict) else "N/A"
+
+    primary_outcomes = outcomes_mod.get("primaryOutcomes", [])
+    primary_outcome = "N/A"
+    if isinstance(primary_outcomes, list) and primary_outcomes:
+        first_out = primary_outcomes[0]
+        if isinstance(first_out, dict):
+            primary_outcome = first_out.get("measure", "N/A")
+
+    study_status = status_mod.get("overallStatus", "N/A")
+    last_submit = status_mod.get("lastUpdateSubmitDate", "N/A")
+
+    conditions_list = cond_mod.get("conditions", [])
+    if isinstance(conditions_list, list) and conditions_list:
+        conditions = ", ".join(safe_str(c, 255) for c in conditions_list[:100])
+    else:
+        conditions = "N/A"
+
+    phases_list = design_mod.get("phases", [])
+    if isinstance(phases_list, list) and phases_list:
+        phases = ", ".join(safe_str(p, 255) for p in phases_list[:10])
+    else:
+        phases = "N/A"
+
+    detailed_desc = desc_mod.get(
+        "detailedDescription",
+        desc_mod.get("briefSummary", "N/A"),
+    )
+
+    monitor_status = "No Change"
+    last_monitored_change = "No changes yet"
+
+    if history_data is None:
+        hist_path = os.path.join(history_dir, f"{safe_trial_id}_history.json")
+        if os.path.exists(hist_path):
+            try:
+                check_file_size(hist_path)
+                with open(hist_path, "r", encoding="utf-8") as f:
+                    history_data = json.load(f)
+            except Exception:
+                history_data = []
+
+    if isinstance(history_data, list) and history_data:
+        if not thirty_days_ago_str:
+            from datetime import datetime, timezone, timedelta
+            thirty_days_ago_str = (datetime.now(timezone.utc) - timedelta(days=30)).strftime("%Y-%m-%d")
+        last_rec = history_data[-1]
+        if isinstance(last_rec, dict) and "timestamp" in last_rec:
+            last_monitored_change = safe_str(last_rec["timestamp"], 10).split(" ")[0]
+        for rec in reversed(history_data):
+            if isinstance(rec, dict) and rec.get("diff") != "Initial data collection":
+                ts = rec.get("timestamp")
+                if ts and safe_str(ts, 10) > thirty_days_ago_str:
+                    monitor_status = "Changed"
+                    break
+
+    name = trial_name
+    if not name or name == "N/A":
+        name = id_mod.get("briefTitle", "N/A")
+
+    return {
+        "id": trial_id,
+        "name": safe_str(name, 1000),
+        "target": safe_str(target_name, 255),
+        "sponsor": safe_str(sponsor, 255),
+        "status": safe_str(study_status, 255),
+        "conditions": conditions,
+        "phases": phases,
+        "last_updated": safe_str(last_submit, 255),
+        "study_start": safe_str(start_date, 255),
+        "study_end": safe_str(end_date, 255),
+        "enrollment": safe_str(enrollment, 255),
+        "primary_outcome": safe_str(primary_outcome, 1000),
+        "monitor_status": monitor_status,
+        "last_monitored_change": last_monitored_change,
+        "details": safe_str(detailed_desc, 10000),
+    }
+
+
+def load_target_status_summary(
+    target_name_or_id: str,
+    target_trials: list[dict[str, Any]] | None = None,
+    trials_config_path: str = "trials.yaml",
+    targets_dir: str = "data/targets",
+    snapshots_dir: str = "data/snapshots",
+    history_dir: str = "data/history",
+) -> list[dict[str, Any]]:
+    """
+    Load status summary rows for a target.
+    First checks data/targets/{target_id}/status_summary.json.
+    If missing or empty, gracefully falls back to extracting rows from data/snapshots/ and trials.yaml.
+    """
+    import yaml
+
+    target_id = sanitize_id(target_name_or_id).lower()
+
+    # 1. Try reading pre-generated status_summary.json
+    spath = os.path.join(targets_dir, target_id, "status_summary.json")
+    if os.path.exists(spath):
+        try:
+            check_file_size(spath)
+            with open(spath, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+            if isinstance(raw, list):
+                rows = [r for r in raw if isinstance(r, dict) and r.get("id")]
+                if rows:
+                    return rows
+        except Exception:
+            pass
+
+    # 2. Fallback: extract rows from snapshots and trials.yaml
+    trials_to_process = target_trials
+    target_display_name = target_name_or_id
+
+    if trials_to_process is None and os.path.exists(trials_config_path):
+        try:
+            check_file_size(trials_config_path)
+            with open(trials_config_path, "r", encoding="utf-8") as f:
+                cfg = yaml.safe_load(f)
+            if isinstance(cfg, dict):
+                for t in cfg.get("targets", []):
+                    if isinstance(t, dict) and sanitize_id(t.get("name", "")).lower() == target_id:
+                        target_display_name = t.get("name", target_name_or_id)
+                        trials_to_process = t.get("trials", [])
+                        break
+        except Exception:
+            trials_to_process = []
+
+    if not trials_to_process or not isinstance(trials_to_process, list):
+        return []
+
+    from datetime import datetime, timezone, timedelta
+    thirty_days_ago_str = (datetime.now(timezone.utc) - timedelta(days=30)).strftime("%Y-%m-%d")
+
+    rows = []
+    for item in trials_to_process:
+        if not isinstance(item, dict):
+            continue
+        tid = item.get("id")
+        if not tid:
+            continue
+        tname = item.get("name", "N/A")
+        row = extract_trial_summary_from_snapshot(
+            trial_id=tid,
+            trial_name=tname,
+            target_name=target_display_name,
+            thirty_days_ago_str=thirty_days_ago_str,
+            snapshots_dir=snapshots_dir,
+            history_dir=history_dir,
+        )
+        if row:
+            rows.append(row)
+
+    return rows
