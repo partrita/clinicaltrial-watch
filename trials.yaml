@@ -927,6 +927,10 @@ targets:
   - id: NCT07807241
     name: A Study of MX006 in Patients With Advanced and/or Metastatic Tumors Known
       to Express B7-H3
+  - id: NCT07833735
+    name: A Study to Evaluate the Safety, Tolerability, Pharmacokinetic Profile, and
+      Preliminary Efficacy of SYS6043 ± Bevacizumab ± Chemotherapy in Participants
+      With Advanced Solid Tumors
 - description: FcRn 타겟 임상시험 모니터링
   name: FcRn
   trials:
