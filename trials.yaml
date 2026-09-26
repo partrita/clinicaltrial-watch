@@ -542,6 +542,9 @@ targets:
   - id: NCT07788664
     name: Local and Systemic Immune Modulation by Rilvegostomig (AZD2936) in the Treatment
       of Advanced Gastric Cancer (RILVE Project)
+  - id: NCT06005493
+    name: Study of AZD5863 in Adult Participants With Advanced or Metastatic Solid
+      Tumors
 - description: B7-H3 타겟 임상시험 모니터링
   name: B7-H3
   trials:
