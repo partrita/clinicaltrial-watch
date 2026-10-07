@@ -1127,3 +1127,5 @@ targets:
   - id: NCT02322190
     name: Biomarkers in Acute Graft-Versus-Host Disease and Extracorporeal Photopheresis
       Added to Investigator Chosen Therapies of Steroid Refractory Acute GVHD
+  - id: NCT07860021
+    name: VYVGART (Hytrulo) in Patients With Stiff Person Syndrome (SPS)
