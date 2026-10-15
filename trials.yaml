@@ -545,6 +545,9 @@ targets:
   - id: NCT06005493
     name: Study of AZD5863 in Adult Participants With Advanced or Metastatic Solid
       Tumors
+  - id: NCT05715281
+    name: Testing the Combination of Anti-cancer Drugs Atezolizumab and Tiragolumab
+      in People With Advanced Stage Rare Cancers, RARE3 Trial
 - description: B7-H3 타겟 임상시험 모니터링
   name: B7-H3
   trials:
