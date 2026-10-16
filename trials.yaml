@@ -937,6 +937,9 @@ targets:
     name: A Study to Evaluate the Safety, Tolerability, Pharmacokinetic Profile, and
       Preliminary Efficacy of SYS6043 ± Bevacizumab ± Chemotherapy in Participants
       With Advanced Solid Tumors
+  - id: NCT07874984
+    name: SPGL008 in Combination With SSGJ-706 ± Chemotherapy for Advanced Non-small
+      Cell Lung Cancer
 - description: FcRn 타겟 임상시험 모니터링
   name: FcRn
   trials:
