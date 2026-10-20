@@ -940,6 +940,13 @@ targets:
   - id: NCT07874984
     name: SPGL008 in Combination With SSGJ-706 ± Chemotherapy for Advanced Non-small
       Cell Lung Cancer
+  - id: NCT07879911
+    name: A Study of SYS6043 Versus Investigator's Choice Chemotherapy as First-Line
+      Treatment in Patients With Unresectable Locally Recurrent or Metastatic Triple-Negative
+      Breast Cancer
+  - id: NCT07881172
+    name: Prospective Multicenter Study of the Genomic, Transcriptomic, and Biological
+      Profile of Patients With Neuroblastoma
 - description: FcRn 타겟 임상시험 모니터링
   name: FcRn
   trials:
