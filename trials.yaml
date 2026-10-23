@@ -947,6 +947,8 @@ targets:
   - id: NCT07881172
     name: Prospective Multicenter Study of the Genomic, Transcriptomic, and Biological
       Profile of Patients With Neuroblastoma
+  - id: NCT07887971
+    name: A Study of [225Ac]Ac-AKY-2519 in Patients With B7-H3 Expressing Solid Tumors
 - description: FcRn 타겟 임상시험 모니터링
   name: FcRn
   trials:
