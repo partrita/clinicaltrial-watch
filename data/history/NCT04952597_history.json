@@ -1,6 +1,1 @@
-[
-  {
-    "timestamp": "2026-02-05 15:10:30",
-    "diff": "Initial data collection"
-  }
-]
+[{"timestamp": "2026-02-05 15:10:30", "diff": "Initial data collection"}, {"timestamp": "2026-10-28 04:24:55", "diff": "Field `contactsLocationsModule.locations.[30]geoPoint.lat` changed from `37.29111` to `37.27818`\nField `contactsLocationsModule.locations.[30]geoPoint.lon` changed from `127.00889` to `127.03164`\nField `contactsLocationsModule.locations.[31]geoPoint.lat` changed from `37.29111` to `37.27818`\nField `contactsLocationsModule.locations.[31]geoPoint.lon` changed from `127.00889` to `127.03164`\nField `contactsLocationsModule.locations.[32]geoPoint.lat` changed from `35.87028` to `35.87102`\nField `contactsLocationsModule.locations.[32]geoPoint.lon` changed from `128.59111` to `128.60121`"}]

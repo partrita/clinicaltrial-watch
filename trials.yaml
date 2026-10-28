@@ -548,6 +548,8 @@ targets:
   - id: NCT05715281
     name: Testing the Combination of Anti-cancer Drugs Atezolizumab and Tiragolumab
       in People With Advanced Stage Rare Cancers, RARE3 Trial
+  - id: NCT03341143
+    name: Fecal Microbiota Transplant (FMT) in Melanoma Patients
 - description: B7-H3 타겟 임상시험 모니터링
   name: B7-H3
   trials:
@@ -949,6 +951,9 @@ targets:
       Profile of Patients With Neuroblastoma
   - id: NCT07887971
     name: A Study of [225Ac]Ac-AKY-2519 in Patients With B7-H3 Expressing Solid Tumors
+  - id: NCT07897799
+    name: 'The METAMAX Study: MT027 Allogeneic CAR-T for Brain Metastases From Advanced
+      Solid Tumors'
 - description: FcRn 타겟 임상시험 모니터링
   name: FcRn
   trials:
