@@ -550,6 +550,8 @@ targets:
       in People With Advanced Stage Rare Cancers, RARE3 Trial
   - id: NCT03341143
     name: Fecal Microbiota Transplant (FMT) in Melanoma Patients
+  - id: NCT07903857
+    name: SND002 Cell Injection in Participants With Advanced Malignant Solid Tumors
 - description: B7-H3 타겟 임상시험 모니터링
   name: B7-H3
   trials:
