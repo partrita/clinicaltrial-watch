@@ -956,6 +956,9 @@ targets:
   - id: NCT07897799
     name: 'The METAMAX Study: MT027 Allogeneic CAR-T for Brain Metastases From Advanced
       Solid Tumors'
+  - id: NCT07925268
+    name: Study of Ifinatamab Deruxtecan in De Novo or Treatment-Emergent Neuroendocrine
+      Prostate Cancer
 - description: FcRn 타겟 임상시험 모니터링
   name: FcRn
   trials:
