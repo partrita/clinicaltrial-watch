@@ -959,6 +959,8 @@ targets:
   - id: NCT07925268
     name: Study of Ifinatamab Deruxtecan in De Novo or Treatment-Emergent Neuroendocrine
       Prostate Cancer
+  - id: NCT07949448
+    name: Chimeric Antigen-Receptor-Modified T Cells Targeting B7-H3
 - description: FcRn 타겟 임상시험 모니터링
   name: FcRn
   trials:
