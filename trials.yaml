@@ -961,6 +961,10 @@ targets:
       Prostate Cancer
   - id: NCT07949448
     name: Chimeric Antigen-Receptor-Modified T Cells Targeting B7-H3
+  - id: NCT07951762
+    name: A Phase I/II Clinical Trial of SYS6043 Monotherapy or SYS6043 Combined With
+      PD-1/VEGF Bispecific Antibody ± Chemotherapy in the Treatment of Advanced Solid
+      Tumors.
 - description: FcRn 타겟 임상시험 모니터링
   name: FcRn
   trials:
