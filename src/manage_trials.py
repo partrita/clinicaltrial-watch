@@ -10,9 +10,11 @@ from typing import Any
 
 try:
     from generate_target_pages import main as generate_pages
+    from nct_search import find_nct_code
     from utils import atomic_write, check_file_size, is_valid_nct_id, sanitize_id
 except ImportError:
     from src.generate_target_pages import main as generate_pages
+    from src.nct_search import find_nct_code
     from src.utils import atomic_write, check_file_size, is_valid_nct_id, sanitize_id
 
 try:
@@ -166,6 +168,25 @@ def remove_trial(trial_id: str, target_name: str | None = None, cleanup: bool = 
         print(
             f"Trial ID '{trial_id}' not found in {'target ' + target_name if target_name else 'any targets'}."
         )
+        # A mistyped code is the common cause: suggest the closest tracked codes
+        # (a suggestion only; nothing is removed without the exact ID).
+        tracked = [
+            trial
+            for target_block in new_targets
+            if isinstance(target_block, dict)
+            for trial in target_block.get("trials", [])
+            if isinstance(trial, dict)
+        ]
+        suggestions = find_nct_code(trial_id, tracked)
+        if suggestions:
+            print("Did you mean:")
+            for suggestion in suggestions:
+                name = suggestion.get("name", "")
+                if len(name) > 80:
+                    name = name[:77] + "..."
+                print(
+                    f"  {suggestion['id']}  (score {suggestion['score']:.2f})  {name}"
+                )
         return False
 
     data["targets"] = new_targets

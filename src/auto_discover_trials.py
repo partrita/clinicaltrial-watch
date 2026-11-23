@@ -3,15 +3,17 @@ Auto-discover new clinical trials from ClinicalTrials.gov based on targets in tr
 Queries the API for each target and appends new trials to trials.yaml.
 """
 
+import argparse
 import contextlib
 import random
 import sys
 import threading
 import time
-from typing import Any
+from typing import Any, Sequence
 from urllib.parse import urlparse
 
 try:
+    from nct_search import query_variants, study_to_trial, trial_similarity
     from update_trials_from_csv import load_yaml, save_yaml, update_target
     from utils import (
         HAS_REQUESTS,
@@ -20,6 +22,7 @@ try:
         is_valid_nct_id,
     )
 except ImportError:
+    from src.nct_search import query_variants, study_to_trial, trial_similarity
     from src.update_trials_from_csv import load_yaml, save_yaml, update_target
     from src.utils import (
         HAS_REQUESTS,
@@ -64,11 +67,17 @@ def get_session() -> Any | None:
     return _session
 
 
-def search_trials(query_term: str) -> list[dict[str, Any]]:
+def search_trials(
+    query_term: str, page_size: int = 1000, fields: str | None = None
+) -> list[dict[str, Any]]:
     """Search ClinicalTrials.gov API for a given term."""
     # Searching with max 1000 items (maximum allowed by pageSize)
     base_url = "https://clinicaltrials.gov/api/v2/studies"
-    params = {"query.term": query_term, "pageSize": "1000"}
+    # pageSize is clamped to the range the API accepts
+    page_size = max(1, min(int(page_size), 1000))
+    params = {"query.term": query_term, "pageSize": str(page_size)}
+    if fields:
+        params["fields"] = fields
 
     # Max response size (to prevent memory exhaustion DoS)
     MAX_RESPONSE_SIZE = MAX_CONFIG_SIZE
@@ -310,8 +319,65 @@ def extract_trials(api_studies: list[dict[str, Any]]) -> list[dict[str, str]]:
     return trials
 
 
-def main() -> int:
-    yaml_path = "trials.yaml"
+# Minimum similarity for a trial that only the widened (fuzzy) queries found.
+# Trials returned by the plain keyword search are always kept, as before.
+FUZZY_MIN_SCORE = 0.7
+
+
+def search_trials_fuzzy(
+    target_name: str, known_names: Sequence[str] = ()
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """
+    Search for a target the way a person writes it, not only literally.
+
+    The plain keyword search runs first. It is then widened with normalized
+    variants of the name (hyphen/space removed or swapped, and the closest
+    tracked target name) so that 'B7H3' also finds studies titled 'B7-H3'.
+    Studies that only the widened queries found are kept when they actually
+    mention the target in their title or interventions.
+
+    Returns the combined study list and the variants that were searched.
+    """
+    primary = search_trials(target_name)
+    variants = query_variants(target_name, known_names)
+
+    seen = set()
+    for study in primary:
+        trial = study_to_trial(study)
+        if trial:
+            seen.add(trial["id"])
+
+    combined = list(primary)
+    for variant in variants[1:]:
+        for study in search_trials(variant):
+            trial = study_to_trial(study)
+            if not trial or trial["id"] in seen:
+                continue
+            seen.add(trial["id"])
+            score, _ = trial_similarity(target_name, trial)
+            if score >= FUZZY_MIN_SCORE:
+                combined.append(study)
+
+    return combined, variants
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        description="Discover new clinical trials for the targets in trials.yaml."
+    )
+    parser.add_argument(
+        "--yaml",
+        "-y",
+        default="trials.yaml",
+        help="Path to trials.yaml (default: trials.yaml)",
+    )
+    parser.add_argument(
+        "--no-fuzzy",
+        action="store_true",
+        help="Search only the exact target name, without widening the query",
+    )
+    args = parser.parse_args(argv)
+    yaml_path = args.yaml
 
     print("Loading existing trials...")
     data = load_yaml(yaml_path)
@@ -323,11 +389,23 @@ def main() -> int:
 
     total_added = 0
 
+    # Names already tracked, so a target written differently still searches well.
+    known_names = [
+        target["name"]
+        for target in targets
+        if isinstance(target, dict) and target.get("name")
+    ]
+
     for target in targets:
         target_name = target["name"]
         print(f"\nSearching for '{target_name}' on ClinicalTrials.gov...")
 
-        api_studies = search_trials(target_name)
+        if args.no_fuzzy:
+            api_studies, variants = search_trials(target_name), [target_name]
+        else:
+            api_studies, variants = search_trials_fuzzy(target_name, known_names)
+        if len(variants) > 1:
+            print(f"  Fuzzy query variants: {variants}")
         if not api_studies:
             print(f"No studies found or error occurred for '{target_name}'.")
             continue
