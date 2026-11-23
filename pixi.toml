@@ -12,6 +12,7 @@ scripts = ["scripts/activate_quarto.sh"]
 preview = "quarto preview"
 render = "quarto render"
 start = "python src/main.py"
+search = "python src/nct_search.py"
 test = "python -m pytest tests/ -v"
 
 [dependencies]
