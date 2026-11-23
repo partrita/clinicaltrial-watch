@@ -965,6 +965,27 @@ targets:
     name: A Phase I/II Clinical Trial of SYS6043 Monotherapy or SYS6043 Combined With
       PD-1/VEGF Bispecific Antibody ± Chemotherapy in the Treatment of Advanced Solid
       Tumors.
+  - id: NCT04483778
+    name: B7H3 CAR T Cell Immunotherapy for Recurrent/Refractory Solid Tumors in Children
+      and Young Adults
+  - id: NCT05323201
+    name: Study Of B7H3 CAR-T Cells in Treating Advanced Liver Cancer
+  - id: NCT07152236
+    name: Clinical Study on the Safety and Efficacy of B7H3 CAR T Cells in Patients
+      With B7H3 Positive Solid Tumors
+  - id: NCT05341492
+    name: EGFR/B7H3 CAR-T on Lung Cancer and Triple Negative Breast Cancer
+  - id: NCT06825455
+    name: Allogeneic B7H3 CAR-γδT Cell Therapy for Advanced Solid Tumors
+  - id: NCT07193628
+    name: B7H3/IL13Ra2 Bispecific Armored Chimeric Antigen Receptor T-Cell Therapy
+      Study for Recurrent/Refractory Glioblastoma
+  - id: NCT05211557
+    name: Study of Fully Human B7H3 CAR-T in Treating Recurrent Malignant Ovarian
+      Cancer
+  - id: NCT06592092
+    name: Clinical Study of QH104 Cell Injection for the Treatment of Meningeal Metastases
+      of B7H3+ Solid Tumors
 - description: FcRn 타겟 임상시험 모니터링
   name: FcRn
   trials:
