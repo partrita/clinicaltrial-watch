@@ -986,6 +986,9 @@ targets:
   - id: NCT06592092
     name: Clinical Study of QH104 Cell Injection for the Treatment of Meningeal Metastases
       of B7H3+ Solid Tumors
+  - id: NCT07954778
+    name: Chemotherapy With Autologous B7-H3-CAR T Cells for Pediatric Patients With
+      CNS Embryonal Tumors
 - description: FcRn 타겟 임상시험 모니터링
   name: FcRn
   trials:
